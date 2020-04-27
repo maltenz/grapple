@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-import React from 'react';
+import React, { useState } from 'react';
 import { ImageSourcePropType } from 'react-native';
 import { ModeType } from '../../types';
 import NavBar from '../core/NavBar';
@@ -15,14 +14,14 @@ interface NavBarUserProps extends MarginProps {
 }
 
 const NavBarUser = ({ mode, name, userType, src, ...rest }: NavBarUserProps) => {
-  let credentialText: string;
+  const [credentialText, setCredentialText] = useState<string>();
 
   switch (userType) {
     case 'approved':
-      credentialText = 'Approved Buddy';
+      setCredentialText('Approved Buddy');
       break;
     case 'survivor':
-      credentialText = 'Survivor';
+      setCredentialText('Survivor');
       break;
     default:
   }
@@ -33,14 +32,11 @@ const NavBarUser = ({ mode, name, userType, src, ...rest }: NavBarUserProps) => 
         <Text type="small" bold minLineHeight color={mode === 'day' ? 'grey' : 'white'}>
           {name}
         </Text>
-        {
-          // @ts-ignore
-          credentialText && (
-            <Text type="mini" minLineHeight color="blue">
-              Approved Buddy
-            </Text>
-          )
-        }
+        {credentialText && (
+          <Text type="mini" minLineHeight color="blue">
+            Approved Buddy
+          </Text>
+        )}
       </Panel>
     </NavBar>
   );

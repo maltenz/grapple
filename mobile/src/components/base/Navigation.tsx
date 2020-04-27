@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { FC } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -18,9 +17,7 @@ interface NavigationIconProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const NavigationIcon = ({ mode, type = 'back', onPress }: NavigationIconProps) => {
-  let El: JSX.Element;
-
+const NavigationIconEl = ({ mode, type = 'back', onPress }: NavigationIconProps) => {
   const config: {
     color?: ColorType;
     scale?: number;
@@ -33,40 +30,34 @@ const NavigationIcon = ({ mode, type = 'back', onPress }: NavigationIconProps) =
 
   switch (type) {
     case 'chat':
-      El = <SvgIconChat {...config} />;
-      break;
+      return <SvgIconChat {...config} />;
     case 'search':
-      El = <SvgIconSearch {...config} />;
-      break;
+      return <SvgIconSearch {...config} />;
     case 'delete':
-      El = (
+      return (
         <Button mode={mode} onPress={onPress} appearance="subtle" type="small">
           Delete
         </Button>
       );
-      break;
     case 'saved':
-      El = (
+      return (
         <Button mode={mode} onPress={onPress} appearance="subtle" type="small">
           Saved
         </Button>
       );
-      break;
     case 'back':
-      El = <SvgIconLeft {...config} />;
-      break;
+      return <SvgIconLeft {...config} />;
     case 'close':
-      El = <SvgIconSmallClose {...config} />;
-      break;
+      return <SvgIconSmallClose {...config} />;
     default:
+      return null;
   }
+};
 
+const NavigationIcon = ({ ...rest }: NavigationIconProps) => {
   return (
     <Panel>
-      {
-        // @ts-ignore
-        El
-      }
+      <NavigationIconEl {...rest} />
     </Panel>
   );
 };

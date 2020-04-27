@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType, UtilityType } from '../../types';
 import CoreThumbnail from '../core/Thumbnail';
@@ -13,25 +12,17 @@ interface ThumbailProps extends MarginProps {
 }
 
 const Thumbail: FC<ThumbailProps> = ({ children, type, onPress, Badge, ...rest }) => {
-  let outline: ColorType;
+  const [outline, setOutline] = useState<ColorType>();
 
   switch (type) {
     case 'delete':
-      outline = 'red';
+      setOutline('red');
       break;
     default:
   }
 
   return (
-    <CoreThumbnail
-      outline={
-        // @ts-ignore
-        outline
-      }
-      onPress={onPress}
-      TopRight={Badge}
-      {...rest}
-    >
+    <CoreThumbnail outline={outline} onPress={onPress} TopRight={Badge} {...rest}>
       {children}
     </CoreThumbnail>
   );

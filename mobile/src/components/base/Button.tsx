@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { ColorType, ModeType } from '../../types';
 import CoreButton, { ButtonType, ButtonOutline } from '../core/Button';
 import { MarginProps } from './Panel';
@@ -23,92 +22,91 @@ const Button: FC<ButtonProps> = ({
   onPress,
   ...rest
 }) => {
-  let backgroundColor: ColorType;
-  let color: ColorType;
-  let outline: ButtonOutline;
+  const [backgroundColor, setBackgroundColor] = useState<ColorType>();
+  const [color, setColor] = useState<ColorType>();
+  const [outline, setOutline] = useState<ButtonOutline>();
 
-  if (mode === 'day') {
-    switch (propAppearance) {
-      case 'strong':
-        backgroundColor = 'red';
-        color = 'white';
+  useEffect(() => {
+    if (mode === 'day') {
+      switch (propAppearance) {
+        case 'strong':
+          setBackgroundColor('red');
+          setColor('white');
 
-        if (propOutline) {
-          outline = backgroundColor;
-          color = backgroundColor;
-          backgroundColor = 'transparent';
+          if (propOutline) {
+            setOutline(backgroundColor);
+            setColor(backgroundColor);
+            setOutline('transparent');
 
-          if (type === 'normal') {
-            outline = 'grey3';
+            if (type === 'normal') {
+              setOutline('grey3');
+            }
           }
-        }
 
-        break;
-      case 'disabled':
-        backgroundColor = 'grey3';
-        color = 'grey2';
-        break;
-      case 'subtle':
-      case 'normal':
-      default:
-        backgroundColor = 'blue';
-        color = 'white';
+          break;
+        case 'disabled':
+          setBackgroundColor('grey3');
+          setColor('grey2');
+          break;
+        case 'subtle':
+        case 'normal':
+        default:
+          setBackgroundColor('blue');
+          setColor('white');
 
-        if (propOutline) {
-          outline = backgroundColor;
-          color = backgroundColor;
-          backgroundColor = 'transparent';
-        }
-    }
-  }
-
-  if (mode === 'night') {
-    switch (propAppearance) {
-      case 'strong':
-        backgroundColor = 'red';
-        color = 'white';
-
-        if (propOutline) {
-          outline = backgroundColor;
-          color = backgroundColor;
-          backgroundColor = 'transparent';
-
-          if (type === 'normal') {
-            outline = 'grey3';
+          if (propOutline) {
+            setOutline(backgroundColor);
+            setColor(backgroundColor);
+            setBackgroundColor('transparent');
           }
-        }
-
-        break;
-      case 'disabled':
-        backgroundColor = 'grey3';
-        color = 'grey2';
-        break;
-      case 'subtle':
-        backgroundColor = 'white';
-        color = 'grey';
-        break;
-      case 'normal':
-      default:
-        backgroundColor = 'blue';
-        color = 'white';
-
-        if (propOutline) {
-          outline = backgroundColor;
-          color = backgroundColor;
-          backgroundColor = 'transparent';
-        }
+      }
     }
-  }
+
+    if (mode === 'night') {
+      switch (propAppearance) {
+        case 'strong':
+          setBackgroundColor('red');
+          setColor('white');
+
+          if (propOutline) {
+            setOutline(backgroundColor);
+            setColor(backgroundColor);
+            setBackgroundColor('transparent');
+
+            if (type === 'normal') {
+              setOutline('grey3');
+            }
+          }
+
+          break;
+        case 'disabled':
+          setBackgroundColor('grey3');
+          setColor('grey2');
+          break;
+        case 'subtle':
+          setBackgroundColor('white');
+          setColor('grey');
+          break;
+        case 'normal':
+        default:
+          setBackgroundColor('blue');
+          setColor('white');
+
+          if (propOutline) {
+            setOutline(backgroundColor);
+            setColor(backgroundColor);
+            setBackgroundColor('transparent');
+          }
+      }
+    }
+  }, []);
 
   return (
     <CoreButton
       onPress={onPress}
       type={type}
-      // @ts-ignore
       outline={outline}
-      // @ts-ignore
       backgroundColor={backgroundColor}
-      // @ts-ignore
       color={color}
       {...rest}
     >
