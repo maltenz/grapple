@@ -30,7 +30,7 @@ const borderColor = (value: ColorType | boolean | undefined): any => {
 
 interface ThumbnailProps extends MarginProps {
   style?: StyleProp<ViewStyle>;
-  src?: ImageSourcePropType | any;
+  src?: ImageSourcePropType;
   backgroundColor?: ColorType;
   outline?: boolean | ColorType;
   onPress?: () => void;
@@ -59,7 +59,7 @@ const Thumbnail: FC<ThumbnailProps> = ({
     <Panel {...rest}>
       <Panel style={styles.container} onPress={onPress}>
         <Panel backgroundColor={myBackgroundColor(backgroundColor)} style={styles.image} />
-        <Image source={src} style={styles.image} />
+        {src && <Image source={src} style={styles.image} />}
         <Panel style={[styles.border, thumbnailStyles, style]} />
         {TopRight && <View style={styles.topRight}>{TopRight}</View>}
       </Panel>

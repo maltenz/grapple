@@ -6,7 +6,7 @@ import { AssetStyles } from '../../assets/styles';
 
 interface AvatarProps extends MarginProps {
   style?: StyleProp<ViewStyle>;
-  src?: ImageSourcePropType | any;
+  src?: ImageSourcePropType;
   backgroundColor?: ColorType;
 }
 
@@ -28,7 +28,7 @@ const Avatar: FC<AvatarProps> = ({ style, src, backgroundColor, ...rest }) => {
       {...rest}
       style={[styles.container, style]}
     >
-      <Image source={src} style={[StyleSheet.absoluteFill, { zIndex: -1 }]} />
+      {src && <Image source={src} style={[StyleSheet.absoluteFill, { zIndex: -1 }]} />}
     </Panel>
   );
 };
