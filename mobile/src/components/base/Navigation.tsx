@@ -63,13 +63,12 @@ const NavigationIcon = ({ ...rest }: NavigationIconProps) => {
 };
 
 interface NavigationProps {
-  Left?: any;
-  Center?: any;
-  Right?: any;
+  Left?: React.ReactNode;
+  Center?: React.ReactNode;
+  Right?: React.ReactNode;
   mode: ModeType;
   style?: StyleProp<ViewStyle>;
   i18nKey?: string;
-  t?: any;
 }
 
 const HEIGHT = 60;

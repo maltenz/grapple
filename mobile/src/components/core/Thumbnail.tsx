@@ -5,18 +5,7 @@ import { AssetStyles } from '../../assets/styles';
 import Panel, { MarginProps } from '../base/Panel';
 import { Color } from '../../assets/colors';
 
-const myBackgroundColor = (value: ColorType | boolean | undefined): any => {
-  switch (typeof value) {
-    case 'string':
-      return `${value}`;
-    case 'boolean':
-    default: {
-      return 'grey';
-    }
-  }
-};
-
-const borderColor = (value: ColorType | boolean | undefined): any => {
+const borderColor = (value: ColorType | boolean | undefined): string | boolean | null => {
   switch (typeof value) {
     case 'string':
       return Color[value];
@@ -34,7 +23,7 @@ interface ThumbnailProps extends MarginProps {
   backgroundColor?: ColorType;
   outline?: boolean | ColorType;
   onPress?: () => void;
-  TopRight?: any;
+  TopRight?: React.ReactNode;
 }
 
 const Thumbnail: FC<ThumbnailProps> = ({
@@ -58,7 +47,7 @@ const Thumbnail: FC<ThumbnailProps> = ({
   return (
     <Panel {...rest}>
       <Panel style={styles.container} onPress={onPress}>
-        <Panel backgroundColor={myBackgroundColor(backgroundColor)} style={styles.image} />
+        <Panel backgroundColor={backgroundColor || 'grey'} style={styles.image} />
         {src && <Image source={src} style={styles.image} />}
         <Panel style={[styles.border, thumbnailStyles, style]} />
         {TopRight && <View style={styles.topRight}>{TopRight}</View>}

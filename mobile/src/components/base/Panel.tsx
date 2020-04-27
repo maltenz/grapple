@@ -54,7 +54,7 @@ const ViewOrTouchable: FC<ViewOrTouchableProps> = ({ onPress, children, style })
   return <View style={style}>{children}</View>;
 };
 
-export const measure = (value: number | boolean | undefined): any => {
+export const measure = (value: number | boolean | undefined): number | boolean | null => {
   switch (typeof value) {
     case 'number':
       return value * space;

@@ -8,7 +8,7 @@ interface ThumbailProps extends MarginProps {
   type: UtilityType;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
-  Badge?: any;
+  Badge?: React.ReactNode;
 }
 
 const Thumbail: FC<ThumbailProps> = ({ children, type, onPress, Badge, ...rest }) => {

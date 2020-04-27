@@ -10,23 +10,12 @@ interface BadgeProps extends MarginProps {
   onPress?: () => void;
 }
 
-const myBackgroundColor = (value: ColorType | boolean | undefined): any => {
-  switch (typeof value) {
-    case 'string':
-      return `${value}`;
-    case 'boolean':
-    default: {
-      return 'blue';
-    }
-  }
-};
-
 const Badge: FC<BadgeProps> = ({ backgroundColor, children, style, onPress, ...rest }) => {
   return (
     <Panel
       onPress={onPress}
       center
-      backgroundColor={myBackgroundColor(backgroundColor)}
+      backgroundColor={backgroundColor || 'blue'}
       style={[styles.container, style]}
       {...rest}
     >

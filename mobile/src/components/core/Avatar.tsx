@@ -10,24 +10,9 @@ interface AvatarProps extends MarginProps {
   backgroundColor?: ColorType;
 }
 
-const myBackgroundColor = (value: ColorType | boolean | undefined): any => {
-  switch (typeof value) {
-    case 'string':
-      return `${value}`;
-    case 'boolean':
-    default: {
-      return 'grey4';
-    }
-  }
-};
-
 const Avatar: FC<AvatarProps> = ({ style, src, backgroundColor, ...rest }) => {
   return (
-    <Panel
-      backgroundColor={myBackgroundColor(backgroundColor)}
-      {...rest}
-      style={[styles.container, style]}
-    >
+    <Panel backgroundColor={backgroundColor || 'grey4'} {...rest} style={[styles.container, style]}>
       {src && <Image source={src} style={[StyleSheet.absoluteFill, { zIndex: -1 }]} />}
     </Panel>
   );

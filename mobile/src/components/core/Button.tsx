@@ -21,7 +21,7 @@ const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...res
   let textType: TextType = 'small';
   let borderWidth = 0;
 
-  const borderColor = (value: ColorType | boolean | undefined): any => {
+  const borderColor = (value: ColorType | boolean | undefined) => {
     switch (typeof value) {
       case 'string':
         return Color[value];

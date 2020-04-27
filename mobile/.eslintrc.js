@@ -21,7 +21,6 @@ module.exports = {
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-use-before-define": [
       "error",
       {

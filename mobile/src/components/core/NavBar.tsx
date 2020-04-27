@@ -24,24 +24,13 @@ const NavBar: FC<NavBarProps> = ({ children, mode, style, ...rest }) => {
     <Panel
       row
       alignItems="center"
-      backgroundColor={myBackgroundColor(backgroundColor)}
+      backgroundColor={backgroundColor || 'grey4'}
       style={[styles.container, style]}
       {...rest}
     >
       {children}
     </Panel>
   );
-};
-
-const myBackgroundColor = (value: ColorType | boolean | undefined): any => {
-  switch (typeof value) {
-    case 'string':
-      return `${value}`;
-    case 'boolean':
-    default: {
-      return 'grey4';
-    }
-  }
 };
 
 const HEIGHT = AssetStyles.measure.circle.small.size;

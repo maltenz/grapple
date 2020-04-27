@@ -9,22 +9,11 @@ interface BulletProps extends MarginProps {
   onPress?: () => void;
 }
 
-const myBackgroundColor = (value: ColorType | boolean | undefined): any => {
-  switch (typeof value) {
-    case 'string':
-      return `${value}`;
-    case 'boolean':
-    default: {
-      return 'grey3';
-    }
-  }
-};
-
 const Bullet: FC<BulletProps> = ({ backgroundColor, style, onPress, ...rest }) => {
   return (
     <Panel
       onPress={onPress}
-      backgroundColor={myBackgroundColor(backgroundColor)}
+      backgroundColor={backgroundColor || 'grey3'}
       {...rest}
       style={[styles.container, style]}
     />
