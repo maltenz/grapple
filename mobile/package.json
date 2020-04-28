@@ -20,6 +20,8 @@
     "csstype": "^2.6.10",
     "expo": "~37.0.3",
     "expo-blur": "~8.1.0",
+    "expo-camera": "~8.2.0",
+    "expo-permissions": "~8.1.0",
     "graphql": "^15.0.0",
     "lodash": "^4.17.15",
     "react": "~16.9.0",

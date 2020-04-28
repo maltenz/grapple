@@ -2,7 +2,6 @@ import React, { useEffect, FC } from 'react';
 import { StatusBar, StyleSheet, ImageBackground } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-
 import {
   SvgLogoGrapple,
   SvgBlob,
@@ -12,9 +11,8 @@ import {
   Color,
   BulletPager,
   AssetStyles,
-} from '../../components';
-
-import Ruler from './OnboardingRuler';
+} from '../components';
+import Ruler from './components/OnboardingRuler';
 
 const ListRow: FC = ({ children }) => (
   <Panel row alignItems="center">
@@ -25,7 +23,7 @@ const ListRow: FC = ({ children }) => (
   </Panel>
 );
 
-const OnboardingScreen1: FC = () => {
+const Onboarding1: FC = () => {
   const insets = useSafeArea();
   useEffect(() => {
     StatusBar.setHidden(true);
@@ -115,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardingScreen1;
+export default Onboarding1;

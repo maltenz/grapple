@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import configureStore from './configureStore';
 import { Window } from './types';
-import HomeScreen from './src/screens/Home';
+import AppRoot from './src/screens/AppRoot';
 
 declare let window: Window & typeof globalThis;
 
@@ -22,7 +22,7 @@ const App: FC = () => (
     <ApolloProvider client={client}>
       <Provider store={store}>
         <NavigationContainer>
-          <HomeScreen />
+          <AppRoot />
         </NavigationContainer>
       </Provider>
     </ApolloProvider>

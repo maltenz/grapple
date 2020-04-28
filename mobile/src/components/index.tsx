@@ -9,6 +9,7 @@ import Bullet from './base/Bullet';
 import BulletPager from './base/BulletPager';
 import Button from './base/Button';
 import Gallery from './base/Gallery';
+import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import Panel from './base/Panel';
 import Post from './base/Post';
@@ -71,6 +72,8 @@ export {
   BulletPager,
   Button,
   Gallery,
+  Navigation,
+  NavigationIcon,
   NavBarUser,
   Panel,
   Post,
