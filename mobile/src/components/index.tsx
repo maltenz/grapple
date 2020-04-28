@@ -6,10 +6,10 @@ import { Color } from '../assets/colors';
 // components
 import Badge from './base/Badge';
 import Bullet from './base/Bullet';
+import BulletPager from './base/BulletPager';
 import Button from './base/Button';
 import Gallery from './base/Gallery';
 import NavBarUser from './base/NavBarUser';
-import Pager from './base/Pager';
 import Panel from './base/Panel';
 import Post from './base/Post';
 import PullBar from './base/PullBar';
@@ -68,10 +68,10 @@ export {
   // components
   Badge,
   Bullet,
+  BulletPager,
   Button,
   Gallery,
   NavBarUser,
-  Pager,
   Panel,
   Post,
   PullBar,

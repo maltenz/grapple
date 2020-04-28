@@ -15,10 +15,10 @@ import {
   SvgTabbarBackgroundHeight,
 } from '../components';
 import HomeMenu from './components/HomeMenu';
-import HomePosts from './components/HomePosts';
+import MyHomeScreen from './components/HomeScreen';
+import OnboardingScreen from './Onboading1';
 
-const Home: FC = () => <HomePosts />;
-const AccountDummyScreen: FC = () => <Panel flex={1} backgroundColor="blue" />;
+const Home: FC = () => <MyHomeScreen />;
 
 const Tab = createBottomTabNavigator();
 
@@ -111,7 +111,7 @@ const HomeScreen: FC = () => {
       />
       <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Account" component={AccountDummyScreen} />
+        <Tab.Screen name="Account" component={OnboardingScreen} />
       </Tab.Navigator>
     </>
   );
