@@ -100,7 +100,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   );
 };
 
-const HomeView: FC = () => {
+const HomeScreen: FC = () => {
   return (
     <NavigationContainer>
       <Navigation
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeView;
+export default HomeScreen;
