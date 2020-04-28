@@ -8,10 +8,10 @@ import Badge from './base/Badge';
 import Bullet from './base/Bullet';
 import Button from './base/Button';
 import Gallery from './base/Gallery';
-import NavbarUser from './base/NavbarUser';
-import NavbarUserPostEdit from './base/NavbarUserPostEdit';
+import NavBarUser from './base/NavBarUser';
 import Pager from './base/Pager';
 import Panel from './base/Panel';
+import Post from './base/Post';
 import PullBar from './base/PullBar';
 import Text from './base/Text';
 import Thumbnail from './base/Thumbnail';
@@ -70,10 +70,10 @@ export {
   Bullet,
   Button,
   Gallery,
-  NavbarUser,
-  NavbarUserPostEdit,
+  NavBarUser,
   Pager,
   Panel,
+  Post,
   PullBar,
   Text,
   Thumbnail,

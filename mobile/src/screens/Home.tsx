@@ -2,7 +2,6 @@
 import React, { useState, Fragment, FC } from 'react';
 import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import Navigation, { NavigationIcon } from '../components/base/Navigation';
 import {
   AssetStyles,
@@ -15,9 +14,11 @@ import {
   SvgIconAccount,
   SvgTabbarBackgroundHeight,
 } from '../components';
-import HomeMenu from './components/Menu';
+import HomeMenu from './components/HomeMenu';
+import HomePosts from './components/HomePosts';
 
-const DummyScreen: FC = () => <Panel flex={1} backgroundColor="grey3" />;
+const Home: FC = () => <HomePosts />;
+const AccountDummyScreen: FC = () => <Panel flex={1} backgroundColor="blue" />;
 
 const Tab = createBottomTabNavigator();
 
@@ -102,17 +103,17 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
 
 const HomeScreen: FC = () => {
   return (
-    <NavigationContainer>
+    <>
       <Navigation
         mode="day"
         Left={<NavigationIcon mode="day" type="search" onPress={(): void => Alert.alert('test')} />}
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
-        <Tab.Screen name="Home" component={DummyScreen} />
-        <Tab.Screen name="Account" component={DummyScreen} />
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Account" component={AccountDummyScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
+    </>
   );
 };
 
