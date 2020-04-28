@@ -44,7 +44,8 @@ module.exports = {
   },
   "settings": {
     react: {
-      version: require('./package.json').dependencies.react,
+      "pragma": "React",
+      "version": "detect",
     },
     "import/resolver": {
       "node": {

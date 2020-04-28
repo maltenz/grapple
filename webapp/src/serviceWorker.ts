@@ -1,5 +1,5 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -25,7 +25,7 @@ type Config = {
   onUpdate?: (registration: ServiceWorkerRegistration) => void;
 };
 
-export function register(config?: Config): any {
+export function register(config?: Config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
@@ -103,7 +103,7 @@ function registerValidSW(swUrl: string, config?: Config) {
     });
 }
 
-function checkValidServiceWorker(swUrl: string, config?: Config): any {
+function checkValidServiceWorker(swUrl: string, config?: Config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
@@ -113,7 +113,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config): any {
       const contentType = response.headers.get('content-type');
       if (
         response.status === 404 ||
-        (contentType !== null && contentType.indexOf('javascript') === -1)
+        (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
@@ -131,7 +131,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config): any {
     });
 }
 
-export function unregister(): any {
+export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then((registration) => {
