@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, Fragment, FC } from 'react';
-import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
-  AssetStyles,
-  SvgTabbarBackgroundWidth,
-  Color,
-  SvgTabbarBackground,
   Panel,
-  SvgIconSmallAdd,
   SvgIconHome,
   SvgIconAccount,
   SvgTabbarBackgroundHeight,
   Navigation,
   NavigationIcon,
+  TabbarBackground,
+  TabbarCircleButton,
 } from '../components';
 import HomeMenu from './components/HomeMenu';
 import Home from './Home';
@@ -33,7 +30,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   return (
     <>
       <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
-        <SvgTabbarBackground style={styles.tabbar} />
+        <TabbarBackground />
 
         {state.routes.map((route: any, index: number) => {
           const { options } = descriptors[route.key];
@@ -79,16 +76,11 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
               </TouchableOpacity>
               {index === 0 && (
                 <Panel center style={{ flex: 1 }}>
-                  <TouchableOpacity
-                    accessibilityRole="button"
-                    accessibilityStates={isFocused ? ['selected'] : []}
-                    accessibilityLabel={options.tabBarAccessibilityLabel}
+                  <TabbarCircleButton
+                    isFocused={isFocused}
                     onPress={(): void => setModalVisible(true)}
                     onLongPress={onLongPress}
-                    style={styles.circle}
-                  >
-                    <SvgIconSmallAdd color="white" scale={1.25} />
-                  </TouchableOpacity>
+                  />
                 </Panel>
               )}
             </Fragment>
@@ -121,28 +113,5 @@ const HomeRoot: FC = ({ navigation }) => {
     </>
   );
 };
-
-const CIRCLE_DIAMETER = AssetStyles.measure.circle.large.size;
-
-const styles = StyleSheet.create({
-  tabbar: {
-    position: 'absolute',
-    zIndex: 0,
-    bottom: 0,
-    left: -SvgTabbarBackgroundWidth / 2 + AssetStyles.measure.window.width / 2,
-    ...AssetStyles.shadow.deep,
-  },
-  circle: {
-    width: CIRCLE_DIAMETER,
-    height: CIRCLE_DIAMETER,
-    borderRadius: CIRCLE_DIAMETER / 2,
-    backgroundColor: Color.red,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -AssetStyles.measure.space * 2,
-    ...AssetStyles.shadow.deep,
-    shadowColor: Color.red,
-  },
-});
 
 export default HomeRoot;

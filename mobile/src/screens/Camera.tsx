@@ -2,7 +2,16 @@ import React, { useEffect, useState, FC } from 'react';
 import { StatusBar, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import { Panel, Navigation, NavigationIcon } from '../components';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  Panel,
+  Navigation,
+  NavigationIcon,
+  TabbarBackground,
+  TabbarCircleButton,
+  SvgTabbarBackgroundHeight,
+  SvgIconAccount,
+} from '../components';
 
 const CameraScreen: FC = () => {
   const [hasPermission, setHasPermission] = useState<boolean>();
@@ -34,6 +43,58 @@ const CameraScreen: FC = () => {
           <NavigationIcon mode="night" type="chat" onPress={(): void => Alert.alert('press')} />
         }
       />
+      <Panel
+        row
+        style={{
+          position: 'absolute',
+          right: 0,
+          bottom: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+      >
+        <Panel flex={1}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            // accessibilityStates={isFocused ? ['selected'] : []}
+            // accessibilityLabel={options.tabBarAccessibilityLabel}
+            // onPress={onPress}
+            // onLongPress={onLongPress}
+            style={{
+              flex: 1,
+              height: SvgTabbarBackgroundHeight,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <SvgIconAccount scale={0.9} color="white" />
+          </TouchableOpacity>
+        </Panel>
+        <Panel flex={1} center>
+          <TabbarCircleButton
+            type="camera"
+            onPress={(): void => Alert.alert('press')}
+            onLongPress={(): void => Alert.alert('long press')}
+          />
+        </Panel>
+        <Panel flex={1}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            // accessibilityStates={isFocused ? ['selected'] : []}
+            // accessibilityLabel={options.tabBarAccessibilityLabel}
+            // onPress={onPress}
+            // onLongPress={onLongPress}
+            style={{
+              height: SvgTabbarBackgroundHeight,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <SvgIconAccount scale={0.9} color="white" />
+          </TouchableOpacity>
+        </Panel>
+      </Panel>
+      <TabbarBackground color="black" />
     </Camera>
   );
 };

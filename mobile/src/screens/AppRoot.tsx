@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 const AppRoot: FC = () => {
   return (
-    <Stack.Navigator mode="modal" headerMode="none">
+    <Stack.Navigator mode="modal" headerMode="none" initialRouteName="CreateRoot">
       <Stack.Screen name="HomeRoot" component={HomeRoot} />
       <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
       <Stack.Screen name="CreateRoot" component={CreateRoot} />

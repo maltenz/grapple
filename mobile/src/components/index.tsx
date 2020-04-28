@@ -14,6 +14,8 @@ import NavBarUser from './base/NavBarUser';
 import Panel from './base/Panel';
 import Post from './base/Post';
 import PullBar from './base/PullBar';
+import TabbarBackground from './base/TabbarBackground';
+import TabbarCircleButton from './base/TabbarCircleButton';
 import Text from './base/Text';
 import Thumbnail from './base/Thumbnail';
 
@@ -78,6 +80,8 @@ export {
   Panel,
   Post,
   PullBar,
+  TabbarBackground,
+  TabbarCircleButton,
   Text,
   Thumbnail,
   // Colors
