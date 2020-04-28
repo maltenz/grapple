@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ColorType } from '../../types';
@@ -10,7 +10,7 @@ interface SvgRulerRightArrowProps {
   color: ColorType;
 }
 
-const SvgRulerRightArrow = ({ style, scale, color: propColor }: SvgRulerRightArrowProps) => {
+const SvgRulerRightArrow: FC<SvgRulerRightArrowProps> = ({ style, scale, color: propColor }) => {
   const color = propColor ? Color[propColor] : Color.grey;
   let width = 35;
   let height = 198;

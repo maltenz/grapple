@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Svg, { G, Path } from 'react-native-svg';
 import { ColorType } from '../../types';
 import { Color } from '../colors';
@@ -8,7 +8,7 @@ interface SvgGrappleLogoProps {
   color: ColorType;
 }
 
-const SvgGrappleLogo = ({ scale, color: propColor }: SvgGrappleLogoProps) => {
+const SvgGrappleLogo: FC<SvgGrappleLogoProps> = ({ scale, color: propColor }) => {
   const color = propColor ? Color[propColor] : Color.white;
   let width = 220;
   let height = 50;

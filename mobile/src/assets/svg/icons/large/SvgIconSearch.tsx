@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Svg, { G, Path } from 'react-native-svg';
-import { Color, ColorType } from '../../../colors';
+import { Color } from '../../../colors';
+import { ColorType } from '../../../../types';
 
 interface SvgIconProps {
   scale?: number;
@@ -9,7 +10,7 @@ interface SvgIconProps {
   onPress?: () => void;
 }
 
-const SvgIconSearch = ({
+const SvgIconSearch: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,

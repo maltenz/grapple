@@ -21,12 +21,12 @@ const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...res
   let textType: TextType = 'small';
   let borderWidth = 0;
 
-  const borderColor = (value: ColorType | boolean | undefined) => {
+  const borderColor = (value: ColorType | boolean | undefined): string | ColorType | null => {
     switch (typeof value) {
       case 'string':
         return Color[value];
       case 'boolean':
-        return color && Color[color];
+        return color ? Color[color] : null;
       default: {
         return null;
       }

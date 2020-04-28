@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Svg, { G, Path } from 'react-native-svg';
-import { Color, ColorType } from '../../../colors';
+import { ColorType } from '../../../../types';
+import { Color } from '../../../colors';
 
 interface SvgIconProps {
   scale?: number;
@@ -8,11 +9,11 @@ interface SvgIconProps {
   strokeWidth?: boolean | number;
 }
 
-const SvgIconSmallAdd = ({
+const SvgIconSmallAdd: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,
-}: SvgIconProps) => {
+}) => {
   const color = propColor ? Color[propColor] : Color.grey;
   let width = 24;
   let height = 24;

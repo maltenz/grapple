@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Color, ColorType } from '../../../colors';
+import { ColorType } from '../../../../types';
+import { Color } from '../../../colors';
 
 interface SvgIconProps {
   scale?: number;
@@ -11,13 +12,13 @@ interface SvgIconProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const SvgIconSmallHeart = ({
+const SvgIconSmallHeart: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,
   onPress,
   style,
-}: SvgIconProps) => {
+}) => {
   const color = propColor ? Color[propColor] : Color.grey;
   let width = 24;
   let height = 24;

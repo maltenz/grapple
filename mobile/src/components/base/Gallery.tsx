@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { Image, ImageSourcePropType, ScrollView, StyleSheet, Alert } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { UtilityType, ModeType } from '../../types';
+import { UtilityType, ModeType, ColorType } from '../../types';
 import { AssetStyles } from '../../assets/styles';
 
 import Panel, { MarginProps } from './Panel';
@@ -28,7 +28,7 @@ interface GalleryProps {
   gutter?: boolean;
 }
 
-const Gallery = ({
+const Gallery: FC<GalleryProps> = ({
   mode,
   activeIndex: propActiveIndex,
   type,
@@ -37,7 +37,7 @@ const Gallery = ({
   items,
   utility,
   gutter,
-}: GalleryProps) => {
+}) => {
   const [activeIndex, setActiveIndex] = useState(propActiveIndex);
   useEffect(() => {
     setActiveIndex(propActiveIndex);
@@ -65,7 +65,7 @@ const Gallery = ({
               utility={utility}
               marginLeft={index === 0 && 0.5}
               marginRight={0.5}
-              onPress={() => onChange(id, index)}
+              onPress={(): void => onChange(id, index)}
             />
           ))}
         </ScrollView>
@@ -82,9 +82,21 @@ interface GalleryItemProps extends MarginProps {
   onPress: () => void;
 }
 
-const GalleryItem = ({ mode, src, active, utility, onPress, ...rest }: GalleryItemProps) => {
+const GalleryItemBadge: FC<{ utility: UtilityType }> = ({ utility }) => {
+  switch (utility) {
+    case 'delete':
+      return (
+        <BaseBadge appearance="heavy" type="delete" onPress={(): void => Alert.alert('delete')} />
+      );
+    case 'edit':
+      return <BaseBadge appearance="heavy" type="edit" onPress={(): void => Alert.alert('edit')} />;
+    default:
+      return null;
+  }
+};
+
+const GalleryItem: FC<GalleryItemProps> = ({ mode, src, active, utility, onPress, ...rest }) => {
   let outline: ColorType = 'white';
-  let Badge: JSX.Element = null;
 
   if (mode === 'day') {
     switch (utility) {
@@ -100,20 +112,11 @@ const GalleryItem = ({ mode, src, active, utility, onPress, ...rest }: GalleryIt
     }
   }
 
-  switch (utility) {
-    case 'delete':
-      Badge = <BaseBadge appearance="heavy" type="delete" onPress={() => Alert.alert('delete')} />;
-      break;
-    case 'edit':
-      Badge = <BaseBadge appearance="heavy" type="edit" onPress={() => Alert.alert('edit')} />;
-      break;
-    default:
-  }
   return (
     <Thumbnail
       src={src}
       outline={active ? outline : false}
-      TopRight={Badge}
+      TopRight={<GalleryItemBadge utility={utility} />}
       onPress={onPress}
       {...rest}
     />

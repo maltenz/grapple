@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ModeType } from '../../types';
 import NavBar from '../core/NavBar';
 import Badge from './Badge';
@@ -10,7 +10,7 @@ interface NavBarUserPostEditProps {
   onPressEdit: () => void;
 }
 
-const NavBarUserPostEdit = ({ mode, attachments, onPressEdit }: NavBarUserPostEditProps) => {
+const NavBarUserPostEdit: FC<NavBarUserPostEditProps> = ({ mode, attachments, onPressEdit }) => {
   return (
     <NavBar
       mode={mode}

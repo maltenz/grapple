@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Color, ColorType } from '../../../colors';
+import { ColorType } from '../../../../types';
+import { Color } from '../../../colors';
 
 interface SvgIconProps {
   scale?: number;
@@ -11,7 +12,7 @@ interface SvgIconProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const SvgIconSmallEdit = ({
+const SvgIconSmallEdit: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,

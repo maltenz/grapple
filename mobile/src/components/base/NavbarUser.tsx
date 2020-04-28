@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import { ImageSourcePropType } from 'react-native';
 import { ModeType } from '../../types';
 import NavBar from '../core/NavBar';
@@ -13,7 +13,7 @@ interface NavBarUserProps extends MarginProps {
   src: ImageSourcePropType;
 }
 
-const NavBarUser = ({ mode, name, userType, src, ...rest }: NavBarUserProps) => {
+const NavBarUser: FC<NavBarUserProps> = ({ mode, name, userType, src, ...rest }) => {
   const [credentialText, setCredentialText] = useState<string>();
 
   switch (userType) {

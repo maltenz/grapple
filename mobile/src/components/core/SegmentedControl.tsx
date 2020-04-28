@@ -11,7 +11,7 @@ interface SegmentedControllerItemProps {
   onPress: () => void;
 }
 
-const SegmentedControllerItem = ({ active, text, onPress }: SegmentedControllerItemProps) => {
+const SegmentedControllerItem: FC<SegmentedControllerItemProps> = ({ active, text, onPress }) => {
   return (
     <Panel flex={1} center onPress={onPress} backgroundColor={active ? 'blue' : 'transparent'}>
       <Text type="p" bold color={active ? 'white' : 'blue'}>
@@ -53,7 +53,7 @@ const SegmentedController: FC<SegmentedControllerProps> = ({
             key={keyTitle}
             active={activeIndex === index}
             text={keyTitle}
-            onPress={() => onChange(index)}
+            onPress={(): void => onChange(index)}
           />
         ))}
       </Panel>

@@ -24,7 +24,7 @@ export interface TextProps extends MarginProps {
   minLineHeight?: boolean;
 }
 
-const fetchFonts = () => {
+const fetchFonts = (): Promise<void> => {
   return Font.loadAsync({
     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
@@ -119,7 +119,7 @@ const Text: FC<TextProps> = ({
   }
 
   if (!fontsLoaded) {
-    return <AppLoading startAsync={fetchFonts} onFinish={() => setFontsLoaded(true)} />;
+    return <AppLoading startAsync={fetchFonts} onFinish={(): void => setFontsLoaded(true)} />;
   }
   return (
     <RnText onPress={onPress} style={[textStyles, style]}>

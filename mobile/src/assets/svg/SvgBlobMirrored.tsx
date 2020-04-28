@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ColorType } from '../../types';
@@ -10,7 +10,7 @@ interface SvgBlobProps {
   color: ColorType;
 }
 
-const SvgBlob = ({ style, scale, color: propColor }: SvgBlobProps) => {
+const SvgBlob: FC<SvgBlobProps> = ({ style, scale, color: propColor }) => {
   const color = propColor ? Color[propColor] : Color.white;
   let width = 300;
   let height = 192;

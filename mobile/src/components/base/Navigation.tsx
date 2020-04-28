@@ -17,7 +17,7 @@ interface NavigationIconProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const NavigationIconEl = ({ mode, type = 'back', onPress }: NavigationIconProps) => {
+const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back', onPress }) => {
   const config: {
     color?: ColorType;
     scale?: number;
@@ -54,7 +54,7 @@ const NavigationIconEl = ({ mode, type = 'back', onPress }: NavigationIconProps)
   }
 };
 
-const NavigationIcon = ({ ...rest }: NavigationIconProps) => {
+const NavigationIcon: FC<NavigationIconProps> = ({ ...rest }) => {
   return (
     <Panel>
       <NavigationIconEl {...rest} />

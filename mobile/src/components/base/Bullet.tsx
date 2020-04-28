@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType, ModeType } from '../../types';
 import { MarginProps } from './Panel';
@@ -11,7 +11,7 @@ interface BulletProps extends MarginProps {
   onPress?: (index?: number) => void;
 }
 
-const Bullet = ({ mode, active, onPress, ...rest }: BulletProps) => {
+const Bullet: FC<BulletProps> = ({ mode, active, onPress, ...rest }) => {
   let backgroundColor: ColorType = 'grey3';
 
   switch (mode) {

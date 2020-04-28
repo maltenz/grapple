@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ColorType } from '../../types';
@@ -12,7 +12,7 @@ interface SvgTabbarBackgroundProps {
 const SvgTabbarBackgroundWidth = 2414;
 const SvgTabbarBackgroundHeight = 86.1;
 
-const SvgTabbarBackground = ({ color: propColor, style }: SvgTabbarBackgroundProps) => {
+const SvgTabbarBackground: FC<SvgTabbarBackgroundProps> = ({ color: propColor, style }) => {
   const color = propColor ? Color[propColor] : Color.white;
   const width = SvgTabbarBackgroundWidth;
   const height = SvgTabbarBackgroundHeight;
