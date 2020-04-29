@@ -51,7 +51,7 @@ const Text: FC<TextProps> = ({
   marginLeft,
 }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const textStyles = { fontFamily: 'roboto-regular', marginLeft: 0 };
+  const textStyles = { fontFamily: 'roboto-regular' };
 
   Object.assign(textStyles, AssetStyles.text[type]);
 

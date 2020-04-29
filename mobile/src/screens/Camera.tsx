@@ -16,6 +16,7 @@ import {
   Gallery,
   GalleryItemType,
   AssetStyles,
+  Button,
 } from '../components';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
@@ -92,17 +93,41 @@ const CameraScreen: FC = () => {
   return (
     <Camera style={{ flex: 1 }} type="front">
       <CameraFrame
+        Top={
+          <Panel
+            alignItems="flex-end"
+            flex={1}
+            justifyContent="flex-end"
+            paddingHorizontal
+            row
+            paddingBottom={0.5}
+          >
+            <Button type="normal" mode="night" appearance="normal">
+              Next
+            </Button>
+          </Panel>
+        }
         Bottom={
-          <Gallery
-            onChange={handleGalleryOnChange}
-            items={GALLERY}
-            activeIndex={galleryActiveIndex}
-            src={galleryHeroImg}
-            utility="delete"
-            mode="day"
-            type="row"
-            blurViewIntensity={0}
-          />
+          <>
+            <Gallery
+              onChange={handleGalleryOnChange}
+              items={GALLERY}
+              activeIndex={galleryActiveIndex}
+              src={galleryHeroImg}
+              utility="delete"
+              mode="day"
+              type="row"
+              blurViewIntensity={0}
+            />
+            <Panel paddingHorizontal row justifyContent="space-between">
+              <Button type="normal" mode="night" appearance="normal" outline>
+                Flip camera
+              </Button>
+              <Button type="normal" mode="night" appearance="warning" outline>
+                Edit
+              </Button>
+            </Panel>
+          </>
         }
       />
       <Navigation

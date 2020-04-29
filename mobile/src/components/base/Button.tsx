@@ -3,7 +3,7 @@ import { ColorType, ModeType } from '../../types';
 import CoreButton, { ButtonType, ButtonOutline } from '../core/Button';
 import { MarginProps } from './Panel';
 
-type AppearanceType = 'strong' | 'normal' | 'subtle' | 'disabled';
+type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning';
 
 interface ButtonProps extends MarginProps {
   mode: ModeType;
@@ -27,78 +27,82 @@ const Button: FC<ButtonProps> = ({
   const [outline, setOutline] = useState<ButtonOutline>();
 
   useEffect(() => {
-    if (mode === 'day') {
-      switch (propAppearance) {
-        case 'strong':
-          setBackgroundColor('red');
-          setColor('white');
+    let myBackground: ColorType = 'transparent';
+    let myColor: ColorType = 'transparent';
+    let myOutline: ColorType = 'transparent';
 
-          if (propOutline) {
-            setOutline(backgroundColor);
-            setColor(backgroundColor);
-            setOutline('transparent');
-
-            if (type === 'normal') {
-              setOutline('grey3');
-            }
-          }
-
-          break;
-        case 'disabled':
-          setBackgroundColor('grey3');
-          setColor('grey2');
-          break;
-        case 'subtle':
-        case 'normal':
-        default:
-          setBackgroundColor('blue');
-          setColor('white');
-
-          if (propOutline) {
-            setOutline(backgroundColor);
-            setColor(backgroundColor);
-            setBackgroundColor('transparent');
-          }
-      }
+    switch (propAppearance) {
+      case 'strong':
+        myBackground = 'red';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'red';
+          myOutline = 'red';
+        }
+        break;
+      case 'normal':
+        myBackground = 'blue';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'blue';
+          myOutline = 'blue';
+        }
+        break;
+      case 'warning':
+        myBackground = 'red';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'red';
+          myOutline = 'grey3';
+        }
+        break;
+      case 'disabled':
+        myBackground = 'grey3';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'grey3';
+          myOutline = 'grey3';
+        }
+        break;
+      default:
     }
 
     if (mode === 'night') {
       switch (propAppearance) {
-        case 'strong':
-          setBackgroundColor('red');
-          setColor('white');
-
-          if (propOutline) {
-            setOutline(backgroundColor);
-            setColor(backgroundColor);
-            setBackgroundColor('transparent');
-
-            if (type === 'normal') {
-              setOutline('grey3');
-            }
+        case 'normal':
+          if (!propOutline) {
+            myColor = 'grey';
           }
 
+          break;
+        case 'warning':
+          if (propOutline) {
+            myBackground = 'transparent';
+            myColor = 'white';
+            myOutline = 'red';
+          }
           break;
         case 'disabled':
-          setBackgroundColor('grey3');
-          setColor('grey2');
-          break;
-        case 'subtle':
-          setBackgroundColor('white');
-          setColor('grey');
-          break;
-        case 'normal':
-        default:
-          setBackgroundColor('blue');
-          setColor('white');
-
+          myBackground = 'grey';
+          myColor = 'grey2';
           if (propOutline) {
-            setOutline(backgroundColor);
-            setColor(backgroundColor);
-            setBackgroundColor('transparent');
+            myBackground = 'transparent';
+            myColor = 'grey';
+            myOutline = 'grey';
           }
+          break;
+        default:
+          break;
       }
     }
+
+    setBackgroundColor(myBackground);
+    setColor(myColor);
+    setOutline(myOutline);
   }, []);
 
   return (

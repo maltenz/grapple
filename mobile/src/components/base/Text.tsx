@@ -47,7 +47,7 @@ const Text: FC<TextProps> = ({ children, mode, appearance, type, ...rest }) => {
   }
 
   return (
-    <CoreText type={type} color={color} {...rest}>
+    <CoreText type={type} color={color} {...rest} style={{ marginLeft: 0 }}>
       {children}
     </CoreText>
   );
