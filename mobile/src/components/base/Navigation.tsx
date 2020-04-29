@@ -73,14 +73,14 @@ interface NavigationProps {
 
 const HEIGHT = 60;
 
-const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right }) => {
+const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, style }) => {
   const insets = useSafeArea();
   return (
     <Panel
       backgroundColor={mode === 'day' ? 'white' : 'black'}
       alignItems="flex-end"
       row
-      style={{ height: HEIGHT + insets.top, ...AssetStyles.shadow }}
+      style={[{ height: HEIGHT + insets.top, ...AssetStyles.shadow }, style]}
     >
       {Left && <Panel style={styles.left}>{Left}</Panel>}
       {Center}

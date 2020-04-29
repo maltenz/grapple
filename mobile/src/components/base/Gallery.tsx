@@ -1,12 +1,20 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Image, ImageSourcePropType, ScrollView, StyleSheet, Alert } from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { BlurView } from 'expo-blur';
 import { UtilityType, ModeType, ColorType } from '../../types';
 import { AssetStyles } from '../../assets/styles';
 
 import Panel, { MarginProps } from './Panel';
 import BaseBadge from './Badge';
-import Thumbnail from '../core/Thumbnail';
+import Thumbnail, { ThumbnailDimension } from '../core/Thumbnail';
 
 export interface GalleryItemType {
   id: string;
@@ -26,6 +34,8 @@ interface GalleryProps {
   src: ImageSourcePropType;
   onChange: (id: string, index: number) => void;
   gutter?: boolean;
+  style?: StyleProp<ViewStyle>;
+  blurViewIntensity?: number;
 }
 
 const Gallery: FC<GalleryProps> = ({
@@ -37,6 +47,8 @@ const Gallery: FC<GalleryProps> = ({
   items,
   utility,
   gutter,
+  style,
+  blurViewIntensity = 100,
 }) => {
   const [activeIndex, setActiveIndex] = useState(propActiveIndex);
   useEffect(() => {
@@ -52,9 +64,18 @@ const Gallery: FC<GalleryProps> = ({
   };
 
   return (
-    <Panel marginHorizontal={gutter}>
+    <Panel
+      marginHorizontal={gutter}
+      style={[
+        type === 'row' && {
+          height: ThumbnailDimension + AssetStyles.measure.space,
+        },
+        { position: 'relative' },
+        style,
+      ]}
+    >
       {type === 'feature' && <Image source={src} resizeMode="cover" style={featureStyles} />}
-      <BlurView tint="dark" intensity={100} style={styles.blurView}>
+      <BlurView tint="dark" intensity={blurViewIntensity} style={styles.blurView}>
         <ScrollView horizontal style={styles.scrollView}>
           {items.map(({ id, src: { thumbnail } }, index) => (
             <GalleryItem

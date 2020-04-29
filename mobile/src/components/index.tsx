@@ -8,7 +8,7 @@ import Badge from './base/Badge';
 import Bullet from './base/Bullet';
 import BulletPager from './base/BulletPager';
 import Button from './base/Button';
-import Gallery from './base/Gallery';
+import Gallery, { GalleryItemType } from './base/Gallery';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import Panel from './base/Panel';
@@ -18,6 +18,7 @@ import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
 import Text from './base/Text';
 import Thumbnail from './base/Thumbnail';
+import { ThumbnailDimension } from './core/Thumbnail';
 
 // svg
 // -- core
@@ -74,6 +75,7 @@ export {
   BulletPager,
   Button,
   Gallery,
+  GalleryItemType,
   Navigation,
   NavigationIcon,
   NavBarUser,
@@ -84,6 +86,7 @@ export {
   TabbarCircleButton,
   Text,
   Thumbnail,
+  ThumbnailDimension,
   // Colors
   Color,
   // components

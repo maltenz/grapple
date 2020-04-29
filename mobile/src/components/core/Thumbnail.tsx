@@ -60,6 +60,9 @@ const WIDTH = 80;
 const HEIGHT = 80;
 const BORDER_WIDTH = AssetStyles.measure.radius.regular;
 
+const ThumbnailDimension = WIDTH;
+export { ThumbnailDimension };
+
 const styles = StyleSheet.create({
   container: {
     width: WIDTH + BORDER_WIDTH * 2,
