@@ -5,6 +5,7 @@ import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Panel,
   Navigation,
@@ -12,12 +13,23 @@ import {
   TabbarBackground,
   TabbarCircleButton,
   SvgTabbarBackgroundHeight,
-  SvgIconAccount,
   Gallery,
   GalleryItemType,
   AssetStyles,
   Button,
+  SvgIconStory,
 } from '../components';
+
+import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
+import { CreateRootParamList } from './CreateRoot';
+
+type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Create'>;
+
+type NavProps = {
+  navigation: ScreenNavigationProp;
+};
+
+type CreateProps = NavProps;
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -59,7 +71,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
-const CameraScreen: FC = () => {
+const CameraScreen: FC<CreateProps> = () => {
   const [hasPermission, setHasPermission] = useState<boolean>();
 
   useEffect(() => {
@@ -153,10 +165,6 @@ const CameraScreen: FC = () => {
         <Panel flex={1}>
           <TouchableOpacity
             accessibilityRole="button"
-            // accessibilityStates={isFocused ? ['selected'] : []}
-            // accessibilityLabel={options.tabBarAccessibilityLabel}
-            // onPress={onPress}
-            // onLongPress={onLongPress}
             style={{
               flex: 1,
               height: SvgTabbarBackgroundHeight,
@@ -164,7 +172,7 @@ const CameraScreen: FC = () => {
               justifyContent: 'center',
             }}
           >
-            <SvgIconAccount scale={0.9} color="white" />
+            <SvgIconVideo scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
         <Panel flex={1} center>
@@ -177,17 +185,13 @@ const CameraScreen: FC = () => {
         <Panel flex={1}>
           <TouchableOpacity
             accessibilityRole="button"
-            // accessibilityStates={isFocused ? ['selected'] : []}
-            // accessibilityLabel={options.tabBarAccessibilityLabel}
-            // onPress={onPress}
-            // onLongPress={onLongPress}
             style={{
               height: SvgTabbarBackgroundHeight,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <SvgIconAccount scale={0.9} color="white" />
+            <SvgIconStory scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
       </Panel>

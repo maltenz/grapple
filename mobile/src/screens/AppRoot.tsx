@@ -4,15 +4,21 @@ import HomeRoot from './HomeRoot';
 import CreateRoot from './CreateRoot';
 import OnboardingRoot from './OnboardingRoot';
 
-const Stack = createStackNavigator();
+export type AppStackParamList = {
+  HomeRoot: undefined;
+  OnboardingRoot: undefined;
+  CreateRoot: undefined;
+};
+
+const AppStack = createStackNavigator<AppStackParamList>();
 
 const AppRoot: FC = () => {
   return (
-    <Stack.Navigator mode="modal" headerMode="none" initialRouteName="CreateRoot">
-      <Stack.Screen name="HomeRoot" component={HomeRoot} />
-      <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
-      <Stack.Screen name="CreateRoot" component={CreateRoot} />
-    </Stack.Navigator>
+    <AppStack.Navigator mode="modal" headerMode="none">
+      <AppStack.Screen name="HomeRoot" component={HomeRoot} />
+      <AppStack.Screen name="OnboardingRoot" component={OnboardingRoot} />
+      <AppStack.Screen name="CreateRoot" component={CreateRoot} />
+    </AppStack.Navigator>
   );
 };
 

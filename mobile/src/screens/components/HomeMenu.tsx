@@ -2,6 +2,9 @@ import React, { FC } from 'react';
 import { StyleSheet, Modal, Alert } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
+
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text, Panel, AssetStyles, Button } from '../../components';
 
 interface HomeMenuProps {
@@ -9,9 +12,18 @@ interface HomeMenuProps {
   isOpen: boolean;
 }
 
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
+
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
+
+type Props = {
+  route: ProfileScreenRouteProp;
+};
+
 interface HomeMenuItemProps {
   children: string;
   onPress: () => void;
+  navigation: NavigationProp<RouteProp>;
 }
 const HomeMenuItem: FC<HomeMenuItemProps> = ({ children, onPress }) => (
   <Text

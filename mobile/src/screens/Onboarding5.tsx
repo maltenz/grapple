@@ -2,12 +2,18 @@ import React, { useEffect, FC } from 'react';
 import { StatusBar, StyleSheet, ImageBackground } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
+import { OnboardingRootParamList } from './OnboardingRoot';
 
-interface OnboardingScreen5Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  navigation: any;
-}
+type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList>;
+
+type NavProps = {
+  navigation: ScreenNavigationProp;
+};
+
+type Onboarding5Props = NavProps;
+type OnboardingScreen5Props = Onboarding5Props;
 
 const OnboardingScreen5: FC<OnboardingScreen5Props> = ({ navigation }) => {
   const insets = useSafeArea();

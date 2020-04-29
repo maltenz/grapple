@@ -1,7 +1,17 @@
 import React, { FC } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
 import OnboardingScreen from './components/OnboardingScreen';
+import { OnboardingRootParamList } from './OnboardingRoot';
 
-const OnboardingScreen2: FC = () => (
+type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList>;
+
+type NavProps = {
+  navigation: ScreenNavigationProp;
+};
+
+type Onboarding2Props = NavProps;
+
+const OnboardingScreen2: FC<Onboarding2Props> = () => (
   <OnboardingScreen
     title="Find your voice"
     heading="Whether you just want to talk, or find a away out"
