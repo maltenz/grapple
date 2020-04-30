@@ -4,13 +4,13 @@ import HomeRoot from './HomeRoot';
 import CreateRoot from './CreateRoot';
 import OnboardingRoot from './OnboardingRoot';
 
-export type AppStackParamList = {
+export type AppRootParamList = {
   HomeRoot: undefined;
   OnboardingRoot: undefined;
   CreateRoot: undefined;
 };
 
-const AppStack = createStackNavigator<AppStackParamList>();
+const AppStack = createStackNavigator<AppRootParamList>();
 
 const AppRoot: FC = () => {
   return (

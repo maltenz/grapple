@@ -4,6 +4,7 @@ import { View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 
+import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import {
   Panel,
   SvgIconHome,
@@ -16,10 +17,10 @@ import {
 } from '../components';
 import HomeMenu from './components/HomeMenu';
 import Home from './Home';
-import { AppStackParamList } from './AppRoot';
+import { AppRootParamList } from './AppRoot';
 import OnboardingRoot from './OnboardingRoot';
 
-type ScreenNavigationProp = StackNavigationProp<AppStackParamList, 'HomeRoot'>;
+type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -32,6 +33,11 @@ export type HomeRootParamList = {
   Menu: undefined;
   Account: undefined;
 };
+
+export type HomeRootNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AppRootParamList>,
+  StackNavigationProp<HomeRootParamList>
+>;
 
 const Tab = createBottomTabNavigator();
 
@@ -109,7 +115,9 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   );
 };
 
-const HomeRoot: FC<HomeRootProps> = ({ navigation }) => {
+const HomeRoot: FC<HomeRootProps> = () => {
+  const navigation = useNavigation<HomeRootNavigationProp>();
+
   return (
     <>
       <Navigation

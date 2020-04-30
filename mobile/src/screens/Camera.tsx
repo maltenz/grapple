@@ -71,7 +71,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
-const CameraScreen: FC<CreateProps> = () => {
+const CameraScreen: FC<CreateProps> = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState<boolean>();
 
   useEffect(() => {
@@ -114,7 +114,12 @@ const CameraScreen: FC<CreateProps> = () => {
             row
             paddingBottom={0.5}
           >
-            <Button type="normal" mode="night" appearance="normal">
+            <Button
+              type="normal"
+              mode="night"
+              appearance="normal"
+              onPress={(): void => navigation.goBack()}
+            >
               Next
             </Button>
           </Panel>

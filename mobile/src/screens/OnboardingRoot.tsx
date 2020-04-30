@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import Onboarding1 from './Onboarding1';
 import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
-import { AppStackParamList } from './AppRoot';
+import { AppRootParamList } from './AppRoot';
 
-type ScreenNavigationProp = StackNavigationProp<AppStackParamList, 'OnboardingRoot'>;
+type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'OnboardingRoot'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -23,6 +24,11 @@ export type OnboardingRootParamList = {
   Onboarding4: undefined;
   Onboarding5: undefined;
 };
+
+export type OnboardingRootScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AppRootParamList>,
+  StackNavigationProp<OnboardingRootProps>
+>;
 
 const Stack = createMaterialTopTabNavigator();
 

@@ -34,10 +34,11 @@ const ListRow: FC = ({ children }) => (
 );
 
 const Onboarding1: FC<Onboarding1Props> = () => {
-  const insets = useSafeArea();
   useEffect(() => {
     StatusBar.setHidden(true);
   }, []);
+
+  const insets = useSafeArea();
 
   return (
     <>
