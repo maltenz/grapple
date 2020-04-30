@@ -1,10 +1,11 @@
-import React, { useEffect, FC } from 'react';
-import { StatusBar, StyleSheet, ImageBackground } from 'react-native';
+import React, { FC } from 'react';
+import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
-import { OnboardingRootParamList } from './OnboardingRoot';
+import { OnboardingRootParamList, OnboardingRootScreenNavigationProp } from './OnboardingRoot';
 
 type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding5'>;
 
@@ -15,14 +16,13 @@ type NavProps = {
 type Onboarding5Props = NavProps;
 type OnboardingScreen5Props = Onboarding5Props;
 
-const OnboardingScreen5: FC<OnboardingScreen5Props> = ({ navigation }) => {
+const OnboardingScreen5: FC<OnboardingScreen5Props> = () => {
   const insets = useSafeArea();
-  useEffect(() => {
-    StatusBar.setHidden(true);
-  }, []);
+  const navigation = useNavigation<OnboardingRootScreenNavigationProp>();
 
   return (
     <>
+      <StatusBar barStyle="light-content" />
       <ImageBackground source={{ uri: 'https://source.unsplash.com/random' }} style={{ flex: 1 }}>
         <Panel
           backgroundColor="purple"
@@ -76,7 +76,7 @@ const OnboardingScreen5: FC<OnboardingScreen5Props> = ({ navigation }) => {
             type="large"
             mode="day"
             appearance="strong"
-            onPress={(): void => navigation.navigate('Home')}
+            onPress={(): void => navigation.navigate('HomeRoot')}
           >
             Enter
           </Button>

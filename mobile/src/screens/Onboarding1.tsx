@@ -1,5 +1,5 @@
-import React, { useEffect, FC } from 'react';
-import { StatusBar, StyleSheet, ImageBackground } from 'react-native';
+import React, { FC } from 'react';
+import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -34,14 +34,11 @@ const ListRow: FC = ({ children }) => (
 );
 
 const Onboarding1: FC<Onboarding1Props> = () => {
-  useEffect(() => {
-    StatusBar.setHidden(true);
-  }, []);
-
   const insets = useSafeArea();
 
   return (
     <>
+      <StatusBar barStyle="light-content" />
       <ImageBackground source={{ uri: 'https://source.unsplash.com/random' }} style={{ flex: 1 }}>
         <Panel
           backgroundColor="purple"

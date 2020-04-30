@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useEffect, useState, FC } from 'react';
 import { StatusBar, Alert, View, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -22,7 +23,7 @@ import {
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 import { CreateRootParamList } from './CreateRoot';
 
-type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Create'>;
+type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Camera'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -82,7 +83,17 @@ const CameraScreen: FC<CreateProps> = ({ navigation }) => {
     StatusBar.setHidden(true);
   }, []);
 
+  const [galleryHeroImg, setGalleryHeroImg] = useState({
+    uri: 'https://source.unsplash.com/random',
+  });
   const [galleryActiveIndex, setGalleryActiveIndex] = useState(0);
+
+  const handleGalleryOnChange = (id: string, index: number): void => {
+    const { large } = GALLERY[index].src;
+    const uri = _.get(large, ['uri']);
+    setGalleryHeroImg({ uri });
+    setGalleryActiveIndex(index);
+  };
 
   if (hasPermission === null) {
     return <Panel flex={1} backgroundColor="black" />;
@@ -116,9 +127,10 @@ const CameraScreen: FC<CreateProps> = ({ navigation }) => {
         Bottom={
           <>
             <Gallery
-              onChange={(id, index): void => setGalleryActiveIndex(index)}
+              onChange={handleGalleryOnChange}
               items={GALLERY}
               activeIndex={galleryActiveIndex}
+              src={galleryHeroImg}
               utility="delete"
               mode="day"
               type="row"

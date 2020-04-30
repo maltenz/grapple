@@ -9,13 +9,17 @@ interface BulletProps extends MarginProps {
   mode: ModeType;
   active?: boolean;
   onPress?: (index?: number) => void;
+  appearance?: 'strong';
 }
 
-const Bullet: FC<BulletProps> = ({ mode, active, onPress, ...rest }) => {
+const Bullet: FC<BulletProps> = ({ mode, active, onPress, appearance, ...rest }) => {
   let backgroundColor: ColorType = 'grey3';
 
   switch (mode) {
     case 'day':
+      if (appearance === 'strong') {
+        backgroundColor = 'white';
+      }
       if (active) {
         backgroundColor = 'red';
       }

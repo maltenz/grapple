@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, Fragment, FC } from 'react';
-import { View, TouchableOpacity, Alert } from 'react-native';
+import { View, TouchableOpacity, Alert, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -52,6 +52,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
 
   return (
     <>
+      <StatusBar barStyle="dark-content" />
       <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
         <TabbarBackground />
 

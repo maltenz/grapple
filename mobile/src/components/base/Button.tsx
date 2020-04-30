@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType, ModeType } from '../../types';
 import CoreButton, { ButtonType, ButtonOutline } from '../core/Button';
 import { MarginProps } from './Panel';
@@ -11,6 +12,7 @@ interface ButtonProps extends MarginProps {
   appearance: AppearanceType;
   outline?: boolean;
   onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -20,6 +22,7 @@ const Button: FC<ButtonProps> = ({
   outline: propOutline,
   appearance: propAppearance,
   onPress,
+  style,
   ...rest
 }) => {
   const [backgroundColor, setBackgroundColor] = useState<ColorType>();
@@ -112,6 +115,7 @@ const Button: FC<ButtonProps> = ({
       outline={outline}
       backgroundColor={backgroundColor}
       color={color}
+      style={style}
       {...rest}
     >
       {children}
