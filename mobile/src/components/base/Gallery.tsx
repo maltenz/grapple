@@ -31,7 +31,7 @@ interface GalleryProps {
   items: GalleryItemType[];
   activeIndex: number;
   utility: UtilityType;
-  src: ImageSourcePropType;
+  src?: ImageSourcePropType;
   onChange: (id: string, index: number) => void;
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -76,7 +76,7 @@ const Gallery: FC<GalleryProps> = ({
         style,
       ]}
     >
-      {type === 'feature' && (
+      {type === 'feature' && src && (
         <Panel style={featureStyles}>
           <Image source={src} resizeMode="cover" style={styles.image} />
           {Nav && <Panel style={styles.navUserEdit}>{Nav}</Panel>}
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   },
   navUserEdit: {
     position: 'absolute',
-    top: AssetStyles.measure.space,
-    right: AssetStyles.measure.space,
+    top: AssetStyles.measure.space / 2,
+    right: AssetStyles.measure.space / 2,
   },
 });
 

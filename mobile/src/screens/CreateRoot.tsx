@@ -28,7 +28,7 @@ export type CreateRootScreenNavigationProp = CompositeNavigationProp<
 
 const CreateRoot: FC<CreateRootProps> = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="MyPosts">
+    <Stack.Navigator headerMode="none" initialRouteName="Create">
       <Stack.Screen name="Create" component={Camera} />
       <Stack.Screen name="MyPosts" component={MyPosts} />
     </Stack.Navigator>

@@ -15,6 +15,7 @@ import NavBarUserPostEdit from './base/NavBarUserPostEdit';
 import Panel from './base/Panel';
 import Post from './base/Post';
 import PostContent from './base/PostContent';
+import PostsEditSlider, { PostsEditItemType } from './base/PostsEditSlider';
 import PullBar from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
@@ -85,6 +86,8 @@ export {
   Panel,
   Post,
   PostContent,
+  PostsEditSlider,
+  PostsEditItemType,
   PullBar,
   TabbarBackground,
   TabbarCircleButton,

@@ -3,16 +3,13 @@ import React, { FC, useState } from 'react';
 import { ScrollView, Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
-  Gallery,
-  GalleryItemType,
   Navigation,
   NavigationIcon,
   AssetStyles,
-  Panel,
-  NavBarUserPostEdit,
-  PostContent,
-  BulletPager,
+  PostsEditSlider,
+  PostsEditItemType,
 } from '../components';
+
 import { CreateRootParamList } from './CreateRoot';
 
 type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
@@ -23,38 +20,66 @@ type NavProps = {
 
 type MyPostsProps = NavProps;
 
-const GALERY_ITEM_SAMPLE = {
+const TITLE = 'Why read motivational sayings?';
+const CONTENT =
+  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
+
+const POSTS_ITEM = {
   src: {
     thumbnail: { uri: 'https://source.unsplash.com/random' },
     large: { uri: 'https://source.unsplash.com/random' },
   },
 };
 
-const GALLERY: GalleryItemType[] = [
-  { ...GALERY_ITEM_SAMPLE, id: 'asd' },
-  { ...GALERY_ITEM_SAMPLE, id: 'a3a' },
-  { ...GALERY_ITEM_SAMPLE, id: 'ags' },
-  { ...GALERY_ITEM_SAMPLE, id: '42v' },
-  { ...GALERY_ITEM_SAMPLE, id: '525' },
-  { ...GALERY_ITEM_SAMPLE, id: '6hj' },
+const POSTS: PostsEditItemType[] = [
+  {
+    ...POSTS_ITEM,
+    title: TITLE,
+    content: CONTENT,
+    id: '123',
+  },
+  {
+    ...POSTS_ITEM,
+    title: TITLE,
+    content: CONTENT,
+    id: '231',
+  },
+  {
+    ...POSTS_ITEM,
+    title: TITLE,
+    content: CONTENT,
+    id: '535',
+  },
+  {
+    ...POSTS_ITEM,
+    title: TITLE,
+    content: CONTENT,
+    id: '532',
+  },
+  {
+    ...POSTS_ITEM,
+    title: TITLE,
+    content: CONTENT,
+    id: '523',
+  },
 ];
 
-const TITLE = 'Why read motivational sayings?';
-const CONTENT =
-  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
+interface PostEditProps {
+  items: PostsEditItemType[];
+}
+
+const PostEdit: FC<PostEditProps> = ({ items }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  return (
+    <PostsEditSlider
+      items={items}
+      activeIndex={activeIndex}
+      onChange={(index): void => setActiveIndex(index)}
+    />
+  );
+};
 
 const MyPosts: FC<MyPostsProps> = ({ navigation }) => {
-  const [galleryActiveIndex, setGalleryActiveIndex] = useState(0);
-  const [galleryHeroImg, setGalleryHeroImg] = useState({
-    uri: 'https://source.unsplash.com/random',
-  });
-
-  const handleGalleryOnChange = (id: string, index: number): void => {
-    const { large } = GALLERY[index].src;
-    const uri = _.get(large, ['uri']);
-    setGalleryHeroImg({ uri });
-    setGalleryActiveIndex(index);
-  };
   return (
     <>
       <Navigation
@@ -69,45 +94,9 @@ const MyPosts: FC<MyPostsProps> = ({ navigation }) => {
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <ScrollView style={styles.scrollView}>
-        {_.times(5, () => {
-          return (
-            <Panel marginBottom key={_.uniqueId('id_')}>
-              <Gallery
-                Nav={
-                  <NavBarUserPostEdit
-                    mode="day"
-                    attachments={5}
-                    onPressEdit={(): void => Alert.alert('edit')}
-                  />
-                }
-                onChange={handleGalleryOnChange}
-                items={GALLERY}
-                activeIndex={galleryActiveIndex}
-                src={galleryHeroImg}
-                utility="delete"
-                mode="day"
-                type="feature"
-                gutter
-              />
-              <Panel
-                marginHorizontal
-                paddingHorizontal={0.5}
-                paddingVertical={0.5}
-                backgroundColor="white"
-              >
-                <PostContent title={TITLE} content={CONTENT} />
-                <BulletPager
-                  marginTop
-                  center
-                  marginBottom={0.5}
-                  mode="day"
-                  count={5}
-                  activeIndex={2}
-                />
-              </Panel>
-            </Panel>
-          );
-        })}
+        {_.times(5, () => (
+          <PostEdit items={POSTS} key={_.uniqueId('id_')} />
+        ))}
       </ScrollView>
     </>
   );
