@@ -14,7 +14,7 @@ const AppStack = createStackNavigator<AppRootParamList>();
 
 const AppRoot: FC = () => {
   return (
-    <AppStack.Navigator mode="modal" headerMode="none">
+    <AppStack.Navigator mode="modal" headerMode="none" initialRouteName="HomeRoot">
       <AppStack.Screen name="HomeRoot" component={HomeRoot} />
       <AppStack.Screen name="OnboardingRoot" component={OnboardingRoot} />
       <AppStack.Screen name="CreateRoot" component={CreateRoot} />

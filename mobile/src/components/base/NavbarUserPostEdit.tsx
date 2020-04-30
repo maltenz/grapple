@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { ModeType } from '../../types';
 import NavBar from '../core/NavBar';
 import Badge from './Badge';
@@ -8,14 +9,20 @@ interface NavBarUserPostEditProps {
   mode: ModeType;
   attachments: number;
   onPressEdit: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
-const NavBarUserPostEdit: FC<NavBarUserPostEditProps> = ({ mode, attachments, onPressEdit }) => {
+const NavBarUserPostEdit: FC<NavBarUserPostEditProps> = ({
+  mode,
+  attachments,
+  onPressEdit,
+  style,
+}) => {
   return (
     <NavBar
       mode={mode}
       paddingLeft
-      style={{ paddingRight: AssetStyles.measure.circle.small.padding }}
+      style={[{ paddingRight: AssetStyles.measure.circle.small.padding }, style]}
     >
       <Badge
         title={`${attachments} Attachments`}

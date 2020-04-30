@@ -35,8 +35,8 @@ export type HomeRootParamList = {
 };
 
 export type HomeRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AppRootParamList>,
-  StackNavigationProp<HomeRootParamList>
+  StackNavigationProp<HomeRootParamList>,
+  StackNavigationProp<AppRootParamList>
 >;
 
 const Tab = createBottomTabNavigator();

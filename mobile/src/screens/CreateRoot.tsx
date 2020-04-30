@@ -3,6 +3,7 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { CompositeNavigationProp } from '@react-navigation/native';
 import Camera from './Camera';
 import { AppRootParamList } from './AppRoot';
+import MyPosts from './MyPosts';
 
 const Stack = createStackNavigator();
 
@@ -27,8 +28,9 @@ export type CreateRootScreenNavigationProp = CompositeNavigationProp<
 
 const CreateRoot: FC<CreateRootProps> = () => {
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator headerMode="none" initialRouteName="MyPosts">
       <Stack.Screen name="Create" component={Camera} />
+      <Stack.Screen name="MyPosts" component={MyPosts} />
     </Stack.Navigator>
   );
 };

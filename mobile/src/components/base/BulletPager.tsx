@@ -8,11 +8,12 @@ interface BulletPagerProps extends MarginProps {
   count: number;
   activeIndex: number;
   mode: ModeType;
+  center?: boolean;
 }
 
-const BulletPager: FC<BulletPagerProps> = ({ count, activeIndex, mode, ...rest }) => {
+const BulletPager: FC<BulletPagerProps> = ({ count, activeIndex, mode, center, ...rest }) => {
   return (
-    <Panel row {...rest}>
+    <Panel row {...rest} center={center}>
       {_.times(count, (index) => (
         <Bullet mode={mode} key={index} active={index === activeIndex} marginRight={0.5} />
       ))}

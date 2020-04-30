@@ -11,8 +11,10 @@ import Button from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
+import NavBarUserPostEdit from './base/NavBarUserPostEdit';
 import Panel from './base/Panel';
 import Post from './base/Post';
+import PostContent from './base/PostContent';
 import PullBar from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
@@ -79,8 +81,10 @@ export {
   Navigation,
   NavigationIcon,
   NavBarUser,
+  NavBarUserPostEdit,
   Panel,
   Post,
+  PostContent,
   PullBar,
   TabbarBackground,
   TabbarCircleButton,

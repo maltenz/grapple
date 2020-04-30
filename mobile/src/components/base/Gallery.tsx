@@ -36,6 +36,7 @@ interface GalleryProps {
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
   blurViewIntensity?: number;
+  Nav?: React.ReactNode;
 }
 
 const Gallery: FC<GalleryProps> = ({
@@ -49,6 +50,7 @@ const Gallery: FC<GalleryProps> = ({
   gutter,
   style,
   blurViewIntensity = 100,
+  Nav,
 }) => {
   const [activeIndex, setActiveIndex] = useState(propActiveIndex);
   useEffect(() => {
@@ -74,7 +76,12 @@ const Gallery: FC<GalleryProps> = ({
         style,
       ]}
     >
-      {type === 'feature' && <Image source={src} resizeMode="cover" style={featureStyles} />}
+      {type === 'feature' && (
+        <Panel style={featureStyles}>
+          <Image source={src} resizeMode="cover" style={styles.image} />
+          {Nav && <Panel style={styles.navUserEdit}>{Nav}</Panel>}
+        </Panel>
+      )}
       <BlurView tint="dark" intensity={blurViewIntensity} style={styles.blurView}>
         <ScrollView horizontal style={styles.scrollView}>
           {items.map(({ id, src: { thumbnail } }, index) => (
@@ -154,6 +161,15 @@ const styles = StyleSheet.create({
   scrollView: {
     flexDirection: 'row',
     paddingVertical: AssetStyles.measure.space / 2,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  navUserEdit: {
+    position: 'absolute',
+    top: AssetStyles.measure.space,
+    right: AssetStyles.measure.space,
   },
 });
 
