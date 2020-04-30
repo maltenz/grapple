@@ -16,6 +16,7 @@ import Panel from './base/Panel';
 import Post from './base/Post';
 import PostContent from './base/PostContent';
 import PostContentHeader from './base/PostContentHeader';
+import PostContentHeading from './base/PostContentHeading';
 import PostsEditSlider, { PostsEditItemType } from './base/PostsEditSlider';
 import PullBar from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
@@ -88,6 +89,7 @@ export {
   Post,
   PostContent,
   PostContentHeader,
+  PostContentHeading,
   PostsEditSlider,
   PostsEditItemType,
   PullBar,

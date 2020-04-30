@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
-import Panel from './Panel';
+import Panel, { MarginProps } from './Panel';
 import Text from './Text';
 
-export interface PostContentProps {
+export interface PostContentProps extends MarginProps {
   title: string;
   content: string;
 }
 
-const PostContent: FC<PostContentProps> = ({ title, content }) => {
+const PostContent: FC<PostContentProps> = ({ title, content, ...rest }) => {
   return (
-    <Panel paddingTop={0.5}>
+    <Panel paddingTop={0.5} {...rest}>
       <Text mode="day" appearance="normal" type="small" bold>
         {title}
         <Text mode="day" appearance="normal" type="small">

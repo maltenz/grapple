@@ -1,11 +1,10 @@
 /* eslint-disable global-require */
-import React, { useState, FC } from 'react';
-import { Text as RnText, StyleProp, TextStyle } from 'react-native';
+import React, { useState, FC, createRef } from 'react';
+import { Text as RnText, StyleProp, TextStyle, TextInput } from 'react-native';
 import { AppLoading } from 'expo';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as Font from 'expo-font';
 import { ColorType } from '../../types';
-import { AssetStyles } from '../../assets/styles';
+import { AssetStyles, minLineheight as AssetStylesMinLineHeight } from '../../assets/styles';
 import { Color } from '../../assets/colors';
 import { MarginProps, measure } from '../base/Panel';
 
@@ -22,6 +21,9 @@ export interface TextProps extends MarginProps {
   textAlign?: TextAlignType;
   onPress?: () => void;
   minLineHeight?: boolean;
+  textInput?: boolean;
+  value?: string;
+  onChangeText?: (text: string) => void;
 }
 
 const fetchFonts = (): Promise<void> => {
@@ -30,6 +32,9 @@ const fetchFonts = (): Promise<void> => {
     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
   });
 };
+
+const fontRegular = 'roboto-regular';
+const fontBold = 'roboto-bold';
 
 const Text: FC<TextProps> = ({
   children,
@@ -42,6 +47,9 @@ const Text: FC<TextProps> = ({
   textAlign,
   onPress,
   minLineHeight,
+  textInput,
+  value,
+  onChangeText,
   margin,
   marginHorizontal,
   marginVertical,
@@ -50,8 +58,11 @@ const Text: FC<TextProps> = ({
   marginBottom,
   marginLeft,
 }) => {
+  const inputRef = createRef<TextInput>();
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const textStyles = { fontFamily: 'roboto-regular' };
+
+  const textStyles = { fontFamily: fontRegular };
 
   Object.assign(textStyles, AssetStyles.text[type]);
 
@@ -60,10 +71,10 @@ const Text: FC<TextProps> = ({
     case 'h2':
     case 'h3':
     case 'h4':
-      Object.assign(textStyles, { fontFamily: 'roboto-bold' });
+      Object.assign(textStyles, { fontFamily: fontBold });
       break;
     default:
-      Object.assign(textStyles, { fontFamily: 'roboto-regular' });
+      Object.assign(textStyles, { fontFamily: fontRegular });
   }
 
   if (color) {
@@ -71,11 +82,11 @@ const Text: FC<TextProps> = ({
   }
 
   if (bold) {
-    Object.assign(textStyles, { fontFamily: 'roboto-bold' });
+    Object.assign(textStyles, { fontFamily: fontBold });
   }
 
   if (regular) {
-    Object.assign(textStyles, { fontFamily: 'roboto-regular' });
+    Object.assign(textStyles, { fontFamily: fontRegular });
   }
 
   if (uppercase) {
@@ -86,8 +97,8 @@ const Text: FC<TextProps> = ({
     Object.assign(textStyles, { textAlign });
   }
 
-  if (minLineHeight) {
-    Object.assign(textStyles, { lineHeight: AssetStyles.text[type].fontSize * 1.1 });
+  if (minLineHeight || textInput) {
+    Object.assign(textStyles, { lineHeight: AssetStylesMinLineHeight(type) });
   }
 
   if (margin) {
@@ -121,11 +132,25 @@ const Text: FC<TextProps> = ({
   if (!fontsLoaded) {
     return <AppLoading startAsync={fetchFonts} onFinish={(): void => setFontsLoaded(true)} />;
   }
+
+  if (textInput) {
+    return (
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        ref={inputRef}
+        style={[textStyles, style]}
+      />
+    );
+  }
+
   return (
     <RnText onPress={onPress} style={[textStyles, style]}>
       {children}
     </RnText>
   );
 };
+
+export { fontRegular, fontBold };
 
 export default Text;

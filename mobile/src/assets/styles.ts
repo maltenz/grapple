@@ -1,6 +1,7 @@
 import { Dimensions } from 'react-native';
 
 import { Color } from './colors';
+import { TextType } from '../components/core/Text';
 
 const genericStyles = {
   color: Color.grey,
@@ -89,4 +90,6 @@ const AssetStyles = {
   },
 };
 
-export { AssetStyles };
+const minLineheight = (type: TextType): number => AssetStyles.text[type].fontSize * 1.1;
+
+export { AssetStyles, minLineheight };
