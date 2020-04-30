@@ -16,7 +16,7 @@ import {
 import Ruler from './components/OnboardingRuler';
 import { OnboardingRootParamList } from './OnboardingRoot';
 
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList>;
+type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding1'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;

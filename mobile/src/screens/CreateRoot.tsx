@@ -15,7 +15,7 @@ type NavProps = {
 type CreateRootProps = NavProps;
 
 export type CreateRootParamList = {
-  Create: undefined;
+  Camera: undefined;
   MyPosts: undefined;
   MyPost: undefined;
 };

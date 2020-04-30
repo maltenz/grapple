@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Post, Color, AssetStyles } from '../components';
 import { HomeRootParamList } from './HomeRoot';
 
-type ScreenNavigationProp = StackNavigationProp<HomeRootParamList>;
+type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'Home'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;

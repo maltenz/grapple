@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
 import { OnboardingRootParamList } from './OnboardingRoot';
 
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList>;
+type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding5'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;

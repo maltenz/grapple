@@ -23,7 +23,7 @@ import {
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 import { CreateRootParamList } from './CreateRoot';
 
-type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Create'>;
+type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Camera'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
