@@ -9,6 +9,10 @@ interface BulletProps extends MarginProps {
   onPress?: () => void;
 }
 
+const BULLET_DIMENSION = 10;
+
+const BulletDimension = BULLET_DIMENSION;
+
 const Bullet: FC<BulletProps> = ({ backgroundColor, style, onPress, ...rest }) => {
   return (
     <Panel
@@ -22,10 +26,10 @@ const Bullet: FC<BulletProps> = ({ backgroundColor, style, onPress, ...rest }) =
 
 const styles = StyleSheet.create({
   container: {
-    width: 10,
-    height: 10,
+    width: BULLET_DIMENSION,
+    height: BULLET_DIMENSION,
     borderRadius: 5,
   },
 });
-
+export { BulletDimension };
 export default Bullet;

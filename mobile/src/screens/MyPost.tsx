@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { ScrollView, Alert, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   Navigation,
   NavigationIcon,
@@ -22,6 +23,7 @@ import {
 import { CreateRootParamList } from './CreateRoot';
 import Text from '../components/core/Text';
 import { ButtonLargeHeight } from '../components/core/Button';
+import { BulletDimension } from '../components/core/Bullet';
 
 type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
 
@@ -79,6 +81,11 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const inset = useSafeArea();
 
+  const FOOTER_HEIGHT =
+    ButtonLargeHeight + BulletDimension + AssetStyles.measure.space + inset.bottom;
+  const FOOTER_PADDING_HEIGHT = FOOTER_HEIGHT + AssetStyles.measure.space;
+  const THUMBNAIL_HEIGHT = ThumbnailDimension + AssetStyles.measure.space;
+
   return (
     <>
       <Navigation
@@ -97,8 +104,12 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <Image style={[styles.heroImage]} source={POSTS_ITEM.src.large} />
-        <ScrollView>
-          <Panel style={{ height: AssetStyles.measure.window.width }} />
+        <ScrollView
+          contentContainerStyle={{
+            paddingTop: AssetStyles.measure.window.width,
+            paddingBottom: FOOTER_PADDING_HEIGHT + THUMBNAIL_HEIGHT,
+          }}
+        >
           <Gallery
             type="row"
             mode="day"
@@ -107,16 +118,9 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
             items={POSTS}
             onChange={(id, index): void => setActiveIndex(index)}
             activeIndex={activeIndex}
-            style={{ marginTop: -(ThumbnailDimension + AssetStyles.measure.space) }}
+            style={{ marginTop: -THUMBNAIL_HEIGHT }}
           />
-          <Panel
-            paddingHorizontal
-            paddingTop
-            backgroundColor="white"
-            style={{
-              paddingBottom: ButtonLargeHeight + inset.bottom + AssetStyles.measure.space,
-            }}
-          >
+          <Panel paddingHorizontal paddingTop backgroundColor="white">
             <PostContentHeader
               title="Story"
               date={new Date()}
@@ -131,15 +135,33 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
             />
             <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
             <PostContent title={TITLE} content={CONTENT} />
-            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
-            <PostContent title={TITLE} content={CONTENT} />
-            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
-            <PostContent title={TITLE} content={CONTENT} />
           </Panel>
+          <Panel
+            backgroundColor="white"
+            style={[
+              styles.backgroundBug,
+              {
+                height: 500,
+                marginBottom: -500,
+              },
+            ]}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
-      <Panel style={styles.footer} paddingHorizontal>
-        <Button type="large" appearance="normal" mode="day" marginVertical>
+      <Panel
+        style={[
+          styles.footer,
+          { height: FOOTER_HEIGHT, paddingBottom: AssetStyles.measure.space + inset.bottom },
+        ]}
+        paddingHorizontal
+      >
+        <LinearGradient
+          colors={['rgba(255,255,255,0)', Color.white]}
+          style={styles.linearGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 0.5 }}
+        />
+        <Button type="large" appearance="normal" mode="day" marginBottom style={{ marginTop: 0 }}>
           Publish
         </Button>
         <BulletPager count={POSTS.length} activeIndex={activeIndex} mode="day" center />
@@ -160,6 +182,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
+  linearGradient: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+  backgroundBug: {},
 });
 
 export default MyPost;
