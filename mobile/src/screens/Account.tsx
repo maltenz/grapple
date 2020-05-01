@@ -1,12 +1,26 @@
 import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
-import { AssetStyles, MenuItem, Color, MenuContainer, MenuItemAccount } from '../components';
+import { useSafeArea } from 'react-native-safe-area-context';
+import {
+  AssetStyles,
+  MenuItem,
+  Color,
+  MenuContainer,
+  MenuItemAccount,
+  SvgTabbarBackgroundHeight,
+} from '../components';
 
 const SRC = { uri: 'https://source.unsplash.com/philipegd' };
 
 const Account: FC = () => {
+  const inset = useSafeArea();
   return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={{
+        paddingBottom: inset.bottom + SvgTabbarBackgroundHeight,
+      }}
+    >
       <MenuContainer>
         <MenuItemAccount
           title="My Account"
