@@ -12,6 +12,7 @@ import Button from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
 import MenuContainer from './base/MenuContainer';
 import MenuItem from './base/MenuItem';
+import MenuItemAccount from './base/MenuItemAccount';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import NavBarUserPostEdit from './base/NavBarUserPostEdit';
@@ -88,6 +89,7 @@ export {
   GalleryItemType,
   MenuContainer,
   MenuItem,
+  MenuItemAccount,
   Navigation,
   NavigationIcon,
   NavBarUser,

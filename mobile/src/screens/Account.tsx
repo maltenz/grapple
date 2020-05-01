@@ -1,10 +1,20 @@
 import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
-import { AssetStyles, MenuItem, Color, MenuContainer } from '../components';
+import { AssetStyles, MenuItem, Color, MenuContainer, MenuItemAccount } from '../components';
+
+const SRC = { uri: 'https://source.unsplash.com/philipegd' };
 
 const Account: FC = () => {
   return (
     <ScrollView style={styles.scrollView}>
+      <MenuContainer>
+        <MenuItemAccount
+          title="My Account"
+          subTitle="Malte Boeing"
+          onPress={(): void => Alert.alert('press')}
+          src={SRC}
+        />
+      </MenuContainer>
       <MenuContainer>
         <MenuItem title="Profile" last onPress={(): void => Alert.alert('press')} />
       </MenuContainer>
