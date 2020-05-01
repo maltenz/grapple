@@ -18,12 +18,14 @@ import {
   SvgIconEdit,
   Color,
   ThumbnailDimension,
+  NavBarUserStoryIncident,
+  Text,
 } from '../components';
 
 import { CreateRootParamList } from './CreateRoot';
-import Text from '../components/core/Text';
 import { ButtonLargeHeight } from '../components/core/Button';
 import { BulletDimension } from '../components/core/Bullet';
+import { NavigationHeight } from '../components/base/Navigation';
 
 type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
 
@@ -90,15 +92,20 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
     <>
       <Navigation
         mode="day"
-        Left={
-          <NavigationIcon
+        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
+        Right={
+          <Button
             mode="day"
-            type="search"
-            onPress={(): void => navigation.navigate('Camera')}
-          />
+            onPress={(): void => Alert.alert('Saved')}
+            appearance="disabled"
+            type="normal"
+            style={{ marginBottom: 0 }}
+          >
+            Saved
+          </Button>
         }
-        Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
+
       <KeyboardAvoidingView
         style={{ backgroundColor: Color.white }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -126,7 +133,7 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
               date={new Date()}
               Right={
                 <Panel row alignItems="center">
-                  <Text type="small" marginRight={0.25}>
+                  <Text type="small" mode="day" appearance="normal" marginRight={0.25}>
                     Edit
                   </Text>
                   <SvgIconEdit scale={0.9} />
@@ -166,6 +173,16 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
         </Button>
         <BulletPager count={POSTS.length} activeIndex={activeIndex} mode="day" center />
       </Panel>
+      <NavBarUserStoryIncident
+        mode="day"
+        onPress={(): void => Alert.alert('edit')}
+        style={{
+          position: 'absolute',
+          top: AssetStyles.measure.space + NavigationHeight + inset.top,
+          left: AssetStyles.measure.space,
+        }}
+        utility="Story"
+      />
     </>
   );
 };
@@ -175,6 +192,9 @@ const styles = StyleSheet.create({
     width: AssetStyles.measure.window.width,
     height: AssetStyles.measure.window.width,
     position: 'absolute',
+    padding: AssetStyles.measure.space,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   footer: {
     position: 'absolute',

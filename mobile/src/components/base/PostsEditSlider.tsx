@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { Alert } from 'react-native';
 import Panel from './Panel';
 import PostContent from './PostContent';
 import BulletPager from './BulletPager';
@@ -15,12 +14,14 @@ export interface PostsEditSliderProps {
   items: PostsEditItemType[];
   onChange: (index: number) => void;
   activeIndex: number;
+  onPressEdit: () => void;
 }
 
 const PostsEditSlider: FC<PostsEditSliderProps> = ({
   items,
   onChange: propsOnChange,
   activeIndex: propsActiveIndex,
+  onPressEdit,
 }) => {
   const [activeIndex, setActiveIndex] = useState(propsActiveIndex);
 
@@ -32,13 +33,7 @@ const PostsEditSlider: FC<PostsEditSliderProps> = ({
   return (
     <Panel marginBottom>
       <Gallery
-        Nav={
-          <NavBarUserPostEdit
-            mode="day"
-            attachments={5}
-            onPressEdit={(): void => Alert.alert('edit')}
-          />
-        }
+        Nav={<NavBarUserPostEdit mode="day" attachments={5} onPressEdit={onPressEdit} />}
         onChange={onChange}
         items={items}
         activeIndex={activeIndex}

@@ -12,6 +12,7 @@ import Gallery, { GalleryItemType } from './base/Gallery';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import NavBarUserPostEdit from './base/NavBarUserPostEdit';
+import NavBarUserStoryIncident from './base/NavBarUserStoryIncident';
 import Panel from './base/Panel';
 import Post from './base/Post';
 import PostContent from './base/PostContent';
@@ -85,6 +86,7 @@ export {
   NavigationIcon,
   NavBarUser,
   NavBarUserPostEdit,
+  NavBarUserStoryIncident,
   Panel,
   Post,
   PostContent,

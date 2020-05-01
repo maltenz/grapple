@@ -17,7 +17,7 @@ const AppRoot: FC = () => {
   return (
     <>
       <StatusBar hidden={false} barStyle="light-content" />
-      <AppStack.Navigator mode="modal" headerMode="none" initialRouteName="CreateRoot">
+      <AppStack.Navigator mode="modal" headerMode="none">
         <AppStack.Screen name="HomeRoot" component={HomeRoot} />
         <AppStack.Screen name="OnboardingRoot" component={OnboardingRoot} />
         <AppStack.Screen name="CreateRoot" component={CreateRoot} />

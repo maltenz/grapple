@@ -35,7 +35,6 @@ const Stack = createMaterialTopTabNavigator();
 const OnboardingRoot: FC<OnboardingRootProps> = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
       tabBarOptions={{
         style: {
           display: 'none',

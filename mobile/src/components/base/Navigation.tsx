@@ -5,7 +5,6 @@ import { ColorType, ModeType } from '../../types';
 import SvgIconChat from '../../assets/svg/icons/large/SvgIconChat';
 import Panel from './Panel';
 import SvgIconSearch from '../../assets/svg/icons/large/SvgIconSearch';
-import Button from './Button';
 import SvgIconLeft from '../../assets/svg/icons/large/SvgIconLeft';
 import SvgIconSmallClose from '../../assets/svg/icons/small/SvgIconSmallClose';
 import { AssetStyles } from '../../assets/styles';
@@ -13,19 +12,17 @@ import { AssetStyles } from '../../assets/styles';
 interface NavigationIconProps {
   mode: ModeType;
   type: 'chat' | 'search' | 'delete' | 'saved' | 'back' | 'close';
-  onPress: () => void;
+  onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
 
-const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back', onPress }) => {
+const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back' }) => {
   const config: {
     color?: ColorType;
     scale?: number;
-    onPress: () => void;
   } = {
     color: mode === 'day' ? 'grey' : 'white',
     scale: 0.9,
-    onPress,
   };
 
   switch (type) {
@@ -33,18 +30,6 @@ const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back', onPres
       return <SvgIconChat {...config} />;
     case 'search':
       return <SvgIconSearch {...config} />;
-    case 'delete':
-      return (
-        <Button mode={mode} onPress={onPress} appearance="subtle" type="small">
-          Delete
-        </Button>
-      );
-    case 'saved':
-      return (
-        <Button mode={mode} onPress={onPress} appearance="subtle" type="small">
-          Saved
-        </Button>
-      );
     case 'back':
       return <SvgIconLeft {...config} />;
     case 'close':
@@ -54,9 +39,9 @@ const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back', onPres
   }
 };
 
-const NavigationIcon: FC<NavigationIconProps> = ({ ...rest }) => {
+const NavigationIcon: FC<NavigationIconProps> = ({ onPress, ...rest }) => {
   return (
-    <Panel>
+    <Panel alignItems="flex-end" onPress={onPress}>
       <NavigationIconEl {...rest} />
     </Panel>
   );

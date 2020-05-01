@@ -64,14 +64,15 @@ const POSTS: PostsEditItemType[] = [
   },
 ];
 
-interface PostEditProps {
+interface PostEditProps extends MyPostsProps {
   items: PostsEditItemType[];
 }
 
-const PostEdit: FC<PostEditProps> = ({ items }) => {
+const PostEdit: FC<PostEditProps> = ({ items, navigation }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <PostsEditSlider
+      onPressEdit={(): void => navigation.navigate('MyPost')}
       items={items}
       activeIndex={activeIndex}
       onChange={(index): void => setActiveIndex(index)}
@@ -84,18 +85,12 @@ const MyPosts: FC<MyPostsProps> = ({ navigation }) => {
     <>
       <Navigation
         mode="day"
-        Left={
-          <NavigationIcon
-            mode="day"
-            type="search"
-            onPress={(): void => navigation.navigate('Camera')}
-          />
-        }
+        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <ScrollView style={styles.scrollView}>
         {_.times(5, () => (
-          <PostEdit items={POSTS} key={_.uniqueId('id_')} />
+          <PostEdit navigation={navigation} items={POSTS} key={_.uniqueId('id_')} />
         ))}
       </ScrollView>
     </>

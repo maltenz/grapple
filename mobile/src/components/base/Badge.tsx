@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType } from '../../types';
 import CoreBadge from '../core/Badge';
@@ -15,7 +15,7 @@ interface BadgeProps extends MarginProps {
   appearance: 'heavy' | 'strong' | 'normal';
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
-  title?: string;
+  title?: string | ReactNode;
 }
 
 const Badge: FC<BadgeProps> = ({ type, appearance, title, onPress, ...rest }) => {

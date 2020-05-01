@@ -64,7 +64,7 @@ const Button: FC<ButtonProps> = ({
         break;
       case 'disabled':
         myBackground = 'grey3';
-        myColor = 'white';
+        myColor = 'grey2';
         if (propOutline) {
           myBackground = 'transparent';
           myColor = 'grey3';
