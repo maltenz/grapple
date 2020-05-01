@@ -72,6 +72,7 @@ interface NavigationProps {
 }
 
 const HEIGHT = 60;
+const NavigationHeight = HEIGHT;
 
 const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, style }) => {
   const insets = useSafeArea();
@@ -88,6 +89,8 @@ const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, style }) =
     </Panel>
   );
 };
+
+export { NavigationHeight };
 
 const GUTTER = AssetStyles.measure.space / 2;
 

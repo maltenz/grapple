@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import ApolloClient from 'apollo-boost';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import configureStore from './configureStore';

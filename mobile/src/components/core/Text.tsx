@@ -24,6 +24,7 @@ export interface TextProps extends MarginProps {
   textInput?: boolean;
   value?: string;
   onChangeText?: (text: string) => void;
+  autoCorrect?: boolean;
 }
 
 const fetchFonts = (): Promise<void> => {
@@ -50,6 +51,7 @@ const Text: FC<TextProps> = ({
   textInput,
   value,
   onChangeText,
+  autoCorrect,
   margin,
   marginHorizontal,
   marginVertical,
@@ -136,6 +138,7 @@ const Text: FC<TextProps> = ({
   if (textInput) {
     return (
       <TextInput
+        autoCorrect={autoCorrect}
         value={value}
         onChangeText={onChangeText}
         ref={inputRef}

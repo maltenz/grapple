@@ -16,6 +16,8 @@ interface ButtonProps extends PanelProps {
   outline?: ButtonOutline;
 }
 
+const ButtonLargeHeight = 72;
+
 const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...rest }) => {
   const buttonStyles = {};
   let textType: TextType = 'small';
@@ -35,7 +37,7 @@ const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...res
 
   switch (type) {
     case 'large':
-      Object.assign(buttonStyles, { height: 72, borderRadius: 36 });
+      Object.assign(buttonStyles, { height: ButtonLargeHeight, borderRadius: 36 });
       textType = 'h3';
       if (outline) {
         borderWidth = 4;
@@ -75,4 +77,5 @@ const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...res
   );
 };
 
+export { ButtonLargeHeight };
 export default Button;

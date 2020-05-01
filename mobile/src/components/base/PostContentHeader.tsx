@@ -12,7 +12,7 @@ interface PostContentHeaderProps {
 const PostContentHeader: FC<PostContentHeaderProps> = ({ title, date, Right }) => {
   return (
     <Panel row justifyContent="space-between">
-      <Text color="blue" type="p" bold style={{ marginLeft: 0 }}>
+      <Text color="blue" type="small" bold style={{ marginLeft: 0 }}>
         {title}
         &nbsp; &nbsp; | &nbsp; &nbsp;
         {moment(date).calendar()}

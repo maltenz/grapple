@@ -5,12 +5,14 @@ import Text from '../core/Text';
 interface PostContentHeadingProps extends MarginProps {
   title: string;
   edit?: boolean;
+  autoCorrect?: boolean;
 }
 
-const PostContentHeading: FC<PostContentHeadingProps> = ({ title, edit, ...rest }) => {
+const PostContentHeading: FC<PostContentHeadingProps> = ({ title, edit, autoCorrect, ...rest }) => {
   const [value, onChangeText] = useState(title);
   return (
     <Text
+      autoCorrect={autoCorrect}
       textInput={edit}
       onChangeText={(text): void => onChangeText(text)}
       value={value}

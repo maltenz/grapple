@@ -1,6 +1,5 @@
-import _ from 'lodash';
 import React, { FC, useState } from 'react';
-import { ScrollView, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, Alert, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeArea } from 'react-native-safe-area-context';
 import {
@@ -16,10 +15,13 @@ import {
   PostContent,
   PostContentHeading,
   SvgIconEdit,
+  Color,
+  ThumbnailDimension,
 } from '../components';
 
 import { CreateRootParamList } from './CreateRoot';
 import Text from '../components/core/Text';
+import { ButtonLargeHeight } from '../components/core/Button';
 
 type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
 
@@ -91,58 +93,72 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ backgroundColor: Color.white }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <ScrollView style={styles.scrollView}>
+        <Image style={[styles.heroImage]} source={POSTS_ITEM.src.large} />
+        <ScrollView>
+          <Panel style={{ height: AssetStyles.measure.window.width }} />
           <Gallery
-            type="feature"
+            type="row"
             mode="day"
             utility="delete"
             src={POSTS[activeIndex].src.large}
             items={POSTS}
-            key={_.uniqueId('id_')}
             onChange={(id, index): void => setActiveIndex(index)}
             activeIndex={activeIndex}
-            gutter
+            style={{ marginTop: -(ThumbnailDimension + AssetStyles.measure.space) }}
           />
+          <Panel
+            paddingHorizontal
+            paddingTop
+            backgroundColor="white"
+            style={{
+              paddingBottom: ButtonLargeHeight + inset.bottom + AssetStyles.measure.space,
+            }}
+          >
+            <PostContentHeader
+              title="Story"
+              date={new Date()}
+              Right={
+                <Panel row alignItems="center">
+                  <Text type="small" marginRight={0.25}>
+                    Edit
+                  </Text>
+                  <SvgIconEdit scale={0.9} />
+                </Panel>
+              }
+            />
+            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
+            <PostContent title={TITLE} content={CONTENT} />
+            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
+            <PostContent title={TITLE} content={CONTENT} />
+            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
+            <PostContent title={TITLE} content={CONTENT} />
+          </Panel>
         </ScrollView>
-        <Panel
-          paddingTop
-          paddingHorizontal
-          style={{
-            paddingBottom: AssetStyles.measure.space + inset.bottom,
-            bottom: 0,
-          }}
-          backgroundColor="white"
-        >
-          <PostContentHeader
-            title="Story"
-            date={new Date()}
-            Right={
-              <Panel row alignItems="center">
-                <Text type="small" marginRight={0.25}>
-                  Edit
-                </Text>
-                <SvgIconEdit scale={0.9} />
-              </Panel>
-            }
-          />
-          <PostContentHeading title="Easter Holidays" edit />
-          <PostContent title={TITLE} content={CONTENT} />
-          <Button type="large" appearance="normal" mode="day" marginVertical>
-            Publish
-          </Button>
-          <BulletPager count={POSTS.length} activeIndex={activeIndex} mode="day" center />
-        </Panel>
       </KeyboardAvoidingView>
+      <Panel style={styles.footer} paddingHorizontal>
+        <Button type="large" appearance="normal" mode="day" marginVertical>
+          Publish
+        </Button>
+        <BulletPager count={POSTS.length} activeIndex={activeIndex} mode="day" center />
+      </Panel>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    paddingTop: AssetStyles.measure.space,
+  heroImage: {
+    width: AssetStyles.measure.window.width,
+    height: AssetStyles.measure.window.width,
+    position: 'absolute',
+  },
+  footer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
 });
 
