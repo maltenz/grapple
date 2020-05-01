@@ -18,7 +18,7 @@ import {
 import HomeMenu from './components/HomeMenu';
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
-import OnboardingRoot from './OnboardingRoot';
+import AccountRoot from './AccountRoot';
 
 type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;
 
@@ -134,7 +134,7 @@ const HomeRoot: FC<HomeRootProps> = () => {
       />
       <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Account" component={OnboardingRoot} />
+        <Tab.Screen name="Account" component={AccountRoot} />
       </Tab.Navigator>
     </>
   );
