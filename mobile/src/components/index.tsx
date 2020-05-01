@@ -5,10 +5,13 @@ import { Color } from '../assets/colors';
 
 // components
 import Badge from './base/Badge';
+import Border from './base/Border';
 import Bullet from './base/Bullet';
 import BulletPager from './base/BulletPager';
 import Button from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
+import MenuContainer from './base/MenuContainer';
+import MenuItem from './base/MenuItem';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import NavBarUserPostEdit from './base/NavBarUserPostEdit';
@@ -77,11 +80,14 @@ export {
   ColorType,
   // components
   Badge,
+  Border,
   Bullet,
   BulletPager,
   Button,
   Gallery,
   GalleryItemType,
+  MenuContainer,
+  MenuItem,
   Navigation,
   NavigationIcon,
   NavBarUser,

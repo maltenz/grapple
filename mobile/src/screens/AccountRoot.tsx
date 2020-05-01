@@ -3,6 +3,7 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyPost from './MyPost';
 import { HomeRootParamList } from './HomeRoot';
+import Account from './Account';
 
 export type AccountRootParamList = {
   Account: undefined;
@@ -31,7 +32,7 @@ const AccountStack = createStackNavigator<AccountRootParamList>();
 const AccountRoot: FC<NavProps> = () => {
   return (
     <AccountStack.Navigator headerMode="none">
-      <AccountStack.Screen name="Account" component={MyPost} />
+      <AccountStack.Screen name="Account" component={Account} />
       <AccountStack.Screen name="MyProfile" component={MyPost} />
       <AccountStack.Screen name="Notifications" component={MyPost} />
       <AccountStack.Screen name="Help" component={MyPost} />
