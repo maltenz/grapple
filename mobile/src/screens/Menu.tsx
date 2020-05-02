@@ -39,6 +39,13 @@ const MenuItem: FC<MenuItemProps> = ({ children, onPress }) => (
 const MAP_WIDTH = AssetStyles.measure.window.width - AssetStyles.measure.space * 4;
 const MAP_HEIGHT = MAP_WIDTH * 0.63;
 
+const SHADOW = {
+  shadowRadius: 50,
+  shadowOpacity: 0.5,
+  shadowColor: Color.black,
+  shadowOffset: { width: 0, height: 10 },
+};
+
 const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
   const inset = useSafeArea();
   return (
@@ -50,7 +57,7 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
         style={{ marginVertical: inset.top + AssetStyles.measure.space }}
         marginHorizontal={2}
       >
-        <Button mode="night" type="large" appearance="strong" style={{ marginBottom: 0 }}>
+        <Button mode="night" type="large" appearance="light" style={{ marginBottom: 0, ...SHADOW }}>
           Get help now
         </Button>
         <Panel style={styles.mapShadow}>
@@ -97,11 +104,8 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   mapShadow: {
-    shadowRadius: 50,
-    shadowOpacity: 0.5,
-    shadowColor: Color.black,
+    ...SHADOW,
     borderRadius: AssetStyles.measure.radius.large,
-    shadowOffset: { width: 0, height: 10 },
   },
   mapContainer: {
     width: MAP_WIDTH,
