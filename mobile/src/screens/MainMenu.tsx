@@ -3,23 +3,23 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar, Alert, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { AppRootParamList } from './AppRoot';
 import { Panel, AssetStyles } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
+import { MainMenuParamList } from './MainMenuRoot';
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'MainMenuRoot'>;
+interface HomeMenuItemProps {
+  children: string;
+  onPress: () => void;
+}
+
+type ScreenNavigationProp = StackNavigationProp<MainMenuParamList, 'MainMenu'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
 type MainMenuProps = NavProps;
-
-interface HomeMenuItemProps {
-  children: string;
-  onPress: () => void;
-}
 
 const HomeMenuItem: FC<HomeMenuItemProps> = ({ children, onPress }) => (
   <Text
@@ -35,7 +35,7 @@ const HomeMenuItem: FC<HomeMenuItemProps> = ({ children, onPress }) => (
   </Text>
 );
 
-const MainMenu: FC<MainMenuProps> = () => {
+const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
   const inset = useSafeArea();
   return (
     <Panel flex={1}>
@@ -53,7 +53,7 @@ const MainMenu: FC<MainMenuProps> = () => {
           <HomeMenuItem onPress={(): void => Alert.alert('press')}>Create story</HomeMenuItem>
           <HomeMenuItem onPress={(): void => Alert.alert('press')}>Create incident</HomeMenuItem>
           <HomeMenuItem onPress={(): void => Alert.alert('press')}>My stories</HomeMenuItem>
-          <HomeMenuItem onPress={(): void => Alert.alert('press')}>Back</HomeMenuItem>
+          <HomeMenuItem onPress={(): void => navigation.goBack()}>Back</HomeMenuItem>
         </Panel>
       </Panel>
     </Panel>

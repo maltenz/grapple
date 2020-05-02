@@ -7,24 +7,24 @@ import MainMenu from './MainMenu';
 
 const Stack = createStackNavigator();
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'CreateRoot'>;
+type ScreenNavigationProp = StackNavigationProp<MainMenuParamList, 'MainMenu'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
-type CreateRootProps = NavProps;
+type MainMenuProps = NavProps;
 
-export type CreateRootParamList = {
+export type MainMenuParamList = {
   MainMenu: undefined;
 };
 
-export type CreateRootScreenNavigationProp = CompositeNavigationProp<
+export type MainMenuNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>,
-  StackNavigationProp<CreateRootProps>
+  StackNavigationProp<MainMenuProps>
 >;
 
-const CreateRoot: FC<CreateRootProps> = () => {
+const MainMenuRoot: FC<MainMenuNavigationProp> = () => {
   return (
     <Stack.Navigator
       headerMode="none"
@@ -34,9 +34,9 @@ const CreateRoot: FC<CreateRootProps> = () => {
         },
       }}
     >
-      <Stack.Screen name="MainMenu" component={MainMenu} />
+      <Stack.Screen name="MainMenuRoot" component={MainMenu} />
     </Stack.Navigator>
   );
 };
 
-export default CreateRoot;
+export default MainMenuRoot;
