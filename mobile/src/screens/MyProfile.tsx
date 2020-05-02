@@ -2,14 +2,7 @@ import React, { FC } from 'react';
 import { ScrollView, Alert, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeArea } from 'react-native-safe-area-context';
-import {
-  Text,
-  Navigation,
-  NavigationIcon,
-  Button,
-  AssetStyles,
-  MenuContainer,
-} from '../components';
+import { Text, Navigation, NavigationIcon, Button, AssetStyles, Container } from '../components';
 import { AccountRootParamList } from './AccountRoot';
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
 
@@ -57,11 +50,11 @@ const MyProfile: FC<MyPostProps> = ({ navigation }) => {
           paddingTop: AssetStyles.measure.window.width - NavigationHeight - inset.top,
         }}
       >
-        <MenuContainer paddingHorizontal paddingVertical={0.5}>
+        <Container paddingHorizontal paddingVertical={0.5}>
           <Text mode="day" appearance="normal" type="h3">
             My Profile
           </Text>
-        </MenuContainer>
+        </Container>
       </ScrollView>
     </>
   );

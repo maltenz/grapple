@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import Panel, { MarginProps, PanelProps } from './Panel';
 
-interface MenuContainerProps extends MarginProps, PanelProps {}
+interface ContainerProps extends MarginProps, PanelProps {}
 
-const MenuContainer: FC<MenuContainerProps> = ({ children, ...rest }) => {
+const Container: FC<ContainerProps> = ({ children, ...rest }) => {
   return (
     <Panel backgroundColor="white" marginBottom {...rest}>
       {children}
@@ -11,4 +11,4 @@ const MenuContainer: FC<MenuContainerProps> = ({ children, ...rest }) => {
   );
 };
 
-export default MenuContainer;
+export default Container;

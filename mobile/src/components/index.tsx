@@ -10,7 +10,7 @@ import Bullet from './base/Bullet';
 import BulletPager from './base/BulletPager';
 import Button from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
-import MenuContainer from './base/MenuContainer';
+import Container from './base/Container';
 import MenuItem from './base/MenuItem';
 import MenuItemAccount from './base/MenuItemAccount';
 import Navigation, { NavigationIcon } from './base/Navigation';
@@ -86,7 +86,7 @@ export {
   Button,
   Gallery,
   GalleryItemType,
-  MenuContainer,
+  Container,
   MenuItem,
   MenuItemAccount,
   Navigation,

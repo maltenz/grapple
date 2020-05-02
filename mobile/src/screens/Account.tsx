@@ -7,7 +7,7 @@ import {
   AssetStyles,
   MenuItem,
   Color,
-  MenuContainer,
+  Container,
   MenuItemAccount,
   SvgTabbarBackgroundHeight,
   Navigation,
@@ -53,27 +53,27 @@ const Account: FC<AccountNavProps> = ({ navigation }) => {
           paddingBottom: inset.bottom + SvgTabbarBackgroundHeight,
         }}
       >
-        <MenuContainer>
+        <Container>
           <MenuItemAccount
             title="My Account"
             subTitle="Malte Boeing"
             onPress={(): void => navigation.navigate('MyProfile')}
             src={SRC}
           />
-        </MenuContainer>
-        <MenuContainer>
+        </Container>
+        <Container>
           <MenuItemBuddyFinder />
-        </MenuContainer>
-        <MenuContainer>
+        </Container>
+        <Container>
           <MenuItem title="Notifications" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Security" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Help" last onPress={(): void => Alert.alert('press')} />
-        </MenuContainer>
-        <MenuContainer>
+        </Container>
+        <Container>
           <MenuItem title="Community guidelines" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Privacy" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Terms" last onPress={(): void => Alert.alert('press')} />
-        </MenuContainer>
+        </Container>
       </ScrollView>
     </>
   );
