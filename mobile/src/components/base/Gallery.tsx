@@ -83,7 +83,7 @@ const Gallery: FC<GalleryProps> = ({
         </Panel>
       )}
       <BlurView tint="dark" intensity={blurViewIntensity} style={styles.blurView}>
-        <ScrollView horizontal style={styles.scrollView}>
+        <ScrollView horizontal style={styles.scrollView} showsHorizontalScrollIndicator={false}>
           {items.map(({ id, src: { thumbnail } }, index) => (
             <GalleryItem
               key={id}

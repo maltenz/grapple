@@ -5,11 +5,51 @@ import CoreText from '../../components/core/Text';
 import { ProfileItemProps } from '../Profile';
 import Thumbnail from '../../components/base/Thumbnail';
 
-interface MenuItemBuddyFinderProps {
-  items: ProfileItemProps[];
-}
+const TITLE = 'Why read motivational sayings?';
+const CONTENT =
+  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
-const MenuItemBuddyFinder: FC<MenuItemBuddyFinderProps> = ({ items }) => {
+const BUDDY_ITEM = {
+  src: {
+    thumbnail: { uri: 'https://source.unsplash.com/random' },
+    large: { uri: 'https://source.unsplash.com/random' },
+  },
+};
+
+const BUDDIES: ProfileItemProps[] = [
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '123',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '231',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '535',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '532',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '523',
+  },
+];
+
+const MenuItemBuddyFinder: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onChange = (id: string, index: number): void => {
@@ -22,12 +62,12 @@ const MenuItemBuddyFinder: FC<MenuItemBuddyFinderProps> = ({ items }) => {
         Find a buddy
       </CoreText>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {items.map(({ src, id }, index) => {
+        {BUDDIES.map(({ src, id }, index) => {
           return (
             <Thumbnail
               key={id}
               src={src.thumbnail}
-              marginRight={index === items.length - 1 ? 1 : 0.25}
+              marginRight={index === BUDDIES.length - 1 ? 1 : 0.25}
               marginLeft={index === 0 && 1}
               outline={index === activeIndex && 'blue'}
               onPress={(): void => onChange(id, index)}
