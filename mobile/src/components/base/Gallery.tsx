@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect, FC, ReactNode } from 'react';
 import {
   Image,
   ImageSourcePropType,
@@ -36,7 +36,7 @@ interface GalleryProps {
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
   blurViewIntensity?: number;
-  Nav?: React.ReactNode;
+  Nav?: ReactNode;
 }
 
 const Gallery: FC<GalleryProps> = ({

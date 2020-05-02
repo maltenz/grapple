@@ -8,7 +8,7 @@ interface SvgIconProps {
   scale?: number;
   color?: ColorType;
   strokeWidth?: boolean | number;
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 const SvgIconSmallRight: FC<SvgIconProps> = ({

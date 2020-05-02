@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar, Alert, StyleSheet } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { Panel, AssetStyles } from '../components';
+import MapView from 'react-native-maps';
+import { Panel, AssetStyles, Color, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
 import { HomeRootParamList } from './HomeRoot';
@@ -35,6 +36,9 @@ const MenuItem: FC<MenuItemProps> = ({ children, onPress }) => (
   </Text>
 );
 
+const MAP_WIDTH = AssetStyles.measure.window.width - AssetStyles.measure.space * 4;
+const MAP_HEIGHT = MAP_WIDTH * 0.63;
+
 const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
   const inset = useSafeArea();
   return (
@@ -46,9 +50,26 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
         style={{ marginVertical: inset.top + AssetStyles.measure.space }}
         marginHorizontal={2}
       >
-        <Button mode="night" type="large" appearance="strong">
+        <Button mode="night" type="large" appearance="strong" style={{ marginBottom: 0 }}>
           Get help now
         </Button>
+        <Panel style={styles.mapShadow}>
+          <BlurView tint="light" intensity={10} style={styles.mapContainer}>
+            <Panel
+              paddingVertical={0.5}
+              paddingHorizontal
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text mode="night" appearance="normal" type="p">
+                Creeper beeper
+              </Text>
+              <SvgIconSmallRight color="white" strokeWidth={1.5} />
+            </Panel>
+            <MapView style={styles.map} />
+          </BlurView>
+        </Panel>
         <Panel flex={1} justifyContent="flex-end">
           <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
           <MenuItem
@@ -73,5 +94,25 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
     </Panel>
   );
 };
+
+const styles = StyleSheet.create({
+  mapShadow: {
+    shadowRadius: 50,
+    shadowOpacity: 0.5,
+    shadowColor: Color.black,
+    borderRadius: AssetStyles.measure.radius.large,
+    shadowOffset: { width: 0, height: 10 },
+  },
+  mapContainer: {
+    width: MAP_WIDTH,
+    marginTop: AssetStyles.measure.space * 2,
+    borderRadius: AssetStyles.measure.radius.large,
+    overflow: 'hidden',
+  },
+  map: {
+    width: MAP_WIDTH,
+    height: MAP_HEIGHT,
+  },
+});
 
 export default MainMenu;
