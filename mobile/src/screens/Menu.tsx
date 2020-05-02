@@ -79,22 +79,8 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
         </Panel>
         <Panel flex={1} justifyContent="flex-end">
           <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
-          <MenuItem
-            onPress={(): void => {
-              navigation.goBack();
-              navigation.navigate('CreateRoot');
-            }}
-          >
-            My Stories
-          </MenuItem>
-          <MenuItem
-            onPress={(): void => {
-              navigation.goBack();
-              navigation.navigate('CreateRoot');
-            }}
-          >
-            My Incidents
-          </MenuItem>
+          <MenuItem onPress={(): void => navigation.navigate('CreateRoot')}>My Stories</MenuItem>
+          <MenuItem onPress={(): void => navigation.navigate('CreateRoot')}>My Incidents</MenuItem>
           <MenuItem onPress={(): void => navigation.goBack()}>Back</MenuItem>
         </Panel>
       </Panel>
