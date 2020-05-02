@@ -76,11 +76,7 @@ const Account: FC = () => {
         />
       </MenuContainer>
       <MenuContainer>
-        <MenuItemBuddyFinder
-          items={BUDDY}
-          onChange={(): void => Alert.alert('press')}
-          activeIndex={0}
-        />
+        <MenuItemBuddyFinder items={BUDDY} />
       </MenuContainer>
       <MenuContainer>
         <MenuItem title="Profile" last onPress={(): void => Alert.alert('press')} />

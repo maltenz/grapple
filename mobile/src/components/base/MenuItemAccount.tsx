@@ -28,7 +28,7 @@ const MenuItemAccount: FC<MenuItemAccountProps> = ({ title, subTitle, onPress, s
       style={styles.container}
     >
       <Panel row>
-        <Thumbnail src={src} />
+        <Thumbnail src={src} backgroundColor="grey4" />
         <Panel justifyContent="center">
           <CoreText type="p" minLineHeight>
             {title}

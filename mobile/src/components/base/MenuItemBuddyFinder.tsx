@@ -7,20 +7,13 @@ import Thumbnail from '../core/Thumbnail';
 
 interface MenuItemBuddyFinderProps {
   items: ProfileItemProps[];
-  onChange: (index: number) => void;
-  activeIndex: number;
 }
 
-const MenuItemBuddyFinder: FC<MenuItemBuddyFinderProps> = ({
-  items,
-  onChange: propsOnChange,
-  activeIndex: propsActiveIndex,
-}) => {
-  const [activeIndex, setActiveIndex] = useState(propsActiveIndex);
+const MenuItemBuddyFinder: FC<MenuItemBuddyFinderProps> = ({ items }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const onChange = (id: string, index: number): void => {
     setActiveIndex(index);
-    propsOnChange(index);
   };
 
   return (
@@ -38,6 +31,7 @@ const MenuItemBuddyFinder: FC<MenuItemBuddyFinderProps> = ({
               marginLeft={index === 0 && 1}
               outline={index === activeIndex && 'blue'}
               onPress={(): void => onChange(id, index)}
+              backgroundColor="grey4"
             />
           );
         })}
