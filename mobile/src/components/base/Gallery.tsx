@@ -14,7 +14,7 @@ import { AssetStyles } from '../../assets/styles';
 
 import Panel, { MarginProps } from './Panel';
 import BaseBadge from './Badge';
-import Thumbnail, { ThumbnailDimension } from '../core/Thumbnail';
+import Thumbnail, { ThumbnailDimension } from './Thumbnail';
 
 export interface GalleryItemType {
   id: string;

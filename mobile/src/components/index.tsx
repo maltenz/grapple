@@ -13,7 +13,6 @@ import Gallery, { GalleryItemType } from './base/Gallery';
 import MenuContainer from './base/MenuContainer';
 import MenuItem from './base/MenuItem';
 import MenuItemAccount from './base/MenuItemAccount';
-import MenuItemBuddyFinder from './base/MenuItemBuddyFinder';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import NavBarUserPostEdit from './base/NavBarUserPostEdit';
@@ -28,8 +27,7 @@ import PullBar from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
 import Text from './base/Text';
-import Thumbnail from './base/Thumbnail';
-import { ThumbnailDimension } from './core/Thumbnail';
+import Thumbnail, { ThumbnailDimension } from './base/Thumbnail';
 
 // svg
 // -- core
@@ -91,7 +89,6 @@ export {
   MenuContainer,
   MenuItem,
   MenuItemAccount,
-  MenuItemBuddyFinder,
   Navigation,
   NavigationIcon,
   NavBarUser,

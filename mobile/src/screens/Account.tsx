@@ -8,9 +8,9 @@ import {
   MenuContainer,
   MenuItemAccount,
   SvgTabbarBackgroundHeight,
-  MenuItemBuddyFinder,
 } from '../components';
 import { ProfileItemProps } from './Profile';
+import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 

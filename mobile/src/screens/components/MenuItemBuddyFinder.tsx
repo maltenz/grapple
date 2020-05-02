@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import Panel from './Panel';
-import CoreText from '../core/Text';
-import { ProfileItemProps } from '../../screens/Profile';
-import Thumbnail from '../core/Thumbnail';
+import Panel from '../../components/base/Panel';
+import CoreText from '../../components/core/Text';
+import { ProfileItemProps } from '../Profile';
+import Thumbnail from '../../components/base/Thumbnail';
 
 interface MenuItemBuddyFinderProps {
   items: ProfileItemProps[];

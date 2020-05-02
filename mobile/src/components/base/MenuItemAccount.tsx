@@ -3,8 +3,9 @@ import { StyleSheet, ImageSourcePropType } from 'react-native';
 import Panel from './Panel';
 import CoreText from '../core/Text';
 import SvgIconSmallRight from '../../assets/svg/icons/small/SvgIconSmallRight';
-import Thumbnail, { ThumbnailDimension } from '../core/Thumbnail';
+// import Thumbnail, { ThumbnailDimension } from './Thumbnail';
 import { AssetStyles } from '../../assets/styles';
+import Thumbnail, { ThumbnailDimension } from './Thumbnail';
 
 interface MenuItemAccountProps {
   title: string;
