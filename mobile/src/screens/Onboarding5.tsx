@@ -5,7 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
-import { OnboardingRootParamList, OnboardingRootScreenNavigationProp } from './OnboardingRoot';
+import { OnboardingRootParamList, OnboardingRootNavigationProp } from './OnboardingRoot';
 
 type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding5'>;
 
@@ -14,11 +14,10 @@ type NavProps = {
 };
 
 type Onboarding5NavProps = NavProps;
-type Onboarding5Props = Onboarding5NavProps;
 
-const OnboardingScreen5: FC<Onboarding5Props> = () => {
+const OnboardingScreen5: FC<Onboarding5NavProps> = () => {
   const insets = useSafeArea();
-  const navigation = useNavigation<OnboardingRootScreenNavigationProp>();
+  const navigation = useNavigation<OnboardingRootNavigationProp>();
 
   return (
     <>

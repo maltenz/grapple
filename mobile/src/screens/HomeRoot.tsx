@@ -19,7 +19,7 @@ import AccountRoot from './AccountRoot';
 import MenuRoot from './MenuRoot';
 import CreateRoot from './CreateRoot';
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;
+type ScreenNavigationProp = StackNavigationProp<AppRootParamList>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -46,6 +46,8 @@ interface MyTabBarProps {
   descriptors: any;
   navigation: any;
 }
+
+const HomeStack = createStackNavigator<HomeRootParamList>();
 
 const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   const myNavigation = useNavigation<HomeRootNavigationProp>();
@@ -121,8 +123,6 @@ const HomeTabStack: FC = () => (
     <Tab.Screen name="Account" component={AccountRoot} />
   </Tab.Navigator>
 );
-
-const HomeStack = createStackNavigator<HomeRootParamList>();
 
 const HomeRoot: FC<HomeRootProps> = () => (
   <>

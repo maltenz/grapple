@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   AssetStyles,
   MenuItem,
@@ -12,15 +13,25 @@ import {
   Navigation,
   NavigationIcon,
 } from '../components';
+
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
-import { AccountRootNavigationProp } from './AccountRoot';
 import { NavigationHeading } from '../components/base/Navigation';
+import { HomeRootNavigationProp } from './HomeRoot';
+import { AccountRootParamList } from './AccountRoot';
+
+type ScreenNavigationProp = StackNavigationProp<AccountRootParamList>;
+
+type NavProps = {
+  navigation: ScreenNavigationProp;
+};
+
+type AccountNavProps = NavProps;
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 
-const Account: FC = () => {
+const Account: FC<AccountNavProps> = ({ navigation }) => {
   const inset = useSafeArea();
-  const navigation = useNavigation<AccountRootNavigationProp>();
+  const homeRootNavigation = useNavigation<HomeRootNavigationProp>();
 
   return (
     <>
@@ -30,7 +41,7 @@ const Account: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => navigation.navigate('CreateRoot')}
+            onPress={(): void => homeRootNavigation.navigate('CreateRoot')}
           />
         }
         Center={<NavigationHeading mode="day" text="Settings" />}
@@ -46,7 +57,7 @@ const Account: FC = () => {
           <MenuItemAccount
             title="My Account"
             subTitle="Malte Boeing"
-            onPress={(): void => Alert.alert('press')}
+            onPress={(): void => navigation.navigate('MyProfile')}
             src={SRC}
           />
         </MenuContainer>

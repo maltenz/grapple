@@ -9,14 +9,6 @@ import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
 import { AppRootParamList } from './AppRoot';
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'OnboardingRoot'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type OnboardingRootProps = NavProps;
-
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
   Onboarding2: undefined;
@@ -25,7 +17,15 @@ export type OnboardingRootParamList = {
   Onboarding5: undefined;
 };
 
-export type OnboardingRootScreenNavigationProp = CompositeNavigationProp<
+type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'OnboardingRoot'>;
+
+type NavProps = {
+  navigation: ScreenNavigationProp;
+};
+
+type OnboardingRootProps = NavProps;
+
+export type OnboardingRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<OnboardingRootProps>,
   StackNavigationProp<AppRootParamList>
 >;

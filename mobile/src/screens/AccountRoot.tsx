@@ -4,6 +4,8 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import MyPost from './MyPost';
 import Account from './Account';
 import { AppRootParamList } from './AppRoot';
+import MyProfile from './MyProfile';
+import { GalleryItemType } from '../components';
 
 export type AccountRootParamList = {
   Account: undefined;
@@ -16,24 +18,31 @@ export type AccountRootParamList = {
   Security: undefined;
 };
 
-type ScreenNavigationProp = StackNavigationProp<AccountRootParamList, 'MyProfile'>;
+type ScreenNavigationProp = StackNavigationProp<AccountRootParamList>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
+type AccountRootProps = NavProps;
+
 export type AccountRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AccountRootParamList>,
+  StackNavigationProp<AccountRootProps>,
   StackNavigationProp<AppRootParamList>
 >;
 
 const AccountStack = createStackNavigator<AccountRootParamList>();
 
+interface ProfileProps extends GalleryItemType {
+  name: string;
+  excerpt: string;
+}
+
 const AccountRoot: FC<NavProps> = () => {
   return (
     <AccountStack.Navigator headerMode="none">
       <AccountStack.Screen name="Account" component={Account} />
-      <AccountStack.Screen name="MyProfile" component={MyPost} />
+      <AccountStack.Screen name="MyProfile" component={MyProfile} />
       <AccountStack.Screen name="Notifications" component={MyPost} />
       <AccountStack.Screen name="Help" component={MyPost} />
       <AccountStack.Screen name="Security" component={MyPost} />
@@ -42,5 +51,7 @@ const AccountRoot: FC<NavProps> = () => {
     </AccountStack.Navigator>
   );
 };
+
+export { ProfileProps };
 
 export default AccountRoot;

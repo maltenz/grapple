@@ -4,7 +4,7 @@ import { ScrollView, LayoutAnimation, Platform, StyleSheet, UIManager, View } fr
 import Panel from '../../components/base/Panel';
 import Text from '../../components/base/Text';
 import CoreText from '../../components/core/Text';
-import { ProfileItemProps } from '../Profile';
+import { ProfileProps } from '../AccountRoot';
 import Thumbnail from '../../components/base/Thumbnail';
 import Button from '../../components/base/Button';
 import { AssetStyles } from '../../components';
@@ -20,7 +20,7 @@ const BUDDY_ITEM = {
   },
 };
 
-const BUDDIES: ProfileItemProps[] = [
+const BUDDIES: ProfileProps[] = [
   {
     ...BUDDY_ITEM,
     name: TITLE,
