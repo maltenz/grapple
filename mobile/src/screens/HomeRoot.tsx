@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { Fragment, FC } from 'react';
+import React, { Fragment, FC, ReactNode } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
@@ -116,7 +116,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
 };
 
 const HomeTabStack: FC = () => (
-  <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
+  <Tab.Navigator tabBar={(props): ReactNode => <MyTabBar {...props} />}>
     <Tab.Screen name="Home" component={Home} />
     <Tab.Screen name="Account" component={AccountRoot} />
   </Tab.Navigator>

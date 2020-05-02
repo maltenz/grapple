@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import moment from 'moment';
 import Panel from './Panel';
 import Text from '../core/Text';
@@ -6,7 +6,7 @@ import Text from '../core/Text';
 interface PostContentHeaderProps {
   title: string;
   date: Date;
-  Right: React.ReactNode;
+  Right: ReactNode;
 }
 
 const PostContentHeader: FC<PostContentHeaderProps> = ({ title, date, Right }) => {

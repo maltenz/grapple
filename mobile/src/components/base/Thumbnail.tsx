@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle, ImageSourcePropType, Image } from 'react-native';
 import { ColorType } from '../../types';
 import { AssetStyles } from '../../assets/styles';
@@ -23,7 +23,7 @@ interface ThumbnailProps extends MarginProps {
   backgroundColor?: ColorType;
   outline?: boolean | ColorType;
   onPress?: () => void;
-  TopRight?: React.ReactNode;
+  TopRight?: ReactNode;
 }
 
 const Thumbnail: FC<ThumbnailProps> = ({

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { ColorType, ModeType } from '../../types';
@@ -50,9 +50,9 @@ const NavigationIcon: FC<NavigationIconProps> = ({ onPress, ...rest }) => {
 };
 
 interface NavigationProps {
-  Left?: React.ReactNode;
-  Center?: React.ReactNode;
-  Right?: React.ReactNode;
+  Left?: ReactNode;
+  Center?: ReactNode;
+  Right?: ReactNode;
   mode: ModeType;
   style?: StyleProp<ViewStyle>;
 }

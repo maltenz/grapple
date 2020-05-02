@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState, FC, ReactNode } from 'react';
 import { StatusBar, Alert, View, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
@@ -53,8 +53,8 @@ const GALLERY: GalleryItemType[] = [
 ];
 
 interface CameraFrameProps {
-  Top?: React.ReactNode;
-  Bottom?: React.ReactNode;
+  Top?: ReactNode;
+  Bottom?: ReactNode;
 }
 
 const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
