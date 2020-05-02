@@ -26,7 +26,7 @@ const MenuItem: FC<MenuItemProps> = ({ title, last, onPress }) => {
       style={styles.container}
     >
       <CoreText type="p">{title}</CoreText>
-      <SvgIconSmallRight color="grey2" strokeWidth={1.5} />
+      <SvgIconSmallRight color="grey2" strokeWidth={1.5} style={styles.icon} />
       {!last && <Border mode="day" style={styles.border} />}
     </Panel>
   );
@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
+  },
+  icon: {
+    marginRight: 5,
   },
 });
 

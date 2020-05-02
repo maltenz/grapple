@@ -70,9 +70,11 @@ const MenuItemBuddyFinder: FC = () => {
   return (
     <>
       <Panel paddingVertical justifyContent="space-between">
-        <CoreText type="p" minLineHeight marginLeft={1} marginBottom={0.5}>
-          Find a buddy
-        </CoreText>
+        <Panel marginLeft>
+          <CoreText type="p" minLineHeight marginBottom={0.75}>
+            Find a buddy
+          </CoreText>
+        </Panel>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {BUDDIES.map(({ src, id }, index) => {
             return (

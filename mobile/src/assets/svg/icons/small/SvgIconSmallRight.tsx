@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Svg, { G, Path } from 'react-native-svg';
+import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType } from '../../../../types';
 import { Color } from '../../../colors';
 
@@ -7,12 +8,14 @@ interface SvgIconProps {
   scale?: number;
   color?: ColorType;
   strokeWidth?: boolean | number;
+  style: StyleProp<ViewStyle>;
 }
 
 const SvgIconSmallRight: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,
+  style,
 }) => {
   const color = propColor ? Color[propColor] : Color.grey;
   let width = 24;
@@ -29,7 +32,7 @@ const SvgIconSmallRight: FC<SvgIconProps> = ({
   }
 
   return (
-    <Svg height={height} width={width} viewBox="0 0 24.483 23.855">
+    <Svg height={height} width={width} viewBox="0 0 24.483 23.855" style={style}>
       <G>
         <Path
           stroke={color}
