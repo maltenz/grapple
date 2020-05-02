@@ -13,10 +13,10 @@ type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
-type Onboarding5Props = NavProps;
-type OnboardingScreen5Props = Onboarding5Props;
+type Onboarding5NavProps = NavProps;
+type Onboarding5Props = Onboarding5NavProps;
 
-const OnboardingScreen5: FC<OnboardingScreen5Props> = () => {
+const OnboardingScreen5: FC<Onboarding5Props> = () => {
   const insets = useSafeArea();
   const navigation = useNavigation<OnboardingRootScreenNavigationProp>();
 

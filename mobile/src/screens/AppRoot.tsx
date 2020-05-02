@@ -9,6 +9,7 @@ export type AppRootParamList = {
   HomeRoot: undefined;
   OnboardingRoot: undefined;
   CreateRoot: undefined;
+  MainMenu: undefined;
 };
 
 const AppStack = createStackNavigator<AppRootParamList>();

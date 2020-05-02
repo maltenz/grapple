@@ -11,7 +11,7 @@ type NavProps = {
 
 type Onboarding4Props = NavProps;
 
-const OnboardingScreen4: FC<Onboarding4Props> = () => (
+const Onboarding4: FC<Onboarding4Props> = () => (
   <OnboardingScreen
     title="Your secret is safe"
     heading="Grapple has spoof mode to stop your partner from finding out    "
@@ -19,4 +19,4 @@ const OnboardingScreen4: FC<Onboarding4Props> = () => (
   />
 );
 
-export default OnboardingScreen4;
+export default Onboarding4;

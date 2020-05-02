@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 import OnboardingScreen from './components/OnboardingScreen';
-import { OnboardingRootParamList } from './OnboardingRoot';
+import { AppRootParamList } from './AppRoot';
 
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding2'>;
+type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'MainMenu'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
-type Onboarding2Props = NavProps;
+type MainMenuProps = NavProps;
 
-const Onboarding2: FC<Onboarding2Props> = () => (
+const MainMenu: FC<MainMenuProps> = () => (
   <>
     <StatusBar barStyle="dark-content" />
     <OnboardingScreen
@@ -23,4 +23,4 @@ const Onboarding2: FC<Onboarding2Props> = () => (
   </>
 );
 
-export default Onboarding2;
+export default MainMenu;

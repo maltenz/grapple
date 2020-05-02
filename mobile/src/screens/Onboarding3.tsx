@@ -11,7 +11,7 @@ type NavProps = {
 
 type Onboarding3Props = NavProps;
 
-const OnboardingScreen3: FC<Onboarding3Props> = () => (
+const Onboarding3: FC<Onboarding3Props> = () => (
   <OnboardingScreen
     title="Share your story"
     heading="How have you experienced abuse or inequality?"
@@ -20,4 +20,4 @@ const OnboardingScreen3: FC<Onboarding3Props> = () => (
   />
 );
 
-export default OnboardingScreen3;
+export default Onboarding3;
