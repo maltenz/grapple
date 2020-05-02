@@ -85,7 +85,11 @@ const NavigationBackground: FC<NavigationBackgroundProps> = ({ blur, mode, child
 
   if (blur) {
     return (
-      <BlurView intensity={100} style={[styles.container, { height: HEIGHT + insets.top }, style]}>
+      <BlurView
+        tint="light"
+        intensity={100}
+        style={[styles.container, { height: HEIGHT + insets.top }, style]}
+      >
         {children}
       </BlurView>
     );

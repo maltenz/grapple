@@ -10,6 +10,8 @@ import {
   Container,
   Panel,
   Text,
+  MenuItemThumbnail,
+  SvgTabbarBackgroundHeight,
 } from '../components';
 import { AccountRootParamList } from './AccountRoot';
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
@@ -30,8 +32,11 @@ const HERO_IMAGE = {
   },
 };
 
+const HERO_DIMENSIONS = AssetStyles.measure.window.width;
+
 const MyProfile: FC<MyPostProps> = ({ navigation }) => {
   const inset = useSafeArea();
+
   return (
     <>
       <Navigation
@@ -52,39 +57,57 @@ const MyProfile: FC<MyPostProps> = ({ navigation }) => {
           </Button>
         }
       />
-      <Image style={[styles.heroImage]} source={HERO_IMAGE.src.large} />
+      <Image
+        style={[styles.heroImage, { height: HERO_DIMENSIONS + NavigationHeight + inset.top }]}
+        source={HERO_IMAGE.src.large}
+      />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{
           paddingTop: AssetStyles.measure.window.width - NavigationHeight - inset.top,
+          paddingBottom: SvgTabbarBackgroundHeight,
         }}
       >
-        <Container paddingHorizontal paddingVertical={0.5}>
-          <Panel row alignItems="center">
-            <Button
-              type="small"
-              appearance="normal"
-              mode="day"
-              style={{ alignSelf: 'flex-start' }}
-              marginRight
-            >
-              Become a buddy
-            </Button>
-            <Text mode="day" appearance="normal" type="small" underline>
-              Info
-            </Text>
-          </Panel>
-          <Panel>
-            <Text mode="day" appearance="normal" type="p" bold>
-              Malte Boeing
-            </Text>
-            <Text mode="day" appearance="normal" type="small" marginBottom>
-              Many people has the notion that enlightenment is one state. Many also believe that
-              when it is attained, a person is forever in that state.
-            </Text>
-            <PullBar />
-          </Panel>
-        </Container>
+        <Panel backgroundColor="grey4">
+          <Container paddingHorizontal paddingVertical={0.5}>
+            <Panel row alignItems="center">
+              <Button
+                type="small"
+                appearance="normal"
+                mode="day"
+                style={{ alignSelf: 'flex-start' }}
+                marginRight
+              >
+                Become a buddy
+              </Button>
+              <Text mode="day" appearance="normal" type="small" underline>
+                Info
+              </Text>
+            </Panel>
+            <Panel>
+              <Text mode="day" appearance="normal" type="p" bold>
+                Malte Boeing
+              </Text>
+              <Text mode="day" appearance="normal" type="small" marginBottom>
+                Many people has the notion that enlightenment is one state. Many also believe that
+                when it is attained, a person is forever in that state.
+              </Text>
+              <PullBar />
+            </Panel>
+          </Container>
+          <MenuItemThumbnail
+            title="Emergency Address"
+            subTitle={`4 Penglington Place \n Wellington, New Zealand`}
+            src={{ uri: HERO_IMAGE.src.thumbnail.uri }}
+            onPress={(): void => Alert.alert('press')}
+          />
+          <MenuItemThumbnail
+            title="Emergency Phone"
+            subTitle="+64 4 21 144 26 24"
+            src={{ uri: HERO_IMAGE.src.thumbnail.uri }}
+            onPress={(): void => Alert.alert('press')}
+          />
+        </Panel>
       </ScrollView>
     </>
   );
@@ -92,8 +115,8 @@ const MyProfile: FC<MyPostProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   heroImage: {
-    width: AssetStyles.measure.window.width,
-    height: AssetStyles.measure.window.width,
+    width: HERO_DIMENSIONS,
+    height: HERO_DIMENSIONS,
     position: 'absolute',
     padding: AssetStyles.measure.space,
     flexDirection: 'row',
