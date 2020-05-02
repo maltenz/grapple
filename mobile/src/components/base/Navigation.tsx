@@ -96,7 +96,11 @@ interface NavigationHeadingProps {
 const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text }) => {
   return (
     <Panel row justifyContent="center" alignItems="flex-end" flex={1} marginBottom={0.5}>
-      <CoreText type="h4" color={mode === 'day' ? 'grey' : 'white'}>
+      <CoreText
+        type="h4"
+        color={mode === 'day' ? 'grey' : 'white'}
+        style={{ marginLeft: 0, marginRight: 0 }}
+      >
         {text}
       </CoreText>
     </Panel>

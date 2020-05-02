@@ -3,7 +3,15 @@ import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { Post, Color, AssetStyles, Navigation, NavigationIcon } from '../components';
+import { useSafeArea } from 'react-native-safe-area-context';
+import {
+  Post,
+  Color,
+  AssetStyles,
+  Navigation,
+  NavigationIcon,
+  SvgTabbarBackgroundHeight,
+} from '../components';
 import { HomeRootParamList, HomeRootNavigationProp } from './HomeRoot';
 import { NavigationLogo } from '../components/base/Navigation';
 
@@ -21,6 +29,7 @@ const CONTENT =
 
 const Home: FC<HomeProps> = () => {
   const navigation = useNavigation<HomeRootNavigationProp>();
+  const inset = useSafeArea();
 
   return (
     <>
@@ -36,7 +45,12 @@ const Home: FC<HomeProps> = () => {
         Center={<NavigationLogo mode="day" />}
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView
+        style={[styles.scrollView]}
+        contentContainerStyle={{
+          paddingBottom: inset.bottom + SvgTabbarBackgroundHeight,
+        }}
+      >
         {_.times(10, () => (
           <Post key={_.uniqueId('id_')} gutter title={TITLE} content={CONTENT} />
         ))}
