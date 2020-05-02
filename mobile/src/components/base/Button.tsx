@@ -106,7 +106,7 @@ const Button: FC<ButtonProps> = ({
     setBackgroundColor(myBackground);
     setColor(myColor);
     setOutline(myOutline);
-  }, []);
+  }, [setBackgroundColor, setColor, setOutline]);
 
   return (
     <CoreButton
