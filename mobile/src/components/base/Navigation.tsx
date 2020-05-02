@@ -51,9 +51,11 @@ const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back' }) => {
   const config: {
     color?: ColorType;
     scale?: number;
+    strokeWidth?: number;
   } = {
     color: mode === 'day' ? 'grey' : 'white',
     scale: 0.9,
+    strokeWidth: 2.5,
   };
 
   switch (type) {

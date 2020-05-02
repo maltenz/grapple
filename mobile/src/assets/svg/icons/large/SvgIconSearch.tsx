@@ -19,7 +19,7 @@ const SvgIconSearch: FC<SvgIconProps> = ({
   const color = propColor ? Color[propColor] : Color.grey;
   let width = 39;
   let height = 38;
-  let strokeWidth = 2;
+  let strokeWidth = 2.5;
 
   if (scale) {
     width *= scale;

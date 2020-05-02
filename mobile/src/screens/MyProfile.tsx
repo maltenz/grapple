@@ -2,9 +2,18 @@ import React, { FC } from 'react';
 import { ScrollView, Alert, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { Text, Navigation, NavigationIcon, Button, AssetStyles, Container } from '../components';
+import {
+  Navigation,
+  NavigationIcon,
+  Button,
+  AssetStyles,
+  Container,
+  Panel,
+  Text,
+} from '../components';
 import { AccountRootParamList } from './AccountRoot';
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
+import PullBar from '../components/core/PullBar';
 
 type ScreenNavigationProp = StackNavigationProp<AccountRootParamList, 'MyProfile'>;
 
@@ -34,7 +43,7 @@ const MyProfile: FC<MyPostProps> = ({ navigation }) => {
           <Button
             mode="day"
             onPress={(): void => Alert.alert('Saved')}
-            appearance="normal"
+            appearance="dark"
             outline
             type="normal"
             style={{ marginBottom: 0 }}
@@ -51,9 +60,30 @@ const MyProfile: FC<MyPostProps> = ({ navigation }) => {
         }}
       >
         <Container paddingHorizontal paddingVertical={0.5}>
-          <Text mode="day" appearance="normal" type="h3">
-            My Profile
-          </Text>
+          <Panel row alignItems="center">
+            <Button
+              type="small"
+              appearance="normal"
+              mode="day"
+              style={{ alignSelf: 'flex-start' }}
+              marginRight
+            >
+              Become a buddy
+            </Button>
+            <Text mode="day" appearance="normal" type="small" underline>
+              Info
+            </Text>
+          </Panel>
+          <Panel>
+            <Text mode="day" appearance="normal" type="p" bold>
+              Malte Boeing
+            </Text>
+            <Text mode="day" appearance="normal" type="small" marginBottom>
+              Many people has the notion that enlightenment is one state. Many also believe that
+              when it is attained, a person is forever in that state.
+            </Text>
+            <PullBar />
+          </Panel>
         </Container>
       </ScrollView>
     </>

@@ -21,6 +21,7 @@ export interface TextProps extends MarginProps {
   textAlign?: TextAlignType;
   onPress?: () => void;
   minLineHeight?: boolean;
+  underline?: boolean;
   textInput?: boolean;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -48,6 +49,7 @@ const Text: FC<TextProps> = ({
   textAlign,
   onPress,
   minLineHeight,
+  underline,
   textInput,
   value,
   onChangeText,
@@ -101,6 +103,10 @@ const Text: FC<TextProps> = ({
 
   if (minLineHeight || textInput) {
     Object.assign(textStyles, { lineHeight: AssetStylesMinLineHeight(type) });
+  }
+
+  if (underline) {
+    Object.assign(textStyles, { textDecorationLine: 'underline' });
   }
 
   if (margin) {

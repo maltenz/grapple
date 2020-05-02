@@ -4,7 +4,7 @@ import { ColorType, ModeType } from '../../types';
 import CoreButton, { ButtonType, ButtonOutline } from '../core/Button';
 import { MarginProps } from './Panel';
 
-type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning' | 'light';
+type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning' | 'dark' | 'light';
 
 interface ButtonProps extends MarginProps {
   mode: ModeType;
@@ -15,16 +15,18 @@ interface ButtonProps extends MarginProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const Button: FC<ButtonProps> = ({
-  children,
-  mode,
-  type,
-  outline: propOutline,
-  appearance: propAppearance,
-  onPress,
-  style,
-  ...rest
-}) => {
+const Button: FC<ButtonProps> = (props) => {
+  const {
+    children,
+    mode,
+    type,
+    outline: propOutline,
+    appearance: propAppearance,
+    onPress,
+    style,
+    ...rest
+  } = props;
+
   const [backgroundColor, setBackgroundColor] = useState<ColorType>();
   const [color, setColor] = useState<ColorType>();
   const [outline, setOutline] = useState<ButtonOutline>();
@@ -80,6 +82,15 @@ const Button: FC<ButtonProps> = ({
           myOutline = 'grey3';
         }
         break;
+      case 'dark':
+        myBackground = 'grey';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'grey';
+          myOutline = 'grey';
+        }
+        break;
       default:
     }
 
@@ -115,7 +126,7 @@ const Button: FC<ButtonProps> = ({
     setBackgroundColor(myBackground);
     setColor(myColor);
     setOutline(myOutline);
-  }, [setBackgroundColor, setColor, setOutline, propAppearance, mode, children, outline]);
+  }, [props]);
 
   return (
     <CoreButton
@@ -125,6 +136,7 @@ const Button: FC<ButtonProps> = ({
       backgroundColor={backgroundColor}
       color={color}
       style={style}
+      paddingHorizontal={type === 'small' ? 1 : 0.5}
       {...rest}
     >
       {children}
