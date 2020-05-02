@@ -70,7 +70,7 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
               justifyContent="space-between"
             >
               <Text mode="night" appearance="normal" type="p">
-                Creeper beeper
+                Creeper Beeper
               </Text>
               <SvgIconSmallRight color="white" strokeWidth={1.5} />
             </Panel>

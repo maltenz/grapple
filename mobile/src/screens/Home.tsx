@@ -15,7 +15,7 @@ import {
 import { HomeRootParamList, HomeRootNavigationProp } from './HomeRoot';
 import { NavigationLogo } from '../components/base/Navigation';
 
-type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'Home'>;
+type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'HomeRoot'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
