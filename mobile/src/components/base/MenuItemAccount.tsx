@@ -52,11 +52,6 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     position: 'relative',
   },
-  border: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-  },
 });
 
 export default MenuItemAccount;

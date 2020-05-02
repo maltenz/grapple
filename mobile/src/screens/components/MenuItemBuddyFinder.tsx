@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 import Panel from '../../components/base/Panel';
 import CoreText from '../../components/core/Text';
 import { ProfileItemProps } from '../Profile';
@@ -57,7 +57,7 @@ const MenuItemBuddyFinder: FC = () => {
   };
 
   return (
-    <Panel paddingVertical justifyContent="space-between" style={styles.container}>
+    <Panel paddingVertical justifyContent="space-between">
       <CoreText type="p" minLineHeight marginLeft={1} marginBottom={0.5}>
         Find a buddy
       </CoreText>
@@ -79,16 +79,5 @@ const MenuItemBuddyFinder: FC = () => {
     </Panel>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-  },
-  border: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-  },
-});
 
 export default MenuItemBuddyFinder;
