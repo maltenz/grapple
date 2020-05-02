@@ -26,8 +26,8 @@ export type OnboardingRootParamList = {
 };
 
 export type OnboardingRootScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AppRootParamList>,
-  StackNavigationProp<OnboardingRootProps>
+  StackNavigationProp<OnboardingRootProps>,
+  StackNavigationProp<AppRootParamList>
 >;
 
 const Stack = createMaterialTopTabNavigator();

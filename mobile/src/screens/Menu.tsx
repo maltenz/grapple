@@ -6,14 +6,14 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { Panel, AssetStyles } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
-import { MainMenuParamList } from './MainMenuRoot';
+import { HomeRootParamList } from './HomeRoot';
 
-interface HomeMenuItemProps {
+interface MenuItemProps {
   children: string;
   onPress: () => void;
 }
 
-type ScreenNavigationProp = StackNavigationProp<MainMenuParamList, 'MainMenu'>;
+type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'MenuRoot'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -21,7 +21,7 @@ type NavProps = {
 
 type MainMenuProps = NavProps;
 
-const HomeMenuItem: FC<HomeMenuItemProps> = ({ children, onPress }) => (
+const MenuItem: FC<MenuItemProps> = ({ children, onPress }) => (
   <Text
     type="h3"
     mode="night"
@@ -50,10 +50,24 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
           Get help now
         </Button>
         <Panel flex={1} justifyContent="flex-end">
-          <HomeMenuItem onPress={(): void => Alert.alert('press')}>Create story</HomeMenuItem>
-          <HomeMenuItem onPress={(): void => Alert.alert('press')}>Create incident</HomeMenuItem>
-          <HomeMenuItem onPress={(): void => Alert.alert('press')}>My stories</HomeMenuItem>
-          <HomeMenuItem onPress={(): void => navigation.goBack()}>Back</HomeMenuItem>
+          <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
+          <MenuItem
+            onPress={(): void => {
+              navigation.goBack();
+              navigation.navigate('CreateRoot');
+            }}
+          >
+            My Stories
+          </MenuItem>
+          <MenuItem
+            onPress={(): void => {
+              navigation.goBack();
+              navigation.navigate('CreateRoot');
+            }}
+          >
+            My Incidents
+          </MenuItem>
+          <MenuItem onPress={(): void => navigation.goBack()}>Back</MenuItem>
         </Panel>
       </Panel>
     </Panel>

@@ -2,7 +2,7 @@
 import React, { Fragment, FC } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
 
 import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import {
@@ -16,6 +16,8 @@ import {
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
 import AccountRoot from './AccountRoot';
+import MenuRoot from './MenuRoot';
+import CreateRoot from './CreateRoot';
 
 type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;
 
@@ -26,8 +28,10 @@ type NavProps = {
 type HomeRootProps = NavProps;
 
 export type HomeRootParamList = {
-  Home: undefined;
-  Account: undefined;
+  HomeRoot: undefined;
+  AccountRoot: undefined;
+  MenuRoot: undefined;
+  CreateRoot: undefined;
 };
 
 export type HomeRootNavigationProp = CompositeNavigationProp<
@@ -98,7 +102,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
                 <Panel center style={{ flex: 1 }}>
                   <TabbarCircleButton
                     isFocused={isFocused}
-                    onPress={(): void => myNavigation.navigate('MainMenuRoot')}
+                    onPress={(): void => myNavigation.navigate('MenuRoot')}
                     onLongPress={onLongPress}
                   />
                 </Panel>
@@ -111,12 +115,30 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   );
 };
 
+const HomeTabStack: FC = () => (
+  <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
+    <Tab.Screen name="Home" component={Home} />
+    <Tab.Screen name="Account" component={AccountRoot} />
+  </Tab.Navigator>
+);
+
+const HomeStack = createStackNavigator<HomeRootParamList>();
+
 const HomeRoot: FC<HomeRootProps> = () => (
   <>
-    <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Account" component={AccountRoot} />
-    </Tab.Navigator>
+    <HomeStack.Navigator
+      mode="modal"
+      headerMode="none"
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: 'transparent',
+        },
+      }}
+    >
+      <HomeStack.Screen name="HomeRoot" component={HomeTabStack} />
+      <HomeStack.Screen name="MenuRoot" component={MenuRoot} />
+      <HomeStack.Screen name="CreateRoot" component={CreateRoot} />
+    </HomeStack.Navigator>
   </>
 );
 

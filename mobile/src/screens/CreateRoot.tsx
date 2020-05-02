@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import Camera from './Camera';
-import { AppRootParamList } from './AppRoot';
 import MyPosts from './MyPosts';
 import MyPost from './MyPost';
+import { HomeRootParamList } from './HomeRoot';
 
 const Stack = createStackNavigator();
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList, 'CreateRoot'>;
+type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'CreateRoot'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
@@ -23,7 +23,7 @@ export type CreateRootParamList = {
 };
 
 export type CreateRootScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AppRootParamList>,
+  StackNavigationProp<HomeRootParamList>,
   StackNavigationProp<CreateRootProps>
 >;
 

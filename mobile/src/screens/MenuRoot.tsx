@@ -3,28 +3,28 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { AppRootParamList } from './AppRoot';
 
-import MainMenu from './MainMenu';
+import Menu from './Menu';
 
 const Stack = createStackNavigator();
 
-type ScreenNavigationProp = StackNavigationProp<MainMenuParamList, 'MainMenu'>;
+type ScreenNavigationProp = StackNavigationProp<MenuParamList, 'Menu'>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
-type MainMenuProps = NavProps;
+type MenuProps = NavProps;
 
-export type MainMenuParamList = {
-  MainMenu: undefined;
+export type MenuParamList = {
+  Menu: undefined;
 };
 
-export type MainMenuNavigationProp = CompositeNavigationProp<
+export type MenuNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>,
-  StackNavigationProp<MainMenuProps>
+  StackNavigationProp<MenuProps>
 >;
 
-const MainMenuRoot: FC<MainMenuNavigationProp> = () => {
+const MenuRoot: FC<MenuNavigationProp> = () => {
   return (
     <Stack.Navigator
       headerMode="none"
@@ -34,9 +34,9 @@ const MainMenuRoot: FC<MainMenuNavigationProp> = () => {
         },
       }}
     >
-      <Stack.Screen name="MainMenuRoot" component={MainMenu} />
+      <Stack.Screen name="MenuRoot" component={Menu} />
     </Stack.Navigator>
   );
 };
 
-export default MainMenuRoot;
+export default MenuRoot;
