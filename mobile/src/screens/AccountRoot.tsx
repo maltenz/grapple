@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyPost from './MyPost';
-import { HomeRootParamList } from './HomeRoot';
 import Account from './Account';
+import { AppRootParamList } from './AppRoot';
 
 export type AccountRootParamList = {
   Account: undefined;
@@ -24,7 +24,7 @@ type NavProps = {
 
 export type AccountRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AccountRootParamList>,
-  StackNavigationProp<HomeRootParamList>
+  StackNavigationProp<AppRootParamList>
 >;
 
 const AccountStack = createStackNavigator<AccountRootParamList>();

@@ -5,7 +5,7 @@ import { Color } from '../colors';
 
 interface SvgGrappleLogoProps {
   scale?: number;
-  color: ColorType;
+  color?: ColorType;
 }
 
 const SvgGrappleLogo: FC<SvgGrappleLogoProps> = ({ scale, color: propColor }) => {

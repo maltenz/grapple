@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, Fragment, FC } from 'react';
-import { View, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   Panel,
   SvgIconHome,
   SvgIconAccount,
   SvgTabbarBackgroundHeight,
-  Navigation,
-  NavigationIcon,
   TabbarBackground,
   TabbarCircleButton,
 } from '../components';
@@ -116,28 +114,13 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   );
 };
 
-const HomeRoot: FC<HomeRootProps> = () => {
-  const navigation = useNavigation<HomeRootNavigationProp>();
-
-  return (
-    <>
-      <Navigation
-        mode="day"
-        Left={
-          <NavigationIcon
-            mode="day"
-            type="search"
-            onPress={(): void => navigation.navigate('CreateRoot')}
-          />
-        }
-        Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
-      />
-      <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Account" component={AccountRoot} />
-      </Tab.Navigator>
-    </>
-  );
-};
+const HomeRoot: FC<HomeRootProps> = () => (
+  <>
+    <Tab.Navigator tabBar={(props): React.ReactNode => <MyTabBar {...props} />}>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Account" component={AccountRoot} />
+    </Tab.Navigator>
+  </>
+);
 
 export default HomeRoot;

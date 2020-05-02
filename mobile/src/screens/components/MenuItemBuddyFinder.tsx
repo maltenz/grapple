@@ -79,7 +79,7 @@ const MenuItemBuddyFinder: FC = () => {
               <Thumbnail
                 key={id}
                 src={src.thumbnail}
-                marginRight={index === BUDDIES.length - 1 ? 1 : 0.25}
+                marginRight={index === BUDDIES.length - 1 ? 1 : 0.5}
                 marginLeft={index === 0 && 1}
                 outline={index === activeIndex && 'blue'}
                 onPress={(): void => onChange(id, index)}
@@ -92,15 +92,17 @@ const MenuItemBuddyFinder: FC = () => {
       <View style={style.container}>
         {expanded && (
           <View style={style.tile}>
-            <Text mode="day" type="p" bold appearance="normal" marginBottom={0.5}>
+            <Text mode="day" type="p" bold appearance="normal" marginBottom={0.25}>
               Malte Boeing
             </Text>
             <Text mode="day" type="small" appearance="normal" marginBottom={0.5}>
               {CONTENT}
             </Text>
-            <Button type="normal" appearance="normal" mode="night" marginBottom={0} outline>
-              See profile
-            </Button>
+            <Panel alignItems="flex-end">
+              <Button type="normal" appearance="normal" mode="night" marginBottom={0} outline>
+                See profile
+              </Button>
+            </Panel>
           </View>
         )}
       </View>

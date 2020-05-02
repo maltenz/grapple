@@ -4,10 +4,12 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { ColorType, ModeType } from '../../types';
 import SvgIconChat from '../../assets/svg/icons/large/SvgIconChat';
 import Panel from './Panel';
+import CoreText from '../core/Text';
 import SvgIconSearch from '../../assets/svg/icons/large/SvgIconSearch';
 import SvgIconLeft from '../../assets/svg/icons/large/SvgIconLeft';
 import SvgIconSmallClose from '../../assets/svg/icons/small/SvgIconSmallClose';
 import { AssetStyles } from '../../assets/styles';
+import SvgLogoGrapple from '../../assets/svg/SvgGrappleLogo';
 
 interface NavigationIconProps {
   mode: ModeType;
@@ -53,7 +55,6 @@ interface NavigationProps {
   Right?: React.ReactNode;
   mode: ModeType;
   style?: StyleProp<ViewStyle>;
-  i18nKey?: string;
 }
 
 const HEIGHT = 60;
@@ -66,11 +67,38 @@ const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, style }) =
       backgroundColor={mode === 'day' ? 'white' : 'black'}
       alignItems="flex-end"
       row
-      style={[{ height: HEIGHT + insets.top, ...AssetStyles.shadow }, style]}
+      style={[{ height: HEIGHT + insets.top, ...AssetStyles.shadow.deep, zIndex: 1 }, style]}
     >
       {Left && <Panel style={styles.left}>{Left}</Panel>}
       {Center}
       {Right && <Panel style={styles.right}>{Right}</Panel>}
+    </Panel>
+  );
+};
+
+interface NavigationLogoProps {
+  mode: ModeType;
+}
+
+const NavigationLogo: FC<NavigationLogoProps> = ({ mode }) => {
+  return (
+    <Panel row justifyContent="center" alignItems="flex-end" flex={1} marginBottom={0.8}>
+      <SvgLogoGrapple color={mode === 'day' ? 'grey' : 'white'} scale={0.4} />
+    </Panel>
+  );
+};
+
+interface NavigationHeadingProps {
+  mode: ModeType;
+  text: string;
+}
+
+const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text }) => {
+  return (
+    <Panel row justifyContent="center" alignItems="flex-end" flex={1} marginBottom={0.5}>
+      <CoreText type="h4" color={mode === 'day' ? 'grey' : 'white'}>
+        {text}
+      </CoreText>
     </Panel>
   );
 };
@@ -84,6 +112,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: GUTTER,
     bottom: GUTTER,
+    zIndex: 1,
   },
   center: {
     position: 'absolute',
@@ -96,8 +125,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: GUTTER,
     bottom: GUTTER,
+    zIndex: 1,
   },
 });
 
-export { NavigationIcon };
+export { NavigationIcon, NavigationLogo, NavigationHeading };
 export default Navigation;
