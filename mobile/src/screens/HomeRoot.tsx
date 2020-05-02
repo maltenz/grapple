@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, Fragment, FC } from 'react';
+import React, { Fragment, FC } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import {
   Panel,
   SvgIconHome,
@@ -13,7 +13,6 @@ import {
   TabbarBackground,
   TabbarCircleButton,
 } from '../components';
-import HomeMenu from './components/HomeMenu';
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
 import AccountRoot from './AccountRoot';
@@ -28,7 +27,6 @@ type HomeRootProps = NavProps;
 
 export type HomeRootParamList = {
   Home: undefined;
-  Menu: undefined;
   Account: undefined;
 };
 
@@ -46,7 +44,7 @@ interface MyTabBarProps {
 }
 
 const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const myNavigation = useNavigation<HomeRootNavigationProp>();
 
   return (
     <>
@@ -100,7 +98,7 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
                 <Panel center style={{ flex: 1 }}>
                   <TabbarCircleButton
                     isFocused={isFocused}
-                    onPress={(): void => setModalVisible(true)}
+                    onPress={(): void => myNavigation.navigate('MainMenuRoot')}
                     onLongPress={onLongPress}
                   />
                 </Panel>
@@ -109,7 +107,6 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
           );
         })}
       </View>
-      <HomeMenu onOpenClose={(): void => setModalVisible(!modalVisible)} isOpen={modalVisible} />
     </>
   );
 };
