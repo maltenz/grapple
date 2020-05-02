@@ -8,9 +8,55 @@ import {
   MenuContainer,
   MenuItemAccount,
   SvgTabbarBackgroundHeight,
+  MenuItemBuddyFinder,
 } from '../components';
+import { ProfileItemProps } from './Profile';
 
-const SRC = { uri: 'https://source.unsplash.com/philipegd' };
+const SRC = { uri: 'https://source.unsplash.com/random' };
+
+const TITLE = 'Why read motivational sayings?';
+const CONTENT =
+  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
+
+const BUDDY_ITEM = {
+  src: {
+    thumbnail: { uri: 'https://source.unsplash.com/random' },
+    large: { uri: 'https://source.unsplash.com/random' },
+  },
+};
+
+const BUDDY: ProfileItemProps[] = [
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '123',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '231',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '535',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '532',
+  },
+  {
+    ...BUDDY_ITEM,
+    name: TITLE,
+    excerpt: CONTENT,
+    id: '523',
+  },
+];
 
 const Account: FC = () => {
   const inset = useSafeArea();
@@ -27,6 +73,13 @@ const Account: FC = () => {
           subTitle="Malte Boeing"
           onPress={(): void => Alert.alert('press')}
           src={SRC}
+        />
+      </MenuContainer>
+      <MenuContainer>
+        <MenuItemBuddyFinder
+          items={BUDDY}
+          onChange={(): void => Alert.alert('press')}
+          activeIndex={0}
         />
       </MenuContainer>
       <MenuContainer>
