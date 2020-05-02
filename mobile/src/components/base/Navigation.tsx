@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
 import { ColorType, ModeType } from '../../types';
 import SvgIconChat from '../../assets/svg/icons/large/SvgIconChat';
 import Panel from './Panel';
@@ -11,12 +12,40 @@ import SvgIconSmallClose from '../../assets/svg/icons/small/SvgIconSmallClose';
 import { AssetStyles } from '../../assets/styles';
 import SvgLogoGrapple from '../../assets/svg/SvgGrappleLogo';
 
+interface NavigationProps {
+  Left?: ReactNode;
+  Center?: ReactNode;
+  Right?: ReactNode;
+  mode: ModeType;
+  style?: StyleProp<ViewStyle>;
+  blur?: boolean;
+}
+
 interface NavigationIconProps {
   mode: ModeType;
   type: 'chat' | 'search' | 'delete' | 'saved' | 'back' | 'close';
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
+
+interface NavigationLogoProps {
+  mode: ModeType;
+}
+
+interface NavigationHeadingProps {
+  mode: ModeType;
+  text: string;
+}
+
+interface NavigationBackgroundProps {
+  mode: ModeType;
+  blur?: boolean;
+  style?: StyleProp<ViewStyle>;
+}
+
+const HEIGHT = 60;
+const NavigationHeight = HEIGHT;
+const GUTTER = AssetStyles.measure.space / 2;
 
 const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back' }) => {
   const config: {
@@ -49,36 +78,35 @@ const NavigationIcon: FC<NavigationIconProps> = ({ onPress, ...rest }) => {
   );
 };
 
-interface NavigationProps {
-  Left?: ReactNode;
-  Center?: ReactNode;
-  Right?: ReactNode;
-  mode: ModeType;
-  style?: StyleProp<ViewStyle>;
-}
-
-const HEIGHT = 60;
-const NavigationHeight = HEIGHT;
-
-const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, style }) => {
+const NavigationBackground: FC<NavigationBackgroundProps> = ({ blur, mode, children, style }) => {
   const insets = useSafeArea();
+
+  if (blur) {
+    return (
+      <BlurView intensity={100} style={[styles.container, { height: HEIGHT + insets.top }, style]}>
+        {children}
+      </BlurView>
+    );
+  }
   return (
     <Panel
       backgroundColor={mode === 'day' ? 'white' : 'black'}
-      alignItems="flex-end"
-      row
-      style={[{ height: HEIGHT + insets.top, ...AssetStyles.shadow.deep, zIndex: 1 }, style]}
+      style={[styles.container, { height: HEIGHT + insets.top }, style]}
     >
-      {Left && <Panel style={styles.left}>{Left}</Panel>}
-      {Center}
-      {Right && <Panel style={styles.right}>{Right}</Panel>}
+      {children}
     </Panel>
   );
 };
 
-interface NavigationLogoProps {
-  mode: ModeType;
-}
+const Navigation: FC<NavigationProps> = ({ mode, Left, Center, Right, blur, style }) => {
+  return (
+    <NavigationBackground mode={mode} blur={blur} style={style}>
+      {Left && <Panel style={styles.left}>{Left}</Panel>}
+      {Center}
+      {Right && <Panel style={styles.right}>{Right}</Panel>}
+    </NavigationBackground>
+  );
+};
 
 const NavigationLogo: FC<NavigationLogoProps> = ({ mode }) => {
   return (
@@ -87,11 +115,6 @@ const NavigationLogo: FC<NavigationLogoProps> = ({ mode }) => {
     </Panel>
   );
 };
-
-interface NavigationHeadingProps {
-  mode: ModeType;
-  text: string;
-}
 
 const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text }) => {
   return (
@@ -107,11 +130,13 @@ const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text }) => {
   );
 };
 
-export { NavigationHeight };
-
-const GUTTER = AssetStyles.measure.space / 2;
-
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    ...AssetStyles.shadow.deep,
+    zIndex: 1,
+  },
   left: {
     position: 'absolute',
     left: GUTTER,
@@ -133,5 +158,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export { NavigationIcon, NavigationLogo, NavigationHeading };
+export { NavigationIcon, NavigationLogo, NavigationHeading, NavigationHeight };
 export default Navigation;

@@ -110,7 +110,7 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
         style={{ backgroundColor: Color.white }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Image style={[styles.heroImage]} source={POSTS_ITEM.src.large} />
+        <Image style={styles.heroImage} source={POSTS_ITEM.src.large} />
         <ScrollView
           contentContainerStyle={{
             paddingTop: AssetStyles.measure.window.width,

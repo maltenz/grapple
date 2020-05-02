@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
-import Panel from './Panel';
+import Panel, { MarginProps, PanelProps } from './Panel';
 
-const MenuContainer: FC = ({ children }) => {
+interface MenuContainerProps extends MarginProps, PanelProps {}
+
+const MenuContainer: FC<MenuContainerProps> = ({ children, ...rest }) => {
   return (
-    <Panel backgroundColor="white" marginBottom>
+    <Panel backgroundColor="white" marginBottom {...rest}>
       {children}
     </Panel>
   );
