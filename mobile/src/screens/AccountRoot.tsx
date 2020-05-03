@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import MyPost from './MyPost';
 import Account from './Account';
 import { AppRootParamList } from './AppRoot';
@@ -15,22 +15,23 @@ export type AccountRootParamList = {
   Security: undefined;
 };
 
-type ScreenNavigationProp = StackNavigationProp<AccountRootParamList>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type AccountRootProps = NavProps;
+type AccountRootRouteProp = RouteProp<AccountRootParamList, 'Account'>;
 
 export type AccountRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AccountRootProps>,
+  StackNavigationProp<AccountRootParamList>,
   StackNavigationProp<AppRootParamList>
 >;
 
+type AccountNavigationProp = StackNavigationProp<AccountRootParamList, 'Account'>;
+
+type AccountNavigationProps = {
+  route: AccountRootRouteProp;
+  navigation: AccountNavigationProp;
+};
+
 const AccountStack = createStackNavigator<AccountRootParamList>();
 
-const AccountRoot: FC<NavProps> = () => {
+const AccountRoot: FC<AccountNavigationProps> = () => {
   return (
     <AccountStack.Navigator headerMode="none">
       <AccountStack.Screen name="Account" component={Account} />
