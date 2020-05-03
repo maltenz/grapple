@@ -75,11 +75,19 @@ const PostEdit: FC<PostEditProps> = ({ items }) => {
 };
 
 const MyPosts: FC = () => {
+  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
+
   return (
     <>
       <Navigation
         mode="day"
-        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
+        Left={
+          <NavigationIcon
+            mode="day"
+            type="back"
+            onPress={(): void => createRootNavigation.goBack()}
+          />
+        }
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <ScrollView style={styles.scrollView}>
