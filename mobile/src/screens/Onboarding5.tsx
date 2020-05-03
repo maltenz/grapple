@@ -2,22 +2,13 @@ import React, { FC } from 'react';
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
-import { OnboardingRootParamList, OnboardingRootNavigationProp } from './OnboardingRoot';
+import { HomeParentRootNavigationProp } from './HomeRoot';
 
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding5'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type Onboarding5NavProps = NavProps;
-
-const OnboardingScreen5: FC<Onboarding5NavProps> = () => {
+const OnboardingScreen5: FC = () => {
   const insets = useSafeArea();
-  const navigation = useNavigation<OnboardingRootNavigationProp>();
+  const homeRootNavigation = useNavigation<HomeParentRootNavigationProp>();
 
   return (
     <>
@@ -75,7 +66,7 @@ const OnboardingScreen5: FC<Onboarding5NavProps> = () => {
             type="large"
             mode="day"
             appearance="strong"
-            onPress={(): void => navigation.navigate('HomeRoot')}
+            onPress={(): void => homeRootNavigation.navigate('HomeRoot')}
           >
             Enter
           </Button>

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+
 import {
   AssetStyles,
   MenuItem,
@@ -18,19 +18,10 @@ import { HomeParentRootNavigationProp, HomeChildRootNavigationProp } from './Hom
 
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../components/base/Navigation';
-import { AccountRootParamList } from './AccountRoot';
-
-type ScreenNavigationProp = StackNavigationProp<AccountRootParamList>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type AccountNavProps = NavProps;
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 
-const Account: FC<AccountNavProps> = () => {
+const Account: FC = () => {
   const inset = useSafeArea();
   const homeRootNavigation = useNavigation<HomeParentRootNavigationProp>();
   const homeChildNavigation = useNavigation<HomeChildRootNavigationProp>();

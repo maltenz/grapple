@@ -5,7 +5,8 @@ import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
 import {
   Panel,
   Navigation,
@@ -20,16 +21,9 @@ import {
   SvgIconStory,
 } from '../components';
 
+import { CreateRootNavigationProp } from './CreateRoot';
+
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
-import { CreateRootParamList } from './CreateRoot';
-
-type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'Camera'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type CreateProps = NavProps;
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -71,7 +65,8 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
-const CameraScreen: FC<CreateProps> = ({ navigation }) => {
+const CameraScreen: FC = () => {
+  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean>();
 
   useEffect(() => {
@@ -118,7 +113,7 @@ const CameraScreen: FC<CreateProps> = ({ navigation }) => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => navigation.navigate('MyPosts')}
+              onPress={(): void => createRootNavigation.navigate('MyPosts')}
             >
               Next
             </Button>

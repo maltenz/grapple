@@ -13,6 +13,7 @@ import {
   TabbarBackground,
   TabbarCircleButton,
 } from '../components';
+
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
 import AccountRoot from './AccountRoot';

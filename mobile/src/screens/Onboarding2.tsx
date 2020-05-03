@@ -1,18 +1,8 @@
 import React, { FC } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 import OnboardingScreen from './components/OnboardingScreen';
-import { OnboardingRootParamList } from './OnboardingRoot';
 
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding2'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type Onboarding2Props = NavProps;
-
-const Onboarding2: FC<Onboarding2Props> = () => (
+const Onboarding2: FC = () => (
   <>
     <StatusBar barStyle="dark-content" />
     <OnboardingScreen

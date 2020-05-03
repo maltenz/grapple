@@ -9,7 +9,7 @@ import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
 import { AppRootParamList } from './AppRoot';
 
-export type OnboardingParamList = {
+export type OnboardingRootParamList = {
   Onboarding1: undefined;
   Onboarding2: undefined;
   Onboarding3: undefined;
@@ -17,18 +17,18 @@ export type OnboardingParamList = {
   Onboarding5: undefined;
 };
 
-type OnboardingRouteProp = RouteProp<OnboardingParamList, 'Onboarding1'>;
+type OnboardingRootRouteProp = RouteProp<OnboardingRootParamList, 'Onboarding1'>;
 
-export type OnboardingNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<OnboardingParamList>,
+export type OnboardingRootNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<OnboardingRootParamList>,
   StackNavigationProp<AppRootParamList>
 >;
 
-type MyOnboardingNavigationProp = StackNavigationProp<OnboardingParamList, 'Onboarding1'>;
+type MyOnboardingRootNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding1'>;
 
 type NavigationProps = {
-  route: OnboardingRouteProp;
-  navigation: MyOnboardingNavigationProp;
+  route: OnboardingRootRouteProp;
+  navigation: MyOnboardingRootNavigationProp;
 };
 
 const Stack = createMaterialTopTabNavigator();

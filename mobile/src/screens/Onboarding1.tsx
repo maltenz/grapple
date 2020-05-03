@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { StackNavigationProp } from '@react-navigation/stack';
+
 import {
   SvgLogoGrapple,
   SvgBlob,
@@ -13,16 +13,8 @@ import {
   BulletPager,
   AssetStyles,
 } from '../components';
+
 import Ruler from './components/OnboardingRuler';
-import { OnboardingRootParamList } from './OnboardingRoot';
-
-type ScreenNavigationProp = StackNavigationProp<OnboardingRootParamList, 'Onboarding1'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type Onboarding1Props = NavProps;
 
 const ListRow: FC = ({ children }) => (
   <Panel row alignItems="center">
@@ -33,7 +25,7 @@ const ListRow: FC = ({ children }) => (
   </Panel>
 );
 
-const Onboarding1: FC<Onboarding1Props> = () => {
+const Onboarding1: FC = () => {
   const insets = useSafeArea();
 
   return (

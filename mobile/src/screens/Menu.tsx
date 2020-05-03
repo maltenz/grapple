@@ -1,26 +1,18 @@
 import React, { FC } from 'react';
 import { StatusBar, Alert, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import MapView from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, Color, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
-import { HomeRootParamList } from './HomeRoot';
+import { HomeParentRootNavigationProp } from './HomeRoot';
 
 interface MenuItemProps {
   children: string;
   onPress: () => void;
 }
-
-type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'MenuRoot'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type MainMenuProps = NavProps;
 
 const MenuItem: FC<MenuItemProps> = ({ children, onPress }) => (
   <Text
@@ -46,7 +38,9 @@ const SHADOW = {
   shadowOffset: { width: 0, height: 10 },
 };
 
-const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
+const MainMenu: FC = () => {
+  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
+
   const inset = useSafeArea();
   return (
     <Panel flex={1}>
@@ -79,9 +73,13 @@ const MainMenu: FC<MainMenuProps> = ({ navigation }) => {
         </Panel>
         <Panel flex={1} justifyContent="flex-end">
           <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
-          <MenuItem onPress={(): void => navigation.navigate('CreateRoot')}>My Stories</MenuItem>
-          <MenuItem onPress={(): void => navigation.navigate('CreateRoot')}>My Incidents</MenuItem>
-          <MenuItem onPress={(): void => navigation.goBack()}>Back</MenuItem>
+          <MenuItem onPress={(): void => homeParentNavigation.navigate('CreateRoot')}>
+            My Stories
+          </MenuItem>
+          <MenuItem onPress={(): void => homeParentNavigation.navigate('CreateRoot')}>
+            My Incidents
+          </MenuItem>
+          <MenuItem onPress={(): void => homeParentNavigation.goBack()}>Back</MenuItem>
         </Panel>
       </Panel>
     </Panel>

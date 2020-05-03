@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 import { ScrollView, Alert, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+
 import {
   Navigation,
   NavigationIcon,
@@ -22,18 +23,10 @@ import {
   Text,
 } from '../components';
 
-import { CreateRootParamList } from './CreateRoot';
 import { ButtonLargeHeight } from '../components/core/Button';
 import { BulletDimension } from '../components/core/Bullet';
 import { NavigationHeight } from '../components/base/Navigation';
-
-type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type MyPostProps = NavProps;
+import { CreateRootNavigationProp } from './CreateRoot';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -79,7 +72,8 @@ const POSTS: PostsEditItemType[] = [
   },
 ];
 
-const MyPost: FC<MyPostProps> = ({ navigation }) => {
+const MyPost: FC = () => {
+  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
   const [activeIndex, setActiveIndex] = useState(0);
   const inset = useSafeArea();
 
@@ -92,7 +86,13 @@ const MyPost: FC<MyPostProps> = ({ navigation }) => {
     <>
       <Navigation
         mode="day"
-        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
+        Left={
+          <NavigationIcon
+            mode="day"
+            type="back"
+            onPress={(): void => createRootNavigation.goBack()}
+          />
+        }
         Right={
           <Button
             mode="day"

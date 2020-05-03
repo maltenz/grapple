@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
+
 import {
   Post,
   Color,
@@ -12,23 +12,17 @@ import {
   NavigationIcon,
   SvgTabbarBackgroundHeight,
 } from '../components';
-import { HomeRootParamList, HomeRootNavigationProp } from './HomeRoot';
+
+import { HomeParentRootNavigationProp } from './HomeRoot';
+
 import { NavigationLogo } from '../components/base/Navigation';
-
-type ScreenNavigationProp = StackNavigationProp<HomeRootParamList, 'HomeRoot'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type HomeProps = NavProps;
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
   'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
-const Home: FC<HomeProps> = () => {
-  const navigation = useNavigation<HomeRootNavigationProp>();
+const Home: FC = () => {
+  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
   const inset = useSafeArea();
 
   return (
@@ -39,7 +33,7 @@ const Home: FC<HomeProps> = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => navigation.navigate('CreateRoot')}
+            onPress={(): void => homeParentNavigation.navigate('CreateRoot')}
           />
         }
         Center={<NavigationLogo mode="day" />}

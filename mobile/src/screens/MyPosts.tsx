@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React, { FC, useState } from 'react';
 import { ScrollView, Alert, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
 import {
   Navigation,
   NavigationIcon,
@@ -10,15 +11,7 @@ import {
   PostsEditItemType,
 } from '../components';
 
-import { CreateRootParamList } from './CreateRoot';
-
-type ScreenNavigationProp = StackNavigationProp<CreateRootParamList, 'MyPost'>;
-
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type MyPostsProps = NavProps;
+import { CreateRootNavigationProp } from './CreateRoot';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -64,15 +57,16 @@ const POSTS: PostsEditItemType[] = [
   },
 ];
 
-interface PostEditProps extends MyPostsProps {
+interface PostEditProps {
   items: PostsEditItemType[];
 }
 
-const PostEdit: FC<PostEditProps> = ({ items, navigation }) => {
+const PostEdit: FC<PostEditProps> = ({ items }) => {
+  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <PostsEditSlider
-      onPressEdit={(): void => navigation.navigate('MyPost')}
+      onPressEdit={(): void => createRootNavigation.navigate('MyPost')}
       items={items}
       activeIndex={activeIndex}
       onChange={(index): void => setActiveIndex(index)}
@@ -80,7 +74,7 @@ const PostEdit: FC<PostEditProps> = ({ items, navigation }) => {
   );
 };
 
-const MyPosts: FC<MyPostsProps> = ({ navigation }) => {
+const MyPosts: FC = () => {
   return (
     <>
       <Navigation
@@ -90,7 +84,7 @@ const MyPosts: FC<MyPostsProps> = ({ navigation }) => {
       />
       <ScrollView style={styles.scrollView}>
         {_.times(5, () => (
-          <PostEdit navigation={navigation} items={POSTS} key={_.uniqueId('id_')} />
+          <PostEdit items={POSTS} key={_.uniqueId('id_')} />
         ))}
       </ScrollView>
     </>

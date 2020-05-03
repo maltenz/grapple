@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StatusBar } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import HomeRoot from './HomeRoot';
 import OnboardingRoot from './OnboardingRoot';
 
@@ -9,16 +10,30 @@ export type AppRootParamList = {
   OnboardingRoot: undefined;
 };
 
-const AppStack = createStackNavigator<AppRootParamList>();
+type AppRootRouteProp = RouteProp<AppRootParamList, 'HomeRoot'>;
 
-const AppRoot: FC = () => {
+export type AppRootNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AppRootParamList>,
+  StackNavigationProp<AppRootParamList>
+>;
+
+type MyCreateNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;
+
+type NavigationProps = {
+  route: AppRootRouteProp;
+  navigation: MyCreateNavigationProp;
+};
+
+const Stack = createStackNavigator<AppRootParamList>();
+
+const AppRoot: FC<NavigationProps> = () => {
   return (
     <>
       <StatusBar hidden={false} barStyle="light-content" />
-      <AppStack.Navigator headerMode="none" initialRouteName="HomeRoot">
-        <AppStack.Screen name="HomeRoot" component={HomeRoot} />
-        <AppStack.Screen name="OnboardingRoot" component={OnboardingRoot} />
-      </AppStack.Navigator>
+      <Stack.Navigator headerMode="none" initialRouteName="OnboardingRoot">
+        <Stack.Screen name="HomeRoot" component={HomeRoot} />
+        <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
+      </Stack.Navigator>
     </>
   );
 };
