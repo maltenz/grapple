@@ -13,7 +13,7 @@ import {
   SvgTabbarBackgroundHeight,
 } from '../components';
 
-import { HomeParentRootNavigationProp } from './HomeRoot';
+import { ParentNavigationProp } from './HomeRoot';
 
 import { NavigationLogo } from '../components/base/Navigation';
 
@@ -22,7 +22,7 @@ const CONTENT =
   'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
 const Home: FC = () => {
-  const parentNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const parentNavigation = useNavigation<ParentNavigationProp>();
   const inset = useSafeArea();
 
   return (

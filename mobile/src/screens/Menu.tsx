@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, Color, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
-import { HomeParentRootNavigationProp } from './HomeRoot';
+import { ParentNavigationProp } from './HomeRoot';
 
 interface MenuItemProps {
   children: string;
@@ -39,7 +39,7 @@ const SHADOW = {
 };
 
 const MainMenu: FC = () => {
-  const navigation = useNavigation<HomeParentRootNavigationProp>();
+  const parentNavigation = useNavigation<ParentNavigationProp>();
 
   const inset = useSafeArea();
   return (
@@ -73,9 +73,11 @@ const MainMenu: FC = () => {
         </Panel>
         <Panel flex={1} justifyContent="flex-end">
           <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
-          <MenuItem onPress={(): void => navigation.navigate('Camera')}>My Stories</MenuItem>
-          <MenuItem onPress={(): void => navigation.navigate('Camera')}>My Incidents</MenuItem>
-          <MenuItem onPress={(): void => navigation.goBack()}>Back</MenuItem>
+          <MenuItem onPress={(): void => parentNavigation.navigate('Camera')}>My Stories</MenuItem>
+          <MenuItem onPress={(): void => parentNavigation.navigate('Camera')}>
+            My Incidents
+          </MenuItem>
+          <MenuItem onPress={(): void => parentNavigation.goBack()}>Back</MenuItem>
         </Panel>
       </Panel>
     </Panel>

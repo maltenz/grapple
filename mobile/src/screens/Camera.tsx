@@ -21,7 +21,7 @@ import {
   SvgIconStory,
 } from '../components';
 
-import { HomeChildRootNavigationProp } from './HomeRoot';
+import { ChildNavigationProp } from './HomeRoot';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 
@@ -66,7 +66,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 };
 
 const CameraScreen: FC = () => {
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean>();
 
   useEffect(() => {

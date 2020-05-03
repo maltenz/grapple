@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { StatusBar } from 'react-native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
-import HomeRoot from './HomeRoot';
+import HomeRoot, { ParentParamList } from './HomeRoot';
 import OnboardingRoot from './OnboardingRoot';
 
 export type AppRootParamList = {
@@ -14,7 +14,7 @@ type AppRootRouteProp = RouteProp<AppRootParamList, 'HomeRoot'>;
 
 export type AppRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>,
-  StackNavigationProp<AppRootParamList>
+  StackNavigationProp<ParentParamList>
 >;
 
 type MyCreateNavigationProp = StackNavigationProp<AppRootParamList, 'HomeRoot'>;

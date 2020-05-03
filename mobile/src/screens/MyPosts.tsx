@@ -11,7 +11,7 @@ import {
   PostsEditItemType,
 } from '../components';
 
-import { HomeChildRootNavigationProp } from './HomeRoot';
+import { ChildNavigationProp } from './HomeRoot';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -62,7 +62,7 @@ interface PostEditProps {
 }
 
 const PostEdit: FC<PostEditProps> = ({ items }) => {
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <PostsEditSlider
@@ -75,7 +75,7 @@ const PostEdit: FC<PostEditProps> = ({ items }) => {
 };
 
 const MyPosts: FC = () => {
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
 
   return (
     <>

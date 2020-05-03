@@ -14,7 +14,7 @@ import {
   NavigationIcon,
 } from '../components';
 
-import { HomeParentRootNavigationProp, HomeChildRootNavigationProp } from './HomeRoot';
+import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../components/base/Navigation';
@@ -23,8 +23,8 @@ const SRC = { uri: 'https://source.unsplash.com/random' };
 
 const Account: FC = () => {
   const inset = useSafeArea();
-  const parentNavigation = useNavigation<HomeParentRootNavigationProp>();
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const parentNavigation = useNavigation<ParentNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
 
   return (
     <>

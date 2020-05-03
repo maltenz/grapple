@@ -26,7 +26,7 @@ import {
 import { ButtonLargeHeight } from '../components/core/Button';
 import { BulletDimension } from '../components/core/Bullet';
 import { NavigationHeight } from '../components/base/Navigation';
-import { HomeChildRootNavigationProp } from './HomeRoot';
+import { ChildNavigationProp } from './HomeRoot';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -73,7 +73,7 @@ const POSTS: PostsEditItemType[] = [
 ];
 
 const MyPost: FC = () => {
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
   const [activeIndex, setActiveIndex] = useState(0);
   const inset = useSafeArea();
 

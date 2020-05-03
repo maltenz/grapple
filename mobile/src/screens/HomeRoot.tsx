@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-
 import React, { Fragment, FC, ReactNode } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -36,32 +35,32 @@ import MyPosts from './MyPosts';
  * Home parent
  */
 
-export type HomeParentRootParamList = {
-  HomeChildRoot: undefined;
+export type ParentParamList = {
+  Child: undefined;
   MenuRoot: undefined;
   Camera: undefined;
 };
 
-type HomeParentRootRouteProp = RouteProp<HomeParentRootParamList, 'HomeChildRoot'>;
+type ParentRouteProp = RouteProp<ParentParamList, 'Child'>;
 
-export type HomeParentRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<HomeParentRootParamList>,
+export type ParentNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ParentParamList>,
   StackNavigationProp<AppRootParamList>
 >;
 
-type MyHomeParentRootNavigationProp = StackNavigationProp<HomeParentRootParamList, 'HomeChildRoot'>;
+type MyParentNavigationProp = StackNavigationProp<ParentParamList, 'Child'>;
 
 type parentNavigationProps = {
-  route: HomeParentRootRouteProp;
-  navigation: MyHomeParentRootNavigationProp;
+  route: ParentRouteProp;
+  navigation: MyParentNavigationProp;
 };
 
-const HomeParentStack = createStackNavigator<HomeParentRootParamList>();
+const ParentStack = createStackNavigator<ParentParamList>();
 
 /**
  * Home child
  */
-type HomeChildRootParamList = {
+type ChildParamList = {
   HomeStack: undefined;
   // Profile
   MyProfile: undefined;
@@ -77,21 +76,21 @@ type HomeChildRootParamList = {
   Security: undefined;
 };
 
-type HomeChildRootRouteProp = RouteProp<HomeChildRootParamList, 'HomeStack'>;
+type ChildRouteProp = RouteProp<ChildParamList, 'HomeStack'>;
 
-export type HomeChildRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<HomeChildRootParamList>,
+export type ChildNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ChildParamList>,
   StackNavigationProp<AppRootParamList>
 >;
 
-type MyHomeChildRootNavigationProp = StackNavigationProp<HomeChildRootParamList, 'HomeStack'>;
+type MyChildNavigationProp = StackNavigationProp<ChildParamList, 'HomeStack'>;
 
 type HomeChildNavigationProps = {
-  route: HomeChildRootRouteProp;
-  navigation: MyHomeChildRootNavigationProp;
+  route: ChildRouteProp;
+  navigation: MyChildNavigationProp;
 };
 
-const HomeChildStack = createStackNavigator<HomeChildRootParamList>();
+const ChildStack = createStackNavigator<ChildParamList>();
 
 /**
  * Home tab
@@ -105,7 +104,7 @@ interface TabBarProps {
 }
 
 const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
-  const myNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const myNavigation = useNavigation<ParentNavigationProp>();
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -189,29 +188,29 @@ const HomeStack: FC = () => (
   </HomeStackTab.Navigator>
 );
 
-const HomeChildRoot: FC<HomeChildNavigationProps> = () => {
+const Child: FC<HomeChildNavigationProps> = () => {
   return (
-    <HomeChildStack.Navigator headerMode="none">
-      <HomeChildStack.Screen name="HomeStack" component={HomeStack} />
+    <ChildStack.Navigator headerMode="none">
+      <ChildStack.Screen name="HomeStack" component={HomeStack} />
       {/* Profile */}
-      <HomeChildStack.Screen name="MyProfile" component={MyProfile} />
+      <ChildStack.Screen name="MyProfile" component={MyProfile} />
       {/* Post */}
-      <HomeChildStack.Screen name="MyPost" component={MyPost} />
-      <HomeChildStack.Screen name="MyPosts" component={MyPosts} />
+      <ChildStack.Screen name="MyPost" component={MyPost} />
+      <ChildStack.Screen name="MyPosts" component={MyPosts} />
       {/* Account */}
-      <HomeChildStack.Screen name="Notifications" component={MyPost} />
-      <HomeChildStack.Screen name="Help" component={MyPost} />
-      <HomeChildStack.Screen name="Security" component={MyPost} />
-      <HomeChildStack.Screen name="CommunityGuidelines" component={MyPost} />
-      <HomeChildStack.Screen name="PrivacyPolicy" component={MyPost} />
-    </HomeChildStack.Navigator>
+      <ChildStack.Screen name="Notifications" component={MyPost} />
+      <ChildStack.Screen name="Help" component={MyPost} />
+      <ChildStack.Screen name="Security" component={MyPost} />
+      <ChildStack.Screen name="CommunityGuidelines" component={MyPost} />
+      <ChildStack.Screen name="PrivacyPolicy" component={MyPost} />
+    </ChildStack.Navigator>
   );
 };
 
-const HomeParentRoot: FC<parentNavigationProps> = () => {
+const Parent: FC<parentNavigationProps> = () => {
   return (
     <>
-      <HomeParentStack.Navigator
+      <ParentStack.Navigator
         mode="modal"
         headerMode="none"
         screenOptions={{
@@ -220,12 +219,12 @@ const HomeParentRoot: FC<parentNavigationProps> = () => {
           },
         }}
       >
-        <HomeParentStack.Screen name="HomeChildRoot" component={HomeChildRoot} />
-        <HomeParentStack.Screen name="MenuRoot" component={MenuRoot} />
-        <HomeParentStack.Screen name="Camera" component={Camera} />
-      </HomeParentStack.Navigator>
+        <ParentStack.Screen name="Child" component={Child} />
+        <ParentStack.Screen name="MenuRoot" component={MenuRoot} />
+        <ParentStack.Screen name="Camera" component={Camera} />
+      </ParentStack.Navigator>
     </>
   );
 };
 
-export default HomeParentRoot;
+export default Parent;

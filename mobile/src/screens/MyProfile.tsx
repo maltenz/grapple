@@ -18,7 +18,7 @@ import {
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
 import PullBar from '../components/core/PullBar';
 
-import { HomeChildRootNavigationProp } from './HomeRoot';
+import { ChildNavigationProp } from './HomeRoot';
 
 const HERO_IMAGE = {
   src: {
@@ -30,7 +30,7 @@ const HERO_IMAGE = {
 const HERO_DIMENSIONS = AssetStyles.measure.window.width;
 
 const MyProfile: FC = () => {
-  const navigation = useNavigation<HomeChildRootNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
 
   const inset = useSafeArea();
 
