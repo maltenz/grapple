@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
-import { BlurView } from 'expo-blur';
 import MapView from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
-import Overlay, { OverlayItem } from './components/Overlay';
+import Overlay, { OverlayItem, OverlayPanel } from './components/Overlay';
 
 const MAP_WIDTH = AssetStyles.measure.window.width - AssetStyles.measure.space * 4;
 const MAP_HEIGHT = MAP_WIDTH * 0.63;
@@ -27,21 +26,20 @@ const Menu: FC = () => {
         Get help now
       </Button>
       <Panel style={styles.mapShadow}>
-        <BlurView tint="light" intensity={10} style={styles.mapContainer}>
-          <Panel
-            paddingVertical={0.5}
-            paddingHorizontal
-            row
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Text mode="night" appearance="normal" type="p">
-              Creeper Beeper
-            </Text>
-            <SvgIconSmallRight color="white" strokeWidth={1.5} />
-          </Panel>
-          <MapView style={styles.map} />
-        </BlurView>
+        <OverlayPanel
+          paddingVertical={0.5}
+          paddingHorizontal
+          row
+          alignItems="center"
+          justifyContent="space-between"
+          style={styles.mapContainer}
+          Sibling={<MapView style={styles.map} />}
+        >
+          <Text mode="night" appearance="normal" type="p">
+            Creeper Beeper
+          </Text>
+          <SvgIconSmallRight color="white" strokeWidth={1.5} />
+        </OverlayPanel>
       </Panel>
       <Panel flex={1} justifyContent="flex-end">
         <OverlayItem title="Create" onPress={(): void => parentNavigation.navigate('Camera')} />

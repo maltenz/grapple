@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import React, { FC, ReactNode } from 'react';
+import { StatusBar, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { Panel, AssetStyles, Text } from '../../components';
+import { PanelProps } from '../../components/base/Panel';
 
 interface OverlayItemProps {
   title: string;
@@ -22,6 +23,29 @@ const OverlayItem: FC<OverlayItemProps> = ({ title, onPress }) => (
     {title}
   </Text>
 );
+
+interface OverlayPanelProps extends PanelProps {
+  style?: StyleProp<ViewStyle>;
+  Sibling?: ReactNode;
+}
+
+const OverlayPanel: FC<OverlayPanelProps> = ({
+  paddingHorizontal = 1,
+  paddingVertical = 0.5,
+  children,
+  Sibling,
+  style,
+  ...rest
+}) => {
+  return (
+    <BlurView tint="light" intensity={10} style={[styles.overlayPanelContainer, style]}>
+      <Panel paddingVertical={paddingVertical} paddingHorizontal={paddingHorizontal} {...rest}>
+        {children}
+      </Panel>
+      {Sibling}
+    </BlurView>
+  );
+};
 
 const Overlay: FC = ({ children }) => {
   const inset = useSafeArea();
@@ -45,6 +69,12 @@ const Overlay: FC = ({ children }) => {
   );
 };
 
-export { OverlayItem };
+const styles = StyleSheet.create({
+  overlayPanelContainer: {
+    borderRadius: AssetStyles.measure.radius.large,
+  },
+});
+
+export { OverlayItem, OverlayPanel };
 
 export default Overlay;
