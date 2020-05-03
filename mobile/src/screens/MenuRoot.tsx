@@ -35,7 +35,7 @@ const MenuRoot: FC<NavigationProps> = () => {
         },
       }}
     >
-      <Stack.Screen name="MenuRoot" component={Menu} />
+      <Stack.Screen name="Menu" component={Menu} />
     </Stack.Navigator>
   );
 };
