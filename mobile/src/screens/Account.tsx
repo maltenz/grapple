@@ -14,9 +14,10 @@ import {
   NavigationIcon,
 } from '../components';
 
+import { HomeParentRootNavigationProp, HomeChildRootNavigationProp } from './HomeRoot';
+
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../components/base/Navigation';
-import { HomeRootNavigationProp } from './HomeRoot';
 import { AccountRootParamList } from './AccountRoot';
 
 type ScreenNavigationProp = StackNavigationProp<AccountRootParamList>;
@@ -31,7 +32,8 @@ const SRC = { uri: 'https://source.unsplash.com/random' };
 
 const Account: FC<AccountNavProps> = () => {
   const inset = useSafeArea();
-  const homeRootNavigation = useNavigation<HomeRootNavigationProp>();
+  const homeRootNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const homeChildNavigation = useNavigation<HomeChildRootNavigationProp>();
 
   return (
     <>
@@ -57,7 +59,7 @@ const Account: FC<AccountNavProps> = () => {
           <MenuItemAccount
             title="My Account"
             subTitle="Malte Boeing"
-            onPress={(): void => homeRootNavigation.navigate('ProfileRoot')}
+            onPress={(): void => homeChildNavigation.navigate('MyProfile')}
             src={SRC}
           />
         </Container>

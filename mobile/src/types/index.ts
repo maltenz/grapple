@@ -1,3 +1,5 @@
+import { GalleryItemType } from '../components';
+
 export type ModeType = 'day' | 'night';
 export type UtilityType = 'edit' | 'delete' | 'view';
 
@@ -12,3 +14,8 @@ export type ColorType =
   | 'grey3'
   | 'grey4'
   | 'transparent';
+
+export interface ProfileType extends GalleryItemType {
+  name: string;
+  excerpt: string;
+}

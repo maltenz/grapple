@@ -4,10 +4,10 @@ import { ScrollView, LayoutAnimation, Platform, StyleSheet, UIManager, View } fr
 import Panel from '../../components/base/Panel';
 import Text from '../../components/base/Text';
 import CoreText from '../../components/core/Text';
-import { ProfileProps } from '../AccountRoot';
 import Thumbnail from '../../components/base/Thumbnail';
 import Button from '../../components/base/Button';
 import { AssetStyles } from '../../components';
+import { ProfileType } from '../../types';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -20,7 +20,7 @@ const BUDDY_ITEM = {
   },
 };
 
-const BUDDIES: ProfileProps[] = [
+const BUDDIES: ProfileType[] = [
   {
     ...BUDDY_ITEM,
     name: TITLE,

@@ -7,7 +7,6 @@ import { AppRootParamList } from './AppRoot';
 
 export type AccountRootParamList = {
   Account: undefined;
-  MyProfile: undefined;
   Notifications: undefined;
   Help: undefined;
   CommunityGuidelines: undefined;

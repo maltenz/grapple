@@ -3,8 +3,8 @@ import React, { Fragment, FC, ReactNode } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+import { CompositeNavigationProp, useNavigation, RouteProp } from '@react-navigation/native';
 
-import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import {
   Panel,
   SvgIconHome,
@@ -18,41 +18,71 @@ import { AppRootParamList } from './AppRoot';
 import AccountRoot from './AccountRoot';
 import MenuRoot from './MenuRoot';
 import CreateRoot from './CreateRoot';
-import ProfileRoot from './ProfileRoot';
+import MyProfile from './MyProfile';
 
-type ScreenNavigationProp = StackNavigationProp<AppRootParamList>;
+/**
+ * Home parent
+ */
 
-type NavProps = {
-  navigation: ScreenNavigationProp;
-};
-
-type HomeRootProps = NavProps;
-
-export type HomeRootParamList = {
-  HomeRoot: undefined;
-  AccountRoot: undefined;
+export type HomeParentRootParamList = {
+  HomeChildRoot: undefined;
   MenuRoot: undefined;
   CreateRoot: undefined;
-  ProfileRoot: undefined;
 };
 
-export type HomeRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<HomeRootParamList>,
+type HomeParentRootRouteProp = RouteProp<HomeParentRootParamList, 'HomeChildRoot'>;
+
+export type HomeParentRootNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<HomeParentRootParamList>,
   StackNavigationProp<AppRootParamList>
 >;
 
-const Tab = createBottomTabNavigator();
+type HomeParentNavigationProp = StackNavigationProp<HomeParentRootParamList, 'HomeChildRoot'>;
 
-interface MyTabBarProps {
+type HomeParentNavigationProps = {
+  route: HomeParentRootRouteProp;
+  navigation: HomeParentNavigationProp;
+};
+
+const HomeParentStack = createStackNavigator<HomeParentRootParamList>();
+
+/**
+ * Home child
+ */
+type HomeChildRootParamList = {
+  HomeStack: undefined;
+  MyProfile: undefined;
+};
+
+type HomeChildRootRouteProp = RouteProp<HomeChildRootParamList, 'HomeStack'>;
+
+export type HomeChildRootNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<HomeChildRootParamList>,
+  StackNavigationProp<AppRootParamList>
+>;
+
+type HomeChildNavigationProp = StackNavigationProp<HomeChildRootParamList, 'HomeStack'>;
+
+type HomeChildNavigationProps = {
+  route: HomeChildRootRouteProp;
+  navigation: HomeChildNavigationProp;
+};
+
+const HomeChildStack = createStackNavigator<HomeChildRootParamList>();
+
+/**
+ * Home tab
+ */
+const HomeStackTab = createBottomTabNavigator();
+
+interface TabBarProps {
   state: any;
   descriptors: any;
   navigation: any;
 }
 
-const HomeStack = createStackNavigator<HomeRootParamList>();
-
-const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
-  const myNavigation = useNavigation<HomeRootNavigationProp>();
+const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
+  const myNavigation = useNavigation<HomeParentRootNavigationProp>();
 
   return (
     <>
@@ -119,30 +149,40 @@ const MyTabBar: FC<MyTabBarProps> = ({ state, descriptors, navigation }) => {
   );
 };
 
-const HomeTabStack: FC = () => (
-  <Tab.Navigator tabBar={(props): ReactNode => <MyTabBar {...props} />}>
-    <Tab.Screen name="Home" component={Home} />
-    <Tab.Screen name="Account" component={AccountRoot} />
-  </Tab.Navigator>
+const HomeStack: FC = () => (
+  <HomeStackTab.Navigator tabBar={(props): ReactNode => <TabBar {...props} />}>
+    <HomeStackTab.Screen name="Home" component={Home} />
+    <HomeStackTab.Screen name="Account" component={AccountRoot} />
+  </HomeStackTab.Navigator>
 );
 
-const HomeRoot: FC<HomeRootProps> = () => (
-  <>
-    <HomeStack.Navigator
-      mode="modal"
-      headerMode="none"
-      screenOptions={{
-        cardStyle: {
-          backgroundColor: 'transparent',
-        },
-      }}
-    >
-      <HomeStack.Screen name="HomeRoot" component={HomeTabStack} />
-      <HomeStack.Screen name="MenuRoot" component={MenuRoot} />
-      <HomeStack.Screen name="CreateRoot" component={CreateRoot} />
-      <HomeStack.Screen name="ProfileRoot" component={ProfileRoot} />
-    </HomeStack.Navigator>
-  </>
-);
+const HomeChildRoot: FC<HomeChildNavigationProps> = () => {
+  return (
+    <HomeChildStack.Navigator headerMode="none">
+      <HomeChildStack.Screen name="HomeStack" component={HomeStack} />
+      <HomeChildStack.Screen name="MyProfile" component={MyProfile} />
+    </HomeChildStack.Navigator>
+  );
+};
 
-export default HomeRoot;
+const HomeParentRoot: FC<HomeParentNavigationProps> = () => {
+  return (
+    <>
+      <HomeParentStack.Navigator
+        mode="modal"
+        headerMode="none"
+        screenOptions={{
+          cardStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
+      >
+        <HomeParentStack.Screen name="HomeChildRoot" component={HomeChildRoot} />
+        <HomeParentStack.Screen name="MenuRoot" component={MenuRoot} />
+        <HomeParentStack.Screen name="CreateRoot" component={CreateRoot} />
+      </HomeParentStack.Navigator>
+    </>
+  );
+};
+
+export default HomeParentRoot;

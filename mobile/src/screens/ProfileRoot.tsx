@@ -4,40 +4,32 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 
 import { AppRootParamList } from './AppRoot';
 import MyProfile from './MyProfile';
-import { GalleryItemType } from '../components';
 
-export type ProfileRootParamList = {
+export type HomeRootStackParamList = {
   MyProfile: undefined;
 };
 
-type ScreenNavigationProp = StackNavigationProp<ProfileRootParamList>;
+type ScreenNavigationProp = StackNavigationProp<HomeRootStackParamList>;
 
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
 
-type ProfileRootProps = NavProps;
+type HomeRootStackProps = NavProps;
 
-export type ProfileRootNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ProfileRootProps>,
+export type HomeRootStackNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<HomeRootStackProps>,
   StackNavigationProp<AppRootParamList>
 >;
 
-const ProfileStack = createStackNavigator<ProfileRootParamList>();
+const HomeRootStack = createStackNavigator<HomeRootStackParamList>();
 
-interface ProfileProps extends GalleryItemType {
-  name: string;
-  excerpt: string;
-}
-
-const ProfileRoot: FC<NavProps> = () => {
+const HomeRoot: FC<NavProps> = () => {
   return (
-    <ProfileStack.Navigator headerMode="none">
-      <ProfileStack.Screen name="MyProfile" component={MyProfile} />
-    </ProfileStack.Navigator>
+    <HomeRootStack.Navigator headerMode="none">
+      <HomeRootStack.Screen name="MyProfile" component={MyProfile} />
+    </HomeRootStack.Navigator>
   );
 };
 
-export { ProfileProps };
-
-export default ProfileRoot;
+export default HomeRoot;
