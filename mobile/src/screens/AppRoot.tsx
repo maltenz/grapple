@@ -29,7 +29,7 @@ const Stack = createStackNavigator<AppRootParamList>();
 const AppRoot: FC<NavigationProps> = () => {
   return (
     <>
-      <StatusBar hidden={false} barStyle="light-content" />
+      <StatusBar barStyle="light-content" />
       <Stack.Navigator headerMode="none" initialRouteName="OnboardingRoot">
         <Stack.Screen name="HomeRoot" component={HomeRoot} />
         <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />

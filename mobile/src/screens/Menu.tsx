@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import MapView from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
-import { ParentNavigationProp } from './HomeRoot';
+import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 import Overlay, { OverlayItem } from './components/Overlay';
 
 interface MenuItemProps {
@@ -19,6 +19,7 @@ const MAP_HEIGHT = MAP_WIDTH * 0.63;
 
 const MainMenu: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
 
   return (
     <Overlay>
@@ -48,13 +49,10 @@ const MainMenu: FC = () => {
         </BlurView>
       </Panel>
       <Panel flex={1} justifyContent="flex-end">
-        <OverlayItem title="Create" onPress={(): void => Alert.alert('press')} />
-        <OverlayItem title="My Stories" onPress={(): void => parentNavigation.navigate('Camera')} />
-        <OverlayItem
-          title="My Incidents"
-          onPress={(): void => parentNavigation.navigate('Camera')}
-        />
-        <OverlayItem title="Back" onPress={(): void => parentNavigation.goBack()}>
+        <OverlayItem title="Create" onPress={(): void => parentNavigation.navigate('Camera')} />
+        <OverlayItem title="My Stories" onPress={(): void => navigation.navigate('MyPosts')} />
+        <OverlayItem title="My Incidents" onPress={(): void => navigation.navigate('MyPosts')} />
+        <OverlayItem title="Back" onPress={(): void => navigation.goBack()}>
           Back
         </OverlayItem>
       </Panel>
