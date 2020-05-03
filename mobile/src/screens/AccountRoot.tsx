@@ -22,25 +22,25 @@ export type AccountRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>
 >;
 
-type AccountNavigationProp = StackNavigationProp<AccountRootParamList, 'Account'>;
+type MyAccountRootNavigationProp = StackNavigationProp<AccountRootParamList, 'Account'>;
 
-type AccountNavigationProps = {
+type NavigationProps = {
   route: AccountRootRouteProp;
-  navigation: AccountNavigationProp;
+  navigation: MyAccountRootNavigationProp;
 };
 
-const AccountStack = createStackNavigator<AccountRootParamList>();
+const Stack = createStackNavigator<AccountRootParamList>();
 
-const AccountRoot: FC<AccountNavigationProps> = () => {
+const AccountRoot: FC<NavigationProps> = () => {
   return (
-    <AccountStack.Navigator headerMode="none">
-      <AccountStack.Screen name="Account" component={Account} />
-      <AccountStack.Screen name="Notifications" component={MyPost} />
-      <AccountStack.Screen name="Help" component={MyPost} />
-      <AccountStack.Screen name="Security" component={MyPost} />
-      <AccountStack.Screen name="CommunityGuidelines" component={MyPost} />
-      <AccountStack.Screen name="PrivacyPolicy" component={MyPost} />
-    </AccountStack.Navigator>
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Notifications" component={MyPost} />
+      <Stack.Screen name="Help" component={MyPost} />
+      <Stack.Screen name="Security" component={MyPost} />
+      <Stack.Screen name="CommunityGuidelines" component={MyPost} />
+      <Stack.Screen name="PrivacyPolicy" component={MyPost} />
+    </Stack.Navigator>
   );
 };
 
