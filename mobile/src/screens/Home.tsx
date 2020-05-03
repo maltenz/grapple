@@ -33,7 +33,7 @@ const Home: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => parentNavigation.navigate('Camera')}
+            onPress={(): void => parentNavigation.navigate('Search')}
           />
         }
         Center={<NavigationLogo mode="day" />}

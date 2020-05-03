@@ -30,6 +30,7 @@ import MyProfile from './MyProfile';
 import MyPost from './MyPost';
 import Account from './Account';
 import MyPosts from './MyPosts';
+import Search from './Search';
 
 /**
  * Home parent
@@ -39,6 +40,7 @@ export type ParentParamList = {
   Child: undefined;
   Menu: undefined;
   Camera: undefined;
+  Search: undefined;
 };
 
 type ParentRouteProp = RouteProp<ParentParamList, 'Child'>;
@@ -222,6 +224,7 @@ const Parent: FC<parentNavigationProps> = () => {
         <ParentStack.Screen name="Child" component={Child} />
         <ParentStack.Screen name="Menu" component={Menu} />
         <ParentStack.Screen name="Camera" component={Camera} />
+        <ParentStack.Screen name="Search" component={Search} />
       </ParentStack.Navigator>
     </>
   );

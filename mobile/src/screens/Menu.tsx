@@ -9,15 +9,10 @@ import Text from '../components/base/Text';
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 import Overlay, { OverlayItem } from './components/Overlay';
 
-interface MenuItemProps {
-  children: string;
-  onPress: () => void;
-}
-
 const MAP_WIDTH = AssetStyles.measure.window.width - AssetStyles.measure.space * 4;
 const MAP_HEIGHT = MAP_WIDTH * 0.63;
 
-const MainMenu: FC = () => {
+const Menu: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
 
@@ -77,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainMenu;
+export default Menu;
