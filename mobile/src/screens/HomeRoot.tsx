@@ -24,7 +24,7 @@ import {
 
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
-import MenuRoot from './MenuRoot';
+import Menu from './Menu';
 import Camera from './Camera';
 import MyProfile from './MyProfile';
 import MyPost from './MyPost';
@@ -37,7 +37,7 @@ import MyPosts from './MyPosts';
 
 export type ParentParamList = {
   Child: undefined;
-  MenuRoot: undefined;
+  Menu: undefined;
   Camera: undefined;
 };
 
@@ -85,7 +85,7 @@ export type ChildNavigationProp = CompositeNavigationProp<
 
 type MyChildNavigationProp = StackNavigationProp<ChildParamList, 'HomeStack'>;
 
-type HomeChildNavigationProps = {
+type ChildNavigationProps = {
   route: ChildRouteProp;
   navigation: MyChildNavigationProp;
 };
@@ -95,16 +95,16 @@ const ChildStack = createStackNavigator<ChildParamList>();
 /**
  * Home tab
  */
-const HomeStackTab = createBottomTabNavigator();
+const StackTab = createBottomTabNavigator();
 
 interface TabBarProps {
   state: StackNavigationState;
   descriptors: StackDescriptorMap;
-  navigation: NavigationHelpers<HomeChildNavigationProps>;
+  navigation: NavigationHelpers<ChildNavigationProps>;
 }
 
 const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
-  const myNavigation = useNavigation<ParentNavigationProp>();
+  const parentNavigation = useNavigation<ParentNavigationProp>();
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -113,7 +113,7 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
 
         {state.routes.map(
           // @ts-ignore
-          (route: RouteProp<HomeChildNavigationProps, 'route'>, index: number) => {
+          (route: RouteProp<ChildNavigationProps, 'route'>, index: number) => {
             const { options } = descriptors[route.key];
             const label = options.title ? options.title : route.name;
 
@@ -162,7 +162,7 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
                   <Panel center style={{ flex: 1 }}>
                     <TabbarCircleButton
                       isFocused={isFocused}
-                      onPress={(): void => myNavigation.navigate('MenuRoot')}
+                      onPress={(): void => parentNavigation.navigate('Menu')}
                       onLongPress={onLongPress}
                     />
                   </Panel>
@@ -177,18 +177,18 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
 };
 
 const HomeStack: FC = () => (
-  <HomeStackTab.Navigator
+  <StackTab.Navigator
     tabBar={(props): ReactNode => {
       // @ts-ignore
       return <TabBar {...props} />;
     }}
   >
-    <HomeStackTab.Screen name="Home" component={Home} />
-    <HomeStackTab.Screen name="Account" component={Account} />
-  </HomeStackTab.Navigator>
+    <StackTab.Screen name="Home" component={Home} />
+    <StackTab.Screen name="Account" component={Account} />
+  </StackTab.Navigator>
 );
 
-const Child: FC<HomeChildNavigationProps> = () => {
+const Child: FC<ChildNavigationProps> = () => {
   return (
     <ChildStack.Navigator headerMode="none">
       <ChildStack.Screen name="HomeStack" component={HomeStack} />
@@ -220,7 +220,7 @@ const Parent: FC<parentNavigationProps> = () => {
         }}
       >
         <ParentStack.Screen name="Child" component={Child} />
-        <ParentStack.Screen name="MenuRoot" component={MenuRoot} />
+        <ParentStack.Screen name="Menu" component={Menu} />
         <ParentStack.Screen name="Camera" component={Camera} />
       </ParentStack.Navigator>
     </>
