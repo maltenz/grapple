@@ -16,6 +16,7 @@ export interface PanelProps extends MarginProps, PaddingProps {
   justifyContent?: ContentDistribution | ContentPosition;
   alignItems?: ContentDistribution | ContentPosition;
   onPress?: () => void;
+  pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
 }
 
 type MeasureType = boolean | number;
@@ -42,8 +43,9 @@ export interface PaddingProps {
 interface ViewOrTouchableProps {
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
 }
-const ViewOrTouchable: FC<ViewOrTouchableProps> = ({ onPress, children, style }) => {
+const ViewOrTouchable: FC<ViewOrTouchableProps> = ({ onPress, children, pointerEvents, style }) => {
   if (onPress) {
     return (
       <TouchableOpacity style={style} onPress={onPress}>
@@ -51,7 +53,12 @@ const ViewOrTouchable: FC<ViewOrTouchableProps> = ({ onPress, children, style })
       </TouchableOpacity>
     );
   }
-  return <View style={style}>{children}</View>;
+
+  return (
+    <View style={style} pointerEvents={pointerEvents}>
+      {children}
+    </View>
+  );
 };
 
 export const measure = (value: number | boolean | undefined): number | boolean | null => {
@@ -76,6 +83,7 @@ const Panel: FC<PanelProps> = ({
   justifyContent,
   alignItems,
   onPress,
+  pointerEvents,
   padding,
   paddingHorizontal,
   paddingVertical,
@@ -175,7 +183,12 @@ const Panel: FC<PanelProps> = ({
   }
 
   return (
-    <ViewOrTouchable onPress={onPress} {...rest} style={[panelStyles, style]}>
+    <ViewOrTouchable
+      onPress={onPress}
+      pointerEvents={pointerEvents}
+      {...rest}
+      style={[panelStyles, style]}
+    >
       {children}
     </ViewOrTouchable>
   );

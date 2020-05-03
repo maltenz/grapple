@@ -18,6 +18,7 @@ import { AppRootParamList } from './AppRoot';
 import AccountRoot from './AccountRoot';
 import MenuRoot from './MenuRoot';
 import CreateRoot from './CreateRoot';
+import ProfileRoot from './ProfileRoot';
 
 type ScreenNavigationProp = StackNavigationProp<AppRootParamList>;
 
@@ -32,6 +33,7 @@ export type HomeRootParamList = {
   AccountRoot: undefined;
   MenuRoot: undefined;
   CreateRoot: undefined;
+  ProfileRoot: undefined;
 };
 
 export type HomeRootNavigationProp = CompositeNavigationProp<
@@ -138,6 +140,7 @@ const HomeRoot: FC<HomeRootProps> = () => (
       <HomeStack.Screen name="HomeRoot" component={HomeTabStack} />
       <HomeStack.Screen name="MenuRoot" component={MenuRoot} />
       <HomeStack.Screen name="CreateRoot" component={CreateRoot} />
+      <HomeStack.Screen name="ProfileRoot" component={ProfileRoot} />
     </HomeStack.Navigator>
   </>
 );

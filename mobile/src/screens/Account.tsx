@@ -29,7 +29,7 @@ type AccountNavProps = NavProps;
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 
-const Account: FC<AccountNavProps> = ({ navigation }) => {
+const Account: FC<AccountNavProps> = () => {
   const inset = useSafeArea();
   const homeRootNavigation = useNavigation<HomeRootNavigationProp>();
 
@@ -57,7 +57,7 @@ const Account: FC<AccountNavProps> = ({ navigation }) => {
           <MenuItemAccount
             title="My Account"
             subTitle="Malte Boeing"
-            onPress={(): void => navigation.navigate('MyProfile')}
+            onPress={(): void => homeRootNavigation.navigate('ProfileRoot')}
             src={SRC}
           />
         </Container>

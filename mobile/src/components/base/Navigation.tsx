@@ -35,6 +35,7 @@ interface NavigationLogoProps {
 interface NavigationHeadingProps {
   mode: ModeType;
   text: string;
+  pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
 }
 
 interface NavigationBackgroundProps {
@@ -122,9 +123,16 @@ const NavigationLogo: FC<NavigationLogoProps> = ({ mode }) => {
   );
 };
 
-const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text }) => {
+const NavigationHeading: FC<NavigationHeadingProps> = ({ mode, text, pointerEvents = 'none' }) => {
   return (
-    <Panel row justifyContent="center" alignItems="flex-end" flex={1} marginBottom={0.5}>
+    <Panel
+      row
+      justifyContent="center"
+      alignItems="flex-end"
+      flex={1}
+      marginBottom={0.5}
+      pointerEvents={pointerEvents}
+    >
       <CoreText
         type="h4"
         color={mode === 'day' ? 'grey' : 'white'}
