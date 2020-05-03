@@ -37,11 +37,11 @@ export type HomeParentRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>
 >;
 
-type HomeParentNavigationProp = StackNavigationProp<HomeParentRootParamList, 'HomeChildRoot'>;
+type MyHomeParentRootNavigationProp = StackNavigationProp<HomeParentRootParamList, 'HomeChildRoot'>;
 
 type HomeParentNavigationProps = {
   route: HomeParentRootRouteProp;
-  navigation: HomeParentNavigationProp;
+  navigation: MyHomeParentRootNavigationProp;
 };
 
 const HomeParentStack = createStackNavigator<HomeParentRootParamList>();
@@ -61,11 +61,11 @@ export type HomeChildRootNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppRootParamList>
 >;
 
-type HomeChildNavigationProp = StackNavigationProp<HomeChildRootParamList, 'HomeStack'>;
+type MyHomeChildRootNavigationProp = StackNavigationProp<HomeChildRootParamList, 'HomeStack'>;
 
 type HomeChildNavigationProps = {
   route: HomeChildRootRouteProp;
-  navigation: HomeChildNavigationProp;
+  navigation: MyHomeChildRootNavigationProp;
 };
 
 const HomeChildStack = createStackNavigator<HomeChildRootParamList>();
