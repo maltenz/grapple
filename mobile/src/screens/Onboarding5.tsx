@@ -4,11 +4,11 @@ import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
-import { HomeParentRootNavigationProp } from './HomeRoot';
+import { HomeChildRootNavigationProp } from './HomeRoot';
 
 const OnboardingScreen5: FC = () => {
   const insets = useSafeArea();
-  const homeRootNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
 
   return (
     <>
@@ -66,7 +66,7 @@ const OnboardingScreen5: FC = () => {
             type="large"
             mode="day"
             appearance="strong"
-            onPress={(): void => homeRootNavigation.navigate('HomeRoot')}
+            onPress={(): void => navigation.navigate('HomeRoot')}
           >
             Enter
           </Button>

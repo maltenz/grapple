@@ -23,7 +23,7 @@ const SRC = { uri: 'https://source.unsplash.com/random' };
 
 const Account: FC = () => {
   const inset = useSafeArea();
-  const homeRootNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
   const homeChildNavigation = useNavigation<HomeChildRootNavigationProp>();
 
   return (
@@ -34,7 +34,7 @@ const Account: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => homeRootNavigation.navigate('CreateRoot')}
+            onPress={(): void => homeParentNavigation.navigate('Camera')}
           />
         }
         Center={<NavigationHeading mode="day" text="Settings" />}

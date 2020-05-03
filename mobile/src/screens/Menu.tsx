@@ -39,7 +39,7 @@ const SHADOW = {
 };
 
 const MainMenu: FC = () => {
-  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const navigation = useNavigation<HomeParentRootNavigationProp>();
 
   const inset = useSafeArea();
   return (
@@ -73,13 +73,9 @@ const MainMenu: FC = () => {
         </Panel>
         <Panel flex={1} justifyContent="flex-end">
           <MenuItem onPress={(): void => Alert.alert('press')}>Create</MenuItem>
-          <MenuItem onPress={(): void => homeParentNavigation.navigate('CreateRoot')}>
-            My Stories
-          </MenuItem>
-          <MenuItem onPress={(): void => homeParentNavigation.navigate('CreateRoot')}>
-            My Incidents
-          </MenuItem>
-          <MenuItem onPress={(): void => homeParentNavigation.goBack()}>Back</MenuItem>
+          <MenuItem onPress={(): void => navigation.navigate('Camera')}>My Stories</MenuItem>
+          <MenuItem onPress={(): void => navigation.navigate('Camera')}>My Incidents</MenuItem>
+          <MenuItem onPress={(): void => navigation.goBack()}>Back</MenuItem>
         </Panel>
       </Panel>
     </Panel>

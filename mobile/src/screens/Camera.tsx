@@ -21,7 +21,7 @@ import {
   SvgIconStory,
 } from '../components';
 
-import { CreateRootNavigationProp } from './CreateRoot';
+import { HomeChildRootNavigationProp } from './HomeRoot';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 
@@ -66,7 +66,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 };
 
 const CameraScreen: FC = () => {
-  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean>();
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => createRootNavigation.navigate('MyPosts')}
+              onPress={(): void => navigation.navigate('MyPosts')}
             >
               Next
             </Button>

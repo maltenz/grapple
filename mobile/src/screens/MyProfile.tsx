@@ -17,7 +17,8 @@ import {
 
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
 import PullBar from '../components/core/PullBar';
-import { CreateRootNavigationProp } from './CreateRoot';
+
+import { HomeChildRootNavigationProp } from './HomeRoot';
 
 const HERO_IMAGE = {
   src: {
@@ -29,7 +30,7 @@ const HERO_IMAGE = {
 const HERO_DIMENSIONS = AssetStyles.measure.window.width;
 
 const MyProfile: FC = () => {
-  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
 
   const inset = useSafeArea();
 
@@ -38,13 +39,7 @@ const MyProfile: FC = () => {
       <Navigation
         blur
         mode="day"
-        Left={
-          <NavigationIcon
-            mode="day"
-            type="back"
-            onPress={(): void => createRootNavigation.goBack()}
-          />
-        }
+        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
         Center={<NavigationHeading mode="day" text="My profile" />}
         Right={
           <Button

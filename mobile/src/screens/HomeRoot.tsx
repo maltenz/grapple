@@ -25,10 +25,12 @@ import {
 
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
-import AccountRoot from './AccountRoot';
 import MenuRoot from './MenuRoot';
-import CreateRoot from './CreateRoot';
+import Camera from './Camera';
 import MyProfile from './MyProfile';
+import MyPost from './MyPost';
+import Account from './Account';
+import MyPosts from './MyPosts';
 
 /**
  * Home parent
@@ -37,7 +39,7 @@ import MyProfile from './MyProfile';
 export type HomeParentRootParamList = {
   HomeChildRoot: undefined;
   MenuRoot: undefined;
-  CreateRoot: undefined;
+  Camera: undefined;
 };
 
 type HomeParentRootRouteProp = RouteProp<HomeParentRootParamList, 'HomeChildRoot'>;
@@ -61,7 +63,18 @@ const HomeParentStack = createStackNavigator<HomeParentRootParamList>();
  */
 type HomeChildRootParamList = {
   HomeStack: undefined;
+  // Profile
   MyProfile: undefined;
+  // Post
+  MyPost: undefined;
+  MyPosts: undefined;
+  // Account
+  Notifications: undefined;
+  Help: undefined;
+  CommunityGuidelines: undefined;
+  PrivacyPolicy: undefined;
+  Terms: undefined;
+  Security: undefined;
 };
 
 type HomeChildRootRouteProp = RouteProp<HomeChildRootParamList, 'HomeStack'>;
@@ -133,6 +146,7 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
                 <TouchableOpacity
                   accessibilityRole="button"
                   accessibilityStates={isFocused ? ['selected'] : []}
+                  // @ts-ignore
                   accessibilityLabel={options.tabBarAccessibilityLabel}
                   onPress={onPress}
                   onLongPress={onLongPress}
@@ -171,7 +185,7 @@ const HomeStack: FC = () => (
     }}
   >
     <HomeStackTab.Screen name="Home" component={Home} />
-    <HomeStackTab.Screen name="Account" component={AccountRoot} />
+    <HomeStackTab.Screen name="Account" component={Account} />
   </HomeStackTab.Navigator>
 );
 
@@ -179,7 +193,17 @@ const HomeChildRoot: FC<HomeChildNavigationProps> = () => {
   return (
     <HomeChildStack.Navigator headerMode="none">
       <HomeChildStack.Screen name="HomeStack" component={HomeStack} />
+      {/* Profile */}
       <HomeChildStack.Screen name="MyProfile" component={MyProfile} />
+      {/* Post */}
+      <HomeChildStack.Screen name="MyPost" component={MyPost} />
+      <HomeChildStack.Screen name="MyPosts" component={MyPosts} />
+      {/* Account */}
+      <HomeChildStack.Screen name="Notifications" component={MyPost} />
+      <HomeChildStack.Screen name="Help" component={MyPost} />
+      <HomeChildStack.Screen name="Security" component={MyPost} />
+      <HomeChildStack.Screen name="CommunityGuidelines" component={MyPost} />
+      <HomeChildStack.Screen name="PrivacyPolicy" component={MyPost} />
     </HomeChildStack.Navigator>
   );
 };
@@ -198,7 +222,7 @@ const HomeParentRoot: FC<HomeParentNavigationProps> = () => {
       >
         <HomeParentStack.Screen name="HomeChildRoot" component={HomeChildRoot} />
         <HomeParentStack.Screen name="MenuRoot" component={MenuRoot} />
-        <HomeParentStack.Screen name="CreateRoot" component={CreateRoot} />
+        <HomeParentStack.Screen name="Camera" component={Camera} />
       </HomeParentStack.Navigator>
     </>
   );

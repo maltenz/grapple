@@ -11,7 +11,7 @@ import {
   PostsEditItemType,
 } from '../components';
 
-import { CreateRootNavigationProp } from './CreateRoot';
+import { HomeChildRootNavigationProp } from './HomeRoot';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =
@@ -62,11 +62,11 @@ interface PostEditProps {
 }
 
 const PostEdit: FC<PostEditProps> = ({ items }) => {
-  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <PostsEditSlider
-      onPressEdit={(): void => createRootNavigation.navigate('MyPost')}
+      onPressEdit={(): void => navigation.navigate('MyPost')}
       items={items}
       activeIndex={activeIndex}
       onChange={(index): void => setActiveIndex(index)}
@@ -75,19 +75,13 @@ const PostEdit: FC<PostEditProps> = ({ items }) => {
 };
 
 const MyPosts: FC = () => {
-  const createRootNavigation = useNavigation<CreateRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
 
   return (
     <>
       <Navigation
         mode="day"
-        Left={
-          <NavigationIcon
-            mode="day"
-            type="back"
-            onPress={(): void => createRootNavigation.goBack()}
-          />
-        }
+        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
         Right={<NavigationIcon mode="day" type="chat" onPress={(): void => Alert.alert('test')} />}
       />
       <ScrollView style={styles.scrollView}>
