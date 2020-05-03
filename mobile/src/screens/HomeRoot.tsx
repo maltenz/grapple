@@ -51,7 +51,7 @@ export type HomeParentRootNavigationProp = CompositeNavigationProp<
 
 type MyHomeParentRootNavigationProp = StackNavigationProp<HomeParentRootParamList, 'HomeChildRoot'>;
 
-type HomeParentNavigationProps = {
+type parentNavigationProps = {
   route: HomeParentRootRouteProp;
   navigation: MyHomeParentRootNavigationProp;
 };
@@ -208,7 +208,7 @@ const HomeChildRoot: FC<HomeChildNavigationProps> = () => {
   );
 };
 
-const HomeParentRoot: FC<HomeParentNavigationProps> = () => {
+const HomeParentRoot: FC<parentNavigationProps> = () => {
   return (
     <>
       <HomeParentStack.Navigator

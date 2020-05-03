@@ -23,8 +23,8 @@ const SRC = { uri: 'https://source.unsplash.com/random' };
 
 const Account: FC = () => {
   const inset = useSafeArea();
-  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
-  const homeChildNavigation = useNavigation<HomeChildRootNavigationProp>();
+  const parentNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const navigation = useNavigation<HomeChildRootNavigationProp>();
 
   return (
     <>
@@ -34,7 +34,7 @@ const Account: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => homeParentNavigation.navigate('Camera')}
+            onPress={(): void => parentNavigation.navigate('Camera')}
           />
         }
         Center={<NavigationHeading mode="day" text="Settings" />}
@@ -50,7 +50,7 @@ const Account: FC = () => {
           <MenuItemAccount
             title="My Account"
             subTitle="Malte Boeing"
-            onPress={(): void => homeChildNavigation.navigate('MyProfile')}
+            onPress={(): void => navigation.navigate('MyProfile')}
             src={SRC}
           />
         </Container>

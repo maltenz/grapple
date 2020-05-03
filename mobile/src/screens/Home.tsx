@@ -22,7 +22,7 @@ const CONTENT =
   'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
 const Home: FC = () => {
-  const homeParentNavigation = useNavigation<HomeParentRootNavigationProp>();
+  const parentNavigation = useNavigation<HomeParentRootNavigationProp>();
   const inset = useSafeArea();
 
   return (
@@ -33,7 +33,7 @@ const Home: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => homeParentNavigation.navigate('Camera')}
+            onPress={(): void => parentNavigation.navigate('Camera')}
           />
         }
         Center={<NavigationLogo mode="day" />}
