@@ -1,9 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+
 import React, { Fragment, FC, ReactNode } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
-import { CompositeNavigationProp, useNavigation, RouteProp } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+  RouteProp,
+  StackNavigationState,
+  NavigationHelpers,
+} from '@react-navigation/native';
+
+import { StackDescriptorMap } from '@react-navigation/stack/lib/typescript/src/types';
 
 import {
   Panel,
@@ -77,81 +86,90 @@ const HomeChildStack = createStackNavigator<HomeChildRootParamList>();
 const HomeStackTab = createBottomTabNavigator();
 
 interface TabBarProps {
-  state: any;
-  descriptors: any;
-  navigation: any;
+  state: StackNavigationState;
+  descriptors: StackDescriptorMap;
+  navigation: NavigationHelpers<HomeChildNavigationProps>;
 }
 
 const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const myNavigation = useNavigation<HomeParentRootNavigationProp>();
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
         <TabbarBackground />
 
-        {state.routes.map((route: any, index: number) => {
-          const { options } = descriptors[route.key];
-          const label = options.title ? options.title : route.name;
+        {state.routes.map(
+          // @ts-ignore
+          (route: RouteProp<HomeChildNavigationProps, 'route'>, index: number) => {
+            const { options } = descriptors[route.key];
+            const label = options.title ? options.title : route.name;
 
-          const isFocused = state.index === index;
+            const isFocused = state.index === index;
 
-          const onPress = (): void => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
+            const onPress = (): void => {
+              const event = navigation.emit({
+                // @ts-ignore
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
 
-          const onLongPress = (): void => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          };
+            const onLongPress = (): void => {
+              navigation.emit({
+                // @ts-ignore
+                type: 'tabLongPress',
+                target: route.key,
+              });
+            };
 
-          return (
-            <Fragment key={label}>
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityStates={isFocused ? ['selected'] : []}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                style={{
-                  flex: 1,
-                  height: SvgTabbarBackgroundHeight,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {label === 'Home' ? <SvgIconHome scale={0.9} /> : <SvgIconAccount scale={0.9} />}
-              </TouchableOpacity>
-              {index === 0 && (
-                <Panel center style={{ flex: 1 }}>
-                  <TabbarCircleButton
-                    isFocused={isFocused}
-                    onPress={(): void => myNavigation.navigate('MenuRoot')}
-                    onLongPress={onLongPress}
-                  />
-                </Panel>
-              )}
-            </Fragment>
-          );
-        })}
+            return (
+              <Fragment key={label}>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityStates={isFocused ? ['selected'] : []}
+                  accessibilityLabel={options.tabBarAccessibilityLabel}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  style={{
+                    flex: 1,
+                    height: SvgTabbarBackgroundHeight,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {label === 'Home' ? <SvgIconHome scale={0.9} /> : <SvgIconAccount scale={0.9} />}
+                </TouchableOpacity>
+                {index === 0 && (
+                  <Panel center style={{ flex: 1 }}>
+                    <TabbarCircleButton
+                      isFocused={isFocused}
+                      onPress={(): void => myNavigation.navigate('MenuRoot')}
+                      onLongPress={onLongPress}
+                    />
+                  </Panel>
+                )}
+              </Fragment>
+            );
+          }
+        )}
       </View>
     </>
   );
 };
 
 const HomeStack: FC = () => (
-  <HomeStackTab.Navigator tabBar={(props): ReactNode => <TabBar {...props} />}>
+  <HomeStackTab.Navigator
+    tabBar={(props): ReactNode => {
+      // @ts-ignore
+      return <TabBar {...props} />;
+    }}
+  >
     <HomeStackTab.Screen name="Home" component={Home} />
     <HomeStackTab.Screen name="Account" component={AccountRoot} />
   </HomeStackTab.Navigator>

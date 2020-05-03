@@ -30,7 +30,7 @@ const AppRoot: FC<NavigationProps> = () => {
   return (
     <>
       <StatusBar hidden={false} barStyle="light-content" />
-      <Stack.Navigator headerMode="none" initialRouteName="OnboardingRoot">
+      <Stack.Navigator headerMode="none" initialRouteName="HomeRoot">
         <Stack.Screen name="HomeRoot" component={HomeRoot} />
         <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
       </Stack.Navigator>
