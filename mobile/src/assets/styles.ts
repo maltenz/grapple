@@ -59,6 +59,12 @@ const AssetStyles = {
     mini,
   },
   shadow: {
+    overlay: {
+      shadowRadius: 50,
+      shadowOpacity: 0.5,
+      shadowColor: Color.black,
+      shadowOffset: { width: 0, height: 10 },
+    },
     deep: {
       shadowRadius: 50,
       shadowColor: Color.purple,
