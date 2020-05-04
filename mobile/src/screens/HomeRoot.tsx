@@ -97,7 +97,7 @@ const ChildStack = createStackNavigator<ChildParamList>();
 /**
  * Home tab
  */
-const StackTab = createBottomTabNavigator();
+const TabStack = createBottomTabNavigator();
 
 interface TabBarProps {
   state: StackNavigationState;
@@ -179,15 +179,15 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
 };
 
 const HomeStack: FC = () => (
-  <StackTab.Navigator
+  <TabStack.Navigator
     tabBar={(props): ReactNode => {
       // @ts-ignore
       return <TabBar {...props} />;
     }}
   >
-    <StackTab.Screen name="Home" component={Home} />
-    <StackTab.Screen name="Account" component={Account} />
-  </StackTab.Navigator>
+    <TabStack.Screen name="Home" component={Home} />
+    <TabStack.Screen name="Account" component={Account} />
+  </TabStack.Navigator>
 );
 
 const Child: FC<ChildNavigationProps> = () => {

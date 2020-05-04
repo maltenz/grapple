@@ -5,8 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, SvgIconSmallRight } from '../components';
 import Button from '../components/base/Button';
 import Text from '../components/base/Text';
-import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 import Overlay, { OverlayItem, OverlayPanel } from './components/Overlay';
+
+import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 const MAP_WIDTH = AssetStyles.measure.window.width - AssetStyles.measure.space * 4;
 const MAP_HEIGHT = MAP_WIDTH * 0.63;

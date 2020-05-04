@@ -49,9 +49,18 @@ const CategoryItem: FC<CategoryItemProps> = ({ title, Icon }) => {
 const Category: FC = () => {
   return (
     <OverlayPanel row paddingHorizontal={0.5} marginBottom>
-      <CategoryItem title="Messages" Icon={<SvgIconChat color="white" />} />
-      <CategoryItem title="Bookmark" Icon={<SvgIconBookmark color="white" />} />
-      <CategoryItem title="Stories" Icon={<SvgIconStory color="white" />} />
+      <CategoryItem
+        title="Messages"
+        Icon={<SvgIconChat color="white" strokeWidth={2} scale={0.9} />}
+      />
+      <CategoryItem
+        title="Bookmark"
+        Icon={<SvgIconBookmark color="white" strokeWidth={2} scale={0.9} />}
+      />
+      <CategoryItem
+        title="Stories"
+        Icon={<SvgIconStory color="white" strokeWidth={2} scale={0.9} />}
+      />
     </OverlayPanel>
   );
 };
