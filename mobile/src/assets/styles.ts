@@ -61,7 +61,7 @@ const AssetStyles = {
   shadow: {
     overlay: {
       shadowRadius: 50,
-      shadowOpacity: 0.5,
+      shadowOpacity: 0.25,
       shadowColor: Color.black,
       shadowOffset: { width: 0, height: 10 },
     },

@@ -35,19 +35,36 @@ const OverlayPanel: FC<OverlayPanelProps> = ({
   children,
   Sibling,
   style,
+  marginTop,
+  marginRight,
+  marginBottom,
+  marginLeft,
+  marginHorizontal,
+  marginVertical,
   ...rest
 }) => {
   return (
-    <BlurView tint="light" intensity={10} style={[styles.overlayPanelContainer, style]}>
-      <Panel paddingVertical={paddingVertical} paddingHorizontal={paddingHorizontal} {...rest}>
-        {children}
-      </Panel>
-      {Sibling}
-    </BlurView>
+    <Panel
+      marginTop={marginTop}
+      marginRight={marginRight}
+      marginBottom={marginBottom}
+      marginLeft={marginLeft}
+      marginHorizontal={marginHorizontal}
+      marginVertical={marginVertical}
+    >
+      <BlurView tint="dark" intensity={50} style={[styles.overlayPanelContainer, style]}>
+        <Panel paddingVertical={paddingVertical} paddingHorizontal={paddingHorizontal} {...rest}>
+          {children}
+        </Panel>
+        {Sibling}
+      </BlurView>
+    </Panel>
   );
 };
 
-const Overlay: FC = ({ children }) => {
+type OverlayProps = PanelProps;
+
+const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children }) => {
   const inset = useSafeArea();
   return (
     <>
@@ -60,7 +77,7 @@ const Overlay: FC = ({ children }) => {
             marginTop: inset.top + AssetStyles.measure.space,
             marginBottom: inset.bottom + AssetStyles.measure.space,
           }}
-          marginHorizontal={2}
+          paddingHorizontal={paddingHorizontal}
         >
           {children}
         </Panel>

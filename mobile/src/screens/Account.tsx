@@ -34,7 +34,7 @@ const Account: FC = () => {
           <NavigationIcon
             mode="day"
             type="search"
-            onPress={(): void => parentNavigation.navigate('Camera')}
+            onPress={(): void => parentNavigation.navigate('Search')}
           />
         }
         Center={<NavigationHeading mode="day" text="Settings" />}

@@ -24,6 +24,7 @@ interface ThumbnailProps extends MarginProps {
   outline?: boolean | ColorType;
   onPress?: () => void;
   TopRight?: ReactNode;
+  TopLeft?: ReactNode;
 }
 
 const Thumbnail: FC<ThumbnailProps> = ({
@@ -33,6 +34,7 @@ const Thumbnail: FC<ThumbnailProps> = ({
   backgroundColor,
   outline,
   TopRight,
+  TopLeft,
   ...rest
 }: ThumbnailProps) => {
   const thumbnailStyles = {};
@@ -51,6 +53,7 @@ const Thumbnail: FC<ThumbnailProps> = ({
         {src && <Image source={src} style={styles.image} />}
         <Panel style={[styles.border, thumbnailStyles, style]} />
         {TopRight && <View style={styles.topRight}>{TopRight}</View>}
+        {TopLeft && <View style={styles.topLeft}>{TopLeft}</View>}
       </Panel>
     </Panel>
   );
@@ -89,6 +92,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: BORDER_WIDTH / 2,
     right: BORDER_WIDTH / 2,
+  },
+  topLeft: {
+    position: 'absolute',
+    top: BORDER_WIDTH / 2,
+    left: BORDER_WIDTH / 2,
   },
 });
 

@@ -26,6 +26,7 @@ export interface TextProps extends MarginProps {
   value?: string;
   onChangeText?: (text: string) => void;
   autoCorrect?: boolean;
+  numberOfLines?: number;
 }
 
 const fetchFonts = (): Promise<void> => {
@@ -54,6 +55,7 @@ const Text: FC<TextProps> = ({
   value,
   onChangeText,
   autoCorrect,
+  numberOfLines,
   margin,
   marginHorizontal,
   marginVertical,
@@ -154,7 +156,7 @@ const Text: FC<TextProps> = ({
   }
 
   return (
-    <RnText onPress={onPress} style={[textStyles, style]}>
+    <RnText onPress={onPress} numberOfLines={numberOfLines} style={[textStyles, style]}>
       {children}
     </RnText>
   );
