@@ -1,16 +1,11 @@
 import React, { FC } from 'react';
 import ApolloClient from 'apollo-boost';
-import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
-import configureStore from './configureStore';
-import { Window } from './types';
 import AppRoot from './src/screens/AppRoot';
 
 declare let window: Window & typeof globalThis;
-
-const store = configureStore(window.INITIAL_REDUX_STATE);
 
 export const client = new ApolloClient({
   uri: process.env.GRAPHQL_URI,
@@ -19,11 +14,9 @@ export const client = new ApolloClient({
 const App: FC = () => (
   <SafeAreaProvider>
     <ApolloProvider client={client}>
-      <Provider store={store}>
-        <NavigationContainer>
-          <AppRoot />
-        </NavigationContainer>
-      </Provider>
+      <NavigationContainer>
+        <AppRoot />
+      </NavigationContainer>
     </ApolloProvider>
   </SafeAreaProvider>
 );
