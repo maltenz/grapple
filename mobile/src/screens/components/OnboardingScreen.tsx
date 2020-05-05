@@ -22,9 +22,16 @@ const OnboardingScreen: FC<OnboardingScreenProps> = ({
   return (
     <>
       <Panel
-        marginHorizontal
+        backgroundColor="white"
+        paddingHorizontal
         alignItems="center"
-        style={{ marginTop: insets.top + AssetStyles.measure.space * 2, marginBottom: insets.top }}
+        style={[
+          {
+            paddingTop: insets.top + AssetStyles.measure.space * 2,
+            paddingBottom: insets.top,
+          },
+          StyleSheet.absoluteFill,
+        ]}
       >
         <Text
           mode="day"

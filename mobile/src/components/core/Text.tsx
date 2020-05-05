@@ -26,6 +26,8 @@ export interface TextProps extends MarginProps {
   value?: string;
   onChangeText?: (text: string) => void;
   autoCorrect?: boolean;
+  placeholder?: string;
+  placeholderTextColor?: ColorType;
   numberOfLines?: number;
 }
 
@@ -55,6 +57,8 @@ const Text: FC<TextProps> = ({
   value,
   onChangeText,
   autoCorrect,
+  placeholder,
+  placeholderTextColor,
   numberOfLines,
   margin,
   marginHorizontal,
@@ -151,6 +155,8 @@ const Text: FC<TextProps> = ({
         onChangeText={onChangeText}
         ref={inputRef}
         style={[textStyles, style]}
+        placeholder={placeholder}
+        placeholderTextColor={placeholderTextColor && Color[placeholderTextColor]}
       />
     );
   }

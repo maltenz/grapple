@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
-import { BlurView } from 'expo-blur';
+import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import {
@@ -15,6 +14,8 @@ import {
 } from '../components';
 
 import Ruler from './components/OnboardingRuler';
+
+const BLOB_INSET = 100;
 
 const ListRow: FC = ({ children }) => (
   <Panel row alignItems="center">
@@ -31,46 +32,33 @@ const Onboarding1: FC = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <ImageBackground source={{ uri: 'https://source.unsplash.com/random' }} style={{ flex: 1 }}>
-        <Panel
-          backgroundColor="purple"
-          flex={1}
-          style={[StyleSheet.absoluteFill, { opacity: 0.75 }]}
-        />
-        <BlurView tint="dark" intensity={75} style={[StyleSheet.absoluteFill, { flex: 1 }]} />
-        <SvgBlob color="white" scale={2.5} style={styles.blob} />
-        <Panel
-          marginHorizontal={2}
-          flex={1.5}
-          style={{ marginTop: insets.top, marginBottom: insets.top }}
-        >
-          <Panel flex={1} justifyContent="space-around">
-            <Panel center>
-              <SvgLogoGrapple color="white" />
-              <Text
-                marginTop={0.5}
-                marginBottom={0.5}
-                textAlign="center"
-                mode="night"
-                type="h3"
-                appearance="normal"
-                regular
-              >
-                A platform for women
-              </Text>
-            </Panel>
-            <Text marginBottom={1} mode="night" type="p" appearance="normal" textAlign="center">
-              One in five women have experienced violence with a loved one in New Zealand
-            </Text>
-          </Panel>
+      <Panel backgroundColor="purple" style={[StyleSheet.absoluteFill]} />
+      <Panel
+        marginHorizontal={2}
+        flex={1}
+        style={{ marginTop: insets.top, marginBottom: BLOB_INSET + AssetStyles.measure.space }}
+      >
+        <Panel flex={1} center>
+          <SvgLogoGrapple color="white" />
+          <Text
+            marginTop={0.5}
+            marginBottom={0.5}
+            textAlign="center"
+            mode="night"
+            type="h3"
+            appearance="normal"
+            regular
+          >
+            A platform for women
+          </Text>
         </Panel>
-        <Panel
-          flex={1}
-          justifyContent="flex-end"
-          alignItems="flex-start"
-          marginHorizontal={2}
-          marginBottom={2}
-        >
+        <Text marginBottom={1} mode="night" type="p" appearance="normal" textAlign="center">
+          One in five women have experienced violence with a loved one in New Zealand
+        </Text>
+      </Panel>
+      <Panel alignItems="flex-start" marginHorizontal={2} marginBottom={2} style={styles.main}>
+        <SvgBlob color="white" scale={2.5} style={styles.blob} />
+        <Panel>
           <Text mode="day" type="h4" appearance="heavy">
             The Tools
           </Text>
@@ -80,10 +68,22 @@ const Onboarding1: FC = () => {
           <ListRow>Collect evidence to build your case</ListRow>
           <ListRow>Security and anonymous support</ListRow>
         </Panel>
-        <Panel alignItems="center" style={{ marginBottom: insets.bottom }}>
-          <BulletPager mode="day" activeIndex={0} count={4} />
-        </Panel>
-      </ImageBackground>
+        <Text
+          mode="day"
+          appearance="heavy"
+          underline
+          type="p"
+          bold
+          textAlign="center"
+          marginTop
+          style={{ width: '100%' }}
+        >
+          See More
+        </Text>
+      </Panel>
+      <Panel alignItems="center" style={{ marginBottom: insets.bottom }}>
+        <BulletPager mode="day" activeIndex={0} count={4} />
+      </Panel>
       <Ruler position="center" />
     </>
   );
@@ -92,12 +92,16 @@ const Onboarding1: FC = () => {
 const styles = StyleSheet.create({
   blob: {
     position: 'absolute',
-    bottom: '-7%',
-    left: '-15%',
-    transform: [{ rotate: '-25deg' }],
+    top: -BLOB_INSET,
+    left: '-50%',
+    transform: [{ rotate: '-10deg' }],
     shadowRadius: 50,
     shadowColor: Color.red,
     shadowOpacity: 0.25,
+  },
+  main: {
+    position: 'relative',
+    height: 250,
   },
   ruler: {
     position: 'absolute',

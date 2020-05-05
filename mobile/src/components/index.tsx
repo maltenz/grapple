@@ -11,9 +11,9 @@ import BulletPager from './base/BulletPager';
 import Button from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
 import Container from './base/Container';
-import MenuItem from './base/MenuItem';
+import MenuItem, { MenuItemHeight } from './base/MenuItem';
 import MenuItemAccount from './base/MenuItemAccount';
-import MenuItemThumbnail, { MenuItemHeight } from './base/MenuItemThumbnail';
+import MenuItemThumbnail from './base/MenuItemThumbnail';
 import Navigation, { NavigationIcon } from './base/Navigation';
 import NavBarUser from './base/NavBarUser';
 import NavBarUserPostEdit from './base/NavBarUserPostEdit';
@@ -28,6 +28,7 @@ import PullBar from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
 import Text from './base/Text';
+import TextInput from './base/TextInput';
 import Thumbnail, { ThumbnailDimension } from './base/Thumbnail';
 import Search from './base/Search';
 
@@ -109,6 +110,7 @@ export {
   TabbarBackground,
   TabbarCircleButton,
   Text,
+  TextInput,
   Thumbnail,
   ThumbnailDimension,
   Search,

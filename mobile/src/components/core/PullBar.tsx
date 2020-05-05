@@ -18,7 +18,7 @@ const PullBar: FC<PullBarProps> = ({ color, ...rest }) => {
           height,
           borderRadius: height / 2,
           width: 40,
-          backgroundColor: color || Color.grey3,
+          backgroundColor: (color && Color[color]) || Color.grey3,
         }}
       />
     </Panel>
