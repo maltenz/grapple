@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
  */
 
 // connection uri
-const uri: string = process.env.MONGO_DB_PATH as string;
+const uri: string = process.env.MONGO_PATH as string;
 
 // mongoose connection
 let conn: mongoose.Connection | null = null;

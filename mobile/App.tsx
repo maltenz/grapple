@@ -1,24 +1,52 @@
-import React, { FC } from 'react';
-import ApolloClient from 'apollo-boost';
+import React, { FC, useState, useEffect } from 'react';
+import ApolloClient, { NormalizedCacheObject, InMemoryCache } from 'apollo-boost';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { AsyncStorage } from 'react-native';
 import AppRoot from './src/screens/AppRoot';
+import { Panel } from './src/components';
 
-declare let window: Window & typeof globalThis;
+const cache = new InMemoryCache();
+const clientConfig = {
+  cache,
+  uri: `${process.env.GRAPHQL_URI}/:${process.env.GRAPHQL_PORT}`,
+  headers: {
+    'client-name': 'grapple',
+    'client-version': '1.0.0',
+  },
+};
 
-export const client = new ApolloClient({
-  uri: process.env.GRAPHQL_URI,
-});
+const Client: FC = ({ children }) => {
+  const [token, setToken] = useState<boolean | string | null>(false);
 
-const App: FC = () => (
-  <SafeAreaProvider>
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <AppRoot />
-      </NavigationContainer>
-    </ApolloProvider>
-  </SafeAreaProvider>
-);
+  useEffect(() => {
+    const getToken = async (): Promise<void> => {
+      const myToken = await AsyncStorage.getItem('token');
+
+      setToken(myToken === null || myToken);
+    };
+    getToken();
+  }, [setToken]);
+
+  if (token !== false && token !== null) {
+    Object.assign(clientConfig.headers, { authorization: token });
+    const client = new ApolloClient<NormalizedCacheObject>(clientConfig);
+    return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  }
+  return <Panel flex={1} />;
+};
+
+const App: FC = () => {
+  return (
+    <SafeAreaProvider>
+      <Client>
+        <NavigationContainer>
+          <AppRoot />
+        </NavigationContainer>
+      </Client>
+    </SafeAreaProvider>
+  );
+};
 
 export default App;
