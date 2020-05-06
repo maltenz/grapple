@@ -12,7 +12,6 @@ import {
   AssetStyles,
 } from '../components';
 
-import Ruler from './components/OnboardingRuler';
 import { PullbarOffset } from './components/PullModal';
 
 const BLOB_INSET = 100;
@@ -38,12 +37,12 @@ const Onboarding1: FC = () => {
           marginHorizontal={2}
           flex={1}
           style={{
-            marginTop: insets.top,
+            marginTop: insets.top + AssetStyles.measure.space,
             marginBottom: BLOB_INSET + AssetStyles.measure.space,
           }}
         >
           <Panel flex={1} center>
-            <SvgLogoGrapple color="white" />
+            <SvgLogoGrapple color="white" scale={0.8} />
             <Text
               marginTop={0.5}
               marginBottom={0.5}
@@ -60,7 +59,7 @@ const Onboarding1: FC = () => {
             One in five women have experienced violence with a loved one in New Zealand
           </Text>
         </Panel>
-        <Panel marginHorizontal={2} alignItems="flex-end" row style={styles.main} marginBottom>
+        <Panel marginHorizontal={2} alignItems="flex-end" row style={styles.main} marginBottom={2}>
           <SvgBlob color="white" scale={2.5} style={styles.blob} />
           <Panel>
             <Text mode="day" type="h4" appearance="heavy">
@@ -79,7 +78,7 @@ const Onboarding1: FC = () => {
               bold
               textAlign="right"
               marginTop
-              style={{ width: '100%' }}
+              marginRight={-1}
             >
               See More
             </Text>
@@ -88,7 +87,6 @@ const Onboarding1: FC = () => {
         {/* <Panel alignItems="center">
           <BulletPager mode="day" activeIndex={0} count={4} />
         </Panel> */}
-        <Ruler position="center" />
       </Panel>
     </>
   );
@@ -106,18 +104,6 @@ const styles = StyleSheet.create({
   },
   main: {
     position: 'relative',
-  },
-  ruler: {
-    position: 'absolute',
-    width: 5,
-    height: AssetStyles.measure.window.height,
-    top: 0,
-    right: 0,
-  },
-  rulerArrow: {
-    position: 'absolute',
-    top: '50%',
-    right: 5,
   },
 });
 
