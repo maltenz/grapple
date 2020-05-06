@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import ApolloClient, { InMemoryCache, Operation } from 'apollo-boost';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { AsyncStorage } from 'react-native';
@@ -25,7 +25,7 @@ const client = new ApolloClient({
 
 const App: FC = () => {
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
       <ApolloProvider client={client}>
         <NavigationContainer>
           <AppRoot />

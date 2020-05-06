@@ -1,28 +1,22 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable no-underscore-dangle */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../components';
 import { NavigationHeight } from '../../components/base/Navigation';
 
-interface PullModalProps {
-  yValue: number;
-}
-const easing = (t: number): number =>
-  // eslint-disable-next-line no-restricted-properties
-  1 - Math.pow(Math.cos((t * Math.PI) / 2), 3) * Math.cos(t * 3);
-
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
-const DUR = 650;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
 
-const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
-  const [initialY] = useState(WINDOW_HEIGHT - Math.abs(yValue));
-  const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
-  pan.y.setValue(initialY);
-
+const PullModal: FC = ({ children }) => {
   const inset = useSafeArea();
+  const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
+  const [top] = useState(NavigationHeight + inset.top);
+  const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
+  useEffect(() => {
+    pan.y.setValue(bottom);
+  }, []);
 
   const panResponder = React.useRef(
     PanResponder.create({
@@ -42,32 +36,30 @@ const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
         });
       },
       onPanResponderEnd: (e, { dy }: PanResponderGestureState) => {
+        const notTouchEvent = dy > 5 || dy < -5;
         pan.flattenOffset();
         const IS_UP = Math.sign(dy) === -1;
-
         if (IS_UP) {
           Animated.timing(pan, {
-            toValue: { x: 0, y: NavigationHeight + inset.top },
-            duration: DUR,
-            easing,
+            toValue: { x: 0, y: top },
           }).start();
-        } else {
-          Animated.timing(pan, { toValue: { x: 0, y: initialY }, easing, duration: DUR }).start();
+        } else if (notTouchEvent) {
+          Animated.timing(pan, {
+            toValue: { x: 0, y: bottom },
+          }).start();
         }
       },
     })
   ).current;
 
   return (
-    <>
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[styles.container, StyleSheet.absoluteFill, pan.getLayout()]}
-      >
-        <PullBar mode="day" />
-        {children}
-      </Animated.View>
-    </>
+    <Animated.View
+      {...panResponder.panHandlers}
+      style={[styles.container, StyleSheet.absoluteFill, pan.getLayout()]}
+    >
+      <PullBar mode="day" />
+      {children}
+    </Animated.View>
   );
 };
 

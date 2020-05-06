@@ -2,14 +2,13 @@ import React, { FC, useState } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
-import { useSafeArea } from 'react-native-safe-area-context';
 import Onboarding1 from './Onboarding1';
 import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
 import { AppRootParamList } from './AppRoot';
-import PullModal, { PullbarOffset } from './components/PullModal';
+import PullModal from './components/PullModal';
 import { Button, Panel, TextInput, Text } from '../components';
 
 export type OnboardingRootParamList = {
@@ -37,8 +36,6 @@ type NavigationProps = {
 const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
-  const inset = useSafeArea();
-
   const [emailValue, setEmailValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
   return (
@@ -56,7 +53,8 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding4" component={Onboarding4} />
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
-      <PullModal yValue={PullbarOffset + inset.bottom}>
+
+      <PullModal>
         <Panel marginHorizontal>
           <Panel row marginBottom={1.5}>
             <Button
