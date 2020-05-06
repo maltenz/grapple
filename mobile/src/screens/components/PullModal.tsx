@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/ban-ts-ignore, no-underscore-dangle  */
 import React, { FC, useState, useEffect } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -39,7 +38,7 @@ const PullModal: FC = ({ children }) => {
         const notTouchEvent = dy > 5 || dy < -5;
         pan.flattenOffset();
         const IS_UP = Math.sign(dy) === -1;
-        if (IS_UP) {
+        if (IS_UP && notTouchEvent) {
           Animated.timing(pan, {
             toValue: { x: 0, y: top },
           }).start();
@@ -70,12 +69,6 @@ const styles = StyleSheet.create({
     ...AssetStyles.shadow.deep,
     borderTopRightRadius: AssetStyles.measure.radius.large,
     borderTopLeftRadius: AssetStyles.measure.radius.large,
-  },
-  box: {
-    height: 150,
-    width: 150,
-    backgroundColor: 'blue',
-    borderRadius: 5,
   },
 });
 
