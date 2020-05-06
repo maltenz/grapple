@@ -1,17 +1,39 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable no-underscore-dangle */
-import React, { FC, useRef } from 'react';
-import { StyleSheet, PanResponder, View, Animated } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
+import { useSafeArea } from 'react-native-safe-area-context';
 import { PullBar, AssetStyles, Color } from '../../components';
+import { NavigationHeight } from '../../components/base/Navigation';
 
-const OFFSET_HEIGHT = 100;
+interface PullModalProps {
+  yValue: number;
+}
+const easing = (t: number): number =>
+  // eslint-disable-next-line no-restricted-properties
+  1 - Math.pow(Math.cos((t * Math.PI) / 2), 3) * Math.cos(t * 3);
 
-const PullModal: FC = ({ children }) => {
-  const pan = useRef(new Animated.ValueXY()).current;
+const WINDOW_HEIGHT = AssetStyles.measure.window.height;
+const DUR = 500;
+
+const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
+  const [initialY] = useState(WINDOW_HEIGHT - Math.abs(yValue));
+  const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
+  pan.y.setValue(initialY);
+
+  const inset = useSafeArea();
 
   const panResponder = React.useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => true,
+
+      onPanResponderMove: Animated.event([
+        null,
+        {
+          dx: new Animated.Value(0),
+          dy: pan.y,
+        },
+      ]),
       onPanResponderGrant: () => {
         pan.setOffset({
           x: 0,
@@ -19,24 +41,30 @@ const PullModal: FC = ({ children }) => {
           y: pan.y._value,
         });
       },
-      onPanResponderMove: Animated.event([null, { dy: pan.y }]),
-      onPanResponderRelease: () => {
+
+      onPanResponderEnd: (e, { vy, dy }: PanResponderGestureState) => {
         pan.flattenOffset();
+        const IS_SWIPE = vy > 0.5 || vy < -0.5;
+        const IS_UP = Math.sign(dy) === -1;
+
+        if (IS_SWIPE && IS_UP) {
+          Animated.timing(pan, {
+            toValue: { x: 0, y: NavigationHeight + inset.top },
+            duration: DUR,
+            easing,
+          }).start();
+        } else if (!IS_UP) {
+          Animated.timing(pan, { toValue: { x: 0, y: initialY }, easing, duration: DUR }).start();
+        }
       },
     })
   ).current;
 
   return (
     <>
-      <View {...panResponder.panHandlers} />
       <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [{ translateY: pan.y }],
-          },
-        ]}
         {...panResponder.panHandlers}
+        style={[styles.container, StyleSheet.absoluteFill, pan.getLayout()]}
       >
         <PullBar mode="day" />
         {children}
@@ -47,11 +75,7 @@ const PullModal: FC = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: AssetStyles.measure.window.height - OFFSET_HEIGHT,
-    right: 0,
-    left: 0,
-    height: AssetStyles.measure.window.height,
+    height: WINDOW_HEIGHT,
     backgroundColor: Color.white,
     ...AssetStyles.shadow.deep,
     borderTopRightRadius: AssetStyles.measure.radius.large,

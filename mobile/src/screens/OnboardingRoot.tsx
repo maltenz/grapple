@@ -53,7 +53,7 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding4" component={Onboarding4} />
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
-      <PullModal>
+      <PullModal yValue={100}>
         <Panel marginHorizontal>
           <Panel row marginBottom>
             <Button
