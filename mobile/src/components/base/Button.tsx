@@ -1,7 +1,13 @@
 import React, { FC, useState, useEffect } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { ColorType, ModeType } from '../../types';
-import CoreButton, { ButtonType, ButtonOutline } from '../core/Button';
+import CoreButton, {
+  ButtonType,
+  ButtonOutline,
+  ButtonLargeHeight,
+  ButtonNormalHeight,
+  ButtonSmallHeight,
+} from '../core/Button';
 import { MarginProps } from './Panel';
 
 type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning' | 'dark' | 'light';
@@ -143,5 +149,7 @@ const Button: FC<ButtonProps> = (props) => {
     </CoreButton>
   );
 };
+
+export { ButtonLargeHeight, ButtonNormalHeight, ButtonSmallHeight };
 
 export default Button;

@@ -8,7 +8,7 @@ import Badge from './base/Badge';
 import Border from './base/Border';
 import Bullet from './base/Bullet';
 import BulletPager from './base/BulletPager';
-import Button from './base/Button';
+import Button, { ButtonLargeHeight, ButtonNormalHeight, ButtonSmallHeight } from './base/Button';
 import Gallery, { GalleryItemType } from './base/Gallery';
 import Container from './base/Container';
 import MenuItem, { MenuItemHeight } from './base/MenuItem';
@@ -24,7 +24,7 @@ import PostContent from './base/PostContent';
 import PostContentHeader from './base/PostContentHeader';
 import PostContentHeading from './base/PostContentHeading';
 import PostsEditSlider, { PostsEditItemType } from './base/PostsEditSlider';
-import PullBar from './base/PullBar';
+import PullBar, { PullBarHeight } from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
 import Text from './base/Text';
@@ -87,6 +87,9 @@ export {
   Bullet,
   BulletPager,
   Button,
+  ButtonLargeHeight,
+  ButtonNormalHeight,
+  ButtonSmallHeight,
   Gallery,
   GalleryItemType,
   Container,
@@ -107,6 +110,7 @@ export {
   PostsEditSlider,
   PostsEditItemType,
   PullBar,
+  PullBarHeight,
   TabbarBackground,
   TabbarCircleButton,
   Text,

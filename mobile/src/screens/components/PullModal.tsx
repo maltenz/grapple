@@ -3,7 +3,7 @@
 import React, { FC, useState } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { PullBar, AssetStyles, Color } from '../../components';
+import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../components';
 import { NavigationHeight } from '../../components/base/Navigation';
 
 interface PullModalProps {
@@ -14,7 +14,8 @@ const easing = (t: number): number =>
   1 - Math.pow(Math.cos((t * Math.PI) / 2), 3) * Math.cos(t * 3);
 
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
-const DUR = 500;
+const DUR = 650;
+const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
 
 const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
   const [initialY] = useState(WINDOW_HEIGHT - Math.abs(yValue));
@@ -26,7 +27,6 @@ const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
   const panResponder = React.useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-
       onPanResponderMove: Animated.event([
         null,
         {
@@ -41,19 +41,17 @@ const PullModal: FC<PullModalProps> = ({ children, yValue }) => {
           y: pan.y._value,
         });
       },
-
-      onPanResponderEnd: (e, { vy, dy }: PanResponderGestureState) => {
+      onPanResponderEnd: (e, { dy }: PanResponderGestureState) => {
         pan.flattenOffset();
-        const IS_SWIPE = vy > 0.5 || vy < -0.5;
         const IS_UP = Math.sign(dy) === -1;
 
-        if (IS_SWIPE && IS_UP) {
+        if (IS_UP) {
           Animated.timing(pan, {
             toValue: { x: 0, y: NavigationHeight + inset.top },
             duration: DUR,
             easing,
           }).start();
-        } else if (!IS_UP) {
+        } else {
           Animated.timing(pan, { toValue: { x: 0, y: initialY }, easing, duration: DUR }).start();
         }
       },
@@ -88,5 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export { PullbarOffset };
 
 export default PullModal;

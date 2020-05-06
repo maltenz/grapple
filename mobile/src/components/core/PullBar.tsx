@@ -9,14 +9,15 @@ interface PullBarProps extends MarginProps {
   color?: ColorType;
 }
 
+const PullBarHeight = 30;
+
 const PullBar: FC<PullBarProps> = ({ color, ...rest }) => {
-  const height = AssetStyles.measure.border.large;
   return (
-    <Panel marginVertical={0.5} center {...rest}>
+    <Panel center style={{ height: PullBarHeight }} {...rest}>
       <View
         style={{
-          height,
-          borderRadius: height / 2,
+          height: AssetStyles.measure.border.large,
+          borderRadius: PullBarHeight / 2,
           width: 40,
           backgroundColor: (color && Color[color]) || Color.grey3,
         }}
@@ -24,5 +25,7 @@ const PullBar: FC<PullBarProps> = ({ color, ...rest }) => {
     </Panel>
   );
 };
+
+export { PullBarHeight };
 
 export default PullBar;
