@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { ApplicationState, createRootReducer } from './store';
+import { ApplicationState, createRootReducer } from '.';
 
 export default function configureStore(initialState: ApplicationState): Store<ApplicationState> {
   const composeEnhancers = composeWithDevTools({});
