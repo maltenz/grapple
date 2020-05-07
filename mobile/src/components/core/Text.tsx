@@ -1,8 +1,5 @@
-/* eslint-disable global-require */
-import React, { useState, FC, createRef } from 'react';
-import { Text as RnText, StyleProp, TextStyle, TextInput } from 'react-native';
-import { AppLoading } from 'expo';
-import * as Font from 'expo-font';
+import React, { FC } from 'react';
+import { Text as RnText, StyleProp, TextStyle } from 'react-native';
 import { ColorType } from '../../types';
 import { AssetStyles, minLineheight as AssetStylesMinLineHeight } from '../../assets/styles';
 import { Color } from '../../assets/colors';
@@ -22,24 +19,10 @@ export interface TextProps extends MarginProps {
   onPress?: () => void;
   minLineHeight?: boolean;
   underline?: boolean;
-  textInput?: boolean;
-  value?: string;
-  onChangeText?: (text: string) => void;
-  autoCorrect?: boolean;
-  placeholder?: string;
-  placeholderTextColor?: ColorType;
   numberOfLines?: number;
 }
 
-const fetchFonts = (): Promise<void> => {
-  return Font.loadAsync({
-    'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-    'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-  });
-};
-
-const fontRegular = 'roboto-regular';
-const fontBold = 'roboto-bold';
+const PlaceholderTextColor = Color.grey2;
 
 const Text: FC<TextProps> = ({
   children,
@@ -53,12 +36,6 @@ const Text: FC<TextProps> = ({
   onPress,
   minLineHeight,
   underline,
-  textInput,
-  value,
-  onChangeText,
-  autoCorrect,
-  placeholder,
-  placeholderTextColor,
   numberOfLines,
   margin,
   marginHorizontal,
@@ -68,11 +45,7 @@ const Text: FC<TextProps> = ({
   marginBottom,
   marginLeft,
 }) => {
-  const inputRef = createRef<TextInput>();
-
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  const textStyles = { fontFamily: fontRegular };
+  const textStyles = { fontFamily: AssetStyles.family.regular };
 
   Object.assign(textStyles, AssetStyles.text[type]);
 
@@ -81,10 +54,10 @@ const Text: FC<TextProps> = ({
     case 'h2':
     case 'h3':
     case 'h4':
-      Object.assign(textStyles, { fontFamily: fontBold });
+      Object.assign(textStyles, { fontFamily: AssetStyles.family.bold });
       break;
     default:
-      Object.assign(textStyles, { fontFamily: fontRegular });
+      Object.assign(textStyles, { fontFamily: AssetStyles.family.regular });
   }
 
   if (color) {
@@ -92,11 +65,11 @@ const Text: FC<TextProps> = ({
   }
 
   if (bold) {
-    Object.assign(textStyles, { fontFamily: fontBold });
+    Object.assign(textStyles, { fontFamily: AssetStyles.family.bold });
   }
 
   if (regular) {
-    Object.assign(textStyles, { fontFamily: fontRegular });
+    Object.assign(textStyles, { fontFamily: AssetStyles.family.regular });
   }
 
   if (uppercase) {
@@ -107,7 +80,7 @@ const Text: FC<TextProps> = ({
     Object.assign(textStyles, { textAlign });
   }
 
-  if (minLineHeight || textInput) {
+  if (minLineHeight) {
     Object.assign(textStyles, { lineHeight: AssetStylesMinLineHeight(type) });
   }
 
@@ -143,24 +116,6 @@ const Text: FC<TextProps> = ({
     Object.assign(textStyles, { marginLeft: measure(marginLeft) });
   }
 
-  if (!fontsLoaded) {
-    return <AppLoading startAsync={fetchFonts} onFinish={(): void => setFontsLoaded(true)} />;
-  }
-
-  if (textInput) {
-    return (
-      <TextInput
-        autoCorrect={autoCorrect}
-        value={value}
-        onChangeText={onChangeText}
-        ref={inputRef}
-        style={[textStyles, style]}
-        placeholder={placeholder}
-        placeholderTextColor={placeholderTextColor && Color[placeholderTextColor]}
-      />
-    );
-  }
-
   return (
     <RnText onPress={onPress} numberOfLines={numberOfLines} style={[textStyles, style]}>
       {children}
@@ -168,6 +123,6 @@ const Text: FC<TextProps> = ({
   );
 };
 
-export { fontRegular, fontBold };
+export { PlaceholderTextColor };
 
 export default Text;

@@ -27,8 +27,7 @@ import PostsEditSlider, { PostsEditItemType } from './base/PostsEditSlider';
 import PullBar, { PullBarHeight } from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
-import Text from './base/Text';
-import TextInput from './base/TextInput';
+import Text, { PlaceholderTextColor } from './base/Text';
 import Thumbnail, { ThumbnailDimension } from './base/Thumbnail';
 import Search from './base/Search';
 
@@ -103,6 +102,7 @@ export {
   NavBarUserPostEdit,
   NavBarUserStoryIncident,
   Panel,
+  PlaceholderTextColor,
   Post,
   PostContent,
   PostContentHeader,
@@ -114,7 +114,6 @@ export {
   TabbarBackground,
   TabbarCircleButton,
   Text,
-  TextInput,
   Thumbnail,
   ThumbnailDimension,
   Search,

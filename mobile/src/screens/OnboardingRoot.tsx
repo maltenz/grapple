@@ -12,8 +12,9 @@ import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
 import { AppRootParamList } from './AppRoot';
 import PullModal from './components/PullModal';
-import { Button, Panel, TextInput, Text, BulletPager, AssetStyles } from '../components';
+import { BulletPager, AssetStyles } from '../components';
 import { storeTheme } from '../store';
+import LoginForm from './components/LoginForm';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
@@ -42,8 +43,7 @@ const Stack = createMaterialTopTabNavigator();
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
   const pagerStore = useSelector(storeTheme.pagerSelector);
-  const [emailValue, setEmailValue] = useState<string>('');
-  const [passwordValue, setPasswordValue] = useState<string>('');
+
   const [pagerAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -87,57 +87,7 @@ const OnboardingRoot: FC<NavigationProps> = () => {
       </Animated.View>
 
       <PullModal>
-        <Panel marginHorizontal>
-          <Panel row marginBottom={1.5}>
-            <Button
-              mode="day"
-              appearance="strong"
-              type="normal"
-              marginRight={0.5}
-              style={{ flex: 1 }}
-            >
-              Login
-            </Button>
-            <Button
-              mode="day"
-              appearance="strong"
-              type="normal"
-              outline
-              marginLeft={0.5}
-              style={{ flex: 1 }}
-            >
-              Register
-            </Button>
-          </Panel>
-          <TextInput
-            mode="day"
-            value={emailValue}
-            placeholder="Email"
-            onChangeText={(value): void => setEmailValue(value)}
-            marginBottom
-          />
-          <TextInput
-            mode="day"
-            value={passwordValue}
-            placeholder="Password"
-            onChangeText={(value): void => setPasswordValue(value)}
-          />
-          <Text
-            mode="day"
-            appearance="heavy"
-            type="small"
-            bold
-            marginTop
-            textAlign="right"
-            style={{ width: '100%' }}
-            marginBottom={2}
-          >
-            Forgot password
-          </Text>
-          <Button mode="day" appearance="strong" type="large">
-            Submit
-          </Button>
-        </Panel>
+        <LoginForm />
       </PullModal>
     </>
   );

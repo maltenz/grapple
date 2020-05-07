@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { ModeType, ColorType } from '../../types';
-import CoreText, { TextProps as CoreTextProps } from '../core/Text';
+import CoreText, { TextProps as CoreTextProps, PlaceholderTextColor } from '../core/Text';
 
 interface TextProps extends CoreTextProps {
   mode: ModeType;
@@ -55,4 +55,5 @@ const Text: FC<TextProps> = ({ children, mode, appearance, type, style, ...rest 
   );
 };
 
+export { PlaceholderTextColor };
 export default Text;

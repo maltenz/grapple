@@ -3,6 +3,13 @@ import { Dimensions } from 'react-native';
 import { Color } from './colors';
 import { TextType } from '../components/core/Text';
 
+const myMinLineheight = 1.1;
+
+const minLineheight = (type: TextType): number => AssetStyles.text[type].fontSize * myMinLineheight;
+
+const fontRegular = 'roboto-regular';
+const fontBold = 'roboto-bold';
+
 const genericStyles = {
   color: Color.grey,
   marginHorizontal: 10,
@@ -49,6 +56,10 @@ const mini = {
 };
 
 const AssetStyles = {
+  family: {
+    regular: fontRegular,
+    bold: fontBold,
+  },
   text: {
     h1,
     h2,
@@ -57,6 +68,17 @@ const AssetStyles = {
     p,
     small,
     mini,
+  },
+  form: {
+    input: {
+      fontSize: p.fontSize,
+      height: 45,
+      marginBottom: 20,
+      borderBottomWidth: 2,
+      color: Color.red,
+      borderColor: Color.red,
+      fontFamily: fontBold,
+    },
   },
   shadow: {
     overlay: {
@@ -95,7 +117,5 @@ const AssetStyles = {
     },
   },
 };
-
-const minLineheight = (type: TextType): number => AssetStyles.text[type].fontSize * 1.1;
 
 export { AssetStyles, minLineheight };
