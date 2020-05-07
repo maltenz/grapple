@@ -1,18 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import {
-  SvgLogoGrapple,
-  SvgBlob,
-  Panel,
-  Text,
-  Bullet,
-  Color,
-  // BulletPager,
-  AssetStyles,
-} from '../components';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../components';
 
 import { PullbarOffset } from './components/PullModal';
+import { OnboardingRootNavigationProp } from './OnboardingRoot';
+import { storeTheme } from '../store';
 
 const BLOB_INSET = 100;
 
@@ -27,6 +22,15 @@ const ListRow: FC = ({ children }) => (
 
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
+  const navigation = useNavigation<OnboardingRootNavigationProp>();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 3, visible: true }));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>

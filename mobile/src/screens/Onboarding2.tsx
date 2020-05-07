@@ -1,16 +1,32 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import OnboardingScreen from './components/OnboardingScreen';
+import { OnboardingRootNavigationProp } from './OnboardingRoot';
+import { storeTheme } from '../store';
 
-const Onboarding2: FC = () => (
-  <>
-    <StatusBar barStyle="dark-content" />
-    <OnboardingScreen
-      title="Find your voice"
-      heading="Whether you just want to talk, or find a away out"
-      subheading="There are women who you can trust and can help you"
-    />
-  </>
-);
+const Onboarding2: FC = () => {
+  const navigation = useNavigation<OnboardingRootNavigationProp>();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 3, visible: true }));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  return (
+    <>
+      <StatusBar barStyle="dark-content" />
+      <OnboardingScreen
+        title="Find your voice"
+        heading="Whether you just want to talk, or find a away out"
+        subheading="There are women who you can trust and can help you"
+      />
+    </>
+  );
+};
 
 export default Onboarding2;

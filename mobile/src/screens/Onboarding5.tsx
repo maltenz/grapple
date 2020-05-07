@@ -1,14 +1,27 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import { Button, SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
 import { ChildNavigationProp } from './HomeRoot';
+import { OnboardingRootNavigationProp } from './OnboardingRoot';
+import { storeTheme } from '../store';
 
 const OnboardingScreen5: FC = () => {
+  const dispatch = useDispatch();
   const insets = useSafeArea();
-  const navigation = useNavigation<ChildNavigationProp>();
+  const navigationChild = useNavigation<ChildNavigationProp>();
+  const navigation = useNavigation<OnboardingRootNavigationProp>();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(storeTheme.updatePager({ activeIndex: 3, count: 3, visible: false }));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
@@ -66,7 +79,7 @@ const OnboardingScreen5: FC = () => {
             type="large"
             mode="day"
             appearance="strong"
-            onPress={(): void => navigation.navigate('HomeRoot')}
+            onPress={(): void => navigationChild.navigate('HomeRoot')}
           >
             Enter
           </Button>
