@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 import Overlay, { OverlayPanel } from './components/Overlay';
+
 import {
   Search as BaseSearch,
   Panel,

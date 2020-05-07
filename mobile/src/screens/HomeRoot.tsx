@@ -3,6 +3,7 @@ import React, { Fragment, FC, ReactNode } from 'react';
 import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+
 import {
   CompositeNavigationProp,
   useNavigation,
