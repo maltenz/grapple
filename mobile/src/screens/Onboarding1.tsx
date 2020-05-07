@@ -22,11 +22,13 @@ const ListRow: FC = ({ children }) => (
 
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
-  const navigation = useNavigation<OnboardingRootNavigationProp>();
   const dispatch = useDispatch();
+  const navigation = useNavigation<OnboardingRootNavigationProp>();
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 3, visible: true }));
+      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 4, visible: false }));
+      dispatch(storeTheme.setPullModalVisibilty(true));
     });
 
     return unsubscribe;
@@ -41,14 +43,14 @@ const Onboarding1: FC = () => {
           marginHorizontal={2}
           flex={1}
           style={{
-            marginTop: insets.top + AssetStyles.measure.space,
+            marginTop: insets.top + AssetStyles.measure.space * 2,
             marginBottom: BLOB_INSET + AssetStyles.measure.space,
           }}
         >
           <Panel flex={1} center>
             <SvgLogoGrapple color="white" scale={0.8} />
             <Text
-              marginTop={0.5}
+              marginTop={0.85}
               marginBottom={0.5}
               textAlign="center"
               mode="night"
@@ -58,10 +60,10 @@ const Onboarding1: FC = () => {
             >
               A platform for women
             </Text>
+            <Text marginBottom mode="night" type="p" appearance="normal" textAlign="center">
+              One in five women have experienced violence with a loved one in New Zealand
+            </Text>
           </Panel>
-          <Text marginBottom mode="night" type="p" appearance="normal" textAlign="center">
-            One in five women have experienced violence with a loved one in New Zealand
-          </Text>
         </Panel>
         <Panel marginHorizontal={2} alignItems="flex-end" row style={styles.main} marginBottom={2}>
           <SvgBlob color="white" scale={2.5} style={styles.blob} />
@@ -88,9 +90,6 @@ const Onboarding1: FC = () => {
             </Text>
           </Panel>
         </Panel>
-        {/* <Panel alignItems="center">
-          <BulletPager mode="day" activeIndex={0} count={4} />
-        </Panel> */}
       </Panel>
     </>
   );

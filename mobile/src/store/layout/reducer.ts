@@ -8,6 +8,7 @@ export const initialState: LayoutState = {
     count: 0,
     visible: false,
   },
+  pullModalVisible: false,
 };
 
 const reducer: Reducer<LayoutState> = (state = initialState, action) => {
@@ -17,6 +18,9 @@ const reducer: Reducer<LayoutState> = (state = initialState, action) => {
     }
     case LayoutActionTypes.UPDATE_PAGER: {
       return { ...state, pager: action.payload };
+    }
+    case LayoutActionTypes.PULL_MODAL_VISIBLE: {
+      return { ...state, pullModalVisible: action.payload };
     }
     default: {
       return state;

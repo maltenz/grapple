@@ -11,7 +11,8 @@ const Onboarding2: FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 3, visible: true }));
+      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 4, visible: true }));
+      dispatch(storeTheme.setPullModalVisibilty(false));
     });
 
     return unsubscribe;

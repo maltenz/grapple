@@ -2,20 +2,22 @@
 import React, { FC, useState, useEffect } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../components';
 import { NavigationHeight } from '../../components/base/Navigation';
+import { storeTheme } from '../../store';
 
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
 
 const PullModal: FC = ({ children }) => {
   const inset = useSafeArea();
+  const pullModalVisible = useSelector(storeTheme.pullModalVisibleSelector);
+  const [hiddenAnim] = useState(new Animated.Value(0));
   const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
   const [top] = useState(NavigationHeight + inset.top);
   const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
-  useEffect(() => {
-    pan.y.setValue(bottom);
-  }, []);
+  pan.y.setValue(bottom);
 
   const panResponder = React.useRef(
     PanResponder.create({
@@ -51,10 +53,29 @@ const PullModal: FC = ({ children }) => {
     })
   ).current;
 
+  useEffect(() => {
+    Animated.timing(hiddenAnim, {
+      toValue: pullModalVisible ? 1 : 0,
+      duration: 250,
+    }).start();
+  }, [pullModalVisible]);
+
+  const marginTop = hiddenAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [PullbarOffset + inset.bottom, 0],
+  });
+
   return (
     <Animated.View
       {...panResponder.panHandlers}
-      style={[styles.container, StyleSheet.absoluteFill, pan.getLayout()]}
+      style={[
+        styles.container,
+        StyleSheet.absoluteFill,
+        pan.getLayout(),
+        {
+          marginTop,
+        },
+      ]}
     >
       <PullBar mode="day" />
       {children}

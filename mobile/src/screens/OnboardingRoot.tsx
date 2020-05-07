@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { Animated, StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import Onboarding1 from './Onboarding1';
 import Onboarding2 from './Onboarding2';
@@ -44,6 +44,19 @@ const OnboardingRoot: FC<NavigationProps> = () => {
   const pagerStore = useSelector(storeTheme.pagerSelector);
   const [emailValue, setEmailValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
+  const [pagerAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(pagerAnim, {
+      toValue: pagerStore.visible ? 1 : 0,
+      duration: 600,
+    }).start();
+  }, [pagerStore.visible]);
+
+  const pagerOpacity = pagerAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   const BULLET_TOP =
     AssetStyles.measure.window.height - inset.bottom - AssetStyles.measure.space * 2;
@@ -63,13 +76,15 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding4" component={Onboarding4} />
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
-      <BulletPager
-        mode="day"
-        count={pagerStore.count}
-        activeIndex={pagerStore.activeIndex}
-        center
-        style={[styles.pager, { top: BULLET_TOP }]}
-      />
+
+      <Animated.View style={[styles.pagerContainer, { top: BULLET_TOP, opacity: pagerOpacity }]}>
+        <BulletPager
+          mode="day"
+          count={pagerStore.count}
+          activeIndex={pagerStore.activeIndex}
+          center
+        />
+      </Animated.View>
 
       <PullModal>
         <Panel marginHorizontal>
@@ -129,9 +144,8 @@ const OnboardingRoot: FC<NavigationProps> = () => {
 };
 
 const styles = StyleSheet.create({
-  pager: {
+  pagerContainer: {
     position: 'absolute',
-    zIndex: 11,
     right: 0,
     left: 0,
   },
