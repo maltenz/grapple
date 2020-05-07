@@ -27,7 +27,7 @@ import PostsEditSlider, { PostsEditItemType } from './base/PostsEditSlider';
 import PullBar, { PullBarHeight } from './base/PullBar';
 import TabbarBackground from './base/TabbarBackground';
 import TabbarCircleButton from './base/TabbarCircleButton';
-import Text, { PlaceholderTextColor } from './base/Text';
+import Text, { TextProps, PlaceholderTextColor } from './base/Text';
 import Thumbnail, { ThumbnailDimension } from './base/Thumbnail';
 import Search from './base/Search';
 
@@ -114,6 +114,7 @@ export {
   TabbarBackground,
   TabbarCircleButton,
   Text,
+  TextProps,
   Thumbnail,
   ThumbnailDimension,
   Search,

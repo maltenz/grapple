@@ -19,10 +19,12 @@ interface ButtonProps extends MarginProps {
   outline?: boolean;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  title?: string;
 }
 
 const Button: FC<ButtonProps> = (props) => {
   const {
+    title,
     children,
     mode,
     type,
@@ -145,7 +147,7 @@ const Button: FC<ButtonProps> = (props) => {
       paddingHorizontal={type === 'small' ? 1 : 0.5}
       {...rest}
     >
-      {children}
+      {title || children}
     </CoreButton>
   );
 };

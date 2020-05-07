@@ -1,19 +1,32 @@
 import React, { FC } from 'react';
 import { Alert, TextInput } from 'react-native';
-import { useForm, Controller, FormContextValues } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
-import { Panel, Button, Text, AssetStyles, PlaceholderTextColor } from '../../components';
+import {
+  Panel,
+  Button,
+  Text,
+  TextProps,
+  AssetStyles,
+  PlaceholderTextColor,
+} from '../../components';
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const LoginForm: FC = () => {
-  const { handleSubmit, control } = useForm({
-    defaultValues: {
-      email: 'hello@malte.nz',
-      password: '',
-    },
-  });
+  const { control, handleSubmit, errors } = useForm<FormData>();
 
-  const onSubmit = (data: FormContextValues): void =>
-    Alert.alert('Form Data', JSON.stringify(data));
+  const onSubmit = (data: FormData): void => Alert.alert('Form Data', JSON.stringify(data));
+
+  const SmallTextConfig: TextProps = {
+    mode: 'day',
+    appearance: 'heavy',
+    type: 'small',
+    bold: true,
+  };
 
   return (
     <Panel marginHorizontal>
@@ -32,42 +45,43 @@ const LoginForm: FC = () => {
           Register
         </Button>
       </Panel>
+      {errors.email && <Text {...SmallTextConfig}>This is required.</Text>}
       <Controller
         as={TextInput}
         control={control}
         name="email"
         onChange={(args): void => args[0].nativeEvent.text}
         rules={{ required: true }}
-        defaultValue=""
         placeholder="email"
         style={AssetStyles.form.input}
       />
+      {errors.password && <Text {...SmallTextConfig}>This is required.</Text>}
       <Controller
         as={TextInput}
         control={control}
         name="password"
         onChange={(args): void => args[0].nativeEvent.text}
         rules={{ required: true }}
-        defaultValue=""
         placeholder="Password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
       />
       <Text
-        mode="day"
-        appearance="heavy"
-        type="small"
-        bold
-        marginTop={0.5}
+        {...SmallTextConfig}
         textAlign="right"
-        style={{ width: '100%' }}
         marginBottom={2}
+        marginTop={0.5}
+        style={{ width: '100%' }}
       >
         Forgot password
       </Text>
-      <Button mode="day" appearance="strong" type="large" onPress={handleSubmit(onSubmit)}>
-        Submit
-      </Button>
+      <Button
+        mode="day"
+        title="Submit"
+        appearance="strong"
+        type="large"
+        onPress={handleSubmit(onSubmit)}
+      />
     </Panel>
   );
 };
