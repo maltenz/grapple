@@ -6,7 +6,7 @@ import { useForm, Controller, EventFunction } from 'react-hook-form';
 import {
   Panel,
   Button,
-  Text as MyText,
+  Text,
   TextProps,
   AssetStyles,
   PlaceholderTextColor,
@@ -103,9 +103,9 @@ const Login: FC = () => {
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
       />
-      <MyText {...SmallTextConfig} textAlign="right" marginTop={0.5} style={{ width: '100%' }}>
+      <Text {...SmallTextConfig} textAlign="right" marginTop={0.5} style={{ width: '100%' }}>
         Forgot password
-      </MyText>
+      </Text>
       <Button
         marginVertical={2}
         mode="day"

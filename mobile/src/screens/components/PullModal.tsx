@@ -10,81 +10,83 @@ import { storeTheme } from '../../store';
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const areEqual = (prevProps: {}, nextProps: {}): boolean => true;
+const PullModal: FC = memo(
+  ({ children }) => {
+    const inset = useSafeArea();
+    const pullModalVisible = useSelector(storeTheme.pullModalVisibleSelector);
+    const [hiddenAnim] = useState(new Animated.Value(0));
+    const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
+    const [top] = useState(NavigationHeight + inset.top);
+    const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
+    pan.y.setValue(bottom);
 
-const PullModal: FC = memo(({ children }) => {
-  const inset = useSafeArea();
-  const pullModalVisible = useSelector(storeTheme.pullModalVisibleSelector);
-  const [hiddenAnim] = useState(new Animated.Value(0));
-  const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
-  const [top] = useState(NavigationHeight + inset.top);
-  const [pan] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
-  pan.y.setValue(bottom);
-
-  const panResponder = React.useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dx: new Animated.Value(0),
-          dy: pan.y,
+    const panResponder = React.useRef(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderMove: Animated.event([
+          null,
+          {
+            dx: new Animated.Value(0),
+            dy: pan.y,
+          },
+        ]),
+        onPanResponderGrant: () => {
+          pan.setOffset({
+            x: 0,
+            // @ts-ignore
+            y: pan.y._value,
+          });
         },
-      ]),
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: 0,
-          // @ts-ignore
-          y: pan.y._value,
-        });
-      },
-      onPanResponderEnd: (e, { dy }: PanResponderGestureState) => {
-        const notTouchEvent = dy > 5 || dy < -5;
-        pan.flattenOffset();
-        const IS_UP = Math.sign(dy) === -1;
-        if (IS_UP && notTouchEvent) {
-          Animated.timing(pan, {
-            toValue: { x: 0, y: top },
-          }).start();
-        } else if (notTouchEvent) {
-          Animated.timing(pan, {
-            toValue: { x: 0, y: bottom },
-          }).start();
-        }
-      },
-    })
-  ).current;
+        onPanResponderEnd: (e, { dy }: PanResponderGestureState) => {
+          pan.flattenOffset();
 
-  useEffect(() => {
-    Animated.timing(hiddenAnim, {
-      toValue: pullModalVisible ? 1 : 0,
-      duration: 250,
-    }).start();
-  }, [pullModalVisible]);
+          const NOT_TOUCH = dy > 5 || dy < -5;
+          const IS_UP = Math.sign(dy) === -1;
 
-  const marginTop = hiddenAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [PullbarOffset + inset.bottom, 0],
-  });
-
-  return (
-    <Animated.View
-      {...panResponder.panHandlers}
-      style={[
-        styles.container,
-        StyleSheet.absoluteFill,
-        pan.getLayout(),
-        {
-          marginTop,
+          if (IS_UP && NOT_TOUCH) {
+            Animated.timing(pan, {
+              toValue: { x: 0, y: top },
+            }).start();
+          } else if (NOT_TOUCH) {
+            Animated.timing(pan, {
+              toValue: { x: 0, y: bottom },
+            }).start();
+          }
         },
-      ]}
-    >
-      <PullBar mode="day" />
-      {children}
-    </Animated.View>
-  );
-}, areEqual);
+      })
+    ).current;
+
+    useEffect(() => {
+      Animated.timing(hiddenAnim, {
+        toValue: pullModalVisible ? 1 : 0,
+        duration: 250,
+      }).start();
+    }, [pullModalVisible]);
+
+    const marginTop = hiddenAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [PullbarOffset + inset.bottom, 0],
+    });
+
+    return (
+      <Animated.View
+        {...panResponder.panHandlers}
+        style={[
+          styles.container,
+          StyleSheet.absoluteFill,
+          pan.getLayout(),
+          {
+            marginTop,
+          },
+        ]}
+      >
+        <PullBar mode="day" />
+        {children}
+      </Animated.View>
+    );
+  },
+  (): boolean => true
+);
 
 const styles = StyleSheet.create({
   container: {
