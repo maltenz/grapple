@@ -14,7 +14,7 @@ import { AppRootParamList } from './AppRoot';
 import PullModal from './components/PullModal';
 import { BulletPager, AssetStyles } from '../components';
 import { storeTheme } from '../store';
-import LoginForm from './components/LoginForm';
+import AuthForm from './components/AuthForm';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
@@ -87,7 +87,7 @@ const OnboardingRoot: FC<NavigationProps> = () => {
       </Animated.View>
 
       <PullModal>
-        <LoginForm />
+        <AuthForm />
       </PullModal>
     </>
   );
