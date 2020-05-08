@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore, no-underscore-dangle  */
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, memo } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -10,7 +10,10 @@ import { storeTheme } from '../../store';
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
 
-const PullModal: FC = ({ children }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const areEqual = (prevProps: {}, nextProps: {}): boolean => true;
+
+const PullModal: FC = memo(({ children }) => {
   const inset = useSafeArea();
   const pullModalVisible = useSelector(storeTheme.pullModalVisibleSelector);
   const [hiddenAnim] = useState(new Animated.Value(0));
@@ -81,7 +84,7 @@ const PullModal: FC = ({ children }) => {
       {children}
     </Animated.View>
   );
-};
+}, areEqual);
 
 const styles = StyleSheet.create({
   container: {

@@ -76,7 +76,6 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding4" component={Onboarding4} />
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
-
       <Animated.View style={[styles.pagerContainer, { top: BULLET_TOP, opacity: pagerOpacity }]}>
         <BulletPager
           mode="day"
@@ -85,7 +84,6 @@ const OnboardingRoot: FC<NavigationProps> = () => {
           center
         />
       </Animated.View>
-
       <PullModal>
         <AuthForm />
       </PullModal>

@@ -1,15 +1,16 @@
-import React, { FC, useState, ReactNode, useEffect } from 'react';
-import { Alert, TextInput } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import SideSwipe from 'react-native-sideswipe';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { FC, useState, useEffect } from 'react';
+import { TextInput, Animated, Vibration, ScrollView, Alert } from 'react-native';
+import { useForm, Controller, EventFunction } from 'react-hook-form';
 
 import {
   Panel,
   Button,
-  Text,
+  Text as MyText,
   TextProps,
   AssetStyles,
   PlaceholderTextColor,
+  Color,
 } from '../../components';
 
 type LoginFormData = {
@@ -31,52 +32,87 @@ const SmallTextConfig: TextProps = {
   bold: true,
 };
 
+const ErrorTextStyles = {
+  overflow: 'hidden',
+  ...AssetStyles.text.small,
+  color: Color.red,
+  fontFamily: AssetStyles.family.regular,
+};
+
+const REQUIRED_TEXT = 'This is required';
+
+const VIBRATE_DUR = 500;
+
+const InputInterpolationConfig = {
+  inputRange: [0, 1],
+  outputRange: [0, 20],
+};
+
 const Login: FC = () => {
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
+  const [animEmailError] = useState(new Animated.Value(0));
+  const [animPasswordError] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    Alert.alert('submit');
-  }, [handleSubmit]);
+    ErrorAnim(animEmailError, errors.email);
+    ErrorAnim(animPasswordError, errors.password);
 
-  const onSubmitLogin = (data: LoginFormData): void =>
-    Alert.alert('Form Data', JSON.stringify(data));
+    if (Object.keys(errors).length) {
+      Vibration.vibrate(VIBRATE_DUR);
+    }
+  }, [errors]);
+
+  const ErrorAnim = (animValue: Animated.Value, errorSelector: any): void => {
+    Animated.timing(animValue, {
+      toValue: errorSelector ? 1 : 0,
+      duration: 600,
+    }).start();
+  };
+
+  const errorEmailHeight = animEmailError.interpolate(InputInterpolationConfig);
+  const errorPasswordHeight = animPasswordError.interpolate(InputInterpolationConfig);
+
+  const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
+
+  const onSubmit = (data: LoginFormData): void => Alert.alert(JSON.stringify(data));
 
   return (
-    <Panel
-      marginHorizontal
-      style={{ width: AssetStyles.measure.window.width - AssetStyles.measure.space * 2 }}
-    >
-      {errors.email && <Text {...SmallTextConfig}>This is required.</Text>}
+    <Panel marginHorizontal>
+      <Animated.Text style={[ErrorTextStyles, { height: errorEmailHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="email"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Email"
         style={AssetStyles.form.input}
       />
-      {errors.password && <Text {...SmallTextConfig}>This is required.</Text>}
+      <Animated.Text style={[ErrorTextStyles, { height: errorPasswordHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="password"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
       />
-      <Text {...SmallTextConfig} textAlign="right" marginTop={0.5} style={{ width: '100%' }}>
+      <MyText {...SmallTextConfig} textAlign="right" marginTop={0.5} style={{ width: '100%' }}>
         Forgot password
-      </Text>
+      </MyText>
       <Button
         marginVertical={2}
         mode="day"
         title="Submit"
         appearance="strong"
         type="large"
-        onPress={handleSubmit(onSubmitLogin)}
+        onPress={handleSubmit(onSubmit)}
       />
     </Panel>
   );
@@ -84,55 +120,85 @@ const Login: FC = () => {
 
 const Register: FC = () => {
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
+  const [animUsernameError] = useState(new Animated.Value(0));
+  const [animEmailError] = useState(new Animated.Value(0));
+  const [animPasswordError] = useState(new Animated.Value(0));
+  const [animPasswordConfirmError] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    Alert.alert('submit');
-  }, [handleSubmit]);
+    ErrorAnim(animUsernameError, errors.username);
+    ErrorAnim(animEmailError, errors.email);
+    ErrorAnim(animPasswordError, errors.password);
+    ErrorAnim(animPasswordConfirmError, errors.passwordConfirm);
 
-  const onSubmitRegister = (data: RegisterFormData): void =>
-    Alert.alert('Form Data', JSON.stringify(data));
+    if (Object.keys(errors).length) {
+      Vibration.vibrate(VIBRATE_DUR);
+    }
+  }, [errors]);
+
+  const ErrorAnim = (animValue: Animated.Value, errorSelector: any): void => {
+    Animated.timing(animValue, {
+      toValue: errorSelector ? 1 : 0,
+      duration: 600,
+    }).start();
+  };
+
+  const errorUsernameHeight = animUsernameError.interpolate(InputInterpolationConfig);
+  const errorEmailHeight = animEmailError.interpolate(InputInterpolationConfig);
+  const errorPasswordHeight = animPasswordError.interpolate(InputInterpolationConfig);
+  const errorPasswordConfirmHeight = animPasswordConfirmError.interpolate(InputInterpolationConfig);
+
+  const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
+
+  const onSubmit = (data: LoginFormData): void => Alert.alert(JSON.stringify(data));
 
   return (
-    <Panel
-      marginHorizontal
-      style={{ width: AssetStyles.measure.window.width - AssetStyles.measure.space * 2 }}
-    >
-      {errors.username && <Text {...SmallTextConfig}>This is required.</Text>}
+    <Panel marginHorizontal>
+      <Animated.Text style={[ErrorTextStyles, { height: errorUsernameHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="username"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Username"
         style={AssetStyles.form.input}
       />
-      {errors.email && <Text {...SmallTextConfig}>This is required.</Text>}
+      <Animated.Text style={[ErrorTextStyles, { height: errorEmailHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="email"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Email"
         style={AssetStyles.form.input}
       />
-      {errors.password && <Text {...SmallTextConfig}>This is required.</Text>}
+      <Animated.Text style={[ErrorTextStyles, { height: errorPasswordHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="password"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
       />
+      <Animated.Text style={[ErrorTextStyles, { height: errorPasswordConfirmHeight }]}>
+        {REQUIRED_TEXT}
+      </Animated.Text>
       <Controller
         as={TextInput}
         control={control}
         name="passwordConfirm"
-        onChange={(args): void => args[0].nativeEvent.text}
+        onChange={onChange}
         rules={{ required: true }}
         placeholder="Confirm password"
         style={AssetStyles.form.input}
@@ -144,7 +210,7 @@ const Register: FC = () => {
         title="Submit"
         appearance="strong"
         type="large"
-        onPress={handleSubmit(onSubmitRegister)}
+        onPress={handleSubmit(onSubmit)}
       />
     </Panel>
   );
@@ -179,19 +245,7 @@ const AuthForm: FC = () => {
           Register
         </Button>
       </Panel>
-      <SideSwipe
-        index={currentIndex}
-        itemWidth={AssetStyles.measure.window.width}
-        style={{ width: AssetStyles.measure.window.width }}
-        data={[{ title: 'test' }, { title: 'test2' }]}
-        onIndexChange={(index): void => setCurrentIndex(index)}
-        renderItem={({ itemIndex }): ReactNode => {
-          if (itemIndex === 0) {
-            return <Login />;
-          }
-          return <Register />;
-        }}
-      />
+      <ScrollView>{currentIndex === 0 ? <Login /> : <Register />}</ScrollView>
     </>
   );
 };
