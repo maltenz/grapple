@@ -1,4 +1,4 @@
-import React, { FC, useState, ReactNode } from 'react';
+import React, { FC, useState, ReactNode, useEffect } from 'react';
 import { Alert, TextInput } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import SideSwipe from 'react-native-sideswipe';
@@ -34,7 +34,13 @@ const SmallTextConfig: TextProps = {
 const Login: FC = () => {
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData): void => Alert.alert('Form Data', JSON.stringify(data));
+  useEffect(() => {
+    Alert.alert('submit');
+  }, [handleSubmit]);
+
+  const onSubmitLogin = (data: LoginFormData): void =>
+    Alert.alert('Form Data', JSON.stringify(data));
+
   return (
     <Panel
       marginHorizontal
@@ -65,12 +71,12 @@ const Login: FC = () => {
         Forgot password
       </Text>
       <Button
-        marginTop={2}
+        marginVertical={2}
         mode="day"
         title="Submit"
         appearance="strong"
         type="large"
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(onSubmitLogin)}
       />
     </Panel>
   );
@@ -79,7 +85,13 @@ const Login: FC = () => {
 const Register: FC = () => {
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
 
-  const onSubmit = (data: RegisterFormData): void => Alert.alert('Form Data', JSON.stringify(data));
+  useEffect(() => {
+    Alert.alert('submit');
+  }, [handleSubmit]);
+
+  const onSubmitRegister = (data: RegisterFormData): void =>
+    Alert.alert('Form Data', JSON.stringify(data));
+
   return (
     <Panel
       marginHorizontal
@@ -127,12 +139,12 @@ const Register: FC = () => {
         placeholderTextColor={PlaceholderTextColor}
       />
       <Button
-        marginTop={2}
+        marginVertical={2}
         mode="day"
         title="Submit"
         appearance="strong"
         type="large"
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(onSubmitRegister)}
       />
     </Panel>
   );
