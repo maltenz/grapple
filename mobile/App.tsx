@@ -24,7 +24,7 @@ const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   cache,
-  uri: `${process.env.GRAPHQL_URI}/:${process.env.GRAPHQL_PORT}`,
+  uri: `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`,
   request: async (operation: Operation): Promise<void> => {
     const token = await AsyncStorage.getItem('token');
     operation.setContext({

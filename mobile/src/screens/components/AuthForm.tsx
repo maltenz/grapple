@@ -3,6 +3,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { TextInput, Animated, Vibration, ScrollView, Alert } from 'react-native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
 import {
   Panel,
   Button,
@@ -24,6 +26,14 @@ type RegisterFormData = {
   password: string;
   passwordConfirm: string;
 };
+
+const GET_ALL_USERS = gql`
+  query getUsers {
+    users {
+      name
+    }
+  }
+`;
 
 const SmallTextConfig: TextProps = {
   mode: 'day',
@@ -218,6 +228,9 @@ const Register: FC = () => {
 
 const AuthForm: FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const users = useQuery(GET_ALL_USERS);
+  // eslint-disable-next-line no-console
+  console.log(users);
 
   return (
     <>
