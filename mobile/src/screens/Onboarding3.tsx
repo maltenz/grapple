@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { storeLayout } from '../store';
+import { layoutActions } from '../store';
 
 const Onboarding3: FC = () => {
   const navigation = useNavigation<OnboardingRootNavigationProp>();
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(storeLayout.updatePager({ activeIndex: 1, count: 4, visible: true }));
-      dispatch(storeLayout.setPullModalVisibilty(false));
+      dispatch(layoutActions.updatePager({ activeIndex: 1, count: 4, visible: true }));
+      dispatch(layoutActions.setPullModalVisibilty(false));
     });
 
     return unsubscribe;

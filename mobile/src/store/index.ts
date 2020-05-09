@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import { LayoutState, layoutReducer } from './layout';
 
-import * as storeLayout from './layout';
+import * as layoutActions from './layout/actions';
+import * as layoutSelectors from './layout/selector';
 
 export interface ApplicationState {
   layout: LayoutState;
@@ -13,4 +14,4 @@ export const createRootReducer = () =>
     layout: layoutReducer,
   });
 
-export { storeLayout };
+export { layoutActions, layoutSelectors };

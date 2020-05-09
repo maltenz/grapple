@@ -5,7 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../components';
 import { NavigationHeight } from '../../components/base/Navigation';
-import { storeLayout } from '../../store';
+import { layoutSelectors } from '../../store';
 
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
@@ -13,7 +13,7 @@ const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.s
 const PullModal: FC = memo(
   ({ children }) => {
     const inset = useSafeArea();
-    const pullModalVisible = useSelector(storeLayout.pullModalVisibleSelector);
+    const pullModalVisible = useSelector(layoutSelectors.pullModalVisibleSelector);
     const [hiddenAnim] = useState(new Animated.Value(0));
     const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
     const [top] = useState(NavigationHeight + inset.top);

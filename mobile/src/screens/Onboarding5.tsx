@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { storeLayout } from '../store';
+import { layoutActions } from '../store';
 
 const OnboardingScreen5: FC = () => {
   const dispatch = useDispatch();
@@ -15,8 +15,8 @@ const OnboardingScreen5: FC = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(storeLayout.updatePager({ activeIndex: 3, count: 4, visible: false }));
-      dispatch(storeLayout.setPullModalVisibilty(true));
+      dispatch(layoutActions.updatePager({ activeIndex: 3, count: 4, visible: false }));
+      dispatch(layoutActions.setPullModalVisibilty(true));
     });
 
     return unsubscribe;
