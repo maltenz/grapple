@@ -13,7 +13,7 @@ import Onboarding5 from './Onboarding5';
 import { AppRootParamList } from './AppRoot';
 import PullModal from './components/PullModal';
 import { BulletPager, AssetStyles } from '../components';
-import { storeTheme } from '../store';
+import { storeLayout } from '../store';
 import AuthForm from './components/AuthForm';
 
 export type OnboardingRootParamList = {
@@ -42,7 +42,7 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
-  const pagerStore = useSelector(storeTheme.pagerSelector);
+  const pagerStore = useSelector(storeLayout.pagerSelector);
 
   const [pagerAnim] = useState(new Animated.Value(0));
 

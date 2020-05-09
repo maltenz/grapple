@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { LayoutState, layoutReducer } from './layout';
 
-import * as storeTheme from './layout';
+import * as storeLayout from './layout';
 
 export interface ApplicationState {
   layout: LayoutState;
@@ -13,4 +13,4 @@ export const createRootReducer = () =>
     layout: layoutReducer,
   });
 
-export { storeTheme };
+export { storeLayout };

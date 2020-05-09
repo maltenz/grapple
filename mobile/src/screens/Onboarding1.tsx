@@ -7,7 +7,7 @@ import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from
 
 import { PullbarOffset } from './components/PullModal';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { storeTheme } from '../store';
+import { storeLayout } from '../store';
 
 const BLOB_INSET = 100;
 
@@ -27,8 +27,8 @@ const Onboarding1: FC = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(storeTheme.updatePager({ activeIndex: 0, count: 4, visible: false }));
-      dispatch(storeTheme.setPullModalVisibilty(true));
+      dispatch(storeLayout.updatePager({ activeIndex: 0, count: 4, visible: false }));
+      dispatch(storeLayout.setPullModalVisibilty(true));
     });
 
     return unsubscribe;
