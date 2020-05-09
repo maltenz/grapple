@@ -2,9 +2,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import { TextInput, Animated, Vibration, ScrollView, Alert } from 'react-native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
+import { useMutation } from '@apollo/react-hooks';
 
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
 import {
   Panel,
   Button,
@@ -14,6 +13,7 @@ import {
   PlaceholderTextColor,
   Color,
 } from '../../components';
+import { CREATE_USER } from '../../api';
 
 type LoginFormData = {
   email: string;
@@ -26,14 +26,6 @@ type RegisterFormData = {
   password: string;
   passwordConfirm: string;
 };
-
-const GET_ALL_USERS = gql`
-  query getUsers {
-    users {
-      name
-    }
-  }
-`;
 
 const SmallTextConfig: TextProps = {
   mode: 'day',
@@ -84,7 +76,9 @@ const Login: FC = () => {
 
   const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
 
-  const onSubmit = (data: LoginFormData): void => Alert.alert(JSON.stringify(data));
+  const onSubmit = (data: LoginFormData): void => {
+    Alert.alert(JSON.stringify(data));
+  };
 
   return (
     <Panel marginHorizontal>
@@ -129,6 +123,7 @@ const Login: FC = () => {
 };
 
 const Register: FC = () => {
+  const [createUser] = useMutation(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
@@ -160,7 +155,9 @@ const Register: FC = () => {
 
   const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
 
-  const onSubmit = (data: LoginFormData): void => Alert.alert(JSON.stringify(data));
+  const onSubmit = ({ username, email, password }: RegisterFormData): void => {
+    createUser({ variables: { name: username, email, password } });
+  };
 
   return (
     <Panel marginHorizontal>
@@ -228,9 +225,6 @@ const Register: FC = () => {
 
 const AuthForm: FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const users = useQuery(GET_ALL_USERS);
-  // eslint-disable-next-line no-console
-  console.log(users);
 
   return (
     <>
