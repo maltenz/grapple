@@ -12,6 +12,8 @@ import AppRoot from './src/screens/AppRoot';
 import configureStore from './src/store/configureStore';
 import { Window } from './types';
 
+declare let window: Window & typeof globalThis;
+
 const fetchFonts = (): Promise<void> => {
   return Font.loadAsync({
     'roboto-regular': require('./src/assets/fonts/Roboto-Regular.ttf'),
@@ -40,7 +42,6 @@ const client = new ApolloClient({
   },
 });
 
-declare let window: Window & typeof globalThis;
 const store = configureStore(window.INITIAL_REDUX_STATE);
 
 const App: FC = () => {

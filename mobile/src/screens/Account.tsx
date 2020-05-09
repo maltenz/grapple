@@ -63,7 +63,7 @@ const Account: FC = () => {
           <MenuItem title="Help" last onPress={(): void => Alert.alert('press')} />
         </Container>
         <Container>
-          <MenuItem title="Community guidelines" onPress={(): void => Alert.alert('press')} />
+          <MenuItem title="Community Guidelines" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Privacy" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Terms" last onPress={(): void => Alert.alert('press')} />
         </Container>

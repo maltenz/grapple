@@ -13,11 +13,8 @@ import {
   PlaceholderTextColor,
   Color,
 } from '../../components';
-import { CREATE_USER, GET_USER_BY_EMAIL } from '../../api';
 
-interface LoginProps {
-  email: string;
-}
+import { CREATE_USER, GET_USER_BY_EMAIL } from '../../api';
 
 type LoginFormData = {
   email: string;
@@ -54,11 +51,8 @@ const InputInterpolationConfig = {
   outputRange: [0, 20],
 };
 
-const Login: FC<LoginProps> = ({ email: propEmail }) => {
-  const [getUserByEmail] = useLazyQuery(GET_USER_BY_EMAIL, {
-    variables: { email: propEmail },
-  });
-
+const Login: FC = () => {
+  const [getUserByEmail] = useLazyQuery(GET_USER_BY_EMAIL);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
@@ -102,7 +96,6 @@ const Login: FC<LoginProps> = ({ email: propEmail }) => {
         placeholder="Email"
         style={AssetStyles.form.input}
         autoCompleteType="email"
-        autoCorrect={false}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -188,6 +181,7 @@ const Register: FC = () => {
         placeholder="Username"
         style={AssetStyles.form.input}
         autoCapitalize="none"
+        autoCorrect={false}
       />
       <Animated.Text style={[ErrorTextStyles, { height: errorEmailHeight }]}>
         {REQUIRED_TEXT}
@@ -197,7 +191,6 @@ const Register: FC = () => {
         control={control}
         name="email"
         autoCompleteType="email"
-        autoCorrect={false}
         keyboardType="email-address"
         autoCapitalize="none"
         onChange={onChange}
