@@ -13,10 +13,10 @@ import {
   Text,
   MenuItemThumbnail,
   SvgTabbarBackgroundHeight,
+  CorePullBar,
 } from '../assets';
 
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
-import PullBar from '../components/core/PullBar';
 
 import { ChildNavigationProp } from './HomeRoot';
 
@@ -89,7 +89,7 @@ const MyProfile: FC = () => {
                 Many people has the notion that enlightenment is one state. Many also believe that
                 when it is attained, a person is forever in that state.
               </Text>
-              <PullBar />
+              <CorePullBar />
             </Panel>
           </Container>
           <MenuItemThumbnail

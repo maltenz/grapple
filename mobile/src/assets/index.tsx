@@ -4,7 +4,19 @@ import { ModeType, UtilityType, ColorType } from '../types';
 import { Color } from './colors';
 import { VIBRATE_DUR } from './system';
 
-// components
+// core components
+import {
+  CoreAvatar,
+  CoreBadge,
+  CoreBullet,
+  CoreButton,
+  CoreNavBar,
+  CorePullBar,
+  CoreSegmentedControl,
+  CoreText,
+} from '../components/core';
+
+// base components
 import Badge from '../components/base/Badge';
 import Border from '../components/base/Border';
 import Bullet from '../components/base/Bullet';
@@ -86,7 +98,16 @@ export {
   ModeType,
   UtilityType,
   ColorType,
-  // components
+  // core components
+  CoreAvatar,
+  CoreBadge,
+  CoreBullet,
+  CoreButton,
+  CoreNavBar,
+  CorePullBar,
+  CoreSegmentedControl,
+  CoreText,
+  // base components
   Badge,
   Border,
   Bullet,

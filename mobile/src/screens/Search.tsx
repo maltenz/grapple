@@ -11,10 +11,9 @@ import {
   Badge,
   AssetStyles,
   ThumbnailDimension,
+  CoreText,
+  CoreBullet,
 } from '../assets';
-
-import CoreText from '../components/core/Text';
-import CoreBullet from '../components/core/Bullet';
 
 interface CategoryItemProps {
   title: string;

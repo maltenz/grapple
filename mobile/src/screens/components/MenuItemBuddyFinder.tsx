@@ -1,12 +1,8 @@
 import React, { FC, useState } from 'react';
 import { ScrollView, LayoutAnimation, Platform, StyleSheet, UIManager, View } from 'react-native';
 
-import Panel from '../../components/base/Panel';
-import Text from '../../components/base/Text';
-import CoreText from '../../components/core/Text';
-import Thumbnail from '../../components/base/Thumbnail';
-import Button from '../../components/base/Button';
-import { AssetStyles } from '../../assets';
+import { AssetStyles, CoreText, Panel, Text, Thumbnail, Button } from '../../assets';
+
 import { ProfileType } from '../../types';
 
 const TITLE = 'Why read motivational sayings?';
