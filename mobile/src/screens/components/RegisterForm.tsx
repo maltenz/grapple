@@ -3,7 +3,7 @@ import React, { useState, useEffect, FC } from 'react';
 import { Vibration, Animated, TextInput } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
-import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../components';
+import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
 
 import { CREATE_USER } from '../../api';
 

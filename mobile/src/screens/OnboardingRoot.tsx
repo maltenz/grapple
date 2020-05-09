@@ -5,16 +5,21 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+
+import { BulletPager, AssetStyles } from '../assets';
+
+import { AppRootParamList } from './AppRoot';
+
+import { layoutSelectors } from '../store';
+
+import Authentication from './components/Authentication';
+import PullModal from './components/PullModal';
+
 import Onboarding1 from './Onboarding1';
 import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
-import Authentication from './components/Authentication';
-import { AppRootParamList } from './AppRoot';
-import PullModal from './components/PullModal';
-import { BulletPager, AssetStyles } from '../components';
-import { layoutSelectors } from '../store';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;

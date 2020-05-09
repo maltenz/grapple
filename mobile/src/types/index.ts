@@ -1,4 +1,4 @@
-import { GalleryItemType } from '../components';
+import { GalleryItemType } from '../assets';
 
 export type ModeType = 'day' | 'night';
 export type UtilityType = 'edit' | 'delete' | 'view';

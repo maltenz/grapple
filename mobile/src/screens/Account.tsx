@@ -12,7 +12,7 @@ import {
   SvgTabbarBackgroundHeight,
   Navigation,
   NavigationIcon,
-} from '../components';
+} from '../assets';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 

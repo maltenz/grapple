@@ -4,7 +4,7 @@ import SvgTabbarBackground, {
   SvgTabbarBackgroundWidth,
 } from '../../assets/svg/SvgTabbarBackground';
 import { AssetStyles } from '../../assets/styles';
-import { ColorType } from '..';
+import { ColorType } from '../../assets';
 
 interface TabbarBackgroundProps {
   color?: ColorType;

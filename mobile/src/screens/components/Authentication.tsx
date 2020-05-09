@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { Panel, Button } from '../../components';
+import { Panel, Button } from '../../assets';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 

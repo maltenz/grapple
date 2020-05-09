@@ -21,11 +21,12 @@ import {
   ThumbnailDimension,
   NavBarUserStoryIncident,
   Text,
-} from '../components';
+} from '../assets';
 
 import { ButtonLargeHeight } from '../components/core/Button';
 import { BulletDimension } from '../components/core/Bullet';
 import { NavigationHeight } from '../components/base/Navigation';
+
 import { ChildNavigationProp } from './HomeRoot';
 
 const TITLE = 'Why read motivational sayings?';

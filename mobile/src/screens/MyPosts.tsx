@@ -9,7 +9,7 @@ import {
   AssetStyles,
   PostsEditSlider,
   PostsEditItemType,
-} from '../components';
+} from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 

@@ -11,7 +11,7 @@ import {
   Navigation,
   NavigationIcon,
   SvgTabbarBackgroundHeight,
-} from '../components';
+} from '../assets';
 
 import { ParentNavigationProp } from './HomeRoot';
 

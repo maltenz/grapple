@@ -6,7 +6,7 @@ import Text from '../../components/base/Text';
 import CoreText from '../../components/core/Text';
 import Thumbnail from '../../components/base/Thumbnail';
 import Button from '../../components/base/Button';
-import { AssetStyles } from '../../components';
+import { AssetStyles } from '../../assets';
 import { ProfileType } from '../../types';
 
 const TITLE = 'Why read motivational sayings?';

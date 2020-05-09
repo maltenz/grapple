@@ -4,14 +4,7 @@ import { Animated, Vibration, TextInput } from 'react-native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
-import {
-  Panel,
-  AssetStyles,
-  PlaceholderTextColor,
-  Text,
-  Button,
-  VIBRATE_DUR,
-} from '../../components';
+import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
 import { GET_USER_BY_EMAIL } from '../../api';
 

@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-import { Panel, AssetStyles, SvgIconSmallRight } from '../components';
-import Button from '../components/base/Button';
-import Text from '../components/base/Text';
+
+import { Panel, AssetStyles, SvgIconSmallRight, Button, Text } from '../assets';
+
 import Overlay, { OverlayItem, OverlayPanel } from './components/Overlay';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';

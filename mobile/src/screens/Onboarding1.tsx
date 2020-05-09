@@ -3,11 +3,14 @@ import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../components';
+
+import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
+
+import { layoutActions } from '../store';
+
+import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 import { PullbarOffset } from './components/PullModal';
-import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { layoutActions } from '../store';
 
 const BLOB_INSET = 100;
 

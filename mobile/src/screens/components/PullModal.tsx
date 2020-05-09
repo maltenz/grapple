@@ -3,7 +3,7 @@ import React, { FC, useState, useEffect, memo } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
-import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../components';
+import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../assets';
 import { NavigationHeight } from '../../components/base/Navigation';
 import { layoutSelectors } from '../../store';
 

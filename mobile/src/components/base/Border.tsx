@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { ModeType } from '..';
+import { ModeType } from '../../assets';
 import { Color } from '../../assets/colors';
 
 interface BorderProps {

@@ -13,7 +13,7 @@ import {
   Text,
   MenuItemThumbnail,
   SvgTabbarBackgroundHeight,
-} from '../components';
+} from '../assets';
 
 import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
 import PullBar from '../components/core/PullBar';

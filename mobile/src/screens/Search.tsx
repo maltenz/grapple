@@ -11,7 +11,7 @@ import {
   Badge,
   AssetStyles,
   ThumbnailDimension,
-} from '../components';
+} from '../assets';
 
 import CoreText from '../components/core/Text';
 import CoreBullet from '../components/core/Bullet';

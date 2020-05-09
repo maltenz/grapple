@@ -19,7 +19,7 @@ import {
   AssetStyles,
   Button,
   SvgIconStory,
-} from '../components';
+} from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 

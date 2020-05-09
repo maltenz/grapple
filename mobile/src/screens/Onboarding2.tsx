@@ -2,9 +2,11 @@ import React, { FC, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+
+import { layoutActions } from '../store';
+
 import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { layoutActions } from '../store';
 
 const Onboarding2: FC = () => {
   const navigation = useNavigation<OnboardingRootNavigationProp>();

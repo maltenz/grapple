@@ -4,9 +4,12 @@ import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { SvgBlob, Panel, Text, Color, AssetStyles } from '../components';
-import { OnboardingRootNavigationProp } from './OnboardingRoot';
+
+import { SvgBlob, Panel, Text, Color, AssetStyles } from '../assets';
+
 import { layoutActions } from '../store';
+
+import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 const OnboardingScreen5: FC = () => {
   const dispatch = useDispatch();

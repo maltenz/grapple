@@ -2,7 +2,9 @@ import React, { FC, ReactNode } from 'react';
 import { StatusBar, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { Panel, AssetStyles, Text } from '../../components';
+
+import { Panel, AssetStyles, Text } from '../../assets';
+
 import { PanelProps } from '../../components/base/Panel';
 
 interface OverlayItemProps {

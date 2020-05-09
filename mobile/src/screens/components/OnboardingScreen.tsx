@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { Panel, Text, SvgBlob, SvgBlobMirrored, Color, AssetStyles } from '../../components';
+
+import { Panel, Text, SvgBlob, SvgBlobMirrored, Color, AssetStyles } from '../../assets';
 
 interface OnboardingScreenProps {
   title: string;

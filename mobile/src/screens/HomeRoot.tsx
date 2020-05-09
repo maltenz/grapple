@@ -21,7 +21,7 @@ import {
   SvgTabbarBackgroundHeight,
   TabbarBackground,
   TabbarCircleButton,
-} from '../components';
+} from '../assets';
 
 import Home from './Home';
 import { AppRootParamList } from './AppRoot';
