@@ -1,6 +1,5 @@
 /* eslint-disable global-require */
 import React, { FC, useState } from 'react';
-
 import ApolloClient, { InMemoryCache, Operation } from 'apollo-boost';
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -22,9 +21,13 @@ const fetchFonts = (): Promise<void> => {
 
 const cache = new InMemoryCache();
 
+const uri = process.env.DEV_DEVICE_IP
+  ? `${process.env.DEV_DEVICE_IP}:${process.env.GRAPHQL_PORT}`
+  : `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`;
+
 const client = new ApolloClient({
   cache,
-  uri: `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`,
+  uri,
   request: async (operation: Operation): Promise<void> => {
     const token = await AsyncStorage.getItem('token');
     operation.setContext({
