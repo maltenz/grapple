@@ -10,11 +10,11 @@ import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
+import Authentication from './components/Authentication';
 import { AppRootParamList } from './AppRoot';
 import PullModal from './components/PullModal';
 import { BulletPager, AssetStyles } from '../components';
 import { layoutSelectors } from '../store';
-import AuthForm from './components/AuthForm';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
@@ -85,7 +85,7 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         />
       </Animated.View>
       <PullModal>
-        <AuthForm />
+        <Authentication />
       </PullModal>
     </>
   );

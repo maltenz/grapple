@@ -2,6 +2,7 @@ import { AssetStyles } from '../assets/styles';
 import { ModeType, UtilityType, ColorType } from '../types';
 
 import { Color } from '../assets/colors';
+import { VIBRATE_DUR } from '../assets/system';
 
 // components
 import Badge from './base/Badge';
@@ -76,6 +77,7 @@ import SvgIconSmallUp from '../assets/svg/icons/small/SvgIconSmallUp';
 export {
   // util
   AssetStyles,
+  VIBRATE_DUR,
   // types
   ModeType,
   UtilityType,
