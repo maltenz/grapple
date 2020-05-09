@@ -16,7 +16,7 @@ import {
   CorePullBar,
 } from '../assets';
 
-import { NavigationHeading, NavigationHeight } from '../components/base/Navigation';
+import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
 

@@ -4,7 +4,7 @@ import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 're
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../assets';
-import { NavigationHeight } from '../../components/base/Navigation';
+import { NavigationHeight } from '../../assets/components/base/Navigation';
 import { layoutSelectors } from '../../store';
 
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;

@@ -15,7 +15,7 @@ import {
 
 import { ParentNavigationProp } from './HomeRoot';
 
-import { NavigationLogo } from '../components/base/Navigation';
+import { NavigationLogo } from '../assets/components/base/Navigation';
 
 const TITLE = 'Why read motivational sayings?';
 const CONTENT =

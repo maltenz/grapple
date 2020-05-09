@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native';
 
 import { Color } from './colors';
-import { TextType } from '../components/core/Text';
+import { TextType } from './components/core/Text';
 
 const myMinLineheight = 1.1;
 

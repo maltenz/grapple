@@ -23,9 +23,9 @@ import {
   Text,
 } from '../assets';
 
-import { ButtonLargeHeight } from '../components/core/Button';
-import { BulletDimension } from '../components/core/Bullet';
-import { NavigationHeight } from '../components/base/Navigation';
+import { ButtonLargeHeight } from '../assets/components/core/Button';
+import { BulletDimension } from '../assets/components/core/Bullet';
+import { NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
 
@@ -135,7 +135,7 @@ const MyPost: FC = () => {
                 </Panel>
               }
             />
-            <PostContentHeading title="Easter Holidays" autoCorrect={false} edit />
+            <PostContentHeading title="Easter Holidays" />
             <PostContent title={TITLE} content={CONTENT} />
           </Panel>
           <Panel

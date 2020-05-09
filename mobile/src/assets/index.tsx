@@ -4,7 +4,9 @@ import { ModeType, UtilityType, ColorType } from '../types';
 import { Color } from './colors';
 import { VIBRATE_DUR } from './system';
 
-// core components
+/**
+ * core components
+ */
 import {
   CoreAvatar,
   CoreBadge,
@@ -14,42 +16,45 @@ import {
   CorePullBar,
   CoreSegmentedControl,
   CoreText,
-} from '../components/core';
+} from './components/core';
 
-// base components
-import Badge from '../components/base/Badge';
-import Border from '../components/base/Border';
-import Bullet from '../components/base/Bullet';
-import BulletPager from '../components/base/BulletPager';
+/**
+ * base components
+ */
+import Badge from './components/base/Badge';
+import Border from './components/base/Border';
+import Bullet from './components/base/Bullet';
+import BulletPager from './components/base/BulletPager';
 import Button, {
   ButtonLargeHeight,
   ButtonNormalHeight,
   ButtonSmallHeight,
-} from '../components/base/Button';
-import Gallery, { GalleryItemType } from '../components/base/Gallery';
-import Container from '../components/base/Container';
-import MenuItem, { MenuItemHeight } from '../components/base/MenuItem';
-import MenuItemAccount from '../components/base/MenuItemAccount';
-import MenuItemThumbnail from '../components/base/MenuItemThumbnail';
-import Navigation, { NavigationIcon } from '../components/base/Navigation';
-import NavBarUser from '../components/base/NavBarUser';
-import NavBarUserPostEdit from '../components/base/NavBarUserPostEdit';
-import NavBarUserStoryIncident from '../components/base/NavBarUserStoryIncident';
-import Panel, { PanelProps } from '../components/base/Panel';
-import Post from '../components/base/Post';
-import PostContent from '../components/base/PostContent';
-import PostContentHeader from '../components/base/PostContentHeader';
-import PostContentHeading from '../components/base/PostContentHeading';
-import PostsEditSlider, { PostsEditItemType } from '../components/base/PostsEditSlider';
-import PullBar, { PullBarHeight } from '../components/base/PullBar';
-import TabbarBackground from '../components/base/TabbarBackground';
-import TabbarCircleButton from '../components/base/TabbarCircleButton';
-import Text, { TextProps, PlaceholderTextColor } from '../components/base/Text';
-import Thumbnail, { ThumbnailDimension } from '../components/base/Thumbnail';
-import Search from '../components/base/Search';
+} from './components/base/Button';
+import Gallery, { GalleryItemType } from './components/base/Gallery';
+import Container from './components/base/Container';
+import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
+import MenuItemAccount from './components/base/MenuItemAccount';
+import MenuItemThumbnail from './components/base/MenuItemThumbnail';
+import Navigation, { NavigationIcon } from './components/base/Navigation';
+import NavBarUser from './components/base/NavBarUser';
+import NavBarUserPostEdit from './components/base/NavBarUserPostEdit';
+import NavBarUserStoryIncident from './components/base/NavBarUserStoryIncident';
+import Panel, { PanelProps } from './components/base/Panel';
+import Post from './components/base/Post';
+import PostContent from './components/base/PostContent';
+import PostContentHeader from './components/base/PostContentHeader';
+import PostContentHeading from './components/base/PostContentHeading';
+import PostsEditSlider, { PostsEditItemType } from './components/base/PostsEditSlider';
+import PullBar, { PullBarHeight } from './components/base/PullBar';
+import TabbarBackground from './components/base/TabbarBackground';
+import TabbarCircleButton from './components/base/TabbarCircleButton';
+import Text, { TextProps, PlaceholderTextColor } from './components/base/Text';
+import Thumbnail, { ThumbnailDimension } from './components/base/Thumbnail';
+import Search from './components/base/Search';
 
-// svg
-// -- core
+/**
+ * Svg components
+ */
 import SvgTabbarBackground, {
   SvgTabbarBackgroundWidth,
   SvgTabbarBackgroundHeight,

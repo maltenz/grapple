@@ -11,7 +11,7 @@ import {
   ErrorInputInterpolationConfig,
   ErrorTextStyles,
   REQUIRED_TEXT,
-} from '../../components/base/Text';
+} from '../../assets/components/base/Text';
 
 type RegisterFormData = {
   username: string;

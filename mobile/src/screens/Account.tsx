@@ -17,7 +17,7 @@ import {
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
-import { NavigationHeading } from '../components/base/Navigation';
+import { NavigationHeading } from '../assets/components/base/Navigation';
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 

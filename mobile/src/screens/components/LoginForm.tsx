@@ -13,7 +13,7 @@ import {
   ErrorTextStyles,
   REQUIRED_TEXT,
   SmallTextConfig,
-} from '../../components/base/Text';
+} from '../../assets/components/base/Text';
 
 type LoginFormData = {
   email: string;

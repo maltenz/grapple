@@ -5,7 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 
 import { Panel, AssetStyles, Text } from '../../assets';
 
-import { PanelProps } from '../../components/base/Panel';
+import { PanelProps } from '../../assets/components/base/Panel';
 
 interface OverlayItemProps {
   title: string;
