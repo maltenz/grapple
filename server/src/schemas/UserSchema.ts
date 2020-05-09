@@ -27,6 +27,7 @@ export const UserSchema = gql`
   extend type Query {
     users: [User]
     user(id: String!): User
+    userByEmail(email: String!): User
   }
 
   extend type Mutation {

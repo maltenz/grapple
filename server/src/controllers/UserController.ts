@@ -54,6 +54,28 @@ export const getUser = async (connection, id: string): Promise<any> => {
 };
 
 /**
+ * gets user by id
+ * @param connection database connection
+ * @param email user
+ * @returns {User | null} user or null
+ */
+export const getUserByEmail = async (connection, email: string): Promise<any> => {
+  let user: IUser | null;
+
+  try {
+    user = await UserModel(connection).findOne({ email });
+    if (user !== null) {
+      user = user.transform();
+    }
+  } catch (error) {
+    console.error('> getUser error: ', error);
+    throw new ApolloError('Error retrieving user with email: ' + email);
+  }
+
+  return user;
+};
+
+/**
  * creates user
  * @param connection database connection
  * @param args user

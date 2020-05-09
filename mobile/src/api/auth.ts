@@ -8,4 +8,12 @@ const CREATE_USER = gql`
   }
 `;
 
-export { CREATE_USER };
+const GET_USER_BY_EMAIL = gql`
+  query getUserByEmail($email: String!) {
+    userByEmail(email: $email) {
+      name
+    }
+  }
+`;
+
+export { CREATE_USER, GET_USER_BY_EMAIL };

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect } from 'react';
-import { TextInput, Animated, Vibration, ScrollView, Alert } from 'react-native';
+import { TextInput, Animated, Vibration, ScrollView } from 'react-native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import {
   Panel,
@@ -13,7 +13,11 @@ import {
   PlaceholderTextColor,
   Color,
 } from '../../components';
-import { CREATE_USER } from '../../api';
+import { CREATE_USER, GET_USER_BY_EMAIL } from '../../api';
+
+interface LoginProps {
+  email: string;
+}
 
 type LoginFormData = {
   email: string;
@@ -50,7 +54,11 @@ const InputInterpolationConfig = {
   outputRange: [0, 20],
 };
 
-const Login: FC = () => {
+const Login: FC<LoginProps> = ({ email: propEmail }) => {
+  const [getUserByEmail] = useLazyQuery(GET_USER_BY_EMAIL, {
+    variables: { email: propEmail },
+  });
+
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
@@ -76,8 +84,8 @@ const Login: FC = () => {
 
   const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
 
-  const onSubmit = (data: LoginFormData): void => {
-    Alert.alert(JSON.stringify(data));
+  const onSubmit = ({ email }: LoginFormData): void => {
+    getUserByEmail({ variables: { email } });
   };
 
   return (
@@ -93,6 +101,10 @@ const Login: FC = () => {
         rules={{ required: true }}
         placeholder="Email"
         style={AssetStyles.form.input}
+        autoCompleteType="email"
+        autoCorrect={false}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <Animated.Text style={[ErrorTextStyles, { height: errorPasswordHeight }]}>
         {REQUIRED_TEXT}
@@ -106,6 +118,9 @@ const Login: FC = () => {
         placeholder="Password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
+        autoCompleteType="password"
+        autoCapitalize="none"
+        secureTextEntry
       />
       <Text {...SmallTextConfig} textAlign="right" marginTop={0.5} style={{ width: '100%' }}>
         Forgot password
@@ -172,6 +187,7 @@ const Register: FC = () => {
         rules={{ required: true }}
         placeholder="Username"
         style={AssetStyles.form.input}
+        autoCapitalize="none"
       />
       <Animated.Text style={[ErrorTextStyles, { height: errorEmailHeight }]}>
         {REQUIRED_TEXT}
@@ -180,6 +196,10 @@ const Register: FC = () => {
         as={TextInput}
         control={control}
         name="email"
+        autoCompleteType="email"
+        autoCorrect={false}
+        keyboardType="email-address"
+        autoCapitalize="none"
         onChange={onChange}
         rules={{ required: true }}
         placeholder="Email"
@@ -197,6 +217,9 @@ const Register: FC = () => {
         placeholder="Password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
+        autoCompleteType="password"
+        autoCapitalize="none"
+        secureTextEntry
       />
       <Animated.Text style={[ErrorTextStyles, { height: errorPasswordConfirmHeight }]}>
         {REQUIRED_TEXT}
@@ -210,6 +233,9 @@ const Register: FC = () => {
         placeholder="Confirm password"
         style={AssetStyles.form.input}
         placeholderTextColor={PlaceholderTextColor}
+        autoCompleteType="password"
+        autoCapitalize="none"
+        secureTextEntry
       />
       <Button
         marginVertical={2}

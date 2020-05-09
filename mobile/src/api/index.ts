@@ -1,3 +1,3 @@
-import { CREATE_USER } from './auth';
+import { CREATE_USER, GET_USER_BY_EMAIL } from './auth';
 
-export { CREATE_USER };
+export { CREATE_USER, GET_USER_BY_EMAIL };
