@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View, StyleProp, ViewStyle } from 'react-native';
-import { ContentDistribution, ContentPosition } from 'csstype';
 import { ColorType } from '../../types';
 import { AssetStyles } from '../../assets/styles';
 import { Color } from '../../assets/colors';
+
+export type ContentDistribution = 'space-around' | 'space-between' | 'space-evenly' | 'stretch';
+export type ContentPosition = 'center' | 'end' | 'flex-end' | 'flex-start' | 'start';
 
 const { space } = AssetStyles.measure;
 
