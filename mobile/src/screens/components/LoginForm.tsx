@@ -3,6 +3,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { Animated, Vibration, TextInput } from 'react-native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
@@ -15,16 +16,27 @@ import {
   SmallTextConfig,
 } from '../../assets/components/base/Text';
 
+import { UserType } from '../../types';
+
+import { userActions } from '../../store';
+
 type LoginFormData = {
   email: string;
   password: string;
 };
 
 const LoginForm: FC = () => {
-  const [getUserByEmail] = useLazyQuery(GET_USER_BY_EMAIL);
+  const [getUserByEmail, { data }] = useLazyQuery<{ userByEmail: UserType }>(GET_USER_BY_EMAIL);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
+  const dispatch = useDispatch();
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    if (data?.userByEmail) {
+      dispatch(userActions.setUser({ ...data.userByEmail }));
+    }
+  }, [data]);
 
   useEffect(() => {
     ErrorAnim(animEmailError, errors.email);

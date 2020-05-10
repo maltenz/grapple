@@ -14,7 +14,6 @@ const GET_USER_BY_EMAIL = gql`
     userByEmail(email: $email) {
       name
       email
-      password
     }
   }
 `;
