@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import AppRoot from './src/screens/AppRoot';
@@ -42,7 +43,7 @@ const client = new ApolloClient({
   },
 });
 
-const store = configureStore(window.INITIAL_REDUX_STATE);
+const { store, persistor } = configureStore(window.INITIAL_REDUX_STATE);
 
 const App: FC = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -55,9 +56,11 @@ const App: FC = () => {
     <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <NavigationContainer>
-            <AppRoot />
-          </NavigationContainer>
+          <PersistGate loading={null} persistor={persistor}>
+            <NavigationContainer>
+              <AppRoot />
+            </NavigationContainer>
+          </PersistGate>
         </Provider>
       </ApolloProvider>
     </SafeAreaProvider>
