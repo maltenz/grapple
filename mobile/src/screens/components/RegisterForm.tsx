@@ -3,6 +3,7 @@ import React, { useState, useEffect, FC } from 'react';
 import { Vibration, Animated, TextInput } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
 
 import { CREATE_USER } from '../../api';
@@ -12,6 +13,8 @@ import {
   ErrorTextStyles,
   REQUIRED_TEXT,
 } from '../../assets/components/base/Text';
+import { UserType } from '../../types';
+import { userActions } from '../../store';
 
 type RegisterFormData = {
   username: string;
@@ -21,12 +24,19 @@ type RegisterFormData = {
 };
 
 const RegisterForm: FC = () => {
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser, { data }] = useMutation<{ createUser: UserType }>(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
   const [animPasswordConfirmError] = useState(new Animated.Value(0));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (data?.createUser) {
+      dispatch(userActions.setUser({ ...data.createUser }));
+    }
+  }, [data]);
 
   useEffect(() => {
     ErrorAnim(animUsernameError, errors.username);

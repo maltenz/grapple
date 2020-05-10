@@ -19,3 +19,8 @@ export interface ProfileType extends GalleryItemType {
   name: string;
   excerpt: string;
 }
+
+export type UserType = {
+  name: string;
+  email: string;
+};
