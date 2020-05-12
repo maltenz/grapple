@@ -7,17 +7,17 @@ import { createUser, deleteUser, updateUser } from '../controllers/UserControlle
 export const UserMutation = {
   createUser: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await createUser(context.dbConn, args.input);
+      return await createUser(context, args.input);
     },
   },
   updateUser: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await updateUser(context.dbConn, args.input);
+      return await updateUser(context, args.input);
     },
   },
   deleteUser: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await deleteUser(context.dbConn, args.id);
+      return await deleteUser(context, args.id);
     },
   },
 };

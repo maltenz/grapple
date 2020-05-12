@@ -8,14 +8,14 @@ import { ApolloError } from 'apollo-server';
 
 /**
  * gets all users
- * @param connection database connection
+ * @param context
  * @returns {User[]} user list
  */
-export const getAllUsers = async (connection): Promise<any> => {
+export const getAllUsers = async ({ dbConn }): Promise<any> => {
   let list: IUser[];
 
   try {
-    list = await UserModel(connection).find();
+    list = await UserModel(dbConn).find();
     if (list !== null && list.length > 0) {
       list = list.map((u) => {
         return u.transform();
@@ -33,15 +33,15 @@ export const getAllUsers = async (connection): Promise<any> => {
 
 /**
  * gets user by id
- * @param connection database connection
+ * @param context
  * @param id user id
  * @returns {User | null} user or null
  */
-export const getUser = async (connection, id: string): Promise<any> => {
+export const getUser = async ({ dbConn }, id: string): Promise<any> => {
   let user: IUser | null;
 
   try {
-    user = await UserModel(connection).findById(id);
+    user = await UserModel(dbConn).findById(id);
     if (user !== null) {
       user = user.transform();
     }
@@ -55,15 +55,15 @@ export const getUser = async (connection, id: string): Promise<any> => {
 
 /**
  * gets user by id
- * @param connection database connection
+ * @param context
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async (connection, email: string): Promise<any> => {
+export const getUserByEmail = async ({ dbConn }, email: string): Promise<any> => {
   let user: IUser | null;
 
   try {
-    user = await UserModel(connection).findOne({ email });
+    user = await UserModel(dbConn).findOne({ email });
     if (user !== null) {
       user = user.transform();
     }
@@ -77,15 +77,15 @@ export const getUserByEmail = async (connection, email: string): Promise<any> =>
 
 /**
  * creates user
- * @param connection database connection
+ * @param context
  * @param args user
  * @returns {User} created user
  */
-export const createUser = async (connection, args: IUser): Promise<any> => {
+export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
   let createdUser: IUser;
 
   try {
-    createdUser = (await UserModel(connection).create(args)).transform();
+    createdUser = (await UserModel(dbConn).create(args)).transform();
   } catch (error) {
     console.error('> createUser error: ', error);
     throw new ApolloError('Error saving user with name: ' + args.name);
@@ -96,15 +96,15 @@ export const createUser = async (connection, args: IUser): Promise<any> => {
 
 /**
  * deletes user
- * @param connection database connection
+ * @param context
  * @param id user id
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async (connection, id: string): Promise<any> => {
+export const deleteUser = async ({ dbConn }, id: string): Promise<any> => {
   let deletedUser: IUser | null;
 
   try {
-    deletedUser = await UserModel(connection).findByIdAndRemove(id);
+    deletedUser = await UserModel(dbConn).findByIdAndRemove(id);
     if (deletedUser !== null) {
       deletedUser = deletedUser.transform();
     }
@@ -118,15 +118,15 @@ export const deleteUser = async (connection, id: string): Promise<any> => {
 
 /**
  * updates user
- * @param connection database connection
+ * @param context
  * @param args user
  * @returns {User | null} updated user or null
  */
-export const updateUser = async (context, args: IUser): Promise<any> => {
+export const updateUser = async ({ dbConn }, args: IUser): Promise<any> => {
   let updatedUser: IUser | null;
 
   try {
-    updatedUser = await UserModel(context).findByIdAndUpdate(
+    updatedUser = await UserModel(dbConn).findByIdAndUpdate(
       args.id,
       {
         name: args.name,

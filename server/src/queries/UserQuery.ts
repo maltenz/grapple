@@ -7,17 +7,17 @@ import { getAllUsers, getUser, getUserByEmail } from '../controllers/UserControl
 export const UserQuery = {
   users: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await getAllUsers(context.dbConn);
+      return await getAllUsers(context);
     },
   },
   user: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await getUser(context.dbConn, args.id);
+      return await getUser(context, args.id);
     },
   },
   userByEmail: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await getUserByEmail(context.dbConn, args.email);
+      return await getUserByEmail(context, args.email);
     },
   },
 };
