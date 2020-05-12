@@ -1,5 +1,7 @@
 import UserModel, { IUser } from '../models/UserModel';
 import { ApolloError } from 'apollo-server';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 /**
  *
@@ -32,6 +34,37 @@ export const getAllUsers = async ({ dbConn }): Promise<any> => {
 };
 
 /**
+ * login user by id
+ * @param context
+ * @param id user id
+ * @returns {User | null} user or null
+ */
+export const loginUser = async ({ dbConn }, input): Promise<any> => {
+  let user: IUser | null;
+
+  try {
+    user = await UserModel(dbConn).findById(input.id);
+    if (user !== null) {
+      user = user.transform();
+      const isPasswordValid = await bcrypt.compare(input.password, user.password);
+      if (!isPasswordValid) {
+        throw new Error('Incorrect Password');
+      }
+      const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
+      const token = jwt.sign({ email: user.email }, secret, { expiresIn: '1d' });
+      return { token };
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error('> getUser error: ', error);
+    throw new ApolloError('Error retrieving user with id: ' + input.id);
+  }
+
+  return user;
+};
+
+/**
  * gets user by id
  * @param context
  * @param id user id
@@ -44,6 +77,7 @@ export const getUser = async ({ dbConn }, id: string): Promise<any> => {
     user = await UserModel(dbConn).findById(id);
     if (user !== null) {
       user = user.transform();
+      console.log(user);
     }
   } catch (error) {
     console.error('> getUser error: ', error);

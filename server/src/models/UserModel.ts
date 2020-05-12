@@ -35,7 +35,7 @@ const userSchema: mongoose.Schema = new mongoose.Schema(schema);
  */
 userSchema.methods.transform = function (): any {
   const obj = this.toObject();
-  delete obj.password;
+  // delete obj.password;
 
   const id = obj._id;
   delete obj._id;

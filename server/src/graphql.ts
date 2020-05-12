@@ -8,6 +8,7 @@ import { context } from './context';
  */
 
 const apolloServer = new ApolloServer({
+  cors: true,
   typeDefs: schema,
   resolvers,
   context: context,

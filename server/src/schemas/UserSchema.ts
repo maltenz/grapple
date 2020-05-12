@@ -34,5 +34,6 @@ export const UserSchema = gql`
     createUser(input: CreateUserInput!): User
     updateUser(input: UpdateUserInput!): User
     deleteUser(id: String!): User
+    loginUser(id: String!): User
   }
 `;
