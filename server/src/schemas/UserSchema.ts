@@ -18,6 +18,11 @@ export const UserSchema = gql`
     email: String!
   }
 
+  input loginUserInput {
+    id: String!
+    password: String!
+  }
+
   input UpdateUserInput {
     id: String!
     name: String!
@@ -34,6 +39,6 @@ export const UserSchema = gql`
     createUser(input: CreateUserInput!): User
     updateUser(input: UpdateUserInput!): User
     deleteUser(id: String!): User
-    loginUser(id: String!): User
+    loginUser(input: loginUserInput): User
   }
 `;
