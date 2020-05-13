@@ -30,12 +30,11 @@ const collectionName = 'user';
 const userSchema: mongoose.Schema = new mongoose.Schema(schema);
 
 /**
- * transforms user object, removes password and
+ * transforms user object
  * changes _id to id
  */
 userSchema.methods.transform = function (): any {
   const obj = this.toObject();
-  // delete obj.password;
 
   const id = obj._id;
   delete obj._id;
