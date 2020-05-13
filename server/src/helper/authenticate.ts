@@ -1,11 +1,13 @@
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/UserModel';
+import { IncomingMessage } from 'http';
 
 /**
  * @description authenicates user
  */
 
-const authenticate = async (dbConn, req) => {
+const authenticate = async (dbConn: mongoose.Connection, req: { req: IncomingMessage }) => {
   const bearer = req.req.headers.authorization || '';
 
   try {

@@ -9,12 +9,12 @@ import authenticate from './helper/authenticate';
  * @returns {Context}
  */
 
-interface Context {
+export interface Context {
   dbConn: mongoose.Connection;
   loggedIn: boolean;
 }
 
-export const context = async (req: mongoose.Connection): Promise<Context> => {
+export const context = async (req): Promise<Context> => {
   const dbConn = await getConnection();
   const loggedIn = await authenticate(dbConn, req);
 
