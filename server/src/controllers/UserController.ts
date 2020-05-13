@@ -55,7 +55,7 @@ export const loginUser = async ({ dbConn, token }, input): Promise<any> => {
       const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
       token = myToken;
 
-      // return { token };
+      return { token };
     } else {
       throw new Error('User not found');
     }

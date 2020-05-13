@@ -12,6 +12,10 @@ export const UserSchema = gql`
     email: String!
   }
 
+  type Token {
+    token: String!
+  }
+
   input CreateUserInput {
     name: String!
     password: String!
@@ -39,6 +43,6 @@ export const UserSchema = gql`
     createUser(input: CreateUserInput!): User
     updateUser(input: UpdateUserInput!): User
     deleteUser(id: String!): User
-    loginUser(input: loginUserInput): User
+    loginUser(input: loginUserInput): Token
   }
 `;
