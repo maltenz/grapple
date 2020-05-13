@@ -39,7 +39,7 @@ export const getAllUsers = async ({ dbConn }): Promise<any> => {
  * @param id user id
  * @returns {User | null} user or null
  */
-export const loginUser = async ({ dbConn }, input): Promise<any> => {
+export const loginUser = async ({ dbConn, context }, input): Promise<any> => {
   let user: IUser | null;
 
   console.log('login');
@@ -57,8 +57,10 @@ export const loginUser = async ({ dbConn }, input): Promise<any> => {
         throw new Error('Incorrect Password');
       }
       const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
-      const token = jwt.sign({ email: user.email }, secret, { expiresIn: '1d' });
-      console.log(token);
+      const token = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
+      // console.log(token);
+      console.log('context.req');
+      console.log(context);
       // return { token };
     } else {
       throw new Error('User not found');
@@ -126,7 +128,17 @@ export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
   let createdUser: IUser;
 
   try {
-    createdUser = (await UserModel(dbConn).create(args)).transform();
+    const user = await UserModel(dbConn).findOne({ email: args.email });
+
+    if (user) {
+      throw new Error('Email already in use');
+    }
+
+    const hashedPassword = await bcrypt.hash(args.password, 12);
+
+    createdUser = (
+      await UserModel(dbConn).create({ ...args, password: hashedPassword })
+    ).transform();
   } catch (error) {
     console.error('> createUser error: ', error);
     throw new ApolloError('Error saving user with name: ' + args.name);
