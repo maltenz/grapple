@@ -1,5 +1,7 @@
 import PostModel, { IPost } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
+import { Context } from '../context';
+import loginRequired from '../helper/loginRequired';
 
 /**
  * creates post
@@ -7,8 +9,10 @@ import { ApolloError } from 'apollo-server';
  * @param args post
  * @returns {Post} created post
  */
-export const createPost = async ({ dbConn }, args: IPost): Promise<any> => {
+export const createPost = async ({ dbConn, loggedIn }: Context, args: IPost): Promise<any> => {
   let createdPost: IPost;
+
+  loginRequired(loggedIn);
 
   try {
     createdPost = (await PostModel(dbConn).create({ ...args })).transform();
