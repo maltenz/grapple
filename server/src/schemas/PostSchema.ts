@@ -10,6 +10,7 @@ export const PostSchema = gql`
     title: String!
     content: String!
     image: String!
+    user: User!
   }
 
   input CreatePostInput {

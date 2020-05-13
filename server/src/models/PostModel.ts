@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { IUser } from './UserModel';
 
 /**
  * @description holds post model
@@ -12,6 +13,7 @@ export interface IPost extends mongoose.Document {
   title: string;
   content: string;
   image: string;
+  user: IUser;
   transform: () => IPost;
 }
 
@@ -22,6 +24,10 @@ const schema: mongoose.SchemaDefinition = {
   title: { type: mongoose.SchemaTypes.String, required: true },
   content: { type: mongoose.SchemaTypes.String, required: true },
   image: { type: mongoose.SchemaTypes.String, required: true },
+  user: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'User',
+  },
 };
 
 // post collection name
