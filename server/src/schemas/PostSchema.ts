@@ -18,6 +18,10 @@ export const PostSchema = gql`
     image: String!
   }
 
+  extend type Query {
+    posts: [Post]
+  }
+
   extend type Mutation {
     createPost(input: CreatePostInput!): Post
   }
