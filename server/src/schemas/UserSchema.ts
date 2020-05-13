@@ -10,6 +10,7 @@ export const UserSchema = gql`
     name: String!
     password: String!
     email: String!
+    posts: [Post]
   }
 
   type Token {
