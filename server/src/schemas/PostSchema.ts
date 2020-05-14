@@ -7,13 +7,21 @@ import { gql } from 'apollo-server';
 export const PostSchema = gql`
   type Post {
     id: ID!
-    title: String!
-    content: String!
-    image: String!
+    items: [PostItem]
     user: User!
   }
 
-  input CreatePostInput {
+  type PostItem {
+    title: String!
+    content: String!
+    image: String!
+  }
+
+  input PostInput {
+    items: [PostItemInput]
+  }
+
+  input PostItemInput {
     title: String!
     content: String!
     image: String!
@@ -24,6 +32,6 @@ export const PostSchema = gql`
   }
 
   extend type Mutation {
-    createPost(input: CreatePostInput!): Post
+    createPost(input: PostInput!): Post
   }
 `;

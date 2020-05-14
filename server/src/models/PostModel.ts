@@ -10,9 +10,11 @@ import { IUser } from './UserModel';
  */
 export interface IPost extends mongoose.Document {
   id: string;
-  title: string;
-  content: string;
-  image: string;
+  items: Array<{
+    title: string;
+    content: string;
+    image: string;
+  }>;
   user: IUser;
   transform: () => IPost;
 }
@@ -21,9 +23,13 @@ export interface IPost extends mongoose.Document {
  * post schema
  */
 const schema: mongoose.SchemaDefinition = {
-  title: { type: mongoose.SchemaTypes.String, required: true },
-  content: { type: mongoose.SchemaTypes.String, required: true },
-  image: { type: mongoose.SchemaTypes.String, required: true },
+  items: [
+    {
+      title: { type: mongoose.SchemaTypes.String, required: true },
+      content: { type: mongoose.SchemaTypes.String, required: true },
+      image: { type: mongoose.SchemaTypes.String, required: true },
+    },
+  ],
   user: {
     type: mongoose.SchemaTypes.String,
     ref: 'User',
