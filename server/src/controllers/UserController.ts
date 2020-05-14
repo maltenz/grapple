@@ -2,6 +2,7 @@ import UserModel, { IUser } from '../models/UserModel';
 import { ApolloError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import loginRequired from '../helper/loginRequired';
 
 /**
  *
@@ -13,8 +14,10 @@ import jwt from 'jsonwebtoken';
  * @param context
  * @returns {User[]} user list
  */
-export const getAllUsers = async ({ dbConn }): Promise<any> => {
+export const getAllUsers = async ({ dbConn, loggedIn }): Promise<any> => {
   let list: IUser[];
+
+  loginRequired(loggedIn);
 
   try {
     list = await UserModel(dbConn).find();
@@ -73,8 +76,10 @@ export const loginUser = async ({ dbConn, token }, input): Promise<any> => {
  * @param id user id
  * @returns {User | null} user or null
  */
-export const getUser = async ({ dbConn }, id: string): Promise<any> => {
+export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
   let user: IUser | null;
+
+  loginRequired(loggedIn);
 
   try {
     user = await UserModel(dbConn).findById(id);
@@ -95,8 +100,10 @@ export const getUser = async ({ dbConn }, id: string): Promise<any> => {
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async ({ dbConn }, email: string): Promise<any> => {
+export const getUserByEmail = async ({ dbConn, loggedIn }, email: string): Promise<any> => {
   let user: IUser | null;
+
+  loginRequired(loggedIn);
 
   try {
     user = await UserModel(dbConn).findOne({ email });
@@ -146,8 +153,10 @@ export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
  * @param id user id
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async ({ dbConn }, id: string): Promise<any> => {
+export const deleteUser = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
   let deletedUser: IUser | null;
+
+  loginRequired(loggedIn);
 
   try {
     deletedUser = await UserModel(dbConn).findByIdAndRemove(id);
@@ -168,8 +177,10 @@ export const deleteUser = async ({ dbConn }, id: string): Promise<any> => {
  * @param args user
  * @returns {User | null} updated user or null
  */
-export const updateUser = async ({ dbConn }, args: IUser): Promise<any> => {
+export const updateUser = async ({ dbConn, loggedIn }, args: IUser): Promise<any> => {
   let updatedUser: IUser | null;
+
+  loginRequired(loggedIn);
 
   try {
     updatedUser = await UserModel(dbConn).findByIdAndUpdate(

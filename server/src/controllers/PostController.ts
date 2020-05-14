@@ -2,7 +2,6 @@ import PostModel, { IPost } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context, context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import UserModel from '../models/UserModel';
 import getUserContext from '../helper/getUserContext';
 
 /**
@@ -35,8 +34,10 @@ export const createPost = async (
  * @param context
  * @returns {Post[]} post list
  */
-export const getAllPosts = async ({ dbConn }): Promise<any> => {
+export const getAllPosts = async ({ dbConn, loggedIn }): Promise<any> => {
   let list: IPost[];
+
+  loginRequired(loggedIn);
 
   try {
     list = await PostModel(dbConn).find();
