@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { getConnection } from './database/Provider';
 import authenticate from './helper/authenticate';
+import { IUser } from './models/UserModel';
 
 /**
  * @description holds context for Apollo Server
@@ -12,14 +13,16 @@ import authenticate from './helper/authenticate';
 export interface Context {
   dbConn: mongoose.Connection;
   loggedIn: boolean;
+  user: IUser | null;
 }
 
 export const context = async (req): Promise<Context> => {
   const dbConn = await getConnection();
-  const loggedIn = await authenticate(dbConn, req);
+  const { loggedIn, user } = await authenticate(dbConn, req);
 
   return {
     dbConn,
     loggedIn,
+    user,
   };
 };

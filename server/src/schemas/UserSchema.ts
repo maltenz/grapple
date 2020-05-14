@@ -13,6 +13,13 @@ export const UserSchema = gql`
     posts: [Post]
   }
 
+  type UserQuery {
+    id: ID!
+    name: String!
+    email: String!
+    posts: [Post]
+  }
+
   type Token {
     token: String!
   }
@@ -35,9 +42,9 @@ export const UserSchema = gql`
   }
 
   extend type Query {
-    users: [User]
-    user(id: String!): User
-    userByEmail(email: String!): User
+    users: [UserQuery]
+    user(id: String!): UserQuery
+    userByEmail(email: String!): UserQuery
   }
 
   extend type Mutation {
