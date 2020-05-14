@@ -9,6 +9,7 @@ export const PostSchema = gql`
     id: ID!
     items: [PostItem]
     user: UserQuery!
+    metrics: Metrics!
   }
 
   type PostItem {
@@ -19,6 +20,7 @@ export const PostSchema = gql`
 
   input PostInput {
     items: [PostItemInput]
+    metrics: MetricsInput
   }
 
   input PostItemInput {

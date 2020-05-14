@@ -35,7 +35,7 @@ export const UserSchema = gql`
     password: String!
   }
 
-  input UpdateUserInput {
+  input UserInput {
     id: String!
     name: String!
     email: String!
@@ -49,7 +49,7 @@ export const UserSchema = gql`
 
   extend type Mutation {
     createUser(input: CreateUserInput!): User
-    updateUser(input: UpdateUserInput!): User
+    updateUser(input: UserInput!): User
     deleteUser(id: String!): User
     loginUser(input: loginUserInput): Token
   }
