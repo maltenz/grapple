@@ -55,3 +55,27 @@ export const getAllPosts = async ({ dbConn, loggedIn }): Promise<any> => {
 
   return list;
 };
+
+/**
+ * deletes post
+ * @param context
+ * @param id post id
+ * @returns {User | null} deleted post or null
+ */
+export const deletePost = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
+  let deletedPost: IPost | null;
+
+  loginRequired(loggedIn);
+
+  try {
+    deletedPost = await PostModel(dbConn).findByIdAndRemove(id);
+    if (deletedPost !== null) {
+      deletedPost = deletedPost.transform();
+    }
+  } catch (error) {
+    console.error('> deletePost error: ', error);
+    throw new ApolloError('Error deleting post with id: ' + id);
+  }
+
+  return deletedPost;
+};

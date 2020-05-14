@@ -8,7 +8,7 @@ export const PostSchema = gql`
   type Post {
     id: ID!
     items: [PostItem]
-    user: User!
+    user: UserQuery!
   }
 
   type PostItem {
@@ -33,5 +33,6 @@ export const PostSchema = gql`
 
   extend type Mutation {
     createPost(input: PostInput!): Post
+    deletePost(id: String!): Post
   }
 `;
