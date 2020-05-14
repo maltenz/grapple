@@ -21,8 +21,7 @@ export const createPost = async (
 
   try {
     const user = await getUserContext(dbConn, userContext);
-    // user.transform();
-    createdPost = (await PostModel(dbConn).create({ ...args, user })).transform();
+    createdPost = (await PostModel(dbConn).create({ ...args, user: user.id })).transform();
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post with name: ' + args.title);
