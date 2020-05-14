@@ -3,6 +3,7 @@ import { ApolloError } from 'apollo-server';
 import { Context, context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import getUserContext from '../helper/getUserContext';
+import MetricsModel, { IMetrics } from '../models/MetricsModel';
 
 /**
  * creates post
@@ -15,12 +16,22 @@ export const createPost = async (
   args: IPost
 ): Promise<any> => {
   let createdPost: IPost;
+  let createdMetrics: IMetrics;
 
   loginRequired(loggedIn);
 
   try {
     const user = await getUserContext(dbConn, userContext);
+
     createdPost = (await PostModel(dbConn).create({ ...args, user: user.id })).transform();
+
+    createdMetrics = (
+      await MetricsModel(dbConn).create({ ...args, user: user.id, post: createdPost.id })
+    ).transform();
+
+    await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
+      metrics: (createdMetrics.id as unknown) as IMetrics,
+    });
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');

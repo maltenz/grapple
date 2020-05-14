@@ -7,6 +7,7 @@ import { gql } from 'apollo-server';
 export const MetricsSchema = gql`
   type Metrics {
     id: ID!
+    post: Post!
     user: UserQuery!
     likes: [UserQuery!]
     comments: [UserQuery!]

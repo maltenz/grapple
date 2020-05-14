@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IUser } from './UserModel';
+import { IMetrics } from './MetricsModel';
 
 /**
  * @description holds post model
@@ -10,12 +11,13 @@ import { IUser } from './UserModel';
  */
 export interface IPost extends mongoose.Document {
   id: string;
+  user: IUser;
+  metrics: IMetrics;
   items: Array<{
     title: string;
     content: string;
     image: string;
   }>;
-  user: IUser;
   transform: () => IPost;
 }
 
@@ -23,6 +25,14 @@ export interface IPost extends mongoose.Document {
  * post schema
  */
 const schema: mongoose.SchemaDefinition = {
+  user: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'User',
+  },
+  metrics: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Metrics',
+  },
   items: [
     {
       title: { type: mongoose.SchemaTypes.String, required: true },
@@ -30,10 +40,6 @@ const schema: mongoose.SchemaDefinition = {
       image: { type: mongoose.SchemaTypes.String, required: true },
     },
   ],
-  user: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'User',
-  },
 };
 
 // post collection name

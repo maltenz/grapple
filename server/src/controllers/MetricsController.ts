@@ -20,6 +20,8 @@ export const createMetrics = async (
 
   try {
     const user = await getUserContext(dbConn, userContext);
+    console.log('create metrics');
+    console.log(args);
     createdMetrics = (await MetricsModel(dbConn).create({ ...args, user: user.id })).transform();
   } catch (error) {
     console.error('> createMetrics error: ', error);

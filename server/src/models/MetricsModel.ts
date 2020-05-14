@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IUser } from './UserModel';
+import { IPost } from './PostModel';
 
 /**
  * @description holds metrics model
@@ -10,6 +11,7 @@ import { IUser } from './UserModel';
  */
 export interface IMetrics extends mongoose.Document {
   id: string;
+  post: IPost;
   user: IUser;
   likes: [IUser];
   comments: [IUser];
@@ -22,6 +24,14 @@ export interface IMetrics extends mongoose.Document {
  * metrics schema
  */
 const schema: mongoose.SchemaDefinition = {
+  user: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'User',
+  },
+  post: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Post',
+  },
   likes: [
     {
       type: mongoose.SchemaTypes.String,
@@ -46,10 +56,6 @@ const schema: mongoose.SchemaDefinition = {
       ref: 'User',
     },
   ],
-  user: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'User',
-  },
 };
 
 // metrics collection name
