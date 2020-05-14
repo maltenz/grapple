@@ -57,6 +57,30 @@ export const getAllPosts = async ({ dbConn, loggedIn }): Promise<any> => {
 };
 
 /**
+ * gets post by id
+ * @param context
+ * @param id post id
+ * @returns {Post | null} post or null
+ */
+export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
+  let post: IPost | null;
+
+  loginRequired(loggedIn);
+
+  try {
+    post = await PostModel(dbConn).findById(id);
+    if (post !== null) {
+      post = post.transform();
+    }
+  } catch (error) {
+    console.error('> getPost error: ', error);
+    throw new ApolloError('Error retrieving post with id: ' + id);
+  }
+
+  return post;
+};
+
+/**
  * deletes post
  * @param context
  * @param id post id

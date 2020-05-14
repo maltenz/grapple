@@ -20,7 +20,6 @@ export const PostSchema = gql`
 
   input PostInput {
     items: [PostItemInput]
-    metrics: MetricsInput
   }
 
   input PostItemInput {
@@ -31,6 +30,7 @@ export const PostSchema = gql`
 
   extend type Query {
     posts: [Post]
+    post(id: String!): Post
   }
 
   extend type Mutation {
