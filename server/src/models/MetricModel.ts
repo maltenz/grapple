@@ -14,7 +14,6 @@ export interface IMetric extends mongoose.Document {
   post: IPost;
   user: IUser;
   likes: [IUser];
-  comments: [IUser];
   shares: [IUser];
   bookmarks: [IUser];
   transform: () => IMetric;
@@ -33,12 +32,6 @@ const schema: mongoose.SchemaDefinition = {
     ref: 'Post',
   },
   likes: [
-    {
-      type: mongoose.SchemaTypes.String,
-      ref: 'User',
-    },
-  ],
-  comments: [
     {
       type: mongoose.SchemaTypes.String,
       ref: 'User',

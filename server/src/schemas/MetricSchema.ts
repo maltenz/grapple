@@ -10,14 +10,12 @@ export const MetricSchema = gql`
     post: Post!
     user: UserQuery!
     likes: [UserQuery!]
-    comments: [UserQuery!]
     shares: [UserQuery!]
     bookmarks: [UserQuery!]
   }
 
   input MetricInput {
     likes: [ID!]
-    comments: [ID!]
     shares: [ID!]
     bookmarks: [ID!]
   }
