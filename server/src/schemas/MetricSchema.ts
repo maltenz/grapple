@@ -23,7 +23,7 @@ export const MetricSchema = gql`
   }
 
   extend type Query {
-    metric: [Metric]
+    metrics: [Metric]
   }
 
   extend type Mutation {

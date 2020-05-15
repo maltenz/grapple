@@ -5,7 +5,7 @@ import { getAllMetrics } from '../controllers/MetricController';
  */
 
 export const MetricQuery = {
-  metric: {
+  metrics: {
     resolve: async (parent, args, context, info): Promise<any> => {
       return await getAllMetrics(context);
     },
