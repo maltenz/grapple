@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import PostModel, { IPost } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
-import { Context, context } from '../context';
+import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import getUserContext from '../helper/getUserContext';
-import MetricModel, { IMetric } from '../models/MetricModel';
+import LikeModel, { ILike } from '../models/LikeModel';
+import ShotModel, { IShot } from '../models/ShotModel';
+import ShareModel, { IShare } from '../models/ShareModel';
+import BookmarkModel, { IBookmark } from '../models/BookmarkModel';
 
 /**
  * creates post
@@ -17,22 +20,43 @@ export const createPost = async (
   args: IPost
 ): Promise<any> => {
   let createdPost: IPost;
-  let createdMetric: IMetric;
+  let createdShot: IShot;
+  let createdLike: ILike;
+  let createdShare: IShare;
+  let createdBookmark: IBookmark;
 
   loginRequired(loggedIn);
 
   try {
     const user = await getUserContext(dbConn, userContext);
+    const userId = user.id;
 
-    createdPost = (await PostModel(dbConn).create({ ...args, user: user.id })).transform();
+    createdPost = (await PostModel(dbConn).create({ ...args, user: userId })).transform();
 
-    createdMetric = (
-      await MetricModel(dbConn).create({ ...args, user: user.id, post: createdPost.id })
+    const createdPostData = {
+      user: user.id,
+      post: createdPost.id,
+    };
+
+    createdShot = (await ShotModel(dbConn).create({ ...args, ...createdPostData })).transform();
+
+    createdLike = (await LikeModel(dbConn).create({ ...args, ...createdPostData })).transform();
+
+    createdShare = (await ShareModel(dbConn).create({ ...args, ...createdPostData })).transform();
+
+    createdBookmark = (
+      await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
     ).transform();
 
     const CreatedPost = await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
       // @ts-ignore
-      metric: createdMetric.id,
+      shot: createdShot.id,
+      // @ts-ignore
+      like: createdLike.id,
+      // @ts-ignore
+      share: createdShare.id,
+      // @ts-ignore
+      bookmark: createdBookmark.id,
     });
 
     CreatedPost.transform();
@@ -49,7 +73,7 @@ export const createPost = async (
  * @param context
  * @returns {Post[]} post list
  */
-export const getAllPosts = async ({ dbConn, loggedIn }): Promise<any> => {
+export const getPosts = async ({ dbConn, loggedIn }): Promise<any> => {
   let list: IPost[];
 
   loginRequired(loggedIn);
@@ -64,7 +88,7 @@ export const getAllPosts = async ({ dbConn, loggedIn }): Promise<any> => {
       throw new ApolloError('No posts found');
     }
   } catch (error) {
-    console.error('> getAllPosts error: ', error);
+    console.error('> getPosts error: ', error);
     throw new ApolloError('Error retrieving all posts');
   }
 

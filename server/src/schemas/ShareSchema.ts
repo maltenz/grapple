@@ -7,7 +7,7 @@ import { gql } from 'apollo-server';
 export const ShareSchema = gql`
   type Share {
     id: ID!
-    metric: Metric!
+    post: Post!
   }
 
   input ShareInput {

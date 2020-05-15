@@ -7,7 +7,7 @@ import { gql } from 'apollo-server';
 export const BookmarkSchema = gql`
   type Bookmark {
     id: ID!
-    metric: Metric!
+    post: Post!
   }
 
   input BookmarkInput {

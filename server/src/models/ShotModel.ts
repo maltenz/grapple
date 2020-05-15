@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { IMetric } from './MetricModel';
+import { IPost } from './PostModel';
+import { IUser } from './UserModel';
 
 /**
  * @description holds Shot model
@@ -10,7 +11,8 @@ import { IMetric } from './MetricModel';
  */
 export interface IShot extends mongoose.Document {
   id: string;
-  metric: IMetric;
+  use: IUser;
+  post: IPost;
   transform: () => IShot;
 }
 
@@ -19,9 +21,13 @@ export interface IShot extends mongoose.Document {
  */
 const schema: mongoose.SchemaDefinition = {
   id: mongoose.SchemaTypes.String,
-  metric: {
+  user: {
     type: mongoose.SchemaTypes.String,
-    ref: 'Metric',
+    ref: 'User',
+  },
+  post: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Post',
   },
 };
 

@@ -17,7 +17,7 @@ export const createShare = async ({ dbConn, loggedIn }: Context, args: IShare): 
   const { id, ...rest } = args;
 
   try {
-    createdShare = (await ShareModel(dbConn).create({ ...rest, metric: id })).transform();
+    createdShare = (await ShareModel(dbConn).create({ ...rest, post: id })).transform();
   } catch (error) {
     console.error('> createShare error: ', error);
     throw new ApolloError('Error saving share');

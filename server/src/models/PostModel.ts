@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import { IUser } from './UserModel';
-import { IMetric } from './MetricModel';
+import { IShot } from './ShotModel';
+import { ILike } from './LikeModel';
+import { IShare } from './ShareModel';
+import { IBookmark } from './BookmarkModel';
 
 /**
  * @description holds post model
@@ -12,12 +15,10 @@ import { IMetric } from './MetricModel';
 export interface IPost extends mongoose.Document {
   id: string;
   user: IUser;
-  metric: IMetric;
-  items: Array<{
-    title: string;
-    content: string;
-    image: string;
-  }>;
+  shot: IShot;
+  like: ILike;
+  share: IShare;
+  bookmark: IBookmark;
   transform: () => IPost;
 }
 
@@ -29,17 +30,22 @@ const schema: mongoose.SchemaDefinition = {
     type: mongoose.SchemaTypes.String,
     ref: 'User',
   },
-  metric: {
+  shot: {
     type: mongoose.SchemaTypes.String,
-    ref: 'Metric',
+    ref: 'Shot',
   },
-  items: [
-    {
-      title: { type: mongoose.SchemaTypes.String, required: true },
-      content: { type: mongoose.SchemaTypes.String, required: true },
-      image: { type: mongoose.SchemaTypes.String, required: true },
-    },
-  ],
+  like: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Like',
+  },
+  share: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Share',
+  },
+  bookmark: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'Bookmark',
+  },
 };
 
 // post collection name

@@ -1,4 +1,4 @@
-import { getAllPosts, getPost } from '../controllers/PostController';
+import { getPosts, getPost } from '../controllers/PostController';
 
 /**
  * @description holds post queries
@@ -7,7 +7,7 @@ import { getAllPosts, getPost } from '../controllers/PostController';
 export const PostQuery = {
   posts: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await getAllPosts(context);
+      return await getPosts(context);
     },
   },
   post: {

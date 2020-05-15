@@ -17,7 +17,7 @@ export const createLike = async ({ dbConn, loggedIn }: Context, args: ILike): Pr
   const { id, ...rest } = args;
 
   try {
-    createdLike = (await LikeModel(dbConn).create({ ...rest, metric: id })).transform();
+    createdLike = (await LikeModel(dbConn).create({ ...rest, post: id })).transform();
   } catch (error) {
     console.error('> createLike error: ', error);
     throw new ApolloError('Error saving like');

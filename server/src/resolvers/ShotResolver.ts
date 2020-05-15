@@ -2,7 +2,7 @@ import { ShotQuery } from '../queries/ShotQuery';
 import { ShotMutation } from '../mutations/ShotMutation';
 import { IResolvers } from 'apollo-server';
 import { Context } from '../context';
-import { getMetric } from '../controllers/MetricController';
+import { getPost } from '../controllers/PostController';
 
 /**
  * @description holds shot resolver
@@ -13,8 +13,10 @@ export const ShotResolver: IResolvers = {
   Mutation: ShotMutation,
   Shot: {
     post: async (parent, args, context: Context, info) => {
+      console.log('post');
+      console.log(parent);
       try {
-        return await getMetric(context, parent.post);
+        return await getPost(context, parent.post);
       } catch (error) {
         console.log(error);
         throw error;

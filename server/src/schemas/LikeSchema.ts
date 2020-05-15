@@ -7,7 +7,7 @@ import { gql } from 'apollo-server';
 export const LikeSchema = gql`
   type Like {
     id: ID!
-    metric: Metric!
+    post: Post!
   }
 
   input LikeInput {

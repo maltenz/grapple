@@ -20,7 +20,7 @@ export const createBookmark = async (
   const { id, ...rest } = args;
 
   try {
-    createdBookmark = (await BookmarkModel(dbConn).create({ ...rest, metric: id })).transform();
+    createdBookmark = (await BookmarkModel(dbConn).create({ ...rest, post: id })).transform();
   } catch (error) {
     console.error('> createBookmark error: ', error);
     throw new ApolloError('Error saving bookmark');

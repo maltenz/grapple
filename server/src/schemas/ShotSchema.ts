@@ -12,6 +12,9 @@ export const ShotSchema = gql`
 
   input ShotInput {
     id: ID!
+    title: String
+    content: String
+    image: String
   }
 
   extend type Query {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IMetric } from './MetricModel';
+import { IPost } from './PostModel';
 
 /**
  * @description holds bookmark model
@@ -10,7 +10,7 @@ import { IMetric } from './MetricModel';
  */
 export interface IBookmark extends mongoose.Document {
   id: string;
-  metric: IMetric;
+  post: IPost;
   transform: () => IBookmark;
 }
 
@@ -19,7 +19,7 @@ export interface IBookmark extends mongoose.Document {
  */
 const schema: mongoose.SchemaDefinition = {
   id: mongoose.SchemaTypes.String,
-  metric: {
+  post: {
     type: mongoose.SchemaTypes.String,
     ref: 'Metric',
   },

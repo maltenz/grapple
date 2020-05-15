@@ -7,25 +7,16 @@ import { gql } from 'apollo-server';
 export const PostSchema = gql`
   type Post {
     id: ID!
-    items: [PostItem]
     user: UserQuery!
-    metric: Metric!
-  }
-
-  type PostItem {
-    title: String!
-    content: String!
-    image: String!
+    post: Post!
+    shots: [Shot]!
+    like: Like!
+    share: Share!
+    bookmark: Bookmark!
   }
 
   input PostInput {
-    items: [PostItemInput]
-  }
-
-  input PostItemInput {
-    title: String!
-    content: String!
-    image: String!
+    user: ID!
   }
 
   extend type Query {

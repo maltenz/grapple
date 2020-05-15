@@ -2,7 +2,6 @@ import { DefaultSchema } from './DefaultSchema';
 import { UserSchema } from './UserSchema';
 import { PostSchema } from './PostSchema';
 import { ShotSchema } from './ShotSchema';
-import { MetricSchema } from './MetricSchema';
 import { LikeSchema } from './LikeSchema';
 import { ShareSchema } from './ShareSchema';
 import { BookmarkSchema } from './BookmarkSchema';
@@ -16,7 +15,6 @@ export const schema = [
   UserSchema,
   PostSchema,
   ShotSchema,
-  MetricSchema,
   LikeSchema,
   ShareSchema,
   BookmarkSchema,
