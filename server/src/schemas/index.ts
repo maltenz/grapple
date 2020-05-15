@@ -4,6 +4,7 @@ import { PostSchema } from './PostSchema';
 import { MetricSchema } from './MetricSchema';
 import { LikeSchema } from './LikeSchema';
 import { ShareSchema } from './ShareSchema';
+import { BookmarkSchema } from './BookmarkSchema';
 
 /**
  * @description holds all schemas
@@ -16,4 +17,5 @@ export const schema = [
   MetricSchema,
   LikeSchema,
   ShareSchema,
+  BookmarkSchema,
 ];
