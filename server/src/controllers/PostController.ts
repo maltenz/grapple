@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import PostModel, { IPost } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context, context } from '../context';
@@ -30,7 +31,8 @@ export const createPost = async (
     ).transform();
 
     await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
-      metrics: (createdMetrics.id as unknown) as IMetrics,
+      // @ts-ignore
+      metrics: createdMetrics.id,
     });
   } catch (error) {
     console.error('> createPost error: ', error);

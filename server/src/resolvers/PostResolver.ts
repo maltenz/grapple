@@ -1,7 +1,6 @@
 import { PostQuery } from '../queries/PostQuery';
 import { PostMutation } from '../mutations/PostMutation';
 import { IResolvers } from 'apollo-server';
-import UserModel from '../models/UserModel';
 import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
 
