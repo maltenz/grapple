@@ -4,8 +4,8 @@ import { gql } from 'apollo-server';
  * @description holds user schema
  */
 
-export const MetricsSchema = gql`
-  type Metrics {
+export const MetricSchema = gql`
+  type Metric {
     id: ID!
     post: Post!
     user: UserQuery!
@@ -15,7 +15,7 @@ export const MetricsSchema = gql`
     bookmarks: [UserQuery!]
   }
 
-  input MetricsInput {
+  input MetricInput {
     likes: [ID!]
     comments: [ID!]
     shared: [ID!]
@@ -23,10 +23,10 @@ export const MetricsSchema = gql`
   }
 
   extend type Query {
-    metrics: [Metrics]
+    metric: [Metric]
   }
 
   extend type Mutation {
-    createMetrics(input: MetricsInput!): Metrics
+    createMetric(input: MetricInput!): Metric
   }
 `;

@@ -1,10 +1,10 @@
 import { UserSchema } from './UserSchema';
 import { PostSchema } from './PostSchema';
-import { MetricsSchema } from './MetricsSchema';
+import { MetricSchema } from './MetricSchema';
 import { DefaultSchema } from './DefaultSchema';
 
 /**
  * @description holds all schemas
  */
 
-export const schema = [DefaultSchema, UserSchema, PostSchema, MetricsSchema];
+export const schema = [DefaultSchema, UserSchema, PostSchema, MetricSchema];

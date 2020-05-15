@@ -4,7 +4,7 @@ import { ApolloError } from 'apollo-server';
 import { Context, context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import getUserContext from '../helper/getUserContext';
-import MetricsModel, { IMetrics } from '../models/MetricsModel';
+import MetricModel, { IMetric } from '../models/MetricModel';
 
 /**
  * creates post
@@ -17,7 +17,7 @@ export const createPost = async (
   args: IPost
 ): Promise<any> => {
   let createdPost: IPost;
-  let createdMetrics: IMetrics;
+  let createdMetric: IMetric;
 
   loginRequired(loggedIn);
 
@@ -26,13 +26,13 @@ export const createPost = async (
 
     createdPost = (await PostModel(dbConn).create({ ...args, user: user.id })).transform();
 
-    createdMetrics = (
-      await MetricsModel(dbConn).create({ ...args, user: user.id, post: createdPost.id })
+    createdMetric = (
+      await MetricModel(dbConn).create({ ...args, user: user.id, post: createdPost.id })
     ).transform();
 
     await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
       // @ts-ignore
-      metrics: createdMetrics.id,
+      metric: createdMetric.id,
     });
   } catch (error) {
     console.error('> createPost error: ', error);

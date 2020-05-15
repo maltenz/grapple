@@ -1,9 +1,9 @@
 import { UserResolver } from './UserResolver';
 import { PostResolver } from './PostResolver';
-import { MetricsResolver } from './MetricsResolver';
+import { MetricResolver } from './MetricResolver';
 
 /**
  * @description holds all resolvers
  */
 
-export const resolvers = [UserResolver, PostResolver, MetricsResolver];
+export const resolvers = [UserResolver, PostResolver, MetricResolver];

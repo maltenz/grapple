@@ -1,58 +1,58 @@
-import MetricsModel, { IMetrics } from '../models/MetricsModel';
+import MetricModel, { IMetric } from '../models/MetricModel';
 import { ApolloError } from 'apollo-server';
-import { Context, context } from '../context';
+import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import getUserContext from '../helper/getUserContext';
 
 /**
- * creates metrics
+ * creates metric
  * @param context
- * @param args metrics
- * @returns {Metrics} created metrics
+ * @param args metric
+ * @returns {Metric} created metric
  */
-export const createMetrics = async (
+export const createMetric = async (
   { dbConn, loggedIn, user: userContext }: Context,
-  args: IMetrics
+  args: IMetric
 ): Promise<any> => {
-  let createdMetrics: IMetrics;
+  let createdMetric: IMetric;
 
   loginRequired(loggedIn);
 
   try {
     const user = await getUserContext(dbConn, userContext);
-    console.log('create metrics');
+    console.log('create metric');
     console.log(args);
-    createdMetrics = (await MetricsModel(dbConn).create({ ...args, user: user.id })).transform();
+    createdMetric = (await MetricModel(dbConn).create({ ...args, user: user.id })).transform();
   } catch (error) {
-    console.error('> createMetrics error: ', error);
+    console.error('> createMetric error: ', error);
     throw new ApolloError('Error saving post');
   }
 
-  return createdMetrics;
+  return createdMetric;
 };
 
 /**
- * gets all metrics
+ * gets all metric
  * @param context
- * @returns {Metrics[]} metrics list
+ * @returns {Metric[]} metric list
  */
 export const getAllMetrics = async ({ dbConn, loggedIn }): Promise<any> => {
-  let list: IMetrics[];
+  let list: IMetric[];
 
   loginRequired(loggedIn);
 
   try {
-    list = await MetricsModel(dbConn).find();
+    list = await MetricModel(dbConn).find();
     if (list !== null && list.length > 0) {
       list = list.map((u) => {
         return u.transform();
       });
     } else {
-      throw new ApolloError('No metrics found');
+      throw new ApolloError('No metric found');
     }
   } catch (error) {
     console.error('> getAllMetrics error: ', error);
-    throw new ApolloError('Error retrieving all metrics');
+    throw new ApolloError('Error retrieving all metric');
   }
 
   return list;

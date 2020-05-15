@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { IUser } from './UserModel';
-import { IMetrics } from './MetricsModel';
+import { IMetric } from './MetricModel';
 
 /**
  * @description holds post model
@@ -12,7 +12,7 @@ import { IMetrics } from './MetricsModel';
 export interface IPost extends mongoose.Document {
   id: string;
   user: IUser;
-  metrics: IMetrics;
+  metric: IMetric;
   items: Array<{
     title: string;
     content: string;
@@ -29,9 +29,9 @@ const schema: mongoose.SchemaDefinition = {
     type: mongoose.SchemaTypes.String,
     ref: 'User',
   },
-  metrics: {
+  metric: {
     type: mongoose.SchemaTypes.String,
-    ref: 'Metrics',
+    ref: 'Metric',
   },
   items: [
     {

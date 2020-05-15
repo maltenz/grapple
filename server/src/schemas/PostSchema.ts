@@ -9,7 +9,7 @@ export const PostSchema = gql`
     id: ID!
     items: [PostItem]
     user: UserQuery!
-    metrics: Metrics!
+    metric: Metric!
   }
 
   type PostItem {

@@ -3,13 +3,13 @@ import { IUser } from './UserModel';
 import { IPost } from './PostModel';
 
 /**
- * @description holds metrics model
+ * @description holds metric model
  */
 
 /**
- * Metrics interface
+ * Metric interface
  */
-export interface IMetrics extends mongoose.Document {
+export interface IMetric extends mongoose.Document {
   id: string;
   post: IPost;
   user: IUser;
@@ -17,11 +17,11 @@ export interface IMetrics extends mongoose.Document {
   comments: [IUser];
   shared: [IUser];
   bookmarks: [IUser];
-  transform: () => IMetrics;
+  transform: () => IMetric;
 }
 
 /**
- * metrics schema
+ * metric schema
  */
 const schema: mongoose.SchemaDefinition = {
   user: {
@@ -58,16 +58,16 @@ const schema: mongoose.SchemaDefinition = {
   ],
 };
 
-// metrics collection name
-const collectionName = 'metrics';
+// metric collection name
+const collectionName = 'metric';
 
-const metricsSchema: mongoose.Schema = new mongoose.Schema(schema);
+const metricSchema: mongoose.Schema = new mongoose.Schema(schema);
 
 /**
- * transforms metrics object
+ * transforms metric object
  * changes _id to id
  */
-metricsSchema.methods.transform = function (): any {
+metricSchema.methods.transform = function (): any {
   const obj = this.toObject();
 
   const id = obj._id;
@@ -78,11 +78,11 @@ metricsSchema.methods.transform = function (): any {
 };
 
 /**
- * creates metrics model
+ * creates metric model
  * @param conn database connection
- * @returns metrics model
+ * @returns metric model
  */
-const MetricsModel = (conn: mongoose.Connection): mongoose.Model<IMetrics> =>
-  conn.model(collectionName, metricsSchema);
+const MetricModel = (conn: mongoose.Connection): mongoose.Model<IMetric> =>
+  conn.model(collectionName, metricSchema);
 
-export default MetricsModel;
+export default MetricModel;
