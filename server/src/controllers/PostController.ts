@@ -30,10 +30,12 @@ export const createPost = async (
       await MetricModel(dbConn).create({ ...args, user: user.id, post: createdPost.id })
     ).transform();
 
-    await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
+    const CreatedPost = await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
       // @ts-ignore
       metric: createdMetric.id,
     });
+
+    CreatedPost.transform();
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');
