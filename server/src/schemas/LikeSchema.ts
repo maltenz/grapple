@@ -7,11 +7,11 @@ import { gql } from 'apollo-server';
 export const LikeSchema = gql`
   type Like {
     id: ID!
-    user: UserQuery!
+    metric: Metric!
   }
 
   input LikeInput {
-    user: UserInput
+    id: ID!
   }
 
   extend type Query {
@@ -19,6 +19,6 @@ export const LikeSchema = gql`
   }
 
   extend type Mutation {
-    createLike(input: LikeInput!): Like
+    createLike(input: LikeInput): Like
   }
 `;

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IUser } from './UserModel';
+import { IMetric } from './MetricModel';
 
 /**
  * @description holds like model
@@ -10,7 +10,7 @@ import { IUser } from './UserModel';
  */
 export interface ILike extends mongoose.Document {
   id: string;
-  user: IUser;
+  metric: IMetric;
   transform: () => ILike;
 }
 
@@ -18,9 +18,10 @@ export interface ILike extends mongoose.Document {
  * like schema
  */
 const schema: mongoose.SchemaDefinition = {
-  like: {
+  id: mongoose.SchemaTypes.String,
+  metric: {
     type: mongoose.SchemaTypes.String,
-    ref: 'User',
+    ref: 'Metric',
   },
 };
 

@@ -10,17 +10,15 @@ import getUserContext from '../helper/getUserContext';
  * @param args like
  * @returns {Like} created like
  */
-export const createLike = async (
-  { dbConn, loggedIn, user: userContext }: Context,
-  args: ILike
-): Promise<any> => {
+export const createLike = async ({ dbConn, loggedIn }: Context, args: ILike): Promise<any> => {
   let createdLike: ILike;
 
   loginRequired(loggedIn);
 
+  const { id, ...rest } = args;
+
   try {
-    const user = await getUserContext(dbConn, userContext);
-    createdLike = (await LikeModel(dbConn).create({ ...args, user: user.id })).transform();
+    createdLike = (await LikeModel(dbConn).create({ ...rest, metric: id })).transform();
   } catch (error) {
     console.error('> createLike error: ', error);
     throw new ApolloError('Error saving like');
