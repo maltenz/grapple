@@ -2,7 +2,6 @@ import LikeModel, { ILike } from '../models/LikeModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import getUserContext from '../helper/getUserContext';
 
 /**
  * creates like
@@ -49,4 +48,29 @@ export const getLike = async ({ dbConn, loggedIn }, id: string): Promise<any> =>
   }
 
   return like;
+};
+
+/**
+ * deletes like
+ * @param context
+ * @param id like id
+ * @returns {Like | null} deleted like or null
+ */
+export const deleteLike = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
+  let deletedLike: ILike | null;
+
+  loginRequired(loggedIn);
+
+  try {
+    deletedLike = await LikeModel(dbConn).findByIdAndRemove(id);
+
+    if (deletedLike !== null) {
+      deletedLike = deletedLike.transform();
+    }
+  } catch (error) {
+    console.error('> deleteLike error: ', error);
+    throw new ApolloError('Error deleting like with id: ' + id);
+  }
+
+  return deletedLike;
 };

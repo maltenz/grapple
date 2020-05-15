@@ -20,5 +20,6 @@ export const LikeSchema = gql`
 
   extend type Mutation {
     createLike(input: LikeInput): Like
+    deleteLike(id: String!): Like
   }
 `;
