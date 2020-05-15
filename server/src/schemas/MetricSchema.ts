@@ -23,6 +23,7 @@ export const MetricSchema = gql`
   }
 
   extend type Query {
+    metric(id: String!): Metric
     metrics: [Metric]
   }
 

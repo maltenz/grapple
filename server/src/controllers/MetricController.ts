@@ -57,3 +57,27 @@ export const getAllMetrics = async ({ dbConn, loggedIn }): Promise<any> => {
 
   return list;
 };
+
+/**
+ * gets metric by id
+ * @param context
+ * @param id metric id
+ * @returns {Metric | null} metric or null
+ */
+export const getMetric = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
+  let metric: IMetric | null;
+
+  loginRequired(loggedIn);
+
+  try {
+    metric = await MetricModel(dbConn).findById(id);
+    if (metric !== null) {
+      metric = metric.transform();
+    }
+  } catch (error) {
+    console.error('> getMetric error: ', error);
+    throw new ApolloError('Error retrieving metric with id: ' + id);
+  }
+
+  return metric;
+};
