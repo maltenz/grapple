@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IPost } from './PostModel';
+import { IUser } from './UserModel';
 
 /**
  * @description holds like model
@@ -10,7 +11,7 @@ import { IPost } from './PostModel';
  */
 export interface ILike extends mongoose.Document {
   id: string;
-  user: ILike;
+  user: IUser;
   post: IPost;
   transform: () => ILike;
 }

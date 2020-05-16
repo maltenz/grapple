@@ -9,7 +9,7 @@ export const PostSchema = gql`
     id: ID!
     user: UserQuery!
     post: Post!
-    shot: Shot!
+    shots: Shots!
     like: Like!
     share: Share!
     bookmark: Bookmark!

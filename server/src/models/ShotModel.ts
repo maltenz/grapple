@@ -7,11 +7,11 @@ import { IUser } from './UserModel';
  */
 
 /**
- * User interface
+ * Shot interface
  */
 export interface IShot extends mongoose.Document {
   id: string;
-  use: IUser;
+  user: IUser;
   post: IPost;
   transform: () => IShot;
 }
@@ -55,7 +55,7 @@ ShotSchema.methods.transform = function (): any {
  * @param conn database connection
  * @returns Shot model
  */
-const UserModel = (conn: mongoose.Connection): mongoose.Model<IShot> =>
+const ShotModel = (conn: mongoose.Connection): mongoose.Model<IShot> =>
   conn.model(collectionName, ShotSchema);
 
-export default UserModel;
+export default ShotModel;

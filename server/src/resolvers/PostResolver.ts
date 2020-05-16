@@ -24,7 +24,7 @@ export const PostResolver: IResolvers = {
         throw error;
       }
     },
-    shot: async (parent, args, context: Context, info) => {
+    shots: async (parent, args, context: Context, info) => {
       try {
         return await getShot(context, parent.shot);
       } catch (error) {
