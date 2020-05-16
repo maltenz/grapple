@@ -1,9 +1,37 @@
 import mongoose from 'mongoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 import { IPost } from './PostModel';
 
 /**
  * @description holds user model
  */
+
+export class User {
+  @prop()
+  public id?: string;
+  public name?: string;
+  public password?: string;
+  public email?: string;
+  public transform?: () => User;
+}
+
+const UserModel = getModelForClass(User);
+
+const collectionName = 'user';
+
+/**
+ * transforms user object
+ * changes _id to id
+ */
+UserModel.schema.methods.transform = function (): any {
+  const obj = this.toObject();
+
+  const id = obj._id;
+  delete obj._id;
+  obj.id = id;
+
+  return obj;
+};
 
 /**
  * User interface
@@ -17,44 +45,4 @@ export interface IUser extends mongoose.Document {
   transform: () => IUser;
 }
 
-/**
- * user schema
- */
-const schema: mongoose.SchemaDefinition = {
-  name: { type: mongoose.SchemaTypes.String, required: true, unique: true },
-  password: { type: mongoose.SchemaTypes.String, required: true },
-  email: { type: mongoose.SchemaTypes.String, required: true },
-  posts: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'Post',
-  },
-};
-
-// user collection name
-const collectionName = 'user';
-
-const userSchema: mongoose.Schema = new mongoose.Schema(schema);
-
-/**
- * transforms user object
- * changes _id to id
- */
-userSchema.methods.transform = function (): any {
-  const obj = this.toObject();
-
-  const id = obj._id;
-  delete obj._id;
-  obj.id = id;
-
-  return obj;
-};
-
-/**
- * creates user model
- * @param conn database connection
- * @returns user model
- */
-const UserModel = (conn: mongoose.Connection): mongoose.Model<IUser> =>
-  conn.model(collectionName, userSchema);
-
-export default UserModel;
+export default (conn: mongoose.Connection) => conn.model(collectionName, UserModel.schema);

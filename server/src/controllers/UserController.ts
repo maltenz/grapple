@@ -1,4 +1,4 @@
-import UserModel, { IUser } from '../models/UserModel';
+import UserModel, { User } from '../models/UserModel';
 import { ApolloError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -14,16 +14,16 @@ import loginRequired from '../helper/loginRequired';
  * @param context
  * @returns {User[]} user list
  */
-export const getAllUsers = async ({ dbConn, loggedIn }): Promise<any> => {
-  let list: IUser[];
+export const getAllUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
+  let list;
 
   loginRequired(loggedIn);
 
   try {
-    list = await UserModel(dbConn).find();
+    list = (await UserModel(dbConn).find()) as User;
     if (list !== null && list.length > 0) {
-      list = list.map((u) => {
-        return u.transform();
+      list = list.map((user) => {
+        return user.transform();
       });
     } else {
       throw new ApolloError('No users found');
@@ -42,11 +42,11 @@ export const getAllUsers = async ({ dbConn, loggedIn }): Promise<any> => {
  * @param id user id
  * @returns {User | null} user or null
  */
-export const loginUser = async ({ dbConn, token }, input): Promise<any> => {
-  let user: IUser | null;
+export const loginUser = async ({ dbConn, token }, input): Promise<{ token: string }> => {
+  let user;
 
   try {
-    user = await UserModel(dbConn).findById(input.id);
+    user = (await UserModel(dbConn).findById(input.id)) as User;
 
     if (user !== null) {
       user = user.transform();
@@ -76,13 +76,13 @@ export const loginUser = async ({ dbConn, token }, input): Promise<any> => {
  * @param id user id
  * @returns {User | null} user or null
  */
-export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
-  let user: IUser | null;
+export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<User> => {
+  let user;
 
   loginRequired(loggedIn);
 
   try {
-    user = await UserModel(dbConn).findById(id);
+    user = (await UserModel(dbConn).findById(id)) as User;
     if (user !== null) {
       user = user.transform();
     }
@@ -100,22 +100,15 @@ export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<any> =>
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async ({ dbConn, loggedIn }, email: string): Promise<any> => {
-  let user: IUser | null;
-
+export const getUserByEmail = async ({ dbConn, loggedIn }, email: string): Promise<User> => {
   loginRequired(loggedIn);
 
   try {
-    user = await UserModel(dbConn).findOne({ email });
-    if (user !== null) {
-      user = user.transform();
-    }
+    return (await UserModel(dbConn).findOne({ email })) as User;
   } catch (error) {
     console.error('> getUser error: ', error);
     throw new ApolloError('Error retrieving user with email: ' + email);
   }
-
-  return user;
 };
 
 /**
@@ -124,11 +117,11 @@ export const getUserByEmail = async ({ dbConn, loggedIn }, email: string): Promi
  * @param args user
  * @returns {User} created user
  */
-export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
-  let createdUser: IUser;
+export const createUser = async ({ dbConn }, args: any): Promise<User> => {
+  let createdUser;
 
   try {
-    const user = await UserModel(dbConn).findOne({ email: args.email });
+    const user = (await UserModel(dbConn).findOne({ email: args.email })) as User;
 
     if (user) {
       throw new Error('Email already in use');
@@ -136,9 +129,7 @@ export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
 
     const hashedPassword = await bcrypt.hash(args.password, 12);
 
-    createdUser = (
-      await UserModel(dbConn).create({ ...args, password: hashedPassword })
-    ).transform();
+    await UserModel(dbConn).create({ ...args, password: hashedPassword });
   } catch (error) {
     console.error('> createUser error: ', error);
     throw new ApolloError('Error saving user with name: ' + args.name);
@@ -153,13 +144,13 @@ export const createUser = async ({ dbConn }, args: IUser): Promise<any> => {
  * @param id user id
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
-  let deletedUser: IUser | null;
+export const deleteUser = async ({ dbConn, loggedIn }, id: string): Promise<User> => {
+  let deletedUser;
 
   loginRequired(loggedIn);
 
   try {
-    deletedUser = await UserModel(dbConn).findByIdAndRemove(id);
+    deletedUser = (await UserModel(dbConn).findByIdAndRemove(id)) as User;
     if (deletedUser !== null) {
       deletedUser = deletedUser.transform();
     }
@@ -177,20 +168,20 @@ export const deleteUser = async ({ dbConn, loggedIn }, id: string): Promise<any>
  * @param args user
  * @returns {User | null} updated user or null
  */
-export const updateUser = async ({ dbConn, loggedIn }, args: IUser): Promise<any> => {
-  let updatedUser: IUser | null;
+export const updateUser = async ({ dbConn, loggedIn }, args: User): Promise<User> => {
+  let updatedUser;
 
   loginRequired(loggedIn);
 
   try {
-    updatedUser = await UserModel(dbConn).findByIdAndUpdate(
+    updatedUser = (await UserModel(dbConn).findByIdAndUpdate(
       args.id,
       {
         name: args.name,
         email: args.email,
       },
       { new: true }
-    );
+    )) as User;
 
     if (updatedUser !== null) {
       updatedUser = updatedUser.transform();
