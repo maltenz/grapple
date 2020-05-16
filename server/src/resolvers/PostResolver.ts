@@ -3,7 +3,7 @@ import { PostMutation } from '../mutations/PostMutation';
 import { IResolvers } from 'apollo-server';
 import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
-import { getShots } from '../controllers/ShotController';
+import { getShot } from '../controllers/ShotController';
 import { getLike } from '../controllers/LikeController';
 import { getShare } from '../controllers/ShareController';
 import { getBookmark } from '../controllers/BookmarkController';
@@ -24,9 +24,9 @@ export const PostResolver: IResolvers = {
         throw error;
       }
     },
-    shots: async (parent, args, context: Context, info) => {
+    shot: async (parent, args, context: Context, info) => {
       try {
-        return await getShots(context, parent.shots);
+        return await getShot(context, parent.shot);
       } catch (error) {
         console.log(error);
         throw error;
@@ -50,7 +50,7 @@ export const PostResolver: IResolvers = {
     },
     bookmark: async (parent, args, context: Context, info) => {
       try {
-        return await getBookmark(context, parent.share);
+        return await getBookmark(context, parent.bookmark);
       } catch (error) {
         console.log(error);
         throw error;

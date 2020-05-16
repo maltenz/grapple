@@ -15,7 +15,7 @@ import { IBookmark } from './BookmarkModel';
 export interface IPost extends mongoose.Document {
   id: string;
   user: IUser;
-  shots: [IShot];
+  shot: IShot;
   like: ILike;
   share: IShare;
   bookmark: IBookmark;
@@ -30,7 +30,7 @@ const schema: mongoose.SchemaDefinition = {
     type: mongoose.SchemaTypes.String,
     ref: 'User',
   },
-  shots: {
+  shot: {
     type: mongoose.SchemaTypes.String,
     ref: 'Shot',
   },

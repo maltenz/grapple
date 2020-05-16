@@ -13,8 +13,6 @@ export const ShotResolver: IResolvers = {
   Mutation: ShotMutation,
   Shot: {
     post: async (parent, args, context: Context, info) => {
-      console.log('post');
-      console.log(parent);
       try {
         return await getPost(context, parent.post);
       } catch (error) {

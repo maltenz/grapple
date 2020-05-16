@@ -50,7 +50,7 @@ export const createPost = async (
 
     const CreatedPost = await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
       // @ts-ignore
-      shots: createdShot.id,
+      shot: createdShot.id,
       // @ts-ignore
       like: createdLike.id,
       // @ts-ignore

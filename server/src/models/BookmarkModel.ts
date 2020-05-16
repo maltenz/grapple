@@ -19,9 +19,13 @@ export interface IBookmark extends mongoose.Document {
  */
 const schema: mongoose.SchemaDefinition = {
   id: mongoose.SchemaTypes.String,
+  user: {
+    type: mongoose.SchemaTypes.String,
+    ref: 'User',
+  },
   post: {
     type: mongoose.SchemaTypes.String,
-    ref: 'Metric',
+    ref: 'Bookmark',
   },
 };
 
