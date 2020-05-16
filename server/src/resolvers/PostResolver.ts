@@ -1,12 +1,13 @@
 import { PostQuery } from '../queries/PostQuery';
 import { PostMutation } from '../mutations/PostMutation';
-import { IResolvers } from 'apollo-server';
+import { IResolvers, ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
-import { getShot } from '../controllers/ShotController';
+import { getShot, getShots } from '../controllers/ShotController';
 import { getLike } from '../controllers/LikeController';
 import { getShare } from '../controllers/ShareController';
 import { getBookmark } from '../controllers/BookmarkController';
+import ShotModel, { IShot } from '../models/ShotModel';
 
 /**
  * @description holds post resolver
@@ -25,8 +26,15 @@ export const PostResolver: IResolvers = {
       }
     },
     shots: async (parent, args, context: Context, info) => {
+      let list: IShot[];
+
       try {
-        return await getShot(context, parent.shot);
+        list = await getShots(context, parent.id);
+
+        return {
+          list: list,
+          count: list.length,
+        };
       } catch (error) {
         console.log(error);
         throw error;

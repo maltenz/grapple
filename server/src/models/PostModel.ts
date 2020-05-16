@@ -14,11 +14,14 @@ import { IBookmark } from './BookmarkModel';
  */
 export interface IPost extends mongoose.Document {
   id: string;
-  user: IUser;
-  shots: IShot;
-  like: ILike;
-  share: IShare;
-  bookmark: IBookmark;
+  user: IUser | string;
+  shots: {
+    list: Array<string>;
+    count: number;
+  };
+  like: ILike | string;
+  share: IShare | string;
+  bookmark: IBookmark | string;
   transform: () => IPost;
 }
 
@@ -31,13 +34,8 @@ const schema: mongoose.SchemaDefinition = {
     ref: 'User',
   },
   shots: {
-    type: mongoose.SchemaTypes.String,
-    list: [
-      {
-        type: mongoose.SchemaTypes.String,
-        ref: 'Shot',
-      },
-    ],
+    list: [mongoose.SchemaTypes.String],
+    count: mongoose.SchemaTypes.Number,
   },
   like: {
     type: mongoose.SchemaTypes.String,

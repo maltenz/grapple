@@ -16,9 +16,4 @@ export const PostMutation = {
       return await deletePost(context, args.id);
     },
   },
-  createShot: {
-    resolve: async (parent, args, context, info): Promise<any> => {
-      return await createShot(context, args.id);
-    },
-  },
 };

@@ -11,6 +11,7 @@ import { IUser } from './UserModel';
  */
 export interface IShot extends mongoose.Document {
   id: string;
+  order: number;
   user: IUser;
   post: IPost;
   transform: () => IShot;
@@ -21,6 +22,7 @@ export interface IShot extends mongoose.Document {
  */
 const schema: mongoose.SchemaDefinition = {
   id: mongoose.SchemaTypes.String,
+  order: mongoose.SchemaTypes.Number,
   user: {
     type: mongoose.SchemaTypes.String,
     ref: 'User',

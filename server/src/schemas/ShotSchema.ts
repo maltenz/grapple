@@ -5,15 +5,19 @@ import { gql } from 'apollo-server';
  */
 
 export const ShotSchema = gql`
-  type Shots {
-    id: ID!
-    post: Post!
-    list: [Shot]!
-  }
-
   type Shot {
     id: ID!
     post: Post!
+    user: UserQuery!
+    title: String
+    content: String
+    image: String
+    order: Int!
+  }
+
+  type Shots {
+    list: [Shot]
+    count: Int
   }
 
   input ShotInput {
@@ -21,16 +25,15 @@ export const ShotSchema = gql`
     title: String
     content: String
     image: String
+    order: Int!
   }
 
   extend type Query {
     shot(id: String!): Shot
-    shots(id: String!): Shots
   }
 
   extend type Mutation {
     createShot(input: ShotInput): Shot
-    createShots(id: String!): Shots
     deleteShot(id: String!): Shot
   }
 `;

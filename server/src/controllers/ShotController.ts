@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import ShotModel, { IShot } from '../models/ShotModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
@@ -60,7 +61,8 @@ export const getShots = async ({ dbConn, loggedIn }, id: string): Promise<any> =
   loginRequired(loggedIn);
 
   try {
-    list = await ShotModel(dbConn).find();
+    // @ts-ignore
+    list = await ShotModel(dbConn).find({ post: id });
     if (list !== null && list.length > 0) {
       list = list.map((post) => {
         return post.transform();

@@ -38,7 +38,9 @@ export const createPost = async (
       post: createdPost.id,
     };
 
-    createdShot = (await ShotModel(dbConn).create({ ...args, ...createdPostData })).transform();
+    createdShot = (
+      await ShotModel(dbConn).create({ ...args, ...createdPostData, order: 0 })
+    ).transform();
 
     createdLike = (await LikeModel(dbConn).create({ ...args, ...createdPostData })).transform();
 
@@ -48,9 +50,12 @@ export const createPost = async (
       await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
     ).transform();
 
-    const CreatedPost = await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
+    return await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
       // @ts-ignore
-      shots: createdShot.id,
+      shots: {
+        list: [createdShot.id],
+        count: 0,
+      },
       // @ts-ignore
       like: createdLike.id,
       // @ts-ignore
@@ -58,8 +63,6 @@ export const createPost = async (
       // @ts-ignore
       bookmark: createdBookmark.id,
     });
-
-    CreatedPost.transform();
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');
