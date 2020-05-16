@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IUser } from './UserModel';
+import { User } from './UserModel';
 import { IShot } from './ShotModel';
 import { ILike } from './LikeModel';
 import { IShare } from './ShareModel';
@@ -14,7 +14,7 @@ import { IBookmark } from './BookmarkModel';
  */
 export interface IPost extends mongoose.Document {
   id: string;
-  user: IUser | string;
+  user: User | string;
   shots: {
     list: Array<string>;
     count: number;

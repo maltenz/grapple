@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import UserModel, { IUser } from '../models/UserModel';
+import UserModel, { User } from '../models/UserModel';
 import { IncomingMessage } from 'http';
 import { Context } from '../context';
 import { ApolloError } from 'apollo-server';
@@ -9,7 +9,7 @@ import { ApolloError } from 'apollo-server';
  * @description get user from context
  */
 
-const getUserContext = async (dbConn: mongoose.Connection, user: IUser | null): Promise<IUser> => {
+const getUserContext = async (dbConn: mongoose.Connection, user: User | null): Promise<User> => {
   try {
     let myUser;
 

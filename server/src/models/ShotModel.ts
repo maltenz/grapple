@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { IPost } from './PostModel';
-import { IUser } from './UserModel';
+import { User } from './UserModel';
 
 /**
  * @description holds Shot model
@@ -12,7 +12,7 @@ import { IUser } from './UserModel';
 export interface IShot extends mongoose.Document {
   id: string;
   order: number;
-  user: IUser;
+  user: User;
   post: IPost;
   transform: () => IShot;
 }

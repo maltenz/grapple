@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { getConnection } from './database/Provider';
 import authenticate from './helper/authenticate';
-import { IUser } from './models/UserModel';
+import { User } from './models/UserModel';
 
 /**
  * @description holds context for Apollo Server
@@ -13,7 +13,7 @@ import { IUser } from './models/UserModel';
 export interface Context {
   dbConn: mongoose.Connection;
   loggedIn: boolean;
-  user: IUser | null;
+  user: User | null;
 }
 
 export const context = async (req): Promise<Context> => {

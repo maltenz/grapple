@@ -6,6 +6,9 @@ import { IPost } from './PostModel';
  * @description holds user model
  */
 
+/**
+ * User interface
+ */
 export class User {
   @prop()
   public id?: string;
@@ -32,17 +35,5 @@ UserModel.schema.methods.transform = function (): any {
 
   return obj;
 };
-
-/**
- * User interface
- */
-export interface IUser extends mongoose.Document {
-  id: string;
-  name: string;
-  password: string;
-  email: string;
-  posts: [IPost];
-  transform: () => IUser;
-}
 
 export default (conn: mongoose.Connection) => conn.model(collectionName, UserModel.schema);
