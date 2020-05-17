@@ -6,10 +6,9 @@ import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
 
 /**
- * creates user
  * @param context
- * @param args user
- * @returns {User} created user
+ * @param {name email password}
+ * @returns {User}
  */
 export const createUser = async (
   { dbConn }: Context,
@@ -36,10 +35,9 @@ export const createUser = async (
 };
 
 /**
- * login user by id
  * @param context
- * @param id user id
- * @returns {User | null} user or null
+ * @param id
+ * @returns {User}
  */
 export const loginUser = async (
   { dbConn, token },
@@ -70,9 +68,8 @@ export const loginUser = async (
 };
 
 /**
- * gets all users
  * @param context
- * @returns {User[]} user list
+ * @returns {User[]}
  */
 export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> => {
   let list;
@@ -95,10 +92,9 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
 };
 
 /**
- * gets user by id
  * @param context
- * @param id user id
- * @returns {User | null} user or null
+ * @param id
+ * @returns {User}
  */
 export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promise<User> => {
   let user;
@@ -116,10 +112,9 @@ export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promis
 };
 
 /**
- * gets user by id
  * @param context
- * @param email user
- * @returns {User | null} user or null
+ * @param email
+ * @returns {User}
  */
 export const getUserByEmail = async (
   { dbConn, loggedIn }: Context,
@@ -130,7 +125,7 @@ export const getUserByEmail = async (
   loginRequired(loggedIn);
 
   try {
-    user = (await UserModel(dbConn).findOne({ email: email })) as User;
+    user = (await UserModel(dbConn).findOne({ email })) as User;
   } catch (error) {
     console.error('> getUser error: ', error);
     throw new ApolloError('Error retrieving user with email: ' + email);
@@ -140,11 +135,9 @@ export const getUserByEmail = async (
 };
 
 /**
- * deletes user
  * @param context
- * @param email
- * @param password
- * @returns {User | null} deleted user or null
+ * @param {email password}
+ * @returns {User}
  */
 export const deleteUser = async (
   { dbConn, loggedIn }: Context,

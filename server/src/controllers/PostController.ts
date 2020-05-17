@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 
 /**
- * creates post
  * @param context
- * @returns {Post} created post
+ * @returns {Post}
  */
 export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
   loginRequired(loggedIn);
@@ -21,10 +19,9 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
 };
 
 /**
- * gets post by id
  * @param context
- * @param id post id
- * @returns {Post | null} post or null
+ * @param id
+ * @returns {Post}
  */
 export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
   loginRequired(loggedIn);

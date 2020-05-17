@@ -35,11 +35,6 @@ export const UserSchema = gql`
     password: String!
   }
 
-  input UpdateUserInput {
-    name: String!
-    email: String!
-  }
-
   extend type Query {
     users: [UserQuery]
     user(id: String!): UserQuery
