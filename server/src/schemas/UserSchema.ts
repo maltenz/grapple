@@ -31,7 +31,7 @@ export const UserSchema = gql`
   }
 
   input loginUserInput {
-    _id: ID
+    email: String!
     password: String!
   }
 

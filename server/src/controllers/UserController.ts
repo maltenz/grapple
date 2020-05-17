@@ -33,6 +33,37 @@ export const createUser = async ({ dbConn }, args: User): Promise<User> => {
 };
 
 /**
+ * login user by id
+ * @param context
+ * @param id user id
+ * @returns {User | null} user or null
+ */
+export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token: string }> => {
+  let user;
+
+  try {
+    user = (await UserModel(dbConn).findOne({ email: input.email })) as User;
+
+    if (user !== null) {
+      const isPasswordValid = await bcrypt.compare(input.password, user.password);
+      if (!isPasswordValid) {
+        throw new Error('Incorrect Password');
+      }
+      const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
+      const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
+      token = myToken;
+
+      return { token };
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error('> loginUser error: ', error);
+    throw new ApolloError('Error retrieving user with id: ' + input._id);
+  }
+};
+
+/**
  * gets all users
  * @param context
  * @returns {User[]} user list
@@ -55,37 +86,6 @@ export const getUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
   }
 
   return list;
-};
-
-/**
- * login user by id
- * @param context
- * @param id user id
- * @returns {User | null} user or null
- */
-export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token: string }> => {
-  let user;
-
-  try {
-    user = (await UserModel(dbConn).findById(input._id)) as User;
-
-    if (user !== null) {
-      const isPasswordValid = await bcrypt.compare(input.password, user.password);
-      if (!isPasswordValid) {
-        throw new Error('Incorrect Password');
-      }
-      const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
-      const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
-      token = myToken;
-
-      return { token };
-    } else {
-      throw new Error('User not found');
-    }
-  } catch (error) {
-    console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + input._id);
-  }
 };
 
 /**
