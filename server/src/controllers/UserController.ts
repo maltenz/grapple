@@ -3,7 +3,7 @@ import { ApolloError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';
-import { Context } from 'vm';
+import { Context } from '../context';
 
 /**
  * creates user
@@ -11,22 +11,25 @@ import { Context } from 'vm';
  * @param args user
  * @returns {User} created user
  */
-export const createUser = async ({ dbConn }: Context, args: User): Promise<User> => {
+export const createUser = async (
+  { dbConn }: Context,
+  { name, email, password }: { name: string; email: string; password: string }
+): Promise<User> => {
   let createdUser;
 
   try {
-    const user = (await UserModel(dbConn).findOne({ email: args.email })) as User;
+    const user = (await UserModel(dbConn).findOne({ email })) as User;
 
     if (user) {
       throw new Error('Email already in use');
     }
 
-    const hashedPassword = await bcrypt.hash(args.password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    createdUser = await UserModel(dbConn).create({ ...args, password: hashedPassword });
+    createdUser = await UserModel(dbConn).create({ password: hashedPassword });
   } catch (error) {
     console.error('> createUser error: ', error);
-    throw new ApolloError('Error saving user with name: ' + args.name);
+    throw new ApolloError('Error saving user with name: ' + name);
   }
 
   return createdUser;
@@ -38,14 +41,17 @@ export const createUser = async ({ dbConn }: Context, args: User): Promise<User>
  * @param id user id
  * @returns {User | null} user or null
  */
-export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token: string }> => {
+export const loginUser = async (
+  { dbConn, token },
+  { id, email, password }: { id: string; email: string; password: string }
+): Promise<{ token: string }> => {
   let user;
 
   try {
-    user = (await UserModel(dbConn).findOne({ email: input.email })) as User;
+    user = (await UserModel(dbConn).findOne({ email: email })) as User;
 
     if (user !== null) {
-      const isPasswordValid = await bcrypt.compare(input.password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         throw new Error('Incorrect Password');
       }
@@ -59,7 +65,7 @@ export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token
     }
   } catch (error) {
     console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + input._id);
+    throw new ApolloError('Error retrieving user with id: ' + id);
   }
 };
 
@@ -68,7 +74,7 @@ export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token
  * @param context
  * @returns {User[]} user list
  */
-export const getUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
+export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> => {
   let list;
 
   loginRequired(loggedIn);
@@ -94,16 +100,16 @@ export const getUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
  * @param id user id
  * @returns {User | null} user or null
  */
-export const getUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> => {
+export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promise<User> => {
   let user;
 
   loginRequired(loggedIn);
 
   try {
-    user = (await UserModel(dbConn).findById(_id)) as User;
+    user = (await UserModel(dbConn).findById(id)) as User;
   } catch (error) {
     console.error('> getUser error: ', error);
-    throw new ApolloError('Error retrieving user with _id: ' + _id);
+    throw new ApolloError('Error retrieving user with id: ' + id);
   }
 
   return user;
@@ -115,16 +121,11 @@ export const getUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> 
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async (
-  { dbConn, loggedIn }: Context,
-  email: string
-): Promise<User> => {
+export const getUserByEmail = async ({ dbConn }: Context, email: string): Promise<User> => {
   let user;
 
-  loginRequired(loggedIn);
-
   try {
-    user = (await UserModel(dbConn).findOne({ email })) as User;
+    user = (await UserModel(dbConn).findOne({ email: email })) as User;
   } catch (error) {
     console.error('> getUser error: ', error);
     throw new ApolloError('Error retrieving user with email: ' + email);
@@ -140,16 +141,19 @@ export const getUserByEmail = async (
  * @param password
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async ({ dbConn, loggedIn }, input: User): Promise<User> => {
+export const deleteUser = async (
+  { dbConn, loggedIn }: Context,
+  { id, email, password }: { id: string; email: string; password: string }
+): Promise<User> => {
   let user;
 
   loginRequired(loggedIn);
 
   try {
-    user = (await UserModel(dbConn).findOne({ email: input.email })) as User;
+    user = (await UserModel(dbConn).findOne({ email })) as User;
 
     if (user !== null) {
-      const isPasswordValid = await bcrypt.compare(input.password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         throw new Error('Incorrect Password');
       }
@@ -160,36 +164,8 @@ export const deleteUser = async ({ dbConn, loggedIn }, input: User): Promise<Use
     }
   } catch (error) {
     console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + input._id);
+    throw new ApolloError('Error retrieving user with id: ' + id);
   }
 
   return user;
-};
-
-/**
- * updates user
- * @param context
- * @param args user
- * @returns {User | null} updated user or null
- */
-export const updateUser = async ({ dbConn, loggedIn }, args: User): Promise<User> => {
-  let updatedUser;
-
-  loginRequired(loggedIn);
-
-  try {
-    updatedUser = (await UserModel(dbConn).findByIdAndUpdate(
-      args._id,
-      {
-        name: args.name,
-        email: args.email,
-      },
-      { new: true }
-    )) as User;
-  } catch (error) {
-    console.error('> updateUser error: ', error);
-    throw new ApolloError('Error updating user with _id: ' + args._id);
-  }
-
-  return updatedUser;
 };

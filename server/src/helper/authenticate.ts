@@ -28,7 +28,10 @@ const authenticate = async (
     }
 
     const jwtPayload = jwt.verify(myBearer, process.env.JWT_SECRET_KEY || 'mysecretkey');
-    const user = (await getUserByEmail({ dbConn }, jwtPayload.email)) as User;
+    const user = (await getUserByEmail(
+      { dbConn, loggedIn: true, user: {} },
+      jwtPayload.email
+    )) as User;
 
     return {
       loggedIn: user?._id ? true : false,

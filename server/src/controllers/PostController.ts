@@ -26,14 +26,13 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
  * @param id post id
  * @returns {Post | null} post or null
  */
-export const getPost = async ({ dbConn, loggedIn }, _id: string): Promise<Post> => {
+export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
   loginRequired(loggedIn);
-  console.log(_id);
 
   try {
-    return (await PostModel(dbConn).findById(_id)) as Post;
+    return (await PostModel(dbConn).findById(id)) as Post;
   } catch (error) {
     console.error('> getPost error: ', error);
-    throw new ApolloError('Error retrieving post with _id: ' + _id);
+    throw new ApolloError('Error retrieving post with id: ' + id);
   }
 };
