@@ -1,4 +1,4 @@
-import { getPost } from '../controllers/PostController';
+import { getPost, getPosts } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
 /**
@@ -8,8 +8,7 @@ import { Post } from '../models/PostModel';
 export const PostQuery = {
   posts: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return null;
-      // return await getPosts(context);
+      return await getPosts(context);
     },
   },
   post: {
