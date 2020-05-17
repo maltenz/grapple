@@ -27,7 +27,7 @@ export const createPost = async (context: Context, args: Post): Promise<Post> =>
   loginRequired(loggedIn);
 
   try {
-    const userId = userContext.id;
+    const userId = userContext._id;
 
     createdPostModel = (await PostModel(dbConn).create({ user: userId })) as Post;
 
@@ -54,7 +54,7 @@ export const createPost = async (context: Context, args: Post): Promise<Post> =>
     // createdBookmark = (
     //   await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
     // ).transform();
-    return createdPost.transform();
+    return createdPost;
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');

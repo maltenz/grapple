@@ -6,8 +6,7 @@ import { Post } from './PostModel';
  * User interface constructor
  */
 export class User {
-  @prop()
-  public id?: string;
+  _id?: mongoose.Types.ObjectId;
   @prop()
   public name?: string;
   @prop()

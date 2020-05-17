@@ -1,4 +1,4 @@
-import { getAllUsers, getUser, getUserByEmail } from '../controllers/UserController';
+import { getUsers, getUser, getUserByEmail } from '../controllers/UserController';
 
 /**
  * @description holds user queries
@@ -7,7 +7,7 @@ import { getAllUsers, getUser, getUserByEmail } from '../controllers/UserControl
 export const UserQuery = {
   users: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await getAllUsers(context);
+      return await getUsers(context);
     },
   },
   user: {

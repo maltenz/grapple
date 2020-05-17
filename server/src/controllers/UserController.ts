@@ -37,7 +37,7 @@ export const createUser = async ({ dbConn }, args: User): Promise<User> => {
  * @param context
  * @returns {User[]} user list
  */
-export const getAllUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
+export const getUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
   let list;
 
   loginRequired(loggedIn);
@@ -50,7 +50,7 @@ export const getAllUsers = async ({ dbConn, loggedIn }): Promise<User[]> => {
       throw new ApolloError('No users found');
     }
   } catch (error) {
-    console.error('> getAllUsers error: ', error);
+    console.error('> getUsers error: ', error);
     throw new ApolloError('Error retrieving all users');
   }
 
@@ -67,7 +67,7 @@ export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token
   let user;
 
   try {
-    user = (await UserModel(dbConn).findById(input.id)) as User;
+    user = (await UserModel(dbConn).findById(input._id)) as User;
 
     if (user !== null) {
       const isPasswordValid = await bcrypt.compare(input.password, user.password);
@@ -84,7 +84,7 @@ export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token
     }
   } catch (error) {
     console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + input.id);
+    throw new ApolloError('Error retrieving user with id: ' + input._id);
   }
 };
 
@@ -94,16 +94,16 @@ export const loginUser = async ({ dbConn, token }, input: User): Promise<{ token
  * @param id user id
  * @returns {User | null} user or null
  */
-export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<User> => {
+export const getUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> => {
   let user;
 
   loginRequired(loggedIn);
 
   try {
-    user = (await UserModel(dbConn).findById(id)) as User;
+    user = (await UserModel(dbConn).findById(_id)) as User;
   } catch (error) {
     console.error('> getUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + id);
+    throw new ApolloError('Error retrieving user with _id: ' + _id);
   }
 
   return user;
@@ -134,16 +134,16 @@ export const getUserByEmail = async ({ dbConn }: Context, email: string): Promis
  * @param id user id
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async ({ dbConn, loggedIn }, id: string): Promise<User> => {
+export const deleteUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> => {
   let deletedUser;
 
   loginRequired(loggedIn);
 
   try {
-    deletedUser = (await UserModel(dbConn).findByIdAndRemove(id)) as User;
+    deletedUser = (await UserModel(dbConn).findByIdAndRemove(_id)) as User;
   } catch (error) {
     console.error('> deleteUser error: ', error);
-    throw new ApolloError('Error deleting user with id: ' + id);
+    throw new ApolloError('Error deleting user with _id: ' + _id);
   }
 
   return deletedUser;
@@ -162,7 +162,7 @@ export const updateUser = async ({ dbConn, loggedIn }, args: User): Promise<User
 
   try {
     updatedUser = (await UserModel(dbConn).findByIdAndUpdate(
-      args.id,
+      args._id,
       {
         name: args.name,
         email: args.email,
@@ -171,7 +171,7 @@ export const updateUser = async ({ dbConn, loggedIn }, args: User): Promise<User
     )) as User;
   } catch (error) {
     console.error('> updateUser error: ', error);
-    throw new ApolloError('Error updating user with id: ' + args.id);
+    throw new ApolloError('Error updating user with _id: ' + args._id);
   }
 
   return updatedUser;
