@@ -52,15 +52,15 @@ export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> =
  * @param id
  * @returns {Post}
  */
-export const getPosts = async ({ dbConn, loggedIn }): Promise<Post> => {
+export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).find()) as Post;
+    const post = (await PostModel(dbConn).find()) as Post[];
 
-    if (post === null) {
-      ERR_MESSAGE = 'Unable find posts';
+    if (!post.length) {
+      ERR_MESSAGE = 'No posts found';
       throw new Error(ERR_MESSAGE);
     }
     return post;
@@ -84,7 +84,7 @@ export const deletePost = async (
   loginRequired(loggedIn);
 
   try {
-    await PostModel(dbConn).findByIdAndRemove(id);
+    post = await PostModel(dbConn).findByIdAndRemove(id);
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }

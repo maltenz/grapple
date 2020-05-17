@@ -12,7 +12,7 @@ export const PostMutation = {
   },
   deletePost: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await deletePost(context, args.id);
+      return await deletePost(context, args);
     },
   },
 };
