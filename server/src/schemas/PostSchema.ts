@@ -9,14 +9,6 @@ export const PostSchema = gql`
     id: ID!
     user: UserQuery!
     post: Post!
-    shots: Shots
-    like: Like!
-    share: Share!
-    bookmark: Bookmark!
-  }
-
-  input PostInput {
-    user: ID!
   }
 
   extend type Query {
@@ -25,7 +17,7 @@ export const PostSchema = gql`
   }
 
   extend type Mutation {
-    createPost(input: PostInput!): Post
+    createPost: Post
     deletePost(id: String!): Post
   }
 `;

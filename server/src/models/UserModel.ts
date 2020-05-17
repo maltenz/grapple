@@ -19,6 +19,4 @@ export class User {
 
 const UserModel = getModelForClass(User);
 
-const collectionName = 'user';
-
-export default (conn: mongoose.Connection) => conn.model(collectionName, UserModel.schema);
+export default (conn: mongoose.Connection) => conn.model('User', UserModel.schema);

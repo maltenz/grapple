@@ -1,5 +1,4 @@
-import { createPost, deletePost } from '../controllers/PostController';
-import { createShot } from '../controllers/ShotController';
+import { createPost } from '../controllers/PostController';
 
 /**
  * @description holds post mutations
@@ -8,12 +7,13 @@ import { createShot } from '../controllers/ShotController';
 export const PostMutation = {
   createPost: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await createPost(context, args.input);
+      return await createPost(context);
     },
   },
   deletePost: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await deletePost(context, args.id);
+      return null;
+      // return await deletePost(context, args.id);
     },
   },
 };

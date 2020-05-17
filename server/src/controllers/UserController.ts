@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';
 import { Context } from 'vm';
-import { Post } from '../models/PostModel';
 
 /**
  * creates user
@@ -12,7 +11,7 @@ import { Post } from '../models/PostModel';
  * @param args user
  * @returns {User} created user
  */
-export const createUser = async ({ dbConn }, args: User): Promise<User> => {
+export const createUser = async ({ dbConn }: Context, args: User): Promise<User> => {
   let createdUser;
 
   try {
