@@ -11,7 +11,7 @@ import { Context } from 'vm';
  * @param args user
  * @returns {User} created user
  */
-export const createUser = async ({ dbConn }, args: any): Promise<User> => {
+export const createUser = async ({ dbConn }, args: User): Promise<User> => {
   let createdUser;
 
   try {
@@ -89,8 +89,6 @@ export const loginUser = async ({ dbConn, token }, input): Promise<{ token: stri
     console.error('> loginUser error: ', error);
     throw new ApolloError('Error retrieving user with id: ' + input.id);
   }
-
-  return user;
 };
 
 /**

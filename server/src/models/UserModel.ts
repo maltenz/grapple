@@ -1,19 +1,20 @@
 import mongoose from 'mongoose';
 import { prop, getModelForClass } from '@typegoose/typegoose';
 import { Post } from './PostModel';
-/**
- * @description holds user model
- */
 
 /**
- * User interface
+ * User interface constructor
  */
 export class User {
   @prop()
   public id?: string;
+  @prop()
   public name?: string;
+  @prop()
   public password?: string;
+  @prop()
   public email?: string;
+  @prop()
   public posts?: Array<Post>;
   public transform?: () => User;
 }

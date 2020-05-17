@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
 import { User } from './UserModel';
 import { IShot } from './ShotModel';
 import { ILike } from './LikeModel';
@@ -7,16 +7,13 @@ import { IShare } from './ShareModel';
 import { IBookmark } from './BookmarkModel';
 
 /**
- * @description holds post model
- */
-
-/**
- * Post interface
+ * Post interface constructor
  */
 export class Post {
   @prop()
   public id?: string;
-  public user?: User | string;
+  @prop({ ref: User })
+  public user?: Ref<User>;
   public transform?: () => Post;
   // public shots?: {
   //   list: Array<string>;
