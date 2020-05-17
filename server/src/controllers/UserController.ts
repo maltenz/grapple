@@ -14,24 +14,25 @@ export const createUser = async (
   { dbConn }: Context,
   { name, email, password }: { name: string; email: string; password: string }
 ): Promise<User> => {
-  let createdUser;
-
+  let ERR_MESSAGE;
   try {
     const user = (await UserModel(dbConn).findOne({ email })) as User;
 
-    if (user) {
-      throw new Error('Email already in use');
+    if (user?._id) {
+      ERR_MESSAGE = 'Email already in use';
+      throw new Error(ERR_MESSAGE);
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    createdUser = await UserModel(dbConn).create({ password: hashedPassword });
+    return await UserModel(dbConn).create({
+      name,
+      email,
+      password: hashedPassword,
+    });
   } catch (error) {
-    console.error('> createUser error: ', error);
-    throw new ApolloError('Error saving user with name: ' + name);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
-
-  return createdUser;
 };
 
 /**
@@ -41,8 +42,9 @@ export const createUser = async (
  */
 export const loginUser = async (
   { dbConn, token },
-  { id, email, password }: { id: string; email: string; password: string }
+  { email, password }: { email: string; password: string }
 ): Promise<{ token: string }> => {
+  let ERR_MESSAGE;
   let user;
 
   try {
@@ -51,7 +53,8 @@ export const loginUser = async (
     if (user !== null) {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new Error('Incorrect Password');
+        ERR_MESSAGE = 'Incorrect Password';
+        throw new Error(ERR_MESSAGE);
       }
       const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
       const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
@@ -59,11 +62,11 @@ export const loginUser = async (
 
       return { token };
     } else {
-      throw new Error('User not found');
+      ERR_MESSAGE = 'User not found';
+      throw new Error(ERR_MESSAGE);
     }
   } catch (error) {
-    console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + id);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 };
 
@@ -72,6 +75,7 @@ export const loginUser = async (
  * @returns {User[]}
  */
 export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> => {
+  let ERR_MESSAGE;
   let list;
 
   loginRequired(loggedIn);
@@ -81,11 +85,11 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
     if (list !== null && list.length > 0) {
       list = list.map((user) => user);
     } else {
-      throw new ApolloError('No users found');
+      ERR_MESSAGE = 'No user found';
+      throw new ApolloError(ERR_MESSAGE);
     }
   } catch (error) {
-    console.error('> getUsers error: ', error);
-    throw new ApolloError('Error retrieving all users');
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 
   return list;
@@ -97,15 +101,20 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
  * @returns {User}
  */
 export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promise<User> => {
+  let ERR_MESSAGE;
   let user;
 
   loginRequired(loggedIn);
 
   try {
     user = (await UserModel(dbConn).findById(id)) as User;
+
+    if (!user) {
+      ERR_MESSAGE = 'No user found';
+      throw new ApolloError(ERR_MESSAGE);
+    }
   } catch (error) {
-    console.error('> getUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + id);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 
   return user;
@@ -120,15 +129,20 @@ export const getUserByEmail = async (
   { dbConn, loggedIn }: Context,
   email: string
 ): Promise<User> => {
+  let ERR_MESSAGE;
   let user;
 
   loginRequired(loggedIn);
 
   try {
     user = (await UserModel(dbConn).findOne({ email })) as User;
+
+    if (!user?._id) {
+      ERR_MESSAGE = 'No email found';
+      throw new ApolloError(ERR_MESSAGE);
+    }
   } catch (error) {
-    console.error('> getUser error: ', error);
-    throw new ApolloError('Error retrieving user with email: ' + email);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 
   return user;
@@ -141,8 +155,9 @@ export const getUserByEmail = async (
  */
 export const deleteUser = async (
   { dbConn, loggedIn }: Context,
-  { id, email, password }: { id: string; email: string; password: string }
+  { email, password }: { email: string; password: string }
 ): Promise<User> => {
+  let ERR_MESSAGE;
   let user;
 
   loginRequired(loggedIn);
@@ -153,16 +168,17 @@ export const deleteUser = async (
     if (user !== null) {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new Error('Incorrect Password');
+        ERR_MESSAGE = 'Incorrect Password';
+        throw new Error(ERR_MESSAGE);
       }
 
       user = await UserModel(dbConn).findByIdAndRemove(user._id);
     } else {
+      ERR_MESSAGE = 'Wrong email';
       throw new Error('Wrong email');
     }
   } catch (error) {
-    console.error('> loginUser error: ', error);
-    throw new ApolloError('Error retrieving user with id: ' + id);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 
   return user;

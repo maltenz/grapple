@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/UserModel';
+import UserModel, { User } from '../models/UserModel';
 import { IncomingMessage } from 'http';
 import { getUserByEmail } from '../controllers/UserController';
 
@@ -28,10 +28,8 @@ const authenticate = async (
     }
 
     const jwtPayload = jwt.verify(myBearer, process.env.JWT_SECRET_KEY || 'mysecretkey');
-    const user = (await getUserByEmail(
-      { dbConn, loggedIn: true, user: {} },
-      jwtPayload.email
-    )) as User;
+
+    const user = (await UserModel(dbConn).findOne({ email: jwtPayload.email })) as User;
 
     return {
       loggedIn: user?._id ? true : false,

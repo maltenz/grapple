@@ -7,14 +7,21 @@ import loginRequired from '../helper/loginRequired';
  * @param context
  * @returns {Post}
  */
-export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
+export const createPost = async ({ dbConn, loggedIn, user: propUser }: Context): Promise<Post> => {
+  let ERR_MESSAGE;
   loginRequired(loggedIn);
 
+  let user;
+
   try {
-    return (await PostModel(dbConn).create({ user: user._id })) as Post;
+    user = (await PostModel(dbConn).create({ user: propUser._id })) as Post;
+    if (!user._id) {
+      ERR_MESSAGE = 'Unable to save post';
+      throw new Error(ERR_MESSAGE);
+    }
+    return user;
   } catch (error) {
-    console.error('> createPost error: ', error);
-    throw new ApolloError('Error saving post');
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 };
 
@@ -24,12 +31,19 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
  * @returns {Post}
  */
 export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
+  let ERR_MESSAGE;
   loginRequired(loggedIn);
 
+  let user;
+
   try {
-    return (await PostModel(dbConn).findById(id)) as Post;
+    user = (await PostModel(dbConn).findById(id)) as Post;
+    if (!user._id) {
+      ERR_MESSAGE = 'Unable find post';
+      throw new Error(ERR_MESSAGE);
+    }
+    return user;
   } catch (error) {
-    console.error('> getPost error: ', error);
-    throw new ApolloError('Error retrieving post with id: ' + id);
+    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
   }
 };
