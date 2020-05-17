@@ -8,7 +8,6 @@ export const PostSchema = gql`
   type Post {
     id: ID!
     user: UserQuery!
-    post: Post!
   }
 
   extend type Query {

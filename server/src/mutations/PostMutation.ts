@@ -1,4 +1,4 @@
-import { createPost } from '../controllers/PostController';
+import { createPost, deletePost } from '../controllers/PostController';
 
 /**
  * @description holds post mutations
@@ -12,8 +12,7 @@ export const PostMutation = {
   },
   deletePost: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return null;
-      // return await deletePost(context, args.id);
+      return await deletePost(context, args.id);
     },
   },
 };
