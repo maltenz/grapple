@@ -8,6 +8,19 @@ export const ShotSchema = gql`
   type Shot {
     id: ID!
     user: UserQuery!
+    post: Post!
+    title: String
+    content: String
+    image: String
+    order: Int!
+  }
+
+  input ShotInput {
+    postId: ID!
+    title: String
+    content: String
+    image: String
+    order: Int!
   }
 
   extend type Query {
@@ -16,7 +29,7 @@ export const ShotSchema = gql`
   }
 
   extend type Mutation {
-    createShot: Shot
+    createShot(input: ShotInput): Shot
     deleteShot(id: String!): Shot
   }
 `;
