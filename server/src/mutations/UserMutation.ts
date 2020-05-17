@@ -22,7 +22,7 @@ export const UserMutation = {
   },
   deleteUser: {
     resolve: async (parent, args, context, info): Promise<any> => {
-      return await deleteUser(context, args.id);
+      return await deleteUser(context, args.input);
     },
   },
 };

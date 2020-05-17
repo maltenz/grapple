@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';
 import { Context } from 'vm';
+import { Post } from '../models/PostModel';
 
 /**
  * creates user
@@ -115,8 +116,13 @@ export const getUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> 
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async ({ dbConn }: Context, email: string): Promise<User> => {
+export const getUserByEmail = async (
+  { dbConn, loggedIn }: Context,
+  email: string
+): Promise<User> => {
   let user;
+
+  loginRequired(loggedIn);
 
   try {
     user = (await UserModel(dbConn).findOne({ email })) as User;
@@ -131,22 +137,34 @@ export const getUserByEmail = async ({ dbConn }: Context, email: string): Promis
 /**
  * deletes user
  * @param context
- * @param id user id
+ * @param email
+ * @param password
  * @returns {User | null} deleted user or null
  */
-export const deleteUser = async ({ dbConn, loggedIn }, _id: string): Promise<User> => {
-  let deletedUser;
+export const deleteUser = async ({ dbConn, loggedIn }, input: User): Promise<User> => {
+  let user;
 
   loginRequired(loggedIn);
 
   try {
-    deletedUser = (await UserModel(dbConn).findByIdAndRemove(_id)) as User;
+    user = (await UserModel(dbConn).findOne({ email: input.email })) as User;
+
+    if (user !== null) {
+      const isPasswordValid = await bcrypt.compare(input.password, user.password);
+      if (!isPasswordValid) {
+        throw new Error('Incorrect Password');
+      }
+
+      user = await UserModel(dbConn).findByIdAndRemove(user._id);
+    } else {
+      throw new Error('Wrong email');
+    }
   } catch (error) {
-    console.error('> deleteUser error: ', error);
-    throw new ApolloError('Error deleting user with _id: ' + _id);
+    console.error('> loginUser error: ', error);
+    throw new ApolloError('Error retrieving user with id: ' + input._id);
   }
 
-  return deletedUser;
+  return user;
 };
 
 /**
