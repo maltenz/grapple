@@ -31,7 +31,7 @@ const authenticate = async (
     const user = (await getUserByEmail({ dbConn }, jwtPayload.email)) as User;
 
     return {
-      loggedIn: user._id ? true : false,
+      loggedIn: user?._id ? true : false,
       user,
     };
   } catch (error) {
