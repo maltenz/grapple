@@ -121,8 +121,13 @@ export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promis
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async ({ dbConn }: Context, email: string): Promise<User> => {
+export const getUserByEmail = async (
+  { dbConn, loggedIn }: Context,
+  email: string
+): Promise<User> => {
   let user;
+
+  loginRequired(loggedIn);
 
   try {
     user = (await UserModel(dbConn).findOne({ email: email })) as User;
