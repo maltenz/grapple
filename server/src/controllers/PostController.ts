@@ -15,13 +15,13 @@ export const createPost = async ({ dbConn, loggedIn, user: propUser }: Context):
 
   try {
     post = (await PostModel(dbConn).create({ user: propUser._id })) as Post;
-    if (!post) {
+    if (post === null) {
       ERR_MESSAGE = 'Unable to save post';
       throw new Error(ERR_MESSAGE);
     }
     return post;
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 };
 
@@ -30,13 +30,18 @@ export const createPost = async ({ dbConn, loggedIn, user: propUser }: Context):
  * @param id
  * @returns {Post}
  */
-export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
-  const ERR_MESSAGE = 'Unable find post';
+export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post | void> => {
+  let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    return (await PostModel(dbConn).findById(id)) as Post;
+    const post = (await PostModel(dbConn).findById(id)) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'Unable find post';
+      throw new Error(ERR_MESSAGE);
+    }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 };
