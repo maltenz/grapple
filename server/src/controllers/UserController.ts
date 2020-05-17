@@ -31,7 +31,7 @@ export const createUser = async (
       password: hashedPassword,
     });
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 };
 
@@ -50,7 +50,10 @@ export const loginUser = async (
   try {
     user = (await UserModel(dbConn).findOne({ email: email })) as User;
 
-    if (user !== null) {
+    if (user === null) {
+      ERR_MESSAGE = 'Email not found';
+      throw new Error(ERR_MESSAGE);
+    } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         ERR_MESSAGE = 'Incorrect Password';
@@ -61,12 +64,9 @@ export const loginUser = async (
       token = myToken;
 
       return { token };
-    } else {
-      ERR_MESSAGE = 'User not found';
-      throw new Error(ERR_MESSAGE);
     }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 };
 
@@ -84,12 +84,13 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
     list = (await UserModel(dbConn).find()) as User;
     if (list !== null && list.length > 0) {
       list = list.map((user) => user);
-    } else {
+    }
+    if (list === null) {
       ERR_MESSAGE = 'No user found';
       throw new ApolloError(ERR_MESSAGE);
     }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 
   return list;
@@ -108,13 +109,12 @@ export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promis
 
   try {
     user = (await UserModel(dbConn).findById(id)) as User;
-
-    if (!user) {
+    if (user === null) {
       ERR_MESSAGE = 'No user found';
       throw new ApolloError(ERR_MESSAGE);
     }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 
   return user;
@@ -136,13 +136,12 @@ export const getUserByEmail = async (
 
   try {
     user = (await UserModel(dbConn).findOne({ email })) as User;
-
-    if (!user?._id) {
+    if (user === null) {
       ERR_MESSAGE = 'No email found';
       throw new ApolloError(ERR_MESSAGE);
     }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 
   return user;
@@ -178,7 +177,7 @@ export const deleteUser = async (
       throw new Error('Wrong email');
     }
   } catch (error) {
-    throw new ApolloError(ERR_MESSAGE ? ERR_MESSAGE : error);
+    throw new ApolloError(error);
   }
 
   return user;
