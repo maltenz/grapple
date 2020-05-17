@@ -6,7 +6,7 @@ import { gql } from 'apollo-server';
 
 export const UserSchema = gql`
   type User {
-    id: ID!
+    _id: ID!
     name: String!
     password: String!
     email: String!
@@ -14,7 +14,6 @@ export const UserSchema = gql`
   }
 
   type UserQuery {
-    id: ID!
     name: String!
     email: String!
     posts: [Post]
@@ -31,12 +30,10 @@ export const UserSchema = gql`
   }
 
   input loginUserInput {
-    id: String!
     password: String!
   }
 
   input UserInput {
-    id: String!
     name: String!
     email: String!
   }

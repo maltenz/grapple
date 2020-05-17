@@ -29,11 +29,11 @@ export const createPost = async (context: Context, args: Post): Promise<Post> =>
   try {
     const userId = userContext.id;
 
-    createdPostModel = await PostModel(dbConn).create({ user: userId });
+    createdPostModel = (await PostModel(dbConn).create({ user: userId })) as Post;
 
     if (createdPostModel) {
-      createdPost = (await PostModel(dbConn).findById(createdPostModel._id)) as Post;
-      createdPost = createdPost.transform();
+      createdPost = (await PostModel(dbConn).findById(createdPostModel.id)) as Post;
+      // createdPost = createdPost.transform();
     }
     // console.log('createdPost');
     // console.log(createdPost);
@@ -54,7 +54,7 @@ export const createPost = async (context: Context, args: Post): Promise<Post> =>
     // createdBookmark = (
     //   await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
     // ).transform();
-    return createdPost;
+    return createdPost.transform();
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');
