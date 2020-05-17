@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IPost } from './PostModel';
+import { Post } from './PostModel';
 
 /**
  * @description holds bookmark model
@@ -10,7 +10,7 @@ import { IPost } from './PostModel';
  */
 export interface IBookmark extends mongoose.Document {
   id: string;
-  post: IPost;
+  post: Post;
   transform: () => IBookmark;
 }
 

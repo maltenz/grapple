@@ -4,23 +4,25 @@ import UserModel, { User } from '../models/UserModel';
 import { IncomingMessage } from 'http';
 import { Context } from '../context';
 import { ApolloError } from 'apollo-server';
+import { getUser } from '../controllers/UserController';
 
 /**
  * @description get user from context
  */
 
-const getUserContext = async (dbConn: mongoose.Connection, user: User | null): Promise<User> => {
+const getUserContext = async (dbConn: mongoose.Connection, propUser: User): Promise<User> => {
   try {
-    let myUser;
+    let user;
 
-    if (user?.id) {
-      myUser = await UserModel(dbConn).findById(user.id);
+    if (propUser.id) {
+      user = await getUser({ dbConn, loggedIn: true }, propUser.id);
     }
 
-    if (!myUser) {
+    if (!propUser) {
       throw new ApolloError('Oops, please you must login to continue');
     }
-    return myUser;
+
+    return user;
   } catch (error) {
     console.log(error);
     throw error;

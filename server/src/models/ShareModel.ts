@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IPost } from './PostModel';
+import { Post } from './PostModel';
 import { User } from './UserModel';
 
 /**
@@ -12,7 +12,7 @@ import { User } from './UserModel';
 export interface IShare extends mongoose.Document {
   id: string;
   user: User;
-  post: IPost;
+  post: Post;
   transform: () => IShare;
 }
 

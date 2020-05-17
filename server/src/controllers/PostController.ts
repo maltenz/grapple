@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import PostModel, { IPost } from '../models/PostModel';
+import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
@@ -15,11 +15,10 @@ import BookmarkModel, { IBookmark } from '../models/BookmarkModel';
  * @param args post
  * @returns {Post} created post
  */
-export const createPost = async (
-  { dbConn, loggedIn, user: userContext }: Context,
-  args: IPost
-): Promise<any> => {
-  let createdPost: IPost;
+export const createPost = async (context: Context, args: Post): Promise<Post> => {
+  const { dbConn, loggedIn, user: userContext } = context;
+  let createdPostModel;
+  let createdPost;
   let createdShot: IShot;
   let createdLike: ILike;
   let createdShare: IShare;
@@ -28,47 +27,38 @@ export const createPost = async (
   loginRequired(loggedIn);
 
   try {
-    const user = await getUserContext(dbConn, userContext);
-    const userId = user.id;
+    const userId = userContext.id;
 
-    createdPost = (await PostModel(dbConn).create({ ...args, user: userId })).transform();
+    createdPostModel = await PostModel(dbConn).create({ user: userId });
 
-    const createdPostData = {
-      user: user.id,
-      post: createdPost.id,
-    };
+    if (createdPostModel) {
+      createdPost = (await PostModel(dbConn).findById(createdPostModel._id)) as Post;
+      createdPost = createdPost.transform();
+    }
+    // console.log('createdPost');
+    // console.log(createdPost);
 
-    createdShot = (
-      await ShotModel(dbConn).create({ ...args, ...createdPostData, order: 0 })
-    ).transform();
+    // const createdPostData = {
+    //   user: user.id,
+    //   post: createdPost.id,
+    // };
 
-    createdLike = (await LikeModel(dbConn).create({ ...args, ...createdPostData })).transform();
+    // createdShot = (
+    //   await ShotModel(dbConn).create({ ...args, ...createdPostData, order: 0 })
+    // ).transform();
 
-    createdShare = (await ShareModel(dbConn).create({ ...args, ...createdPostData })).transform();
+    // createdLike = (await LikeModel(dbConn).create({ ...args, ...createdPostData })).transform();
 
-    createdBookmark = (
-      await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
-    ).transform();
+    // createdShare = (await ShareModel(dbConn).create({ ...args, ...createdPostData })).transform();
 
-    return await PostModel(dbConn).findByIdAndUpdate(createdPost.id, {
-      // @ts-ignore
-      shots: {
-        list: [createdShot.id],
-        count: 0,
-      },
-      // @ts-ignore
-      like: createdLike.id,
-      // @ts-ignore
-      share: createdShare.id,
-      // @ts-ignore
-      bookmark: createdBookmark.id,
-    });
+    // createdBookmark = (
+    //   await BookmarkModel(dbConn).create({ ...args, ...createdPostData })
+    // ).transform();
+    return createdPost;
   } catch (error) {
     console.error('> createPost error: ', error);
     throw new ApolloError('Error saving post');
   }
-
-  return createdPost;
 };
 
 /**
@@ -76,13 +66,13 @@ export const createPost = async (
  * @param context
  * @returns {Post[]} post list
  */
-export const getPosts = async ({ dbConn, loggedIn }): Promise<any> => {
-  let list: IPost[];
+export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
+  let list;
 
   loginRequired(loggedIn);
 
   try {
-    list = await PostModel(dbConn).find();
+    list = (await PostModel(dbConn).find()) as Post;
     if (list !== null && list.length > 0) {
       list = list.map((post) => {
         return post.transform();
@@ -104,13 +94,13 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<any> => {
  * @param id post id
  * @returns {Post | null} post or null
  */
-export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
-  let post: IPost | null;
+export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
+  let post;
 
   loginRequired(loggedIn);
 
   try {
-    post = await PostModel(dbConn).findById(id);
+    post = (await PostModel(dbConn).findById(id)) as Post;
     if (post !== null) {
       post = post.transform();
     }
@@ -128,13 +118,13 @@ export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<any> =>
  * @param id post id
  * @returns {User | null} deleted post or null
  */
-export const deletePost = async ({ dbConn, loggedIn }, id: string): Promise<any> => {
-  let deletedPost: IPost | null;
+export const deletePost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
+  let deletedPost;
 
   loginRequired(loggedIn);
 
   try {
-    deletedPost = await PostModel(dbConn).findByIdAndRemove(id);
+    deletedPost = (await PostModel(dbConn).findByIdAndRemove(id)) as Post;
     if (deletedPost !== null) {
       deletedPost = deletedPost.transform();
     }

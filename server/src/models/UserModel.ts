@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { prop, getModelForClass } from '@typegoose/typegoose';
-import { IPost } from './PostModel';
-
+import { Post } from './PostModel';
 /**
  * @description holds user model
  */
@@ -15,6 +14,7 @@ export class User {
   public name?: string;
   public password?: string;
   public email?: string;
+  public posts?: Array<Post>;
   public transform?: () => User;
 }
 

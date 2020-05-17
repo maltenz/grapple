@@ -3,11 +3,34 @@ import { ApolloError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';
+import { Context } from 'vm';
 
 /**
- *
- * @description holds crud operations for the user entity
+ * creates user
+ * @param context
+ * @param args user
+ * @returns {User} created user
  */
+export const createUser = async ({ dbConn }, args: any): Promise<User> => {
+  let createdUser;
+
+  try {
+    const user = (await UserModel(dbConn).findOne({ email: args.email })) as User;
+
+    if (user) {
+      throw new Error('Email already in use');
+    }
+
+    const hashedPassword = await bcrypt.hash(args.password, 12);
+
+    await UserModel(dbConn).create({ ...args, password: hashedPassword });
+  } catch (error) {
+    console.error('> createUser error: ', error);
+    throw new ApolloError('Error saving user with name: ' + args.name);
+  }
+
+  return createdUser;
+};
 
 /**
  * gets all users
@@ -100,42 +123,20 @@ export const getUser = async ({ dbConn, loggedIn }, id: string): Promise<User> =
  * @param email user
  * @returns {User | null} user or null
  */
-export const getUserByEmail = async ({ dbConn, loggedIn }, email: string): Promise<User> => {
-  loginRequired(loggedIn);
+export const getUserByEmail = async ({ dbConn }: Context, email: string): Promise<User> => {
+  let user;
 
   try {
-    return (await UserModel(dbConn).findOne({ email })) as User;
+    user = (await UserModel(dbConn).findOne({ email })) as User;
+    if (user !== null) {
+      user = user.transform();
+    }
   } catch (error) {
     console.error('> getUser error: ', error);
     throw new ApolloError('Error retrieving user with email: ' + email);
   }
-};
 
-/**
- * creates user
- * @param context
- * @param args user
- * @returns {User} created user
- */
-export const createUser = async ({ dbConn }, args: any): Promise<User> => {
-  let createdUser;
-
-  try {
-    const user = (await UserModel(dbConn).findOne({ email: args.email })) as User;
-
-    if (user) {
-      throw new Error('Email already in use');
-    }
-
-    const hashedPassword = await bcrypt.hash(args.password, 12);
-
-    await UserModel(dbConn).create({ ...args, password: hashedPassword });
-  } catch (error) {
-    console.error('> createUser error: ', error);
-    throw new ApolloError('Error saving user with name: ' + args.name);
-  }
-
-  return createdUser;
+  return user;
 };
 
 /**

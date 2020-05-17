@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 import { User } from './UserModel';
 import { IShot } from './ShotModel';
 import { ILike } from './LikeModel';
@@ -12,55 +13,30 @@ import { IBookmark } from './BookmarkModel';
 /**
  * Post interface
  */
-export interface IPost extends mongoose.Document {
-  id: string;
-  user: User | string;
-  shots: {
-    list: Array<string>;
-    count: number;
-  };
-  like: ILike | string;
-  share: IShare | string;
-  bookmark: IBookmark | string;
-  transform: () => IPost;
+export class Post {
+  @prop()
+  public id?: string;
+  public user?: User | string;
+  public transform?: () => Post;
+  // public shots?: {
+  //   list: Array<string>;
+  //   count: number;
+  // };
+  // public like?: ILike | string;
+  // public share?: IShare | string;
+  // public bookmark?: IBookmark | string;
 }
 
-/**
- * post schema
- */
-const schema: mongoose.SchemaDefinition = {
-  user: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'User',
-  },
-  shots: {
-    list: [mongoose.SchemaTypes.String],
-    count: mongoose.SchemaTypes.Number,
-  },
-  like: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'Like',
-  },
-  share: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'Share',
-  },
-  bookmark: {
-    type: mongoose.SchemaTypes.String,
-    ref: 'Bookmark',
-  },
-};
+const PostModel = getModelForClass(Post);
 
 // post collection name
 const collectionName = 'post';
-
-const postSchema: mongoose.Schema = new mongoose.Schema(schema);
 
 /**
  * transforms post object
  * changes _id to id
  */
-postSchema.methods.transform = function (): any {
+PostModel.schema.methods.transform = function (): any {
   const obj = this.toObject();
 
   const id = obj._id;
@@ -75,7 +51,4 @@ postSchema.methods.transform = function (): any {
  * @param conn database connection
  * @returns post model
  */
-const PostModel = (conn: mongoose.Connection): mongoose.Model<IPost> =>
-  conn.model(collectionName, postSchema);
-
-export default PostModel;
+export default (conn: mongoose.Connection) => conn.model(collectionName, PostModel.schema);
