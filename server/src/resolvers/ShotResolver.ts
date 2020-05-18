@@ -27,20 +27,12 @@ export const ShotResolver: IResolvers = {
       }
     },
     post: async (parent, args, context: Context, info): Promise<Post> => {
-      console.log(parent);
       try {
-        return await getPost(context, parent.post.id);
+        return await getPost(context, parent.post);
       } catch (error) {
         console.log(error);
         throw error;
       }
     },
-    // shots: async (parent, args, context: Context, info): Promise<Shot[]> => {
-    //   try {
-    //     return await getShots(context, parent.post.id);
-    //   } catch (error) {
-    //     throw new ApolloError(error);
-    //   }
-    // },
   },
 };
