@@ -6,7 +6,8 @@ import { Post } from './PostModel';
  * User interface constructor
  */
 export class User {
-  _id?: mongoose.Types.ObjectId;
+  @prop()
+  public _id?: string;
   @prop()
   public name?: string;
   @prop()
@@ -19,4 +20,5 @@ export class User {
 
 const UserModel = getModelForClass(User);
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default (conn: mongoose.Connection) => conn.model('User', UserModel.schema);

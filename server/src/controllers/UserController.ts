@@ -25,11 +25,11 @@ export const createUser = async (
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    return await UserModel(dbConn).create({
+    return (await UserModel(dbConn).create({
       name,
       email,
       password: hashedPassword,
-    });
+    })) as User;
   } catch (error) {
     throw new ApolloError(error);
   }

@@ -4,6 +4,8 @@ import { IResolvers } from 'apollo-server';
 import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
 import { getShots } from '../controllers/ShotController';
+import { User } from '../models/UserModel';
+import { Shot } from '../models/ShotModel';
 
 /**
  * @description holds post resolver
@@ -13,7 +15,7 @@ export const PostResolver: IResolvers = {
   Query: PostQuery,
   Mutation: PostMutation,
   Post: {
-    user: async (parent, args, context: Context, info) => {
+    user: async (parent, args, context: Context, info): Promise<User> => {
       try {
         return await getUser(context, parent.user);
       } catch (error) {
@@ -21,7 +23,7 @@ export const PostResolver: IResolvers = {
         throw error;
       }
     },
-    shots: async (parent, args, context: Context, info) => {
+    shots: async (parent, args, context: Context, info): Promise<Shot[]> => {
       try {
         return await getShots(context, parent._id);
       } catch (error) {

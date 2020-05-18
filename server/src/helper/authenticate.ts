@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import UserModel, { User } from '../models/UserModel';
 import { IncomingMessage } from 'http';
-import { getUserByEmail } from '../controllers/UserController';
 
 /**
  * @description authenicates user

@@ -8,7 +8,8 @@ import { Shot } from './ShotModel';
  */
 
 export class Post {
-  _id?: mongoose.Types.ObjectId;
+  @prop()
+  public _id?: string;
   @prop({ ref: User })
   public user?: Ref<User>;
   @arrayProp({ items: Shot })
@@ -17,4 +18,5 @@ export class Post {
 
 const PostModel = getModelForClass(Post);
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default (conn: mongoose.Connection) => conn.model('Post', PostModel.schema);

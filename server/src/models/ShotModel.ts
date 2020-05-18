@@ -7,7 +7,8 @@ import { Post } from './PostModel';
  * Shot interface constructor
  */
 export class Shot {
-  _id?: mongoose.Types.ObjectId;
+  @prop()
+  public _id?: string;
   @prop({ ref: User })
   public user?: Ref<User>;
   @prop()
@@ -24,4 +25,5 @@ export class Shot {
 
 const ShotModel = getModelForClass(Shot);
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default (conn: mongoose.Connection) => conn.model('Shot', ShotModel.schema);
