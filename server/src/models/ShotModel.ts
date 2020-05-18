@@ -10,10 +10,10 @@ export class Shot {
   _id?: mongoose.Types.ObjectId;
   @prop({ ref: User })
   public user?: Ref<User>;
-  @prop({ ref: Post })
-  public post?: Ref<Post>;
   @prop()
   public title?: string;
+  @prop()
+  public postId?: string;
   @prop()
   public content?: string;
   @prop()

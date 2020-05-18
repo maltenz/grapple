@@ -2,6 +2,7 @@ import ShotModel, { Shot } from '../models/ShotModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
+import { Post } from '../models/PostModel';
 
 /**
  * @param context
@@ -29,10 +30,12 @@ export const createShot = async (
 
   let shot;
 
+  console.log(postId);
+
   try {
     shot = (await ShotModel(dbConn).create({
       user: user._id,
-      post: postId,
+      postId,
       title,
       content,
       image,
@@ -73,15 +76,15 @@ export const getShot = async ({ dbConn, loggedIn }, id: string): Promise<Shot> =
 
 /**
  * @param context
- * @param id
+ * @param postId
  * @returns {Shot}
  */
-export const getShots = async ({ dbConn, loggedIn }): Promise<Shot[]> => {
+export const getShots = async ({ dbConn, loggedIn }, postId: Post): Promise<Shot[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    const shot = (await ShotModel(dbConn).find()) as Shot[];
+    const shot = (await ShotModel(dbConn).find({ postId })) as Shot[];
 
     if (!shot.length) {
       ERR_MESSAGE = 'No shots found';

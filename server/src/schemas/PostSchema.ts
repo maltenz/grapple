@@ -8,6 +8,7 @@ export const PostSchema = gql`
   type Post {
     id: ID!
     user: UserQuery!
+    shots: [Shot]!
   }
 
   extend type Query {

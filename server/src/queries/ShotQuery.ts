@@ -7,8 +7,8 @@ import { Shot } from '../models/ShotModel';
 
 export const ShotQuery = {
   shots: {
-    resolve: async (parent, args, context, info): Promise<any> => {
-      return await getShots(context);
+    resolve: async (parent, args, context, info): Promise<Shot[]> => {
+      return await getShots(context, args);
     },
   },
   shot: {

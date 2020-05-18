@@ -2,19 +2,46 @@ import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
+import { createShot } from './ShotController';
+import { mongoose } from '@typegoose/typegoose';
+import ShotModel from '../models/ShotModel';
 
 /**
  * @param context
  * @returns {Post}
  */
-export const createPost = async ({ dbConn, loggedIn, user: propPost }: Context): Promise<Post> => {
+export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   let post;
 
+  const tempValue = (mongoose.Types.ObjectId() as unknown) as string;
+
   try {
-    post = (await PostModel(dbConn).create({ user: propPost._id })) as Post;
+    const shot = await createShot(
+      { dbConn, loggedIn, user },
+      {
+        postId: tempValue,
+        title: 'Why read motivational sayings?',
+        content:
+          'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
+        image: 'https://source.unsplash.com/random/768x768',
+        order: 0,
+      }
+    );
+
+    post = (await PostModel(dbConn).create({
+      user,
+      shots: [shot._id],
+    })) as Post;
+
+    await ShotModel(dbConn).findOneAndUpdate(
+      { postId: tempValue },
+      { $set: { postId: post._id } },
+      { new: true }
+    );
+
     if (post === null) {
       ERR_MESSAGE = 'Unable to save post';
       throw new Error(ERR_MESSAGE);
