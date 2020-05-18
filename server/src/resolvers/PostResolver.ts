@@ -25,7 +25,7 @@ export const PostResolver: IResolvers = {
     },
     shots: async (parent, args, context: Context, info): Promise<Shot[]> => {
       try {
-        return await getShots(context, parent._id);
+        return await getShots(context, { id: parent._id });
       } catch (error) {
         throw new ApolloError(error);
       }
