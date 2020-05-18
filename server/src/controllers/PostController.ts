@@ -36,7 +36,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
       shots: [shot._id],
     })) as Post;
 
-    await ShotModel(dbConn).findOneAndUpdate(
+    await ShotModel(dbConn).updateMany(
       { postId: tempValue },
       { $set: { postId: post._id } },
       { new: true }
