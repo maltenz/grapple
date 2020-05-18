@@ -13,7 +13,7 @@ import { User } from './models/UserModel';
 export interface Context {
   dbConn: mongoose.Connection;
   loggedIn: boolean;
-  user: User;
+  user: User | null;
 }
 
 export const context = async (req): Promise<Context> => {

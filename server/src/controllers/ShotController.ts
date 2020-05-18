@@ -32,7 +32,7 @@ export const createShot = async (
 
   try {
     shot = (await ShotModel(dbConn).create({
-      user: user._id,
+      user: user?._id,
       postId,
       title,
       content,

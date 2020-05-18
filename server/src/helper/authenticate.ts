@@ -12,7 +12,7 @@ const authenticate = async (
   req: { req: IncomingMessage }
 ): Promise<{
   loggedIn: boolean;
-  user: User;
+  user: User | null;
 }> => {
   const bearer = req.req.headers.authorization || '';
 
@@ -22,7 +22,7 @@ const authenticate = async (
     if (!myBearer) {
       return {
         loggedIn: false,
-        user: {},
+        user: null,
       };
     }
 
