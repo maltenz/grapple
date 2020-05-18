@@ -7,8 +7,6 @@ import { getUser } from '../controllers/UserController';
 import { getPost } from '../controllers/PostController';
 import { User } from '../models/UserModel';
 import { Post } from '../models/PostModel';
-import { getShots } from '../controllers/ShotController';
-import { Shot } from '../models/ShotModel';
 
 /**
  * @description holds shot resolver
