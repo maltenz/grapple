@@ -77,7 +77,7 @@ export const getShot = async ({ dbConn, loggedIn }, id: string): Promise<Shot> =
  * @param post
  * @returns {Shot}
  */
-export const getShots = async ({ dbConn, loggedIn }, { id }: { id: string }): Promise<Shot[]> => {
+export const getShots = async ({ dbConn, loggedIn }, id: string): Promise<Shot[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
