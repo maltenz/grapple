@@ -3,7 +3,7 @@ import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import { createShot } from './ShotController';
+import { createShot, deleteShot } from './ShotController';
 import ShotModel from '../models/ShotModel';
 
 /**
@@ -33,7 +33,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
 
     post = (await PostModel(dbConn).create({
       user,
-      shots: [shot._id],
+      shots: [shot._id, shot._id],
     })) as Post;
 
     await ShotModel(dbConn).updateMany(
@@ -101,17 +101,20 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
  * @param {id}
  * @returns {Post}
  */
-export const deletePost = async (
-  { dbConn, loggedIn }: Context,
-  { id }: { id: string }
-): Promise<Post> => {
+export const deletePost = async (context: Context, { id }: { id: string }): Promise<Post> => {
+  const { dbConn, loggedIn } = context;
   const ERR_MESSAGE = 'Unable to delete post';
   let post;
 
   loginRequired(loggedIn);
 
   try {
-    post = await PostModel(dbConn).findByIdAndRemove(id);
+    post = (await PostModel(dbConn).findByIdAndRemove(id)) as Post;
+    if (loggedIn === true) {
+      await post.shots.map(async (id) => {
+        await deleteShot(context, { id: id });
+      });
+    }
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
