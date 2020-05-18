@@ -1,6 +1,6 @@
+import { IResolvers } from 'apollo-server';
 import { UserQuery } from '../queries/UserQuery';
 import { UserMutation } from '../mutations/UserMutation';
-import { IResolvers } from 'apollo-server';
 
 /**
  * @description holds user resolver

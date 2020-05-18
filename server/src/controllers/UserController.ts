@@ -1,5 +1,5 @@
-import UserModel, { User } from '../models/UserModel';
 import { ApolloError } from 'apollo-server';
+import UserModel, { User } from '../models/UserModel';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';

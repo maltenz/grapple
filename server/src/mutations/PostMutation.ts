@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createPost, deletePost } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 

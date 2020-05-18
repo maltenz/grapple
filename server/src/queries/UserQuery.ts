@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getUsers, getUser, getUserByEmail } from '../controllers/UserController';
 import { User } from '../models/UserModel';
 

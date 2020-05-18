@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
 import { User } from './UserModel';
-import { Post } from './PostModel';
 
 /**
  * Shot interface constructor

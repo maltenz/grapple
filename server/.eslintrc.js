@@ -10,7 +10,6 @@ module.exports = {
   ],
   "rules": {
     "eqeqeq":["error", "always"],
-    "@typescript-eslint/no-unused-vars": "off",
    },
   "env": {
     "browser": true,

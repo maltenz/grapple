@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { IResolvers } from 'apollo-server';
 import { ShotQuery } from '../queries/ShotQuery';
 import { ShotMutation } from '../mutations/ShotMutation';
-import { IResolvers } from 'apollo-server';
 import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
 import { getPost } from '../controllers/PostController';

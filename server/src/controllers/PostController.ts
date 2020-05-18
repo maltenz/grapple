@@ -1,9 +1,9 @@
+import { mongoose } from '@typegoose/typegoose';
 import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import { createShot } from './ShotController';
-import { mongoose } from '@typegoose/typegoose';
 import ShotModel from '../models/ShotModel';
 
 /**

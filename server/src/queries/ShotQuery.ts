@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getShot, getShots } from '../controllers/ShotController';
 import { Shot } from '../models/ShotModel';
 

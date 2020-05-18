@@ -30,8 +30,6 @@ export const createShot = async (
 
   let shot;
 
-  console.log(postId);
-
   try {
     shot = (await ShotModel(dbConn).create({
       user: user._id,
