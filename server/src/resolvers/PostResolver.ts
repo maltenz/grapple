@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IResolvers } from 'apollo-server';
+import { IResolvers, ApolloError } from 'apollo-server';
 import { PostQuery } from '../queries/PostQuery';
 import { PostMutation } from '../mutations/PostMutation';
 import { Context } from '../context';
@@ -20,16 +20,14 @@ export const PostResolver: IResolvers = {
       try {
         return await getUser(context, parent.user);
       } catch (error) {
-        console.log(error);
-        throw error;
+        throw new ApolloError(error);
       }
     },
     shots: async (parent, args, context: Context, info): Promise<Shot[]> => {
       try {
-        return await getShots(context, parent._id);
+        return await getShots(context, parent);
       } catch (error) {
-        console.log(error);
-        throw error;
+        throw new ApolloError(error);
       }
     },
   },

@@ -24,7 +24,7 @@ export const ShotSchema = gql`
   }
 
   extend type Query {
-    shots: [Shot]
+    shots(id: String!): [Shot]
     shot(id: String!): Shot
   }
 
