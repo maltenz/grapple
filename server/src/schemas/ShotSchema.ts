@@ -16,7 +16,7 @@ export const ShotSchema = gql`
   }
 
   input ShotInput {
-    postId: ID!
+    post: ID!
     title: String
     content: String
     image: String

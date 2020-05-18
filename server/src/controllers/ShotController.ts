@@ -12,13 +12,13 @@ import { Post } from '../models/PostModel';
 export const createShot = async (
   { dbConn, loggedIn, user }: Context,
   {
-    postId,
+    post,
     title,
     content,
     image,
     order,
   }: {
-    postId: string;
+    post: Post;
     title: string;
     content: string;
     image: string;
@@ -33,7 +33,7 @@ export const createShot = async (
   try {
     shot = (await ShotModel(dbConn).create({
       user: user?._id,
-      postId,
+      post: post?._id,
       title,
       content,
       image,
@@ -74,15 +74,15 @@ export const getShot = async ({ dbConn, loggedIn }, id: string): Promise<Shot> =
 
 /**
  * @param context
- * @param postId
+ * @param post
  * @returns {Shot}
  */
-export const getShots = async ({ dbConn, loggedIn }, postId: Post): Promise<Shot[]> => {
+export const getShots = async ({ dbConn, loggedIn }, post: Post): Promise<Shot[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    const shot = (await ShotModel(dbConn).find({ postId })) as Shot[];
+    const shot = (await ShotModel(dbConn).find({ post })) as Shot[];
 
     if (!shot.length) {
       ERR_MESSAGE = 'No shots found';

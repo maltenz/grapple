@@ -16,13 +16,13 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
 
   let post;
 
-  const tempValue = (mongoose.Types.ObjectId() as unknown) as string;
+  const tempValue = (mongoose.Types.ObjectId() as unknown) as Post;
 
   try {
     const shot = await createShot(
       { dbConn, loggedIn, user },
       {
-        postId: tempValue,
+        post: tempValue,
         title: 'Why read motivational sayings?',
         content:
           'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
@@ -37,8 +37,8 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
     })) as Post;
 
     await ShotModel(dbConn).updateMany(
-      { postId: tempValue },
-      { $set: { postId: post._id } },
+      { post: tempValue },
+      { $set: { post: post._id } },
       { new: true }
     );
 

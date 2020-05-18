@@ -16,8 +16,6 @@ export class Shot {
   @prop()
   public title?: string;
   @prop()
-  public postId?: string;
-  @prop()
   public content?: string;
   @prop()
   public image?: string;

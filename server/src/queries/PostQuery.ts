@@ -22,7 +22,7 @@ export const PostQuery = {
   shots: {
     resolve: async (parent, args, context: Context, info): Promise<Shot[]> => {
       return parent.post.map(async (post) => {
-        return await ShotModel(context.dbConn).find({ postId: post._id });
+        return await ShotModel(context.dbConn).find({ post: post._id });
       });
     },
   },
