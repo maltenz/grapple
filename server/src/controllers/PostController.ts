@@ -46,6 +46,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
       ERR_MESSAGE = 'Unable to save post';
       throw new Error(ERR_MESSAGE);
     }
+
     return post;
   } catch (error) {
     throw new ApolloError(error);
@@ -66,8 +67,9 @@ export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> =
 
     if (post === null) {
       ERR_MESSAGE = 'Unable find post';
-      throw new Error(ERR_MESSAGE);
+      throw new ApolloError(ERR_MESSAGE);
     }
+
     return post;
   } catch (error) {
     throw new ApolloError(error);
@@ -88,8 +90,9 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
 
     if (!post.length) {
       ERR_MESSAGE = 'No posts found';
-      throw new Error(ERR_MESSAGE);
+      throw new ApolloError(ERR_MESSAGE);
     }
+
     return post;
   } catch (error) {
     throw new ApolloError(error);
@@ -104,12 +107,13 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
 export const deletePost = async (context: Context, { id }: { id: string }): Promise<Post> => {
   const { dbConn, loggedIn } = context;
   const ERR_MESSAGE = 'Unable to delete post';
-  let post;
-
   loginRequired(loggedIn);
+
+  let post;
 
   try {
     post = (await PostModel(dbConn).findByIdAndRemove(id)) as Post;
+
     if (loggedIn === true) {
       await post.shots.map(async (id) => {
         await deleteShot(context, { id: id });

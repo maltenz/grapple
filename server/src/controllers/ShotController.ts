@@ -39,6 +39,7 @@ export const createShot = async (
       image,
       order,
     })) as Shot;
+
     if (shot === null) {
       ERR_MESSAGE = 'Unable to save shot';
       throw new Error(ERR_MESSAGE);
@@ -86,7 +87,7 @@ export const getShots = async ({ dbConn, loggedIn }, { id }: { id: string }): Pr
 
     if (!shot.length) {
       ERR_MESSAGE = 'No shots found';
-      throw new Error(ERR_MESSAGE);
+      throw new ApolloError(ERR_MESSAGE);
     }
     return shot;
   } catch (error) {

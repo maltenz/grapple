@@ -15,12 +15,13 @@ export const createUser = async (
   { name, email, password }: { name: string; email: string; password: string }
 ): Promise<User> => {
   let ERR_MESSAGE;
+
   try {
     const user = (await UserModel(dbConn).findOne({ email })) as User;
 
     if (user?._id) {
       ERR_MESSAGE = 'Email already in use';
-      throw new Error(ERR_MESSAGE);
+      throw new ApolloError(ERR_MESSAGE);
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -52,15 +53,17 @@ export const loginUser = async (
 
     if (user === null) {
       ERR_MESSAGE = 'Email not found';
-      throw new Error(ERR_MESSAGE);
+      throw new ApolloError(ERR_MESSAGE);
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
+
       if (!isPasswordValid) {
         ERR_MESSAGE = 'Incorrect Password';
-        throw new Error(ERR_MESSAGE);
+        throw new ApolloError(ERR_MESSAGE);
       }
       const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
       const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
+
       token = myToken;
 
       return { token };
@@ -82,9 +85,11 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
 
   try {
     list = (await UserModel(dbConn).find()) as User;
+
     if (list !== null && list.length > 0) {
       list = list.map((user) => user);
     }
+
     if (list === null) {
       ERR_MESSAGE = 'No user found';
       throw new ApolloError(ERR_MESSAGE);
@@ -109,6 +114,7 @@ export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promis
 
   try {
     user = (await UserModel(dbConn).findById(id)) as User;
+
     if (user === null) {
       ERR_MESSAGE = 'No user found';
       throw new ApolloError(ERR_MESSAGE);
@@ -136,6 +142,7 @@ export const getUserByEmail = async (
 
   try {
     user = (await UserModel(dbConn).findOne({ email })) as User;
+
     if (user === null) {
       ERR_MESSAGE = 'No email found';
       throw new ApolloError(ERR_MESSAGE);
@@ -166,15 +173,16 @@ export const deleteUser = async (
 
     if (user !== null) {
       const isPasswordValid = await bcrypt.compare(password, user.password);
+
       if (!isPasswordValid) {
         ERR_MESSAGE = 'Incorrect Password';
-        throw new Error(ERR_MESSAGE);
+        throw new ApolloError(ERR_MESSAGE);
       }
 
       user = await UserModel(dbConn).findByIdAndRemove(user._id);
     } else {
       ERR_MESSAGE = 'Wrong email';
-      throw new Error('Wrong email');
+      throw new ApolloError('Wrong email');
     }
   } catch (error) {
     throw new ApolloError(error);
