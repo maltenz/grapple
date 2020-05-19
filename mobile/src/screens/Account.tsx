@@ -60,7 +60,12 @@ const Account: FC = () => {
         <Container>
           <MenuItem title="Notifications" onPress={(): void => Alert.alert('press')} />
           <MenuItem title="Security" onPress={(): void => Alert.alert('press')} />
-          <MenuItem title="Help" last onPress={(): void => Alert.alert('press')} />
+          <MenuItem title="Help" onPress={(): void => Alert.alert('press')} />
+          <MenuItem
+            title="Logout"
+            last
+            onPress={(): void => parentNavigation.navigate('OnboardingRoot')}
+          />
         </Container>
         <Container>
           <MenuItem title="Community Guidelines" onPress={(): void => Alert.alert('press')} />

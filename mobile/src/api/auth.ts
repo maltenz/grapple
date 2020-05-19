@@ -9,6 +9,14 @@ const CREATE_USER = gql`
   }
 `;
 
+const LOGIN_USER = gql`
+  mutation loginUser($email: String!, $password: String!) {
+    loginUser(input: { email: $email, password: $password }) {
+      token
+    }
+  }
+`;
+
 const GET_USER_BY_EMAIL = gql`
   query getUserByEmail($email: String!) {
     userByEmail(email: $email) {
@@ -18,4 +26,4 @@ const GET_USER_BY_EMAIL = gql`
   }
 `;
 
-export { CREATE_USER, GET_USER_BY_EMAIL };
+export { CREATE_USER, LOGIN_USER, GET_USER_BY_EMAIL };

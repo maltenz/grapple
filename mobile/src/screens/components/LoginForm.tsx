@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect } from 'react';
-import { Animated, Vibration, TextInput } from 'react-native';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { Animated, Vibration, TextInput, AsyncStorage } from 'react-native';
+import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
+import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
-import { GET_USER_BY_EMAIL } from '../../api';
+import { LOGIN_USER } from '../../api';
 
 import {
   ErrorInputInterpolationConfig,
@@ -15,26 +15,35 @@ import {
   REQUIRED_TEXT,
   SmallTextConfig,
 } from '../../assets/components/base/Text';
-
-import { UserType } from '../../types';
-
-import { userActions } from '../../store';
+import { ChildNavigationProp } from '../HomeRoot';
 
 type LoginFormData = {
   email: string;
   password: string;
 };
 
+const setToken = async (token: string): Promise<void> => {
+  try {
+    await AsyncStorage.setItem('token', token);
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
 const LoginForm: FC = () => {
-  const [getUserByEmail, { data }] = useLazyQuery<{ userByEmail: UserType }>(GET_USER_BY_EMAIL);
+  const [loginUser, { data }] = useMutation(LOGIN_USER);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
-  const dispatch = useDispatch();
+  const navigation = useNavigation<ChildNavigationProp>();
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    if (data?.userByEmail) {
-      dispatch(userActions.setUser({ ...data.userByEmail }));
+    if (data?.loginUser) {
+      const token = async (): Promise<void> => {
+        await setToken(data?.loginUser?.token);
+        navigation.navigate('HomeStack');
+      };
+      token();
     }
   }, [data]);
 
@@ -59,8 +68,8 @@ const LoginForm: FC = () => {
 
   const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
 
-  const onSubmit = ({ email }: LoginFormData): void => {
-    getUserByEmail({ variables: { email } });
+  const onSubmit = ({ email, password }: LoginFormData): void => {
+    loginUser({ variables: { email, password } });
   };
 
   return (

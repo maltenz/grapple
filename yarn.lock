@@ -990,11 +990,6 @@ execa@^4.0.0:
     signal-exit "^3.0.2"
     strip-final-newline "^2.0.0"
 
-expo-secure-store@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-8.1.0.tgz#1dcc4705c5264c828592a83842b8be8bbfb5f77f"
-  integrity sha512-EjCx9M2nH7iW3eNOjXl0I7oPypI0es6OStZakimR2iD8riLZp9LYHTj+39Iuz2o1m3OKi+bpwr3cHL52DxcDnA==
-
 external-editor@^3.0.3:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/external-editor/-/external-editor-3.1.0.tgz#cb03f740befae03ea4d283caed2741a83f335495"

@@ -1,9 +1,10 @@
-import _ from 'lodash';
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { FC } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
+import { useQuery } from '@apollo/react-hooks';
 import {
   Post,
   Color,
@@ -16,14 +17,12 @@ import {
 import { ParentNavigationProp } from './HomeRoot';
 
 import { NavigationLogo } from '../assets/components/base/Navigation';
-
-const TITLE = 'Why read motivational sayings?';
-const CONTENT =
-  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
+import { GET_POSTS } from '../api';
 
 const Home: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const inset = useSafeArea();
+  const { data } = useQuery(GET_POSTS);
 
   return (
     <>
@@ -45,9 +44,12 @@ const Home: FC = () => {
           paddingBottom: inset.bottom + SvgTabbarBackgroundHeight,
         }}
       >
-        {_.times(10, () => (
-          <Post key={_.uniqueId('id_')} gutter title={TITLE} content={CONTENT} />
-        ))}
+        {
+          // @ts-ignore
+          data?.posts.map(({ id, shots }) => (
+            <Post key={id} gutter title={shots[0].title} content={shots[0].content} />
+          ))
+        }
       </ScrollView>
     </>
   );
