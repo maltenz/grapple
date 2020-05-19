@@ -15,7 +15,7 @@
     "clear:server": "rm -rf server/node_modules",
     "clear:webapp": "rm -rf webapp/node_modules",
     "clear:mobile": "rm -rf mobile/node_modules",
-    "start:all": "concurrently \"yarn start:server\" \"yarn start:webapp\" \"yarn start:mobile\"",
+    "start": "concurrently \"yarn start:server\" \"yarn start:webapp\" \"yarn start:mobile\"",
     "clear:all": "concurrently \"yarn clear:dev\" \"yarn clear:server\" \"yarn clear:webapp\" \"yarn clear:mobile\"",
     "postinstall": "concurrently \"yarn install:server\" \"yarn install:webapp\" \"yarn install:mobile\"",
     "mobile:devtools": "cd mobile && yarn redux-devtools && cd ../"
