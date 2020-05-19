@@ -12,6 +12,9 @@ const apolloServer = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: context,
+  engine: {
+    apiKey: process.env.APOLLO_ENGINE,
+  },
   playground: {
     endpoint: '/graphql',
   },

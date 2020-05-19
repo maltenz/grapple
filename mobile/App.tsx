@@ -35,6 +35,7 @@ const client = new ApolloClient({
     const token = await AsyncStorage.getItem('token');
     // eslint-disable-next-line no-console
     console.log(`token ${token}`);
+
     operation.setContext({
       headers: {
         Authorization: token ? `Bearer ${token}` : '',
