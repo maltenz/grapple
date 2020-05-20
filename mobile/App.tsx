@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import AppRoot from './src/screens/AppRoot';
+import { resolvers, typeDefs } from './src/resolvers';
 import configureStore from './src/store/configureStore';
 import { Window } from './types';
 
@@ -31,6 +32,8 @@ const uri = process.env.DEV_DEVICE_IP
 const client = new ApolloClient({
   cache,
   uri,
+  typeDefs,
+  resolvers,
   request: async (operation: Operation): Promise<void> => {
     const token = await AsyncStorage.getItem('token');
     // eslint-disable-next-line no-console
@@ -43,6 +46,14 @@ const client = new ApolloClient({
         'client-version': '1.0.0',
       },
     });
+  },
+});
+
+cache.writeData({
+  data: {
+    counter: 0,
+    randomNumber: 0,
+    todos: [],
   },
 });
 
