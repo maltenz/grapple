@@ -31,7 +31,7 @@ const AppRoot: FC<NavigationProps> = () => {
     <>
       <StatusBar barStyle="light-content" />
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="HomeRoot" component={HomeRoot} />
+        {/* <Stack.Screen name="HomeRoot" component={HomeRoot} /> */}
         <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
       </Stack.Navigator>
     </>

@@ -1,0 +1,24 @@
+query GetCharacters {
+  characters {
+    __typename
+    results {
+      id
+      __typename
+      name
+      image
+      species
+      chosenQuantity @client
+      unitPrice @client
+      origin {
+        id
+        __typename
+        name
+      }
+      location {
+        id
+        __typename
+        name
+      }
+    }
+  }
+}

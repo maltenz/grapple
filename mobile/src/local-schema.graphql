@@ -1,0 +1,25 @@
+type Query {
+  shoppingCart: ShoppingCart!
+  getCharacter(id: ID!): Character
+}
+
+type Mutation {
+  increaseChosenQuantity(input: ChangeProductQuantity!): Boolean
+  decreaseChosenQuantity(input: ChangeProductQuantity!): Boolean
+}
+
+extend type Character {
+  chosenQuantity: Int!
+  unitPrice: Int!
+}
+
+type ShoppingCart {
+  id: ID!
+  totalPrice: Int!
+  numActionFigures: Int!
+}
+
+input ChangeProductQuantity {
+  id: ID!
+}
+

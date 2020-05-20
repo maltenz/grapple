@@ -47,6 +47,7 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
+
   const pagerStore = useSelector(layoutSelectors.pagerSelector);
 
   const [pagerAnim] = useState(new Animated.Value(0));

@@ -1,28 +1,35 @@
 import React, { FC, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 
 import { useMutation } from '@apollo/react-hooks';
-import { layoutActions } from '../store';
 
 import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
+
 import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
+// import { UPDATE_PAGER } from '../mutations/pager';
 
 const Onboarding2: FC = () => {
   const navigation = useNavigation<OnboardingRootNavigationProp>();
   const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
+  // const [updatePager] = useMutation(UPDATE_PAGER);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(layoutActions.updatePager({ activeIndex: 0, count: 4, visible: true }));
       updatePullModalVisibilty({
         variables: {
           visible: false,
         },
       });
+
+      // updatePager({
+      //   variables: {
+      //     activeIndex: 0,
+      //     count: 4,
+      //     visible: true,
+      //   },
+      // });
     });
 
     return unsubscribe;
