@@ -4,10 +4,10 @@ import { Text, View, Button } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
 import { TextInput } from 'react-native-gesture-handler';
-import { TODOS_QUERY } from '../queries/todosQueries';
-import { GET_COUNTER } from '../queries/counterQueries';
-import { UPDATE_COUNTER } from '../mutations/counterMutation';
-import { ADD_TODO_MUTATION, TOGGLE_TODO } from '../mutations/todosMutation';
+import { TODOS_QUERY } from '../queries/todo';
+import { GET_COUNTER } from '../queries/counter';
+import { UPDATE_COUNTER } from '../mutations/counter';
+import { ADD_TODO_MUTATION, TOGGLE_TODO } from '../mutations/todo';
 
 export const GET_ALERT_MESSAGE = gql`
   query GetRandomNumber {

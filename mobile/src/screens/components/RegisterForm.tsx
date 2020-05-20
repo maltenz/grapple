@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
 
-import { CREATE_USER } from '../../api';
+import { CREATE_USER } from '../../mutations/user';
 
 import {
   ErrorInputInterpolationConfig,

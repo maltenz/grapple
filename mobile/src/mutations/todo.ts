@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { gql } from 'apollo-boost';
-import { TODOS_QUERY } from '../queries/todosQueries';
+import { TODOS_QUERY } from '../queries/todo';
 
 export const ADD_TODO_MUTATION = gql`
   mutation AddTodo($todo: TODO!) {

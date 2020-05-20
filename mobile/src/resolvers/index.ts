@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
-import { CounterMutation } from '../mutations/counterMutation';
-import TodoMutations from '../mutations/todosMutation';
+import CounterMutation from '../mutations/counter';
+import TodoMutations from '../mutations/todo';
 
 export const typeDefs = gql`
   extend type Query {

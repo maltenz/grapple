@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { gql } from 'apollo-boost';
-import { GET_COUNTER } from '../queries/counterQueries';
+import { GET_COUNTER } from '../queries/counter';
 
 export const UPDATE_COUNTER = gql`
   mutation updateCounter($offset: Number!) {
@@ -8,7 +8,7 @@ export const UPDATE_COUNTER = gql`
   }
 `;
 
-export const CounterMutation = {
+ const CounterMutation = {
   // @ts-ignore
   updateCounter: (_, variables, { cache }) => {
     const data = cache.readQuery({ query: GET_COUNTER });
@@ -16,4 +16,6 @@ export const CounterMutation = {
     return null;
   },
 };
+
+export default CounterMutation
 /* eslint-enable */
