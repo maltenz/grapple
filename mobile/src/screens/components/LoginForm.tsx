@@ -7,7 +7,7 @@ import { useForm, EventFunction, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
-import { LOGIN_USER } from '../../api';
+import { LOGIN_USER } from '../../mutations/user';
 
 import {
   ErrorInputInterpolationConfig,

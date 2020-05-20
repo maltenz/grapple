@@ -17,13 +17,4 @@ const LOGIN_USER = gql`
   }
 `;
 
-const GET_USER_BY_EMAIL = gql`
-  query getUserByEmail($email: String!) {
-    userByEmail(email: $email) {
-      name
-      email
-    }
-  }
-`;
-
-export { CREATE_USER, LOGIN_USER, GET_USER_BY_EMAIL };
+export { CREATE_USER, LOGIN_USER };

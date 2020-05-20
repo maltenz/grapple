@@ -16,8 +16,9 @@ import {
 
 import { ParentNavigationProp } from './HomeRoot';
 
+import { GET_POSTS } from '../queries/post';
+
 import { NavigationLogo } from '../assets/components/base/Navigation';
-import { GET_POSTS } from '../api';
 
 const Home: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();

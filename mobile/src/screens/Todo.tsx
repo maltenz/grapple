@@ -21,8 +21,6 @@ function AddTodo() {
     variables: { todo: { text, completed: false } },
   });
 
-  console.log(text);
-
   return (
     <View>
       <TextInput
@@ -72,7 +70,6 @@ function Todo({ todo = {} }: any) {
   return (
     <View>
       <Text>{todo.text}</Text>
-
       <View
         style={{ height: 20, width: 20, backgroundColor: 'red' }}
         // @ts-ignore
