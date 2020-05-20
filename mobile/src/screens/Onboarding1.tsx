@@ -4,9 +4,11 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
+import { useMutation } from '@apollo/react-hooks';
 import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
 
 import { layoutActions } from '../store';
+import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
@@ -25,13 +27,18 @@ const ListRow: FC = ({ children }) => (
 
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
+  const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
   const dispatch = useDispatch();
   const navigation = useNavigation<OnboardingRootNavigationProp>();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       dispatch(layoutActions.updatePager({ activeIndex: 0, count: 4, visible: false }));
-      dispatch(layoutActions.setPullModalVisibilty(true));
+      updatePullModalVisibilty({
+        variables: {
+          visible: true,
+        },
+      });
     });
 
     return unsubscribe;
