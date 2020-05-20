@@ -54,6 +54,7 @@ cache.writeData({
     counter: 0,
     randomNumber: 0,
     todos: [],
+    pullModalVisible: false,
   },
 });
 

@@ -5,6 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import { useMutation } from '@apollo/react-hooks';
 
 import { BulletPager, AssetStyles } from '../assets';
 
@@ -20,6 +21,7 @@ import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
+import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
@@ -46,10 +48,20 @@ type NavigationProps = {
 const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
+  const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
+
   const inset = useSafeArea();
   const pagerStore = useSelector(layoutSelectors.pagerSelector);
 
   const [pagerAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    updatePullModalVisibilty({
+      variables: {
+        visible: true,
+      },
+    });
+  }, []);
 
   useEffect(() => {
     Animated.timing(pagerAnim, {
