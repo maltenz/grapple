@@ -1,4 +1,4 @@
-import ApolloClient, { Operation } from 'apollo-boost';
+import { ApolloClient, Operation } from 'apollo-boost';
 import { AsyncStorage } from 'react-native';
 import { localCache, initLocalCache } from './apollo-local-cache';
 import { localResolvers } from './apollo-resolvers';

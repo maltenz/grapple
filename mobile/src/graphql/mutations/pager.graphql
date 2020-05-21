@@ -1,0 +1,7 @@
+mutation UpdatePager($input: PagerInput!) {
+  updatePager(input: $input) @client {
+    activeIndex
+    count
+    visible
+  }
+}

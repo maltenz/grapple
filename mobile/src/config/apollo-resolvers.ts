@@ -1,15 +1,7 @@
-import getPager from '../resolvers/pager';
+import updatePager from '../resolvers/updatePager';
 
 export const localResolvers = {
-  Query: {
-    getPager,
+  Mutation: {
+    updatePager,
   },
-  // Mutation: {
-  //   increaseChosenQuantity,
-  //   decreaseChosenQuantity,
-  // },
-  // Character: {
-  //   chosenQuantity: (): number => 0,
-  //   unitPrice: setUnitPrice,
-  // },
 };

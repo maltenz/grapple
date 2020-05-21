@@ -4,14 +4,14 @@ import { ApolloClient } from 'apollo-boost';
 import { Context } from '@apollo/react-common';
 import { PagerDataFragmentDoc, PagerDataFragment, Pager } from '../generated/graphql';
 
-export default (
+export default function pager(
   root: any,
   variables: Pager,
   context: { cache: InMemoryCache; getCacheKey: any; client: ApolloClient<any> },
   info: any
-): Context | null => {
+): Context | null {
   return context.cache.readFragment<PagerDataFragment>({
     fragment: PagerDataFragmentDoc,
-    id: context.getCacheKey({ id: variables.id, __typename: 'Pager' }),
+    id: context.getCacheKey({ id: 'staticpagerid', __typename: 'Pager' }),
   });
-};
+}

@@ -1,26 +1,19 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import { useMutation } from '@apollo/react-hooks';
-
-// import { UPDATE_PAGER } from '../mutations/pager';
-
 import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
+import { useUpdatePagerMutation } from '../generated/graphql';
 
 const Onboarding3: FC = () => {
   const navigation = useNavigation<OnboardingRootNavigationProp>();
-  // const [updatePager] = useMutation(UPDATE_PAGER);
+  const [updatePager] = useUpdatePagerMutation();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      // updatePager({
-      //   variables: {
-      //     activeIndex: 1,
-      //     count: 4,
-      //     visible: true,
-      //   },
-      // });
+      updatePager({
+        variables: { input: { activeIndex: 1, count: 4, visible: true } },
+      });
     });
 
     return unsubscribe;

@@ -7,13 +7,13 @@ import { useMutation } from '@apollo/react-hooks';
 import { SvgBlob, Panel, Text, Color, AssetStyles } from '../assets';
 
 import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
-// import { UPDATE_PAGER } from '../mutations/pager';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
+import { useUpdatePagerMutation } from '../generated/graphql';
 
 const OnboardingScreen5: FC = () => {
   const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
-  // const [updatePager] = useMutation(UPDATE_PAGER);
+  const [updatePager] = useUpdatePagerMutation();
 
   const insets = useSafeArea();
   const navigation = useNavigation<OnboardingRootNavigationProp>();
@@ -26,13 +26,9 @@ const OnboardingScreen5: FC = () => {
         },
       });
 
-      // updatePager({
-      //   variables: {
-      //     activeIndex: 3,
-      //     count: 4,
-      //     visible: true,
-      //   },
-      // });
+      updatePager({
+        variables: { input: { activeIndex: 3, count: 4, visible: true } },
+      });
     });
 
     return unsubscribe;

@@ -4,13 +4,12 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
 
 import { BulletPager, AssetStyles } from '../assets';
 
-import { AppRootParamList } from './AppRoot';
+import { useGetPagerQuery } from '../generated/graphql';
 
-import { layoutSelectors } from '../store';
+import { AppRootParamList } from './AppRoot';
 
 import Authentication from './components/Authentication';
 import PullModal from './components/PullModal';
@@ -47,17 +46,16 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
-
-  const pagerStore = useSelector(layoutSelectors.pagerSelector);
+  const { data } = useGetPagerQuery();
 
   const [pagerAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(pagerAnim, {
-      toValue: pagerStore.visible ? 1 : 0,
+      toValue: data?.pager.visible ? 1 : 0,
       duration: 600,
     }).start();
-  }, [pagerStore.visible]);
+  }, [data?.pager.visible]);
 
   const pagerOpacity = pagerAnim.interpolate({
     inputRange: [0, 1],
@@ -83,12 +81,14 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
       <Animated.View style={[styles.pagerContainer, { top: BULLET_TOP, opacity: pagerOpacity }]}>
-        <BulletPager
-          mode="day"
-          count={pagerStore.count}
-          activeIndex={pagerStore.activeIndex}
-          center
-        />
+        {data && (
+          <BulletPager
+            mode="day"
+            count={data.pager.count}
+            activeIndex={data.pager.activeIndex}
+            center
+          />
+        )}
       </Animated.View>
       <PullModal>
         <Authentication />

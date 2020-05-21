@@ -8,12 +8,13 @@ import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
-// import { UPDATE_PAGER } from '../mutations/pager';
+
+import { useUpdatePagerMutation } from '../generated/graphql';
 
 const Onboarding2: FC = () => {
   const navigation = useNavigation<OnboardingRootNavigationProp>();
   const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
-  // const [updatePager] = useMutation(UPDATE_PAGER);
+  const [updatePager] = useUpdatePagerMutation();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -22,14 +23,9 @@ const Onboarding2: FC = () => {
           visible: false,
         },
       });
-
-      // updatePager({
-      //   variables: {
-      //     activeIndex: 0,
-      //     count: 4,
-      //     visible: true,
-      //   },
-      // });
+      updatePager({
+        variables: { input: { activeIndex: 0, count: 4, visible: true } },
+      });
     });
 
     return unsubscribe;

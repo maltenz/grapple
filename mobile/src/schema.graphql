@@ -4,7 +4,17 @@ type Query {
 }
 
 type Pager {
-  id: ID!
+  id: ID
+  activeIndex: Int!
+  count: Int!
+  visible: Boolean
+}
+
+type Mutation {
+  updatePager(input: PagerInput!): Pager
+}
+
+input PagerInput {
   activeIndex: Int!
   count: Int!
   visible: Boolean

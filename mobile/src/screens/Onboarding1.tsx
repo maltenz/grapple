@@ -2,16 +2,13 @@ import React, { FC, useEffect } from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/react-hooks';
 
 import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
-
-import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
-import { UPDATE_PAGER } from '../mutations/pager';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 import { PullbarOffset } from './components/PullModal';
+import { useUpdatePagerMutation } from '../generated/graphql';
 
 const BLOB_INSET = 100;
 
@@ -24,35 +21,16 @@ const ListRow: FC = ({ children }) => (
   </Panel>
 );
 
-const Onboarding1: FC = ({ pager = {} }) => {
+const Onboarding1: FC = () => {
   const insets = useSafeArea();
-  const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
-  const [updatePager] = useMutation(UPDATE_PAGER, {
-    variables: {
-      id: pager.id,
-      activeIndex: pager.activeIndex,
-      count: pager.count,
-      visible: pager.visible,
-    },
-  });
+  const [updatePager] = useUpdatePagerMutation();
+
   const navigation = useNavigation<OnboardingRootNavigationProp>();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      updatePullModalVisibilty({
-        variables: {
-          visible: true,
-        },
-      });
       updatePager({
-        variables: {
-          input: {
-            id: pager.id,
-            activeIndex: 0,
-            count: 4,
-            visible: false,
-          },
-        },
+        variables: { input: { activeIndex: 0, count: 4, visible: false } },
       });
     });
 
