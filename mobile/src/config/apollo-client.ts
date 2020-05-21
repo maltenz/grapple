@@ -3,12 +3,8 @@ import { AsyncStorage } from 'react-native';
 import { localCache, initLocalCache } from './apollo-local-cache';
 import { localResolvers } from './apollo-resolvers';
 
-const uri = process.env.DEVICE_IP
-  ? `${process.env.DEVICE_IP}:${process.env.PORT}`
-  : `${process.env.HOST}:${process.env.PORT}`;
-
 export const apolloClient = new ApolloClient({
-  uri,
+  uri: 'http://192.168.1.100:8080/',
   cache: localCache,
   resolvers: localResolvers,
   request: async (operation: Operation): Promise<void> => {

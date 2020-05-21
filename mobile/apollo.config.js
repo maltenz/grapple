@@ -1,8 +1,6 @@
 module.exports = {
   client: {
     service: 'grapple',
-    url: process.env.DEVICE_IP
-      ? `${process.env.DEVICE_IP}:${process.env.PORT}`
-      : `${process.env.HOST}:${process.env.PORT}`,
+    url: 'http://192.168.1.100:8080/',
   },
 };
