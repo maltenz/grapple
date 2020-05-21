@@ -1,0 +1,11 @@
+type Query {
+  pager: Pager!
+  pullModalVisible: Boolean!
+}
+
+type Pager {
+  id: ID!
+  activeIndex: Int!
+  count: Int!
+  visible: Boolean
+}

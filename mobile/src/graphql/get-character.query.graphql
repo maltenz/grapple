@@ -1,5 +1,0 @@
-query GetCharacter($id: ID!) {
-  getCharacter(id: $id) @client {
-    ...characterData
-  }
-}

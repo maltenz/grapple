@@ -1,7 +1,0 @@
-fragment characterData on Character {
-  id
-  __typename
-  name
-  unitPrice @client
-  chosenQuantity @client
-}

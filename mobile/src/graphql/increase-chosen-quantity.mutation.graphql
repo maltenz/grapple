@@ -1,3 +1,0 @@
-mutation IncreaseChosenQuantity($input: ChangeProductQuantity!) {
-  increaseChosenQuantity(input: $input) @client
-}

@@ -1,0 +1,9 @@
+query GetPager {
+  pager @client {
+    id
+    __typename
+    activeIndex
+    count
+    visible
+  }
+}

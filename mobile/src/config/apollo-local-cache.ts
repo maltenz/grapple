@@ -9,11 +9,12 @@ export const localCache = new InMemoryCache({
 export function initLocalCache(): void {
   localCache.writeData({
     data: {
-      shoppingCart: {
-        __typename: 'ShoppingCart',
-        // id: btoa('ShoppingCart:1'),
-        totalPrice: 0,
-        numActionFigures: 0,
+      pager: {
+        __typename: 'Pager',
+        id: 'staticpagerid',
+        activeIndex: 0,
+        count: 4,
+        visible: false,
       },
     },
   });

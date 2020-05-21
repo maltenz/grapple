@@ -1,18 +1,15 @@
-import setUnitPrice from '../resolvers/set-unit-price.resolver';
-import increaseChosenQuantity from '../resolvers/increase-chosen-quantity.resolver';
-import decreaseChosenQuantity from '../resolvers/decrease-chosen-quantity.resolver';
-import getCharacter from '../resolvers/get-character.resolver';
+import getPager from '../resolvers/pager';
 
 export const localResolvers = {
   Query: {
-    getCharacter,
+    getPager,
   },
-  Mutation: {
-    increaseChosenQuantity,
-    decreaseChosenQuantity,
-  },
-  Character: {
-    chosenQuantity: (): number => 0,
-    unitPrice: setUnitPrice,
-  },
+  // Mutation: {
+  //   increaseChosenQuantity,
+  //   decreaseChosenQuantity,
+  // },
+  // Character: {
+  //   chosenQuantity: (): number => 0,
+  //   unitPrice: setUnitPrice,
+  // },
 };

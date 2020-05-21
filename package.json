@@ -31,7 +31,7 @@
     ],
     "*.tsx": [
       "eslint --fix --max-warnings=0"
-    ]
+    ]  
   },
   "devDependencies": {
     "@typegoose/typegoose": "^7.0.0",
