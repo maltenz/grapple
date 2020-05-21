@@ -1,6 +1,4 @@
 import { gql } from 'apollo-boost';
-import CounterMutation from '../mutations/counter';
-// import TodoMutations from '../mutations/todo';
 import { PullModalMutation } from '../mutations/modal';
 import { PagerMutations } from '../mutations/pager';
 
@@ -25,8 +23,6 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Mutation: {
-    ...CounterMutation,
-    // ...TodoMutations,
     ...PagerMutations,
     ...PullModalMutation,
   },

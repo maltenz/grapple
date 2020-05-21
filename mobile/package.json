@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "gen-graphql": "graphql-codegen --config codegen.yml",
+    "gen": "graphql-codegen --config codegen.yml",
     "redux-devtools": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
   },
   "dependencies": {
