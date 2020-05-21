@@ -3,7 +3,7 @@ schema: "http://localhost:8080/"
 documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.tsx:
-    schema: "./src/schema.graphql"
+    schema: "./src/local.graphql"
     plugins:
       - "typescript"
       - "typescript-operations"
@@ -13,6 +13,6 @@ generates:
       withHooks: true
 
   src/generated/fragment-matcher.json:
-    schema: "./src/schema.graphql"
+    schema: "./src/local.graphql"
     plugins:
       - "fragment-matcher"
