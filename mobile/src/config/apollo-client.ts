@@ -1,14 +1,10 @@
-import { ApolloClient, Operation } from 'apollo-boost';
+import ApolloClient, { Operation } from 'apollo-boost';
 import { AsyncStorage } from 'react-native';
 import { localCache, initLocalCache } from './apollo-local-cache';
 import { localResolvers } from './apollo-resolvers';
 
-const uri = process.env.DEV_DEVICE_IP
-  ? `${process.env.DEV_DEVICE_IP}:${process.env.GRAPHQL_PORT}`
-  : `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`;
-
 export const apolloClient = new ApolloClient({
-  uri,
+  uri: process.env.HOST,
   cache: localCache,
   resolvers: localResolvers,
   request: async (operation: Operation): Promise<void> => {
