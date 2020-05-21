@@ -16,6 +16,11 @@ export function initLocalCache(): void {
         count: 4,
         visible: false,
       },
+      pullModal: {
+        __typename: 'PullModal',
+        id: 'staticpullmodalid',
+        visible: true,
+      },
     },
   });
 }

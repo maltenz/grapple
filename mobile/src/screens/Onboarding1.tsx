@@ -8,7 +8,8 @@ import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 import { PullbarOffset } from './components/PullModal';
-import { useUpdatePagerMutation } from '../generated/graphql';
+
+import { useUpdatePagerMutation, useUpdatePullModalMutation } from '../generated/graphql';
 
 const BLOB_INSET = 100;
 
@@ -24,6 +25,7 @@ const ListRow: FC = ({ children }) => (
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
   const [updatePager] = useUpdatePagerMutation();
+  const [updatePullModal] = useUpdatePullModalMutation();
 
   const navigation = useNavigation<OnboardingRootNavigationProp>();
 
@@ -31,6 +33,9 @@ const Onboarding1: FC = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       updatePager({
         variables: { input: { activeIndex: 0, count: 4, visible: false } },
+      });
+      updatePullModal({
+        variables: { input: { visible: true } },
       });
     });
 

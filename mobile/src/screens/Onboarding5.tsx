@@ -3,16 +3,13 @@ import { StyleSheet, StatusBar } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/react-hooks';
 import { SvgBlob, Panel, Text, Color, AssetStyles } from '../assets';
 
-import { UPDATE_PULL_MODAL_VIS } from '../mutations/modal';
-
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
-import { useUpdatePagerMutation } from '../generated/graphql';
+import { useUpdatePagerMutation, useUpdatePullModalMutation } from '../generated/graphql';
 
 const OnboardingScreen5: FC = () => {
-  const [updatePullModalVisibilty] = useMutation(UPDATE_PULL_MODAL_VIS);
+  const [updatePullModal] = useUpdatePullModalMutation();
   const [updatePager] = useUpdatePagerMutation();
 
   const insets = useSafeArea();
@@ -20,12 +17,9 @@ const OnboardingScreen5: FC = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      updatePullModalVisibilty({
-        variables: {
-          visible: true,
-        },
+      updatePullModal({
+        variables: { input: { visible: true } },
       });
-
       updatePager({
         variables: { input: { activeIndex: 3, count: 4, visible: true } },
       });

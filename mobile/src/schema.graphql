@@ -1,8 +1,8 @@
-extend type Query {
+ extend type Query {
   pager: Pager!
-  pullModalVisible: Boolean!
 }
 
+# Pager
 type Pager {
   id: ID
   activeIndex: Int!
@@ -10,7 +10,7 @@ type Pager {
   visible: Boolean
 }
 
-type Mutation {
+extend type Mutation {
   updatePager(input: PagerInput!): Pager
 }
 
@@ -45,3 +45,42 @@ query GetPager {
     visible
   }
 }
+
+# PullModal
+ extend type Query {
+  pullModal: PullModal!
+}
+
+type PullModal {
+  id: ID
+  visible: Boolean
+}
+
+extend type Mutation {
+  updatePullModal(input: PullModalInput!): PullModal
+}
+
+input PullModalInput {
+  visible: Boolean
+}
+
+fragment pullModalData on PullModal {
+  id
+  __typename
+  visible @client
+}
+
+mutation UpdatePullModal($input: PullModalInput!) {
+  updatePullModal(input: $input) @client {
+    visible
+  }
+}
+
+query GetPullModal {
+  pullModal @client {
+    id
+    __typename
+    visible
+  }
+}
+
