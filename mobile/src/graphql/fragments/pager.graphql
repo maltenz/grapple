@@ -1,7 +1,0 @@
-fragment pagerData on Pager {
-  id
-  __typename
-  activeIndex @client
-  count @client
-  visible @client
-}

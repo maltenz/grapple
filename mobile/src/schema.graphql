@@ -1,4 +1,4 @@
-type Query {
+extend type Query {
   pager: Pager!
   pullModalVisible: Boolean!
 }
@@ -18,4 +18,30 @@ input PagerInput {
   activeIndex: Int!
   count: Int!
   visible: Boolean
+}
+
+fragment pagerData on Pager {
+  id
+  __typename
+  activeIndex @client
+  count @client
+  visible @client
+}
+
+mutation UpdatePager($input: PagerInput!) {
+  updatePager(input: $input) @client {
+    activeIndex
+    count
+    visible
+  }
+}
+
+query GetPager {
+  pager @client {
+    id
+    __typename
+    activeIndex
+    count
+    visible
+  }
 }
