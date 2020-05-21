@@ -4,7 +4,6 @@ import { Animated, Vibration, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
-import { useNavigation } from '@react-navigation/native';
 import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
 import { LOGIN_USER } from '../../mutations/user';
@@ -15,7 +14,7 @@ import {
   REQUIRED_TEXT,
   SmallTextConfig,
 } from '../../assets/components/base/Text';
-import { ChildNavigationProp } from '../HomeRoot';
+import { useUpdateTokenMutation } from '../../generated/graphql';
 
 type LoginFormData = {
   email: string;
@@ -33,7 +32,7 @@ const setToken = async (token: string): Promise<void> => {
 const LoginForm: FC = () => {
   const [loginUser, { data }] = useMutation(LOGIN_USER);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
-  const navigation = useNavigation<ChildNavigationProp>();
+  const [updateToken] = useUpdateTokenMutation();
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
 
@@ -41,7 +40,7 @@ const LoginForm: FC = () => {
     if (data?.loginUser) {
       const token = async (): Promise<void> => {
         await setToken(data?.loginUser?.token);
-        navigation.navigate('HomeStack');
+        // navigation.navigate('HomeStack');
       };
       token();
     }
@@ -69,7 +68,11 @@ const LoginForm: FC = () => {
   const onChange = (args: any[]): EventFunction => args[0].nativeEvent.text;
 
   const onSubmit = ({ email, password }: LoginFormData): void => {
-    loginUser({ variables: { email, password } });
+    const auth = async (): Promise<void> => {
+      const { data: token } = await loginUser({ variables: { email, password } });
+      updateToken({ variables: { input: { value: token } } });
+    };
+    auth();
   };
 
   return (

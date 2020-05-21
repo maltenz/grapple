@@ -1,8 +1,46 @@
+  # Token
+ extend type Query {
+  token: Token!
+}
+
+type Token {
+  id: ID
+  value: String
+}
+
+extend type Mutation {
+  updateToken(input: TokenInput!): Token
+}
+
+input TokenInput {
+  value: String
+}
+
+fragment tokenData on Token {
+  id
+  __typename
+  value @client
+}
+
+mutation UpdateToken($input: TokenInput!) {
+  updateToken(input: $input) @client {
+    value
+  }
+}
+
+query GetToken {
+  token @client {
+    id
+    __typename
+    value
+  }
+}
+
+ # Pager
  extend type Query {
   pager: Pager!
 }
 
-# Pager
 type Pager {
   id: ID
   activeIndex: Int!
