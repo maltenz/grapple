@@ -2,12 +2,11 @@
 import React, { FC, useState } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppRoot from './src/screens/AppRoot';
-import { apolloClient } from './src/config/apollo-client';
+import Client from './src/config/apollo-client';
 
 const fetchFonts = (): Promise<void> => {
   return Font.loadAsync({
@@ -25,11 +24,11 @@ const App: FC = () => {
 
   return (
     <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-      <ApolloProvider client={apolloClient}>
+      <Client>
         <NavigationContainer>
           <AppRoot />
         </NavigationContainer>
-      </ApolloProvider>
+      </Client>
     </SafeAreaProvider>
   );
 };
