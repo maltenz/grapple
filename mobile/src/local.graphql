@@ -1,38 +1,49 @@
-  # Token
+ # Signed User
  extend type Query {
-  token: Token!
+  signUser: SignUser!
 }
 
-type Token {
+type SignUser {
   id: ID
-  value: String
+  userId: ID!
+  name: String!
+  email: String!
 }
 
 extend type Mutation {
-  updateToken(input: TokenInput!): Token
+  updateSignUser(input: SignUserInput!): SignUser
 }
 
-input TokenInput {
-  value: String
+input SignUserInput {
+  id: ID
+  userId: ID
+  name: String
+  email: String
 }
 
-fragment tokenData on Token {
+fragment signUserData on SignUser {
   id
   __typename
-  value @client
+  userId @client
+  name @client
+  email @client
 }
 
-mutation UpdateToken($input: TokenInput!) {
-  updateToken(input: $input) @client {
-    value
+mutation UpdateSignUser($input: SignUserInput!) {
+  updateSignUser(input: $input) @client {
+    userId @client
+    name @client
+    email @client
   }
 }
 
-query GetToken {
-  token @client {
+query GetSignUser {
+  signUser @client {
     id
     __typename
-    value
+    userId @client
+    name @client
+    email @client
   }
 }
 

@@ -14,37 +14,20 @@ import {
   REQUIRED_TEXT,
   SmallTextConfig,
 } from '../../assets/components/base/Text';
-import { useUpdateTokenMutation } from '../../generated/graphql';
+import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 
 type LoginFormData = {
   email: string;
   password: string;
 };
 
-const setToken = async (token: string): Promise<void> => {
-  try {
-    await AsyncStorage.setItem('token', token);
-  } catch (error) {
-    throw Error(error);
-  }
-};
-
 const LoginForm: FC = () => {
-  const [loginUser, { data }] = useMutation(LOGIN_USER);
+  const [loginUser] = useMutation(LOGIN_USER);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
-  const [updateToken] = useUpdateTokenMutation();
+  const [updateSignUser] = useUpdateSignUserMutation();
+
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
-
-  useEffect(() => {
-    if (data?.loginUser) {
-      const token = async (): Promise<void> => {
-        await setToken(data?.loginUser?.token);
-        // navigation.navigate('HomeStack');
-      };
-      token();
-    }
-  }, [data]);
 
   useEffect(() => {
     ErrorAnim(animEmailError, errors.email);
@@ -69,8 +52,15 @@ const LoginForm: FC = () => {
 
   const onSubmit = ({ email, password }: LoginFormData): void => {
     const auth = async (): Promise<void> => {
-      const { data: token } = await loginUser({ variables: { email, password } });
-      updateToken({ variables: { input: { value: token } } });
+      const { data } = await loginUser({ variables: { email, password } });
+
+      if (data?.loginUser) {
+        const { id: myId, name: myName, email: myEmail }: UserQuery = data.loginUser;
+        await AsyncStorage.setItem('token', data.loginUser.token);
+        updateSignUser({
+          variables: { input: { userId: myId || '', name: myName, email: myEmail } },
+        });
+      }
     };
     auth();
   };

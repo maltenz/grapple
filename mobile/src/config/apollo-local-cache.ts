@@ -9,10 +9,12 @@ export const localCache = new InMemoryCache({
 export function initLocalCache(): void {
   localCache.writeData({
     data: {
-      token: {
-        __typename: 'Token',
-        id: 'statictokenid',
-        value: '',
+      signUser: {
+        __typename: 'SignUser',
+        id: 'staticsignuserid',
+        userId: null,
+        name: null,
+        email: null,
       },
       pager: {
         __typename: 'Pager',

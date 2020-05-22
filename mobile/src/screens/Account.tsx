@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ScrollView, StyleSheet, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Alert, AsyncStorage } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,6 +18,7 @@ import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../assets/components/base/Navigation';
+import { useUpdateSignUserMutation } from '../generated/graphql';
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 
@@ -25,6 +26,7 @@ const Account: FC = () => {
   const inset = useSafeArea();
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
+  const [updateSignUser] = useUpdateSignUserMutation();
 
   return (
     <>
@@ -64,7 +66,10 @@ const Account: FC = () => {
           <MenuItem
             title="Logout"
             last
-            onPress={(): void => parentNavigation.navigate('OnboardingRoot')}
+            onPress={async (): Promise<void> => {
+              await AsyncStorage.removeItem('token');
+              updateSignUser({ variables: { input: { userId: '' } } });
+            }}
           />
         </Container>
         <Container>

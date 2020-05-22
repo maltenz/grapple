@@ -1,10 +1,10 @@
-import updateToken from '../resolvers/updateToken';
+import updateSignUser from '../resolvers/updateSignUser';
 import updatePager from '../resolvers/updatePager';
 import updatePullModal from '../resolvers/updatePullModal';
 
 export const localResolvers = {
   Mutation: {
-    updateToken,
+    updateSignUser,
     updatePager,
     updatePullModal,
   },

@@ -4,6 +4,7 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import HomeRoot, { ParentParamList } from './HomeRoot';
 import OnboardingRoot from './OnboardingRoot';
+import { useGetSignUserQuery } from '../generated/graphql';
 
 export type AppRootParamList = {
   HomeRoot: undefined;
@@ -27,12 +28,17 @@ type NavigationProps = {
 const Stack = createStackNavigator<AppRootParamList>();
 
 const AppRoot: FC<NavigationProps> = () => {
+  const { data } = useGetSignUserQuery();
+
   return (
     <>
       <StatusBar barStyle="light-content" />
       <Stack.Navigator headerMode="none">
-        {/* <Stack.Screen name="HomeRoot" component={HomeRoot} /> */}
-        <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
+        {data?.signUser.userId ? (
+          <Stack.Screen name="HomeRoot" component={HomeRoot} />
+        ) : (
+          <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />
+        )}
       </Stack.Navigator>
     </>
   );

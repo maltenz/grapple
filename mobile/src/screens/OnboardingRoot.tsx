@@ -7,7 +7,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 
 import { BulletPager, AssetStyles } from '../assets';
 
-import { useGetPagerQuery, useGetTokenQuery } from '../generated/graphql';
+import { useGetPagerQuery } from '../generated/graphql';
 
 import { AppRootParamList } from './AppRoot';
 
@@ -46,17 +46,17 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
-  const { data: tokenData } = useGetTokenQuery();
-  const { data: pagerData } = useGetPagerQuery();
+
+  const { data } = useGetPagerQuery();
 
   const [pagerAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(pagerAnim, {
-      toValue: pagerData?.pager.visible ? 1 : 0,
+      toValue: data?.pager.visible ? 1 : 0,
       duration: 600,
     }).start();
-  }, [pagerData?.pager.visible]);
+  }, [data?.pager.visible]);
 
   const pagerOpacity = pagerAnim.interpolate({
     inputRange: [0, 1],
@@ -65,10 +65,6 @@ const OnboardingRoot: FC<NavigationProps> = () => {
 
   const BULLET_TOP =
     AssetStyles.measure.window.height - inset.bottom - AssetStyles.measure.space * 2;
-
-  // eslint-disable-next-line no-console
-  console.log(`tokenData ${tokenData?.token}`);
-  // console.log(tokenData?.token);
 
   return (
     <>
@@ -86,11 +82,11 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
       <Animated.View style={[styles.pagerContainer, { top: BULLET_TOP, opacity: pagerOpacity }]}>
-        {pagerData && (
+        {data && (
           <BulletPager
             mode="day"
-            count={pagerData.pager.count}
-            activeIndex={pagerData.pager.activeIndex}
+            count={data.pager.count}
+            activeIndex={data.pager.activeIndex}
             center
           />
         )}
