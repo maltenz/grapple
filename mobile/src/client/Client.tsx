@@ -1,51 +1,24 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore, @typescript-eslint/no-empty-function */
 import React, { FC, useState, useEffect } from 'react';
-import ApolloClient, { Operation, IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-boost';
+import { AppLoading } from 'expo';
+import ApolloClient, { Operation } from 'apollo-boost';
 import { AsyncStorage } from 'react-native';
 import { persistCache } from 'apollo-cache-persist';
 import { ApolloProvider } from '@apollo/react-hoc';
-import { AppLoading } from 'expo';
-import { localResolvers } from './apollo-resolvers';
-import introspectionQueryResultData from '../generated/fragment-matcher.json';
+import { resolvers } from './resolvers';
+import { cache, data } from './cache';
 
 const Client: FC = ({ children }) => {
   const [client, setClient] = useState<ApolloClient<unknown> | undefined>(undefined);
 
   useEffect(() => {
-    const cache = new InMemoryCache({
-      fragmentMatcher: new IntrospectionFragmentMatcher({ introspectionQueryResultData }),
-    });
-
-    const initData = {
-      signUser: {
-        __typename: 'SignUser',
-        id: 'staticsignuserid',
-        userId: null,
-        name: null,
-        email: null,
-      },
-      pager: {
-        __typename: 'Pager',
-        id: 'staticpagerid',
-        activeIndex: 0,
-        count: 4,
-        visible: false,
-      },
-      pullModal: {
-        __typename: 'PullModal',
-        id: 'staticpullmodalid',
-        visible: true,
-      },
-    };
-
-    cache.writeData({
-      data: initData,
-    });
+    cache.writeData({ data });
 
     try {
       const myClient = new ApolloClient({
         uri: 'http://192.168.1.100:8080/',
         cache,
-        resolvers: localResolvers,
+        resolvers,
         request: async (operation: Operation): Promise<void> => {
           const token = await AsyncStorage.getItem('token');
 
@@ -61,15 +34,13 @@ const Client: FC = ({ children }) => {
 
       persistCache({
         cache,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         storage: AsyncStorage,
         serialize: true,
       }).then(() => {
-        myClient.onResetStore(async () => cache.writeData({ data: initData }));
+        myClient.onResetStore(async () => cache.writeData({ data }));
         setClient(myClient);
       });
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       return (): void => {};
     } catch (error) {
       throw Error(`Error restoring Apollo cache ${error}`);

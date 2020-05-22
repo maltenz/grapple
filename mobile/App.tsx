@@ -5,8 +5,8 @@ import { AppLoading } from 'expo';
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
+import Client from './src/client/Client';
 import AppRoot from './src/screens/AppRoot';
-import Client from './src/config/apollo-client';
 
 const fetchFonts = (): Promise<void> => {
   return Font.loadAsync({
