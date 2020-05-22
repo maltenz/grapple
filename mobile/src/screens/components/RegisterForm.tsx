@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, FC } from 'react';
-import { Vibration, Animated, TextInput } from 'react-native';
+import { Vibration, Animated, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
@@ -14,7 +14,7 @@ import {
   REQUIRED_TEXT,
 } from '../../assets/components/base/Text';
 
-import { UserType } from '../../types';
+import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 
 type RegisterFormData = {
   username: string;
@@ -24,19 +24,13 @@ type RegisterFormData = {
 };
 
 const RegisterForm: FC = () => {
-  const [createUser] = useMutation<{ createUser: UserType }>(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
+  const [updateSignUser] = useUpdateSignUserMutation();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
   const [animPasswordConfirmError] = useState(new Animated.Value(0));
-
-  useEffect(() => {
-    if (data?.createUser) {
-      // eslint-disable-next-line no-console
-      console.log(`Create user ${data}`);
-    }
-  }, [data]);
 
   useEffect(() => {
     ErrorAnim(animUsernameError, errors.username);
@@ -70,9 +64,9 @@ const RegisterForm: FC = () => {
     const auth = async (): Promise<void> => {
       const { data } = await createUser({ variables: { name: username, email, password } });
 
-      if (data?.loginUser) {
-        const { id: myId, name: myName, email: myEmail }: UserQuery = data.loginUser;
-        await AsyncStorage.setItem('token', data.loginUser.token);
+      if (data?.createUser) {
+        const { id: myId, name: myName, email: myEmail }: UserQuery = data.createUser;
+        await AsyncStorage.setItem('token', data.createUser.token);
         updateSignUser({
           variables: { input: { userId: myId || '', name: myName, email: myEmail } },
         });
