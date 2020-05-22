@@ -36,7 +36,7 @@ export const createUser = async (
     const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
     const token = jwt.sign({ email }, secret, { expiresIn: '1y' });
 
-    if (newUser._id !== undefined && newUser.name !== undefined && newUser.email !== undefined) {
+    if (newUser._id && newUser.name && newUser.email) {
       return {
         id: newUser._id,
         name: newUser.name,
@@ -58,7 +58,7 @@ export const createUser = async (
  * @returns {User}
  */
 export const loginUser = async (
-  { dbConn, token },
+  { dbConn },
   { email, password }: { email: string; password: string }
 ): Promise<{ token: string; id: string; name: string; email: string }> => {
   let ERR_MESSAGE;
