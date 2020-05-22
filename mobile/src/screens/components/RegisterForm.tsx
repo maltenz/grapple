@@ -61,6 +61,7 @@ const RegisterForm: FC = () => {
 
   const onSubmit = ({ username, email, password }: RegisterFormData): void => {
     createUser({ variables: { name: username, email, password } });
+
     const auth = async (): Promise<void> => {
       const { data } = await createUser({ variables: { name: username, email, password } });
 

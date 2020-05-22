@@ -44,7 +44,8 @@ export const createUser = async (
         token,
       };
     } else {
-      ERR_MESSAGE = 'Oops something went wrong';
+      ERR_MESSAGE = 'Oops something went wrong. Please try again';
+      await UserModel(dbConn).findByIdAndRemove(newUser._id);
       throw new ApolloError(ERR_MESSAGE);
     }
   } catch (error) {
