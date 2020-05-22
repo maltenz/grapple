@@ -24,7 +24,7 @@ type RegisterFormData = {
 };
 
 const RegisterForm: FC = () => {
-  const [createUser, { data }] = useMutation<{ createUser: UserType }>(CREATE_USER);
+  const [createUser] = useMutation<{ createUser: UserType }>(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
@@ -67,6 +67,18 @@ const RegisterForm: FC = () => {
 
   const onSubmit = ({ username, email, password }: RegisterFormData): void => {
     createUser({ variables: { name: username, email, password } });
+    const auth = async (): Promise<void> => {
+      const { data } = await createUser({ variables: { name: username, email, password } });
+
+      if (data?.loginUser) {
+        const { id: myId, name: myName, email: myEmail }: UserQuery = data.loginUser;
+        await AsyncStorage.setItem('token', data.loginUser.token);
+        updateSignUser({
+          variables: { input: { userId: myId || '', name: myName, email: myEmail } },
+        });
+      }
+    };
+    auth();
   };
 
   return (

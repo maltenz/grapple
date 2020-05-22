@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
+import { mongoose } from '@typegoose/typegoose';
 
 /**
  * @param context
@@ -13,7 +14,7 @@ import { Context } from '../context';
 export const createUser = async (
   { dbConn }: Context,
   { name, email, password }: { name: string; email: string; password: string }
-): Promise<User> => {
+): Promise<{ id: mongoose.Types.ObjectId; name: string; email: string; token: string }> => {
   let ERR_MESSAGE;
 
   try {
@@ -26,11 +27,26 @@ export const createUser = async (
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    return (await UserModel(dbConn).create({
+    const newUser = (await UserModel(dbConn).create({
       name,
       email,
       password: hashedPassword,
     })) as User;
+
+    const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
+    const token = jwt.sign({ email }, secret, { expiresIn: '1y' });
+
+    if (newUser._id !== undefined && newUser.name !== undefined && newUser.email !== undefined) {
+      return {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        token,
+      };
+    } else {
+      ERR_MESSAGE = 'Oops something went wrong';
+      throw new ApolloError(ERR_MESSAGE);
+    }
   } catch (error) {
     throw new ApolloError(error);
   }
@@ -44,7 +60,7 @@ export const createUser = async (
 export const loginUser = async (
   { dbConn, token },
   { email, password }: { email: string; password: string }
-): Promise<{ token: string }> => {
+): Promise<{ token: string; id: string; name: string; email: string }> => {
   let ERR_MESSAGE;
   let user;
 
@@ -62,11 +78,9 @@ export const loginUser = async (
         throw new ApolloError(ERR_MESSAGE);
       }
       const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
-      const myToken = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
+      const token = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
 
-      token = myToken;
-
-      return { token };
+      return { token, id: user.id, name: user.name, email: user.email };
     }
   } catch (error) {
     throw new ApolloError(error);

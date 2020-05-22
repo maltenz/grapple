@@ -21,7 +21,10 @@ export const UserSchema = gql`
   }
 
   type Token {
+    id: ID!
     token: String!
+    name: String!
+    email: String!
   }
 
   input CreateUserInput {
@@ -42,7 +45,7 @@ export const UserSchema = gql`
   }
 
   extend type Mutation {
-    createUser(input: CreateUserInput!): User
+    createUser(input: CreateUserInput!): Token
     deleteUser(input: AuthUserInput): User
     loginUser(input: AuthUserInput): Token
   }
