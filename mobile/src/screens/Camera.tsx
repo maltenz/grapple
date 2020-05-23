@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
-import { StatusBar, Alert, View, StyleSheet } from 'react-native';
+import { StatusBar, Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Camera, CameraCapturedPicture } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import bson, { EJSON } from 'bson';
 
+import { useMutation } from '@apollo/react-hooks';
 import {
   Panel,
   Navigation,
@@ -24,6 +25,11 @@ import {
 import { ChildNavigationProp } from './HomeRoot';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
+import { CREATE_SHOT } from '../mutations/shot';
+
+let postId = new bson.ObjectId();
+const formatId = JSON.parse(EJSON.stringify(postId));
+postId = formatId.$oid;
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -68,6 +74,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
+  const [createShot] = useMutation(CREATE_SHOT);
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
 
@@ -89,8 +96,9 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          // eslint-disable-next-line no-console
-          console.log(pic);
+          createShot({
+            variables: { post: postId, image: pic.uri },
+          });
         })
         .catch((err) => {
           throw Error(err);

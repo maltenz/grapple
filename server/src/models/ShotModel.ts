@@ -19,8 +19,6 @@ export class Shot {
   public content?: string;
   @prop()
   public image?: string;
-  @prop()
-  public order?: number;
 }
 
 const ShotModel = getModelForClass(Shot);

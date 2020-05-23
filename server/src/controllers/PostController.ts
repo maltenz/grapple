@@ -27,7 +27,6 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
         content:
           'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
         image: 'https://source.unsplash.com/random/768x768',
-        order: 0,
       }
     );
 

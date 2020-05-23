@@ -12,7 +12,6 @@ export const ShotSchema = gql`
     title: String
     content: String
     image: String
-    order: Int!
   }
 
   input ShotInput {
@@ -20,7 +19,6 @@ export const ShotSchema = gql`
     title: String
     content: String
     image: String
-    order: Int!
   }
 
   extend type Query {

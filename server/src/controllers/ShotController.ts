@@ -6,7 +6,7 @@ import { Post } from '../models/PostModel';
 
 /**
  * @param context
- * @param {post title content image order}
+ * @param {post title content image}
  * @returns {Shot}
  */
 export const createShot = async (
@@ -16,13 +16,11 @@ export const createShot = async (
     title,
     content,
     image,
-    order,
   }: {
     post: Post;
     title: string;
     content: string;
     image: string;
-    order: number;
   }
 ): Promise<Shot> => {
   let ERR_MESSAGE;
@@ -37,7 +35,6 @@ export const createShot = async (
       title,
       content,
       image,
-      order,
     })) as Shot;
 
     if (shot === null) {
