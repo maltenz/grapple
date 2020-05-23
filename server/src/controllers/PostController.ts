@@ -109,7 +109,6 @@ export const deletePost = async (context: Context, { id }: { id: string }): Prom
  * @param {id shotId}
  * @returns {Post}
  */
-
 export const deletePostShot = async (
   context: Context,
   { id, shotId }: { id: string; shotId: string }
@@ -122,6 +121,43 @@ export const deletePostShot = async (
     const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
       $pull: {
         shots: { _id: shotId },
+      },
+    })) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'Unable find post';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+};
+
+/**
+ * @param context
+ * @param {id shotId title content image}
+ * @returns {Post}
+ */
+export const updatePostShot = async (
+  context: Context,
+  {
+    id,
+    shotId,
+    title,
+    content,
+    image,
+  }: { id: string; shotId: string; title: string; content: string; image: string }
+): Promise<Post> => {
+  const { dbConn, loggedIn } = context;
+  let ERR_MESSAGE = 'Unable to update shot';
+  loginRequired(loggedIn);
+
+  try {
+    const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
+      $set: {
+        shots: { shotId, title, content, image },
       },
     })) as Post;
 
