@@ -1,10 +1,9 @@
-import _ from 'lodash';
 import React, { useEffect, useState, FC, ReactNode } from 'react';
 import { StatusBar, Alert, View, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -14,11 +13,11 @@ import {
   TabbarBackground,
   TabbarCircleButton,
   SvgTabbarBackgroundHeight,
-  Gallery,
   GalleryItemType,
   AssetStyles,
   Button,
   SvgIconStory,
+  Thumbnail,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
@@ -68,6 +67,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 const CameraScreen: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean>();
+  const [activeIndex, setActiveIndex] = useState<number>();
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -78,16 +78,8 @@ const CameraScreen: FC = () => {
     StatusBar.setHidden(true);
   }, []);
 
-  const [galleryHeroImg, setGalleryHeroImg] = useState({
-    uri: 'https://source.unsplash.com/random',
-  });
-  const [galleryActiveIndex, setGalleryActiveIndex] = useState(0);
-
-  const handleGalleryOnChange = (id: string, index: number): void => {
-    const { large } = GALLERY[index].src;
-    const uri = _.get(large, ['uri']);
-    setGalleryHeroImg({ uri });
-    setGalleryActiveIndex(index);
+  const onChange = (id: string, index: number): void => {
+    setActiveIndex(index);
   };
 
   if (hasPermission === null) {
@@ -120,18 +112,23 @@ const CameraScreen: FC = () => {
           </Panel>
         }
         Bottom={
-          <>
-            <Gallery
-              onChange={handleGalleryOnChange}
-              items={GALLERY}
-              activeIndex={galleryActiveIndex}
-              src={galleryHeroImg}
-              utility="delete"
-              mode="day"
-              type="row"
-              blurViewIntensity={0}
-            />
-            <Panel paddingHorizontal row justifyContent="space-between">
+          <Panel>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {GALLERY.map(({ src, id }, index) => {
+                return (
+                  <Thumbnail
+                    key={id}
+                    src={src.thumbnail}
+                    marginRight={index === GALLERY.length - 1 ? 1 : 0.5}
+                    marginLeft={index === 0 && 1}
+                    outline={index === activeIndex && 'blue'}
+                    onPress={(): void => onChange(id, index)}
+                    backgroundColor="grey4"
+                  />
+                );
+              })}
+            </ScrollView>
+            <Panel marginTop={0.5} paddingHorizontal row justifyContent="space-between">
               <Button type="normal" mode="night" appearance="normal" outline>
                 Flip camera
               </Button>
@@ -139,7 +136,7 @@ const CameraScreen: FC = () => {
                 Edit
               </Button>
             </Panel>
-          </>
+          </Panel>
         }
       />
       <Navigation
