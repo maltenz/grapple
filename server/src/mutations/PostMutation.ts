@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createPost, deletePost } from '../controllers/PostController';
+import { createPost, deletePost, deletePostShot } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
 /**
@@ -15,6 +15,12 @@ export const PostMutation = {
   deletePost: {
     resolve: async (parent, args, context, info): Promise<Post> => {
       return await deletePost(context, args);
+    },
+  },
+  deletePostShot: {
+    resolve: async (parent, args, context, info): Promise<Post> => {
+      const { id, shotId } = args.input;
+      return await deletePostShot(context, { id, shotId });
     },
   },
 };

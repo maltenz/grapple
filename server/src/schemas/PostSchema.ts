@@ -16,8 +16,14 @@ export const PostSchema = gql`
     post(id: String!): Post
   }
 
+  input ShotDeleteInput {
+    id: ID!
+    shotId: ID!
+  }
+
   extend type Mutation {
     createPost: Post
     deletePost(id: String!): Post
+    deletePostShot(input: ShotDeleteInput): Post
   }
 `;

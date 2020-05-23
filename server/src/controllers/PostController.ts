@@ -103,3 +103,35 @@ export const deletePost = async (context: Context, { id }: { id: string }): Prom
 
   return post;
 };
+
+/**
+ * @param context
+ * @param {id shotId}
+ * @returns {Post}
+ */
+
+export const deletePostShot = async (
+  context: Context,
+  { id, shotId }: { id: string; shotId: string }
+): Promise<Post> => {
+  const { dbConn, loggedIn } = context;
+  let ERR_MESSAGE = 'Unable to delete shot';
+  loginRequired(loggedIn);
+
+  try {
+    const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
+      $pull: {
+        shots: { _id: shotId },
+      },
+    })) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'Unable find post';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+};
