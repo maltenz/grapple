@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
-import { StatusBar, Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Camera, CameraCapturedPicture } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
@@ -15,7 +15,6 @@ import {
   TabbarBackground,
   TabbarCircleButton,
   SvgTabbarBackgroundHeight,
-  GalleryItemType,
   AssetStyles,
   Button,
   SvgIconStory,
@@ -24,8 +23,10 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 import { CREATE_SHOT } from '../mutations/shot';
+
+import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
+import { Shot } from '../generated/graphql';
 
 let postId = new bson.ObjectId();
 const formatId = JSON.parse(EJSON.stringify(postId));
@@ -35,22 +36,6 @@ const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
 const TOP_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 - TOP_OFFSET;
 const BOTTOM_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 + TOP_OFFSET;
-
-const GALERY_ITEM_SAMPLE = {
-  src: {
-    thumbnail: { uri: 'https://source.unsplash.com/random' },
-    large: { uri: 'https://source.unsplash.com/random' },
-  },
-};
-
-const GALLERY: GalleryItemType[] = [
-  { ...GALERY_ITEM_SAMPLE, id: 'asd' },
-  { ...GALERY_ITEM_SAMPLE, id: 'a3a' },
-  { ...GALERY_ITEM_SAMPLE, id: 'ags' },
-  { ...GALERY_ITEM_SAMPLE, id: '42v' },
-  { ...GALERY_ITEM_SAMPLE, id: '525' },
-  { ...GALERY_ITEM_SAMPLE, id: '6hj' },
-];
 
 interface CameraFrameProps {
   Top?: ReactNode;
@@ -75,6 +60,7 @@ const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const [createShot] = useMutation(CREATE_SHOT);
+  const [shots, setShots] = useState<Shot[]>([]);
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
 
@@ -84,7 +70,6 @@ const CameraScreen: FC = () => {
       setHasPermission(status === 'granted');
     };
     checkMultiPermissions();
-    StatusBar.setHidden(true);
   }, []);
 
   const onChange = (id: string, index: number): void => {
@@ -98,6 +83,11 @@ const CameraScreen: FC = () => {
         .then((pic) => {
           createShot({
             variables: { post: postId, image: pic.uri },
+          }).then((res) => {
+            const myShot = res.data.createShot as Shot;
+            const myShots = [...shots];
+            myShots.push(myShot);
+            setShots(myShots);
           });
         })
         .catch((err) => {
@@ -143,19 +133,24 @@ const CameraScreen: FC = () => {
         Bottom={
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {GALLERY.map(({ src, id }, index) => {
-                return (
-                  <Thumbnail
-                    key={id}
-                    src={src.thumbnail}
-                    marginRight={index === GALLERY.length - 1 ? 1 : 0.5}
-                    marginLeft={index === 0 && 1}
-                    outline={index === activeIndex && 'blue'}
-                    onPress={(): void => onChange(id, index)}
-                    backgroundColor="grey4"
-                  />
-                );
-              })}
+              {shots?.map(
+                ({ image, id }, index): ReactNode => {
+                  if (image) {
+                    return (
+                      <Thumbnail
+                        key={id}
+                        src={{ uri: image }}
+                        marginRight={index === shots.length - 1 ? 1 : 0.5}
+                        marginLeft={index === 0 && 1}
+                        outline={index === activeIndex && 'blue'}
+                        onPress={(): void => onChange(id, index)}
+                        backgroundColor="grey4"
+                      />
+                    );
+                  }
+                  return null;
+                }
+              )}
             </ScrollView>
             <Panel marginTop={0.5} paddingHorizontal row justifyContent="space-between">
               <Button type="normal" mode="night" appearance="normal" outline>
