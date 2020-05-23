@@ -1,18 +1,26 @@
 import mongoose from 'mongoose';
 import { prop, getModelForClass, Ref, arrayProp } from '@typegoose/typegoose';
 import { User } from './UserModel';
-import { Shot } from './ShotModel';
 
 /**
  * Post interface constructor
  */
 
+export class Shot {
+  @prop()
+  public title?: string;
+  @prop()
+  public content?: string;
+  @prop()
+  public image?: string;
+}
+
 export class Post {
   _id?: mongoose.Types.ObjectId;
   @prop({ ref: User })
   public user?: Ref<User>;
-  @arrayProp({ ref: 'Shot' })
-  public shots?: Ref<Shot>;
+  @arrayProp({ items: Shot })
+  shots?: Shot[];
 }
 
 const PostModel = getModelForClass(Post);

@@ -1,10 +1,7 @@
-import { mongoose } from '@typegoose/typegoose';
 import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import { createShot, deleteShot } from './ShotController';
-import ShotModel from '../models/ShotModel';
 
 /**
  * @param context
@@ -16,30 +13,18 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<P
 
   let post;
 
-  const tempValue = (mongoose.Types.ObjectId() as unknown) as Post;
+  const testShot = {
+    title: 'Why read motivational sayings?',
+    content:
+      'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
+    image: 'https://source.unsplash.com/random/768x768',
+  };
 
   try {
-    const shot = await createShot(
-      { dbConn, loggedIn, user },
-      {
-        post: tempValue,
-        title: 'Why read motivational sayings?',
-        content:
-          'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
-        image: 'https://source.unsplash.com/random/768x768',
-      }
-    );
-
-    post = (await PostModel(dbConn).create({
+    post = await PostModel(dbConn).create({
       user,
-      shots: [shot._id, shot._id],
-    })) as Post;
-
-    await ShotModel(dbConn).updateMany(
-      { post: tempValue },
-      { $set: { post: post._id } },
-      { new: true }
-    );
+      shots: [testShot, testShot],
+    });
 
     if (post === null) {
       ERR_MESSAGE = 'Unable to save post';
@@ -111,13 +96,7 @@ export const deletePost = async (context: Context, { id }: { id: string }): Prom
   let post;
 
   try {
-    post = (await PostModel(dbConn).findByIdAndRemove(id)) as Post;
-
-    if (loggedIn === true) {
-      await post.shots.map(async (id) => {
-        await deleteShot(context, { id: id });
-      });
-    }
+    post = await PostModel(dbConn).findByIdAndRemove(id);
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
