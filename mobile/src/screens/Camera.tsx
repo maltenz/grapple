@@ -1,6 +1,7 @@
-import React, { useEffect, useState, FC, ReactNode } from 'react';
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
 import { StatusBar, Alert, View, StyleSheet } from 'react-native';
-import { Camera } from 'expo-camera';
+import { Camera, CameraCapturedPicture } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -65,6 +66,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 };
 
 const CameraScreen: FC = () => {
+  const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
@@ -82,6 +84,20 @@ const CameraScreen: FC = () => {
     setActiveIndex(index);
   };
 
+  const handleCapture = (): Promise<CameraCapturedPicture> | void => {
+    if (camRef.current !== undefined) {
+      camRef.current
+        .takePictureAsync()
+        .then((pic) => {
+          // eslint-disable-next-line no-console
+          console.log(pic);
+        })
+        .catch((err) => {
+          throw Error(err);
+        });
+    }
+  };
+
   if (hasPermission === null) {
     return <Panel flex={1} backgroundColor="black" />;
   }
@@ -90,7 +106,12 @@ const CameraScreen: FC = () => {
   }
 
   return (
-    <Camera style={{ flex: 1 }} type="front">
+    <Camera
+      // @ts-ignore
+      ref={camRef}
+      style={{ flex: 1 }}
+      type="front"
+    >
       <CameraFrame
         Top={
           <Panel
@@ -149,45 +170,21 @@ const CameraScreen: FC = () => {
         }
         style={{ backgroundColor: 'transparent' }}
       />
-      <Panel
-        row
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          left: 0,
-          zIndex: 1,
-        }}
-      >
+      <Panel row style={styles.footer}>
         <Panel flex={1}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={{
-              flex: 1,
-              height: SvgTabbarBackgroundHeight,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <TouchableOpacity accessibilityRole="button" style={styles.footerIcon}>
             <SvgIconVideo scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
         <Panel flex={1} center>
           <TabbarCircleButton
             type="camera"
-            onPress={(): void => Alert.alert('press')}
+            onPress={handleCapture}
             onLongPress={(): void => Alert.alert('long press')}
           />
         </Panel>
         <Panel flex={1}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={{
-              height: SvgTabbarBackgroundHeight,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <TouchableOpacity accessibilityRole="button" style={styles.footerIcon}>
             <SvgIconStory scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
@@ -214,6 +211,19 @@ const styles = StyleSheet.create({
   frameBottom: {
     paddingTop: AssetStyles.measure.space / 2,
     height: BOTTOM_HEIGHT,
+  },
+  footer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 1,
+  },
+  footerIcon: {
+    flex: 1,
+    height: SvgTabbarBackgroundHeight,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
