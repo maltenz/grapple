@@ -171,3 +171,50 @@ export const updatePostShot = async (
     throw new ApolloError(ERR_MESSAGE);
   }
 };
+
+/**
+ * @param context
+ * @param {id shotId title content image}
+ * @returns {Post}
+ */
+export const updateWithPositionPostShot = async (
+  context: Context,
+  {
+    id,
+    shotId,
+    position,
+    title,
+    content,
+    image,
+  }: { id: string; shotId: string; position: string; title: string; content: string; image: string }
+): Promise<Post> => {
+  const { dbConn, loggedIn } = context;
+  let ERR_MESSAGE = 'Unable to update shot';
+  loginRequired(loggedIn);
+
+  try {
+    (await PostModel(dbConn).findByIdAndUpdate(id, {
+      $pull: {
+        shots: { _id: shotId },
+      },
+    })) as Post;
+
+    const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
+      $push: {
+        shots: {
+          $each: [{ _id: shotId, title, content, image }],
+          $position: position,
+        },
+      },
+    })) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'Unable find post';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+};

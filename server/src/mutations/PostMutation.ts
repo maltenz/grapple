@@ -4,6 +4,7 @@ import {
   deletePost,
   deletePostShot,
   updatePostShot,
+  updateWithPositionPostShot,
 } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
@@ -32,6 +33,20 @@ export const PostMutation = {
     resolve: async (parent, args, context, info): Promise<Post> => {
       const { id, shotId, title, content, image } = args.input;
       return await updatePostShot(context, { id, shotId, title, content, image });
+    },
+  },
+  updateWithPositionPostShot: {
+    resolve: async (parent, args, context, info): Promise<Post> => {
+      const { id, shotId, position, title, content, image } = args.input;
+
+      return await updateWithPositionPostShot(context, {
+        id,
+        shotId,
+        position,
+        title,
+        content,
+        image,
+      });
     },
   },
 };

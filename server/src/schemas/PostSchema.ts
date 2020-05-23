@@ -11,6 +11,13 @@ export const PostSchema = gql`
     shots: [Shot]!
   }
 
+  type Shot {
+    id: ID!
+    title: String
+    content: String
+    image: String
+  }
+
   extend type Query {
     posts: [Post]
     post(id: String!): Post
@@ -29,10 +36,20 @@ export const PostSchema = gql`
     image: String!
   }
 
+  input ShotUpdatePositionInput {
+    id: ID!
+    shotId: ID!
+    position: Int!
+    title: String!
+    content: String!
+    image: String!
+  }
+
   extend type Mutation {
     createPost: Post
     deletePost(id: String!): Post
     deletePostShot(input: ShotDeleteInput): Post
     updatePostShot(input: ShotUpdateInput): Post
+    updateWithPositionPostShot(input: ShotUpdatePositionInput): Post
   }
 `;
