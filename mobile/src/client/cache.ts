@@ -14,9 +14,9 @@ export const data = {
     name: '',
     email: '',
   },
-  signShot: {
-    __typename: 'SignShot',
-    id: 'staticsignshotid',
+  shot: {
+    __typename: 'Shot',
+    id: 'staticshotid',
     title: '',
     content: '',
     image: '',

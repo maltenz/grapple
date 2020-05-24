@@ -7,7 +7,7 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import bson, { EJSON } from 'bson';
 
-import { Shot, useUpdateSignShotMutation, useGetSignShotQuery } from '../generated/graphql';
+import { useUpdateShotMutation, useGetShotQuery } from '../generated/graphql';
 
 import {
   Panel,
@@ -57,12 +57,11 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [updateSignShot] = useUpdateSignShotMutation();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = useGetSignShotQuery();
+  const [updateSignShot] = useUpdateShotMutation();
+  const { data } = useGetShotQuery();
 
-  const [shots] = useState<Shot[]>([]);
   const [hasPermission, setHasPermission] = useState<boolean>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeIndex, setActiveIndex] = useState<number>();
 
   useEffect(() => {
@@ -73,6 +72,7 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onChange = (id: string, index: number): void => {
     setActiveIndex(index);
   };
@@ -135,7 +135,18 @@ const CameraScreen: FC = () => {
         Bottom={
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {shots?.map(
+              {data?.shot && (
+                <Thumbnail
+                  // @ts-ignore
+                  src={{ uri: data.shot.image }}
+                  marginRight={0.5}
+                  marginLeft={1}
+                  //  outline={index === activeIndex && 'blue'}
+                  // onPress={(): void => onChange(id, index)}
+                  backgroundColor="grey4"
+                />
+              )}
+              {/* {shots?.map(
                 ({ image, id }, index): ReactNode => {
                   if (image) {
                     return (
@@ -152,7 +163,7 @@ const CameraScreen: FC = () => {
                   }
                   return null;
                 }
-              )}
+              )} */}
             </ScrollView>
             <Panel marginTop={0.5} paddingHorizontal row justifyContent="space-between">
               <Button type="normal" mode="night" appearance="normal" outline>
