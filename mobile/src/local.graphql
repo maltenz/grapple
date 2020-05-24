@@ -133,3 +133,51 @@ query GetPullModal {
   }
 }
 
+ # Signed Shot
+ extend type Query {
+  signShot: SignShot!
+}
+
+type SignShot {
+  id: ID
+  title: String!
+  content: String!
+  image: String!
+}
+
+extend type Mutation {
+  updateSignShot(input: SignShotInput!): SignShot
+}
+
+input SignShotInput {
+  id: ID
+  title: String!
+  content: String!
+  image: String!
+}
+
+fragment signShotData on SignShot {
+  id
+  __typename
+  title @client
+  content @client
+  image @client
+}
+
+mutation UpdateSignShot($input: SignShotInput!) {
+  updateSignShot(input: $input) @client {
+    title @client
+    content @client
+    image @client
+  }
+}
+
+query GetSignShot {
+  signShot @client {
+    id
+    __typename
+    title @client
+    content @client
+    image @client
+  }
+}

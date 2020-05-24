@@ -10,9 +10,16 @@ export const data = {
   signUser: {
     __typename: 'SignUser',
     id: 'staticsignuserid',
-    userId: null,
-    name: null,
-    email: null,
+    userId: '',
+    name: '',
+    email: '',
+  },
+  signShot: {
+    __typename: 'SignShot',
+    id: 'staticsignshotid',
+    title: '',
+    content: '',
+    image: '',
   },
   pager: {
     __typename: 'Pager',

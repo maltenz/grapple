@@ -7,7 +7,8 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import bson, { EJSON } from 'bson';
 
-import { useMutation } from '@apollo/react-hooks';
+import { Shot, useUpdateSignShotMutation } from '../generated/graphql';
+
 import {
   Panel,
   Navigation,
@@ -23,10 +24,7 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import { CREATE_SHOT } from '../mutations/shot';
-
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
-import { Shot } from '../generated/graphql';
 
 let postId = new bson.ObjectId();
 const formatId = JSON.parse(EJSON.stringify(postId));
@@ -59,8 +57,9 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [createShot] = useMutation(CREATE_SHOT);
-  const [shots, setShots] = useState<Shot[]>([]);
+  const [updateSignShot] = useUpdateSignShotMutation();
+
+  const [shots] = useState<Shot[]>([]);
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
 
@@ -81,13 +80,14 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          createShot({
-            variables: { post: postId, image: pic.uri },
+          updateSignShot({
+            variables: { input: { title: '', content: '', image: pic.uri } },
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
           }).then((res) => {
-            const myShot = res.data.createShot as Shot;
-            const myShots = [...shots];
-            myShots.push(myShot);
-            setShots(myShots);
+            // const myShot = res.data.createShot as Shot;
+            // const myShots = [...shots];
+            // myShots.push(myShot);
+            // setShots(myShots);
           });
         })
         .catch((err) => {
