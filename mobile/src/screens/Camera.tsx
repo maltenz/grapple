@@ -7,6 +7,8 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import bson, { EJSON } from 'bson';
 
+import gql from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useUpdateShotMutation, useGetShotQuery } from '../generated/graphql';
 
 import {
@@ -54,11 +56,27 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
+const UPDATE_TODOS = gql`
+  mutation UpdateTodos($id: Int!, $text: String, $completed: Boolean) {
+    updateTodos(input: { id: $id, text: $text, completed: $completed }) @client
+  }
+`;
+
+const GET_TODOS = gql`
+  {
+    todos @client {
+      id
+      completed
+      text
+    }
+  }
+`;
+
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [updateShot] = useUpdateShotMutation();
-  const { data } = useGetShotQuery();
+  const [updateTodos] = useMutation(UPDATE_TODOS);
+  const { data } = useQuery(GET_TODOS);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,21 +100,22 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          updateShot({
-            variables: {
-              input: [
-                {
-                  image: pic.uri,
-                },
-              ],
-            },
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          }).then((res) => {
-            // const myShot = res.data.createShot as Shot;
-            // const myShots = [...shots];
-            // myShots.push(myShot);
-            // setShots(myShots);
-          });
+          console.log(pic.uri);
+          // updateShot({
+          //   variables: {
+          //     input: [
+          //       {
+          //         image: pic.uri,
+          //       },
+          //     ],
+          //   },
+          //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // }).then((res) => {
+          //   // const myShot = res.data.createShot as Shot;
+          //   // const myShots = [...shots];
+          //   // myShots.push(myShot);
+          //   // setShots(myShots);
+          // });
         })
         .catch((err) => {
           throw Error(err);
@@ -111,7 +130,7 @@ const CameraScreen: FC = () => {
     return <Panel flex={1} backgroundColor="red" />;
   }
 
-  // console.log(data);
+  console.log(data);
 
   return (
     <Camera
@@ -134,7 +153,12 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => navigation.navigate('MyPosts')}
+              // onPress={(): void => navigation.navigate('MyPosts')}
+              onPress={(): void => {
+                updateTodos({
+                  variables: { id: Math.round(Math.random() * 100), text: 'test', completed: true },
+                });
+              }}
             >
               Next
             </Button>

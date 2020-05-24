@@ -4,7 +4,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
@@ -30,11 +30,20 @@ const UPDATE_TODOS = gql`
   }
 `;
 
+const GET_TODOS = gql`
+  {
+    todos @client {
+      id
+      completed
+      text
+    }
+  }
+`;
+
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
   const [updatePager] = useUpdatePagerMutation();
   const [updatePullModal] = useUpdatePullModalMutation();
-  const [updateTodos] = useMutation(UPDATE_TODOS);
 
   const navigation = useNavigation<OnboardingRootNavigationProp>();
 
@@ -67,11 +76,6 @@ const Onboarding1: FC = () => {
           <Panel flex={1} center>
             <SvgLogoGrapple color="white" scale={0.8} />
             <Text
-              onPress={() =>
-                updateTodos({
-                  variables: { text: 'test', completed: true },
-                })
-              }
               marginTop={0.85}
               marginBottom={0.5}
               textAlign="center"
