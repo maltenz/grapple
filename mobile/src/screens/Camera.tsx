@@ -7,7 +7,7 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import bson, { EJSON } from 'bson';
 
-import { Shot, useUpdateSignShotMutation } from '../generated/graphql';
+import { Shot, useUpdateSignShotMutation, useGetSignShotQuery } from '../generated/graphql';
 
 import {
   Panel,
@@ -58,6 +58,8 @@ const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const [updateSignShot] = useUpdateSignShotMutation();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data } = useGetSignShotQuery();
 
   const [shots] = useState<Shot[]>([]);
   const [hasPermission, setHasPermission] = useState<boolean>();
