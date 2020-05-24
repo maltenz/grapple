@@ -174,3 +174,45 @@ query GetShot {
     image @client
   }
 }
+
+extend type Query {
+  todos: [TodoItem]
+}
+
+extend type Mutation {
+  updateTodos(input: TodoInput!): TodoItem
+}
+
+type TodoItem {
+  id: String
+  text: String
+  completed: Boolean
+}
+
+fragment completeTodo on TodoItem {
+  id
+  text
+  completed
+}
+
+input TodoInput {
+  id: ID
+  text: String!
+  completed: Boolean!
+}
+
+query GetTodos {
+  todos @client {
+    id
+    text
+    completed
+  }
+}
+
+mutation UpdateTodos($input: TodoInput!) {
+  updateTodos(input: $input) @client {
+    id @client
+    text @client
+    completed @client
+  }
+}

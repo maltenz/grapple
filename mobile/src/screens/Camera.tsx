@@ -57,7 +57,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [updateSignShot] = useUpdateShotMutation();
+  const [updateShot] = useUpdateShotMutation();
   const { data } = useGetShotQuery();
 
   const [hasPermission, setHasPermission] = useState<boolean>();
@@ -82,8 +82,14 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          updateSignShot({
-            variables: { input: { title: '', content: '', image: pic.uri } },
+          updateShot({
+            variables: {
+              input: [
+                {
+                  image: pic.uri,
+                },
+              ],
+            },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
           }).then((res) => {
             // const myShot = res.data.createShot as Shot;
@@ -104,6 +110,8 @@ const CameraScreen: FC = () => {
   if (hasPermission === false) {
     return <Panel flex={1} backgroundColor="red" />;
   }
+
+  // console.log(data);
 
   return (
     <Camera
@@ -135,7 +143,7 @@ const CameraScreen: FC = () => {
         Bottom={
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {data?.shot && (
+              {/* {data?.shots && (
                 <Thumbnail
                   // @ts-ignore
                   src={{ uri: data.shot.image }}
@@ -145,18 +153,18 @@ const CameraScreen: FC = () => {
                   // onPress={(): void => onChange(id, index)}
                   backgroundColor="grey4"
                 />
-              )}
-              {/* {shots?.map(
-                ({ image, id }, index): ReactNode => {
-                  if (image) {
+              )} */}
+              {/* {data?.shots?.map(
+                (shot, index): ReactNode => {
+                  if (shot?.image) {
                     return (
                       <Thumbnail
-                        key={id}
-                        src={{ uri: image }}
-                        marginRight={index === shots.length - 1 ? 1 : 0.5}
+                        key={shot.image}
+                        src={{ uri: shot.image }}
+                        marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
-                        onPress={(): void => onChange(id, index)}
+                        // onPress={(): void => onChange(id, index)}
                         backgroundColor="grey4"
                       />
                     );
