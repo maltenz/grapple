@@ -5,6 +5,11 @@ import { Color } from './colors';
 import { VIBRATE_DUR } from './system';
 
 /**
+ * helpers
+ */
+import { CreateId } from './helpers';
+
+/**
  * core components
  */
 import {
@@ -96,8 +101,11 @@ import SvgIconSmallShare from './svg/icons/small/SvgIconSmallShare';
 import SvgIconSmallUp from './svg/icons/small/SvgIconSmallUp';
 
 export {
+  // helpers
+  CreateId,
   // util
   AssetStyles,
+  Color,
   VIBRATE_DUR,
   // types
   ModeType,
@@ -151,8 +159,6 @@ export {
   Thumbnail,
   ThumbnailDimension,
   Search,
-  // Colors
-  Color,
   // components
   // svg graphics
   SvgTabbarBackground,

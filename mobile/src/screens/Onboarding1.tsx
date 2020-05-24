@@ -3,8 +3,6 @@ import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
@@ -23,22 +21,6 @@ const ListRow: FC = ({ children }) => (
     </Text>
   </Panel>
 );
-
-const UPDATE_TODOS = gql`
-  mutation UpdateTodos($id: Int!, $text: String, $completed: Boolean) {
-    updateTodos(input: { id: $id, text: $text, completed: $completed }) @client
-  }
-`;
-
-const GET_TODOS = gql`
-  {
-    todos @client {
-      id
-      completed
-      text
-    }
-  }
-`;
 
 const Onboarding1: FC = () => {
   const insets = useSafeArea();

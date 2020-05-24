@@ -5,7 +5,6 @@ import { User } from './UserModel';
 /**
  * Post interface constructor
  */
-
 export class Shot {
   @prop()
   public title?: string;

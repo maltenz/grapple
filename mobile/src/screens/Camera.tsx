@@ -9,7 +9,6 @@ import bson, { EJSON } from 'bson';
 
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { useUpdateShotMutation, useGetShotQuery } from '../generated/graphql';
 
 import {
   Panel,
@@ -22,15 +21,16 @@ import {
   Button,
   SvgIconStory,
   Thumbnail,
+  CreateId,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 
-let postId = new bson.ObjectId();
-const formatId = JSON.parse(EJSON.stringify(postId));
-postId = formatId.$oid;
+let id = new bson.ObjectId();
+const formatId = JSON.parse(EJSON.stringify(id));
+id = formatId.$oid;
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -57,8 +57,8 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 };
 
 const UPDATE_TODOS = gql`
-  mutation UpdateTodos($id: Int!, $text: String, $completed: Boolean) {
-    updateTodos(input: { id: $id, text: $text, completed: $completed }) @client
+  mutation UpdateTodos($id: ID!, $title: String, $content: String, $image: String) {
+    updateTodos(input: { id: $id, title: $title, content: $content, image: $image }) @client
   }
 `;
 
@@ -66,8 +66,9 @@ const GET_TODOS = gql`
   {
     todos @client {
       id
-      completed
-      text
+      title
+      content
+      image
     }
   }
 `;
@@ -90,8 +91,12 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data?.todos]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onChange = (id: string, index: number): void => {
+  const onChange = (index: number): void => {
     setActiveIndex(index);
   };
 
@@ -100,22 +105,9 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          console.log(pic.uri);
-          // updateShot({
-          //   variables: {
-          //     input: [
-          //       {
-          //         image: pic.uri,
-          //       },
-          //     ],
-          //   },
-          //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          // }).then((res) => {
-          //   // const myShot = res.data.createShot as Shot;
-          //   // const myShots = [...shots];
-          //   // myShots.push(myShot);
-          //   // setShots(myShots);
-          // });
+          updateTodos({
+            variables: { id: CreateId(), title: '', content: '', image: pic.uri },
+          });
         })
         .catch((err) => {
           throw Error(err);
@@ -129,8 +121,6 @@ const CameraScreen: FC = () => {
   if (hasPermission === false) {
     return <Panel flex={1} backgroundColor="red" />;
   }
-
-  console.log(data);
 
   return (
     <Camera
@@ -153,12 +143,7 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              // onPress={(): void => navigation.navigate('MyPosts')}
-              onPress={(): void => {
-                updateTodos({
-                  variables: { id: Math.round(Math.random() * 100), text: 'test', completed: true },
-                });
-              }}
+              onPress={(): void => navigation.navigate('MyPosts')}
             >
               Next
             </Button>
