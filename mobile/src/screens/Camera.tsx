@@ -29,13 +29,13 @@ import {
   Badge,
   SvgIconImage,
   SvgIconVideo,
+  SvgIconVideoOff,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 
 import { ADD_SHOT, GET_SHOTS, DELETE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
-import SvgIconVideoOff from '../assets/svg/icons/large/SvgIconVideoOff';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -164,12 +164,12 @@ const CameraScreen: FC = () => {
         Right={
           <NavigationIcon mode="night" type="close" onPress={(): void => navigation.goBack()} />
         }
-        style={{ backgroundColor: 'transparent', position: 'absolute', width: '100%' }}
+        style={styles.navigation}
       />
       <Camera
         // @ts-ignore
         ref={camRef}
-        style={{ flex: 1, backgroundColor: 'red' }}
+        style={{ flex: 1 }}
         type="front"
       />
       <CameraFrame
@@ -314,6 +314,11 @@ const styles = StyleSheet.create({
     height: SvgTabbarBackgroundHeight,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  navigation: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    width: '100%',
   },
 });
 
