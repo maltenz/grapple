@@ -24,7 +24,7 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import { ADD_SHOT, GET_SHOTS } from '../resolvers/addShot';
+import { ADD_SHOT, GET_SHOTS, DELETE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
@@ -57,6 +57,7 @@ const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const [addShot] = useMutation<Shot>(ADD_SHOT);
+  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
@@ -70,8 +71,14 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
-  const onChange = (index: number): void => {
+  const onChange = (id: string, index: number): void => {
     setActiveIndex(index);
+
+    if (activeIndex === index) {
+      deleteShot({
+        variables: { id },
+      });
+    }
   };
 
   const handleCapture = async (): Promise<void> => {
@@ -135,7 +142,7 @@ const CameraScreen: FC = () => {
                         marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
-                        onPress={(): void => onChange(index)}
+                        onPress={(): void => onChange(shot.id, index)}
                         backgroundColor="grey4"
                       />
                     );
