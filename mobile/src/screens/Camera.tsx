@@ -6,7 +6,6 @@ import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 
-import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import {
@@ -25,6 +24,7 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
+import { ADD_SHOT, GET_SHOTS } from '../resolvers/addShot';
 import { Shot } from '../generated/graphql';
 
 import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
@@ -53,28 +53,11 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
-const ADD_SHOT = gql`
-  mutation AddShots($id: ID!, $title: String, $content: String, $image: String) {
-    addShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
-  }
-`;
-
-const GET_SHOT = gql`
-  {
-    shots @client {
-      id
-      title
-      content
-      image
-    }
-  }
-`;
-
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [addShot] = useMutation(ADD_SHOT);
-  const { data } = useQuery(GET_SHOT);
+  const [addShot] = useMutation<Shot>(ADD_SHOT);
+  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
