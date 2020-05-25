@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { useQuery } from '@apollo/react-hooks';
+import { GET_POSTS } from '../queries/post';
+
 import {
   Post,
   Color,
@@ -15,9 +17,6 @@ import {
 } from '../assets';
 
 import { ParentNavigationProp } from './HomeRoot';
-
-import { GET_POSTS } from '../queries/post';
-
 import { NavigationLogo } from '../assets/components/base/Navigation';
 
 const Home: FC = () => {

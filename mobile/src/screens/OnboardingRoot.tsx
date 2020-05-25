@@ -5,9 +5,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
-import { BulletPager, AssetStyles } from '../assets';
-
 import { useGetPagerQuery } from '../generated/graphql';
+
+import { BulletPager, AssetStyles } from '../assets';
 
 import { AppRootParamList } from './AppRoot';
 
@@ -46,9 +46,7 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
-
   const { data } = useGetPagerQuery();
-
   const [pagerAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {

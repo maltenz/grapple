@@ -4,17 +4,16 @@ import { Vibration, Animated, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
-import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
-
 import { CREATE_USER } from '../../mutations/user';
+import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
+
+import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
 
 import {
   ErrorInputInterpolationConfig,
   ErrorTextStyles,
   REQUIRED_TEXT,
 } from '../../assets/components/base/Text';
-
-import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 
 type RegisterFormData = {
   username: string;

@@ -4,7 +4,6 @@ import MapView from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
 import { Panel, AssetStyles, SvgIconSmallRight, Button, Text } from '../assets';
-
 import Overlay, { OverlayItem, OverlayPanel } from './components/Overlay';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';

@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
-import { Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  Alert,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
@@ -18,8 +25,10 @@ import {
   AssetStyles,
   Button,
   SvgIconStory,
+  SvgIconVideo,
   Thumbnail,
   CreateId,
+  Badge,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
@@ -27,21 +36,36 @@ import { ChildNavigationProp } from './HomeRoot';
 import { ADD_SHOT, GET_SHOTS, DELETE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
-import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
-
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
 const TOP_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 - TOP_OFFSET;
 const BOTTOM_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 + TOP_OFFSET;
 
 interface CameraFrameProps {
+  backgroundImage: string | null;
   Top?: ReactNode;
   Bottom?: ReactNode;
 }
 
-const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
+interface CameraBackground {
+  backgroundImage: string | null;
+}
+
+const CameraBackground: FC<CameraBackground> = ({ backgroundImage, children }) => {
+  if (backgroundImage) {
+    return (
+      <ImageBackground source={{ uri: backgroundImage }} style={styles.frame}>
+        {children}
+      </ImageBackground>
+    );
+  }
+
+  return <View style={styles.frame}>{children}</View>;
+};
+
+const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => {
   return (
-    <View style={styles.frame}>
+    <CameraBackground backgroundImage={backgroundImage}>
       <BlurView tint="dark" intensity={100} style={styles.frameTop}>
         {Top}
       </BlurView>
@@ -49,7 +73,7 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
       <BlurView tint="dark" intensity={100} style={styles.frameBottom}>
         {Bottom}
       </BlurView>
-    </View>
+    </CameraBackground>
   );
 };
 
@@ -59,9 +83,10 @@ const CameraScreen: FC = () => {
   const [addShot] = useMutation<Shot>(ADD_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
-
   const [hasPermission, setHasPermission] = useState<boolean>();
-  const [activeIndex, setActiveIndex] = useState<number>();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [deleteActive, setDeleteActive] = useState<boolean>(false);
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -73,11 +98,12 @@ const CameraScreen: FC = () => {
 
   const onChange = (id: string, index: number): void => {
     setActiveIndex(index);
+    const image = data?.shots[index].image;
+    setBackgroundImage(image !== undefined ? image : null);
 
     if (activeIndex === index) {
-      deleteShot({
-        variables: { id },
-      });
+      setBackgroundImage(null);
+      setActiveIndex(null);
     }
   };
 
@@ -85,7 +111,6 @@ const CameraScreen: FC = () => {
     try {
       if (camRef.current !== undefined) {
         const pic = await camRef.current.takePictureAsync();
-
         addShot({
           variables: { id: CreateId(), title: '', content: '', image: pic.uri },
         });
@@ -110,6 +135,7 @@ const CameraScreen: FC = () => {
       type="front"
     >
       <CameraFrame
+        backgroundImage={backgroundImage}
         Top={
           <Panel
             alignItems="flex-end"
@@ -131,12 +157,31 @@ const CameraScreen: FC = () => {
         }
         Bottom={
           <Panel>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ overflow: 'visible' }}
+            >
               {data?.shots?.map(
                 (shot, index: number): ReactNode => {
                   if (shot?.image) {
                     return (
                       <Thumbnail
+                        TopRight={
+                          deleteActive && (
+                            <Badge
+                              type="delete"
+                              appearance="heavy"
+                              onPress={(): void => {
+                                setBackgroundImage(null);
+                                setActiveIndex(null);
+                                deleteShot({
+                                  variables: { id: shot.id },
+                                });
+                              }}
+                            />
+                          )
+                        }
                         key={shot.id}
                         src={{ uri: shot.image }}
                         marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
@@ -155,7 +200,13 @@ const CameraScreen: FC = () => {
               <Button type="normal" mode="night" appearance="normal" outline>
                 Flip camera
               </Button>
-              <Button type="normal" mode="night" appearance="warning" outline>
+              <Button
+                type="normal"
+                mode="night"
+                appearance="warning"
+                outline={!deleteActive}
+                onPress={(): void => setDeleteActive(!deleteActive)}
+              >
                 Edit
               </Button>
             </Panel>

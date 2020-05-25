@@ -4,9 +4,10 @@ import { Animated, Vibration, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
-import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
-
+import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 import { LOGIN_USER } from '../../mutations/user';
+
+import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
 import {
   ErrorInputInterpolationConfig,
@@ -14,7 +15,6 @@ import {
   REQUIRED_TEXT,
   SmallTextConfig,
 } from '../../assets/components/base/Text';
-import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 
 type LoginFormData = {
   email: string;

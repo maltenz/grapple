@@ -4,7 +4,6 @@ import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { Panel, AssetStyles, Text } from '../../assets';
-
 import { PanelProps } from '../../assets/components/base/Panel';
 
 interface OverlayItemProps {

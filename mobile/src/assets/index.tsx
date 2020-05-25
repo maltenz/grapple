@@ -86,6 +86,7 @@ import SvgIconLeft from './svg/icons/large/SvgIconLeft';
 import SvgIconRight from './svg/icons/large/SvgIconRight';
 import SvgIconSearch from './svg/icons/large/SvgIconSearch';
 import SvgIconStory from './svg/icons/large/SvgIconStory';
+import SvgIconVideo from './svg/icons/large/SvgIconVideo';
 // -- icons small
 import SvgIconSmallAdd from './svg/icons/small/SvgIconSmallAdd';
 import SvgIconSmallAttach from './svg/icons/small/SvgIconSmallAttach';
@@ -184,6 +185,7 @@ export {
   SvgIconRight,
   SvgIconSearch,
   SvgIconStory,
+  SvgIconVideo,
   // icons small
   SvgIconSmallAdd,
   SvgIconSmallAttach,
