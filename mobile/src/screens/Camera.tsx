@@ -53,13 +53,13 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
   );
 };
 
-const UPDATE_TODOS = gql`
-  mutation UpdateShots($id: ID!, $title: String, $content: String, $image: String) {
-    updateTodos(input: { id: $id, title: $title, content: $content, image: $image }) @client
+const ADD_SHOT = gql`
+  mutation AddShots($id: ID!, $title: String, $content: String, $image: String) {
+    addShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
   }
 `;
 
-const GET_TODOS = gql`
+const GET_SHOT = gql`
   {
     shots @client {
       id
@@ -73,8 +73,8 @@ const GET_TODOS = gql`
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [updateTodos] = useMutation(UPDATE_TODOS);
-  const { data } = useQuery(GET_TODOS);
+  const [addShot] = useMutation(ADD_SHOT);
+  const { data } = useQuery(GET_SHOT);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number>();
@@ -96,7 +96,7 @@ const CameraScreen: FC = () => {
       camRef.current
         .takePictureAsync()
         .then((pic) => {
-          updateTodos({
+          addShot({
             variables: { id: CreateId(), title: '', content: '', image: pic.uri },
           });
         })

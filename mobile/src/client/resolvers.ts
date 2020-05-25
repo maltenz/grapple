@@ -12,7 +12,7 @@ export const resolvers = {
     updatePager,
     updatePullModal,
     // @ts-ignore
-    updateTodos: (_, { input: { id, title, content, image } }, { cache }) => {
+    addShot: (_, { input: { id, title, content, image } }, { cache }) => {
       const query = gql`
         query GetShots {
           shots @client {
