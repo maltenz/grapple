@@ -30,6 +30,7 @@ import {
   SvgIconImage,
   SvgIconVideo,
   SvgIconVideoOff,
+  ThumbnailDimension,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
@@ -187,7 +188,7 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => navigation.navigate('MyPosts')}
+              onPress={(): void => navigation.navigate('CreatePost')}
             >
               Next
             </Button>
@@ -195,11 +196,7 @@ const CameraScreen: FC = () => {
         }
         Bottom={
           <Panel>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ overflow: 'visible' }}
-            >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
               {data?.shots?.map(
                 (shot, index: number): ReactNode => {
                   if (shot?.image) {
@@ -319,6 +316,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     position: 'absolute',
     width: '100%',
+  },
+  scrollView: {
+    height: ThumbnailDimension + AssetStyles.measure.space,
+    overflow: 'visible',
   },
 });
 

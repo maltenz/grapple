@@ -32,6 +32,7 @@ import MyPost from './MyPost';
 import Account from './Account';
 import MyPosts from './MyPosts';
 import Search from './Search';
+import CreatePost from './CreatePost';
 
 /**
  * Home parent
@@ -68,6 +69,7 @@ type ChildParamList = {
   // Profile
   MyProfile: undefined;
   // Post
+  CreatePost: undefined;
   MyPost: undefined;
   MyPosts: undefined;
   // Account
@@ -198,6 +200,7 @@ const Child: FC<ChildNavigationProps> = () => {
       {/* Profile */}
       <ChildStack.Screen name="MyProfile" component={MyProfile} />
       {/* Post */}
+      <ChildStack.Screen name="CreatePost" component={CreatePost} />
       <ChildStack.Screen name="MyPost" component={MyPost} />
       <ChildStack.Screen name="MyPosts" component={MyPosts} />
       {/* Account */}
