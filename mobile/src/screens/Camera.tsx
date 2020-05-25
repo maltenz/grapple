@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
 import { Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Camera, CameraCapturedPicture } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
@@ -74,18 +74,17 @@ const CameraScreen: FC = () => {
     setActiveIndex(index);
   };
 
-  const handleCapture = (): Promise<CameraCapturedPicture> | void => {
-    if (camRef.current !== undefined) {
-      camRef.current
-        .takePictureAsync()
-        .then((pic) => {
-          addShot({
-            variables: { id: CreateId(), title: '', content: '', image: pic.uri },
-          });
-        })
-        .catch((err) => {
-          throw Error(err);
+  const handleCapture = async (): Promise<void> => {
+    try {
+      if (camRef.current !== undefined) {
+        const pic = await camRef.current.takePictureAsync();
+
+        addShot({
+          variables: { id: CreateId(), title: '', content: '', image: pic.uri },
         });
+      }
+    } catch (err) {
+      throw Error(err);
     }
   };
 
@@ -127,7 +126,7 @@ const CameraScreen: FC = () => {
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {data?.shots?.map(
-                (shot: Shot, index: number): ReactNode => {
+                (shot, index: number): ReactNode => {
                   if (shot?.image) {
                     return (
                       <Thumbnail
