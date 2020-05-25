@@ -33,5 +33,5 @@ export const data = {
     id: 'staticpullmodalid',
     visible: true,
   },
-  todos: [],
+  shots: [],
 };

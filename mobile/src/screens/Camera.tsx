@@ -5,7 +5,6 @@ import { Camera, CameraCapturedPicture } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
-import bson, { EJSON } from 'bson';
 
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -26,11 +25,9 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
+import { Shot } from '../generated/graphql';
 
-let id = new bson.ObjectId();
-const formatId = JSON.parse(EJSON.stringify(id));
-id = formatId.$oid;
+import SvgIconVideo from '../assets/svg/icons/large/SvgIconVideo';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -57,14 +54,14 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom }) => {
 };
 
 const UPDATE_TODOS = gql`
-  mutation UpdateTodos($id: ID!, $title: String, $content: String, $image: String) {
+  mutation UpdateShots($id: ID!, $title: String, $content: String, $image: String) {
     updateTodos(input: { id: $id, title: $title, content: $content, image: $image }) @client
   }
 `;
 
 const GET_TODOS = gql`
   {
-    todos @client {
+    shots @client {
       id
       title
       content
@@ -80,7 +77,6 @@ const CameraScreen: FC = () => {
   const { data } = useQuery(GET_TODOS);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeIndex, setActiveIndex] = useState<number>();
 
   useEffect(() => {
@@ -91,11 +87,6 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data?.todos]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onChange = (index: number): void => {
     setActiveIndex(index);
   };
@@ -152,35 +143,24 @@ const CameraScreen: FC = () => {
         Bottom={
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {/* {data?.shots && (
-                <Thumbnail
-                  // @ts-ignore
-                  src={{ uri: data.shot.image }}
-                  marginRight={0.5}
-                  marginLeft={1}
-                  //  outline={index === activeIndex && 'blue'}
-                  // onPress={(): void => onChange(id, index)}
-                  backgroundColor="grey4"
-                />
-              )} */}
-              {/* {data?.shots?.map(
-                (shot, index): ReactNode => {
+              {data?.shots?.map(
+                (shot: Shot, index: number): ReactNode => {
                   if (shot?.image) {
                     return (
                       <Thumbnail
-                        key={shot.image}
+                        key={shot.id}
                         src={{ uri: shot.image }}
                         marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
-                        // onPress={(): void => onChange(id, index)}
+                        onPress={(): void => onChange(index)}
                         backgroundColor="grey4"
                       />
                     );
                   }
                   return null;
                 }
-              )} */}
+              )}
             </ScrollView>
             <Panel marginTop={0.5} paddingHorizontal row justifyContent="space-between">
               <Button type="normal" mode="night" appearance="normal" outline>

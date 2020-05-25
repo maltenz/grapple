@@ -13,11 +13,9 @@ export const resolvers = {
     updatePullModal,
     // @ts-ignore
     updateTodos: (_, { input: { id, title, content, image } }, { cache }) => {
-      console.log(title);
-      console.log(content);
       const query = gql`
-        query GetTodos {
-          todos @client {
+        query GetShots {
+          shots @client {
             id
             title
             content
@@ -30,7 +28,7 @@ export const resolvers = {
 
       const newTodo = { id, title, content, image, __typename: 'TodoItem' };
       const data = {
-        todos: [...previous.todos, newTodo],
+        shots: [...previous.shots, newTodo],
       };
 
       cache.writeQuery({ query, data });
