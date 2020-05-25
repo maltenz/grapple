@@ -155,12 +155,23 @@ const CameraScreen: FC = () => {
   }
 
   return (
-    <Camera
-      // @ts-ignore
-      ref={camRef}
-      style={{ flex: 1 }}
-      type="front"
-    >
+    <>
+      <Navigation
+        mode="night"
+        Left={
+          <NavigationIcon mode="night" type={flashSettings} onPress={(): void => handleFlash()} />
+        }
+        Right={
+          <NavigationIcon mode="night" type="close" onPress={(): void => navigation.goBack()} />
+        }
+        style={{ backgroundColor: 'transparent', position: 'absolute', width: '100%' }}
+      />
+      <Camera
+        // @ts-ignore
+        ref={camRef}
+        style={{ flex: 1, backgroundColor: 'red' }}
+        type="front"
+      />
       <CameraFrame
         backgroundImage={backgroundImage}
         Top={
@@ -240,16 +251,6 @@ const CameraScreen: FC = () => {
           </Panel>
         }
       />
-      <Navigation
-        mode="night"
-        Left={
-          <NavigationIcon mode="night" type={flashSettings} onPress={(): void => handleFlash()} />
-        }
-        Right={
-          <NavigationIcon mode="night" type="close" onPress={(): void => Alert.alert('press')} />
-        }
-        style={{ backgroundColor: 'transparent' }}
-      />
       <Panel row style={styles.footer}>
         <Panel flex={1}>
           <TouchableOpacity
@@ -278,7 +279,7 @@ const CameraScreen: FC = () => {
         </Panel>
       </Panel>
       <TabbarBackground color="black" />
-    </Camera>
+    </>
   );
 };
 
@@ -291,6 +292,7 @@ const styles = StyleSheet.create({
     left: 0,
   },
   frameTop: {
+    top: 0,
     height: TOP_HEIGHT,
   },
   frameSquare: {
