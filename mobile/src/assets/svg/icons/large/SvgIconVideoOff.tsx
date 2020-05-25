@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Svg, { G, Path } from 'react-native-svg';
+import Svg, { Path, Line } from 'react-native-svg';
 import { ColorType } from '../../../../types';
 import { Color } from '../../../colors';
 
@@ -30,29 +30,31 @@ const SvgIconVideoOff: FC<SvgIconProps> = ({
 
   return (
     <Svg height={height} width={width} viewBox="0 0 39 38">
-      <G>
-        <Path
-          fill="none"
-          d="M15 27.914h8.183a2.454 2.454 0 0 0 2.454-2.454v-3.273L33 25.46V12.37l-4.061 1.805"
-          stroke={color}
-          strokeLinecap="round"
-          strokeWidth={strokeWidth}
-        />
-        <Path
-          fill="none"
-          d="M23.183 9.916H10.91a2.454 2.454 0 0 0-2.454 2.454V24"
-          stroke={color}
-          strokeLinecap="round"
-          strokeWidth={strokeWidth}
-        />
-        <Path
-          fill="none"
-          d="M27.822 9.822l-18 18"
-          stroke={color}
-          strokeLinecap="round"
-          strokeWidth={strokeWidth}
-        />
-      </G>
+      <Line
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+        x1="24.64"
+        y1="15.01"
+        x2="24.64"
+        y2="15"
+      />
+      <Path
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+        d="M7.46,25.11V13.37a2.44757,2.44757,0,0,1,2.45-2.45H21.58Z"
+      />
+
+      <Path
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+        d="M24.64,14.92V15H32v9H24.64v2.46a2.454,2.454,0,0,1-2.45,2.45H10.73L24,15"
+      />
     </Svg>
   );
 };

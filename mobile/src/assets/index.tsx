@@ -74,6 +74,7 @@ import SvgRulerRightArrow from './svg/SvgRulerRightArrow';
 import SvgIconAccount from './svg/icons/large/SvgIconAccount';
 import SvgIconBookmark from './svg/icons/large/SvgIconBookmark';
 import SvgIconChat from './svg/icons/large/SvgIconChat';
+import SvgIconClose from './svg/icons/large/SvgIconClose';
 import SvgIconDown from './svg/icons/large/SvgIconDown';
 import SvgIconEdit from './svg/icons/large/SvgIconEdit';
 import SvgIconFlash from './svg/icons/large/SvgIconFlash';
@@ -81,6 +82,7 @@ import SvgIconFlashAuto from './svg/icons/large/SvgIconFlashAuto';
 import SvgIconFlashOff from './svg/icons/large/SvgIconFlashOff';
 import SvgIconHeart from './svg/icons/large/SvgIconHeart';
 import SvgIconHome from './svg/icons/large/SvgIconHome';
+import SvgIconImage from './svg/icons/large/SvgIconImage';
 import SvgIconIncognito from './svg/icons/large/SvgIconIncognito';
 import SvgIconLeft from './svg/icons/large/SvgIconLeft';
 import SvgIconRight from './svg/icons/large/SvgIconRight';
@@ -173,6 +175,7 @@ export {
   SvgIconAccount,
   SvgIconBookmark,
   SvgIconChat,
+  SvgIconClose,
   SvgIconDown,
   SvgIconEdit,
   SvgIconFlash,
@@ -180,6 +183,7 @@ export {
   SvgIconFlashOff,
   SvgIconHeart,
   SvgIconHome,
+  SvgIconImage,
   SvgIconIncognito,
   SvgIconLeft,
   SvgIconRight,

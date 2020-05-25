@@ -24,17 +24,18 @@ import {
   SvgTabbarBackgroundHeight,
   AssetStyles,
   Button,
-  SvgIconStory,
-  SvgIconVideo,
   Thumbnail,
   CreateId,
   Badge,
+  SvgIconImage,
+  SvgIconVideo,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 
 import { ADD_SHOT, GET_SHOTS, DELETE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
+import SvgIconVideoOff from '../assets/svg/icons/large/SvgIconVideoOff';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -50,6 +51,8 @@ interface CameraFrameProps {
 interface CameraBackground {
   backgroundImage: string | null;
 }
+
+type Flash = 'flash' | 'flashAuto' | 'flashOff';
 
 const CameraBackground: FC<CameraBackground> = ({ backgroundImage, children }) => {
   if (backgroundImage) {
@@ -87,6 +90,8 @@ const CameraScreen: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [deleteActive, setDeleteActive] = useState<boolean>(false);
+  const [flashSettings, setFlashSettings] = useState<Flash>('flash');
+  const [videoSettings, setVideoSettings] = useState<'on' | 'off'>('off');
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -117,6 +122,28 @@ const CameraScreen: FC = () => {
       }
     } catch (err) {
       throw Error(err);
+    }
+  };
+
+  const handleFlash = (): void => {
+    switch (flashSettings) {
+      case 'flashAuto':
+        setFlashSettings('flashOff');
+        break;
+      case 'flashOff':
+        setFlashSettings('flash');
+        break;
+      case 'flash':
+      default:
+        setFlashSettings('flashAuto');
+    }
+  };
+
+  const handleVideo = (): void => {
+    if (videoSettings === 'off') {
+      setVideoSettings('on');
+    } else {
+      setVideoSettings('off');
     }
   };
 
@@ -216,17 +243,25 @@ const CameraScreen: FC = () => {
       <Navigation
         mode="night"
         Left={
-          <NavigationIcon mode="night" type="search" onPress={(): void => Alert.alert('press')} />
+          <NavigationIcon mode="night" type={flashSettings} onPress={(): void => handleFlash()} />
         }
         Right={
-          <NavigationIcon mode="night" type="chat" onPress={(): void => Alert.alert('press')} />
+          <NavigationIcon mode="night" type="close" onPress={(): void => Alert.alert('press')} />
         }
         style={{ backgroundColor: 'transparent' }}
       />
       <Panel row style={styles.footer}>
         <Panel flex={1}>
-          <TouchableOpacity accessibilityRole="button" style={styles.footerIcon}>
-            <SvgIconVideo scale={0.9} color="white" />
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={styles.footerIcon}
+            onPress={handleVideo}
+          >
+            {videoSettings === 'off' ? (
+              <SvgIconVideoOff scale={0.9} color="white" />
+            ) : (
+              <SvgIconVideo scale={0.9} color="white" />
+            )}
           </TouchableOpacity>
         </Panel>
         <Panel flex={1} center>
@@ -238,7 +273,7 @@ const CameraScreen: FC = () => {
         </Panel>
         <Panel flex={1}>
           <TouchableOpacity accessibilityRole="button" style={styles.footerIcon}>
-            <SvgIconStory scale={0.9} color="white" />
+            <SvgIconImage scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
       </Panel>

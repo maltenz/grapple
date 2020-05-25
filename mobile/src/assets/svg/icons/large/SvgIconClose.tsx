@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 import { ColorType } from '../../../../types';
 import { Color } from '../../../colors';
 
@@ -9,7 +9,7 @@ interface SvgIconProps {
   strokeWidth?: boolean | number;
 }
 
-const SvgIconFlash: FC<SvgIconProps> = ({
+const SvgIconClose: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,
@@ -30,15 +30,28 @@ const SvgIconFlash: FC<SvgIconProps> = ({
 
   return (
     <Svg height={height} width={width} viewBox="0 0 39 38">
-      <Path
+      <Line
+        x1="29"
+        y1="28.5"
+        x2="10"
+        y2="9.5"
         fill="none"
         stroke={color}
         strokeLinecap="round"
         strokeWidth={strokeWidth}
-        d="M20.11612,7.41189,8.818,20.12233a1.1,1.1,0,0,0,.82215,1.8308h9.14535l-1.30535,7.83215a1.1,1.1,0,0,0,1.90718.91164L30.68545,17.98649a1.1,1.1,0,0,0-.82215-1.8308H20.71795L22.0233,8.32353A1.1,1.1,0,0,0,20.11612,7.41189Z"
+      />
+      <Line
+        x1="10"
+        y1="28.5"
+        x2="29"
+        y2="9.5"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
       />
     </Svg>
   );
 };
 
-export default SvgIconFlash;
+export default SvgIconClose;

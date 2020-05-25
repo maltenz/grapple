@@ -8,9 +8,13 @@ import Panel from './Panel';
 import CoreText from '../core/Text';
 import SvgIconSearch from '../../svg/icons/large/SvgIconSearch';
 import SvgIconLeft from '../../svg/icons/large/SvgIconLeft';
-import SvgIconSmallClose from '../../svg/icons/small/SvgIconSmallClose';
 import { AssetStyles } from '../../styles';
 import SvgLogoGrapple from '../../svg/SvgGrappleLogo';
+import SvgIconFlash from '../../svg/icons/large/SvgIconFlash';
+import SvgIconClose from '../../svg/icons/large/SvgIconClose';
+import SvgIconImage from '../../svg/icons/large/SvgIconImage';
+import SvgIconFlashAuto from '../../svg/icons/large/SvgIconFlashAuto';
+import SvgIconFlashOff from '../../svg/icons/large/SvgIconFlashOff';
 
 interface NavigationProps {
   Left?: ReactNode;
@@ -23,7 +27,17 @@ interface NavigationProps {
 
 interface NavigationIconProps {
   mode: ModeType;
-  type: 'chat' | 'search' | 'delete' | 'saved' | 'back' | 'close';
+  type:
+    | 'chat'
+    | 'search'
+    | 'delete'
+    | 'saved'
+    | 'back'
+    | 'close'
+    | 'flash'
+    | 'flashOff'
+    | 'flashAuto'
+    | 'image';
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
@@ -67,7 +81,15 @@ const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back' }) => {
     case 'back':
       return <SvgIconLeft {...config} />;
     case 'close':
-      return <SvgIconSmallClose {...config} />;
+      return <SvgIconClose {...config} />;
+    case 'flash':
+      return <SvgIconFlash {...config} />;
+    case 'flashOff':
+      return <SvgIconFlashOff {...config} />;
+    case 'flashAuto':
+      return <SvgIconFlashAuto {...config} />;
+    case 'image':
+      return <SvgIconImage {...config} />;
     default:
       return null;
   }

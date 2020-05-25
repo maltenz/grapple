@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, Circle } from 'react-native-svg';
 import { ColorType } from '../../../../types';
 import { Color } from '../../../colors';
 
@@ -9,7 +9,7 @@ interface SvgIconProps {
   strokeWidth?: boolean | number;
 }
 
-const SvgIconFlash: FC<SvgIconProps> = ({
+const SvgIconImage: FC<SvgIconProps> = ({
   scale,
   color: propColor,
   strokeWidth: propStrokeWidth,
@@ -31,14 +31,37 @@ const SvgIconFlash: FC<SvgIconProps> = ({
   return (
     <Svg height={height} width={width} viewBox="0 0 39 38">
       <Path
+        d="M18.8364,23.1136,24.55,17.4l7.2,6.4"
         fill="none"
         stroke={color}
         strokeLinecap="round"
         strokeWidth={strokeWidth}
-        d="M20.11612,7.41189,8.818,20.12233a1.1,1.1,0,0,0,.82215,1.8308h9.14535l-1.30535,7.83215a1.1,1.1,0,0,0,1.90718.91164L30.68545,17.98649a1.1,1.1,0,0,0-.82215-1.8308H20.71795L22.0233,8.32353A1.1,1.1,0,0,0,20.11612,7.41189Z"
+      />
+      <Path
+        d="M7.75,26.2l7.2-6.4,6.8008,5.7992"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+      />
+      <Path
+        d="M9.75,8.6h20a2,2,0,0,1,2,2V27.4a2,2,0,0,1-2,2h-20a2,2,0,0,1-2-2V10.6A2,2,0,0,1,9.75,8.6Z"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+      />
+      <Circle
+        cx="18.55"
+        cy="14.6"
+        r="2"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
       />
     </Svg>
   );
 };
 
-export default SvgIconFlash;
+export default SvgIconImage;
