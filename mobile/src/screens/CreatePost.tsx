@@ -48,7 +48,7 @@ interface Form {
 
 type OnChangeType = 'title' | 'content';
 
-const Form: FC<Form> = ({ shot: { id }, index }) => {
+const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
   const { control } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
@@ -118,6 +118,7 @@ const Form: FC<Form> = ({ shot: { id }, index }) => {
               onContentSizeChange={onTitleContentSizeChange}
               rules={{ required: true }}
               placeholder="Title"
+              value={title || ''}
               style={[
                 AssetStyles.form.bubble.title,
                 { height: heightTitle && Math.max(35, heightTitle + 50) },
@@ -132,6 +133,7 @@ const Form: FC<Form> = ({ shot: { id }, index }) => {
             onChange={(args): EventFunction => onChange(args, 'content')}
             onContentSizeChange={onContentSizeChange}
             placeholder="Content"
+            value={content || ''}
             style={[
               AssetStyles.form.bubble.content,
               {
