@@ -39,6 +39,7 @@ type FormData = {
 };
 
 interface Form {
+  shot: Shot;
   id: string;
   visible: boolean;
   expandable: boolean;
@@ -47,12 +48,13 @@ interface Form {
 
 type OnChangeType = 'title' | 'content';
 
-const Form: FC<Form> = ({ id, visible: propVisible, expandable, index }) => {
+const Form: FC<Form> = ({ shot: { id }, index }) => {
   const { control } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
-  const [visible, setVisible] = useState(propVisible);
+  const [visible, setVisible] = useState(index === 0);
+  const [expandable] = useState(index !== 0);
 
   const handleVisible = (): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
@@ -189,7 +191,7 @@ const CreatePost: FC = () => {
               <Panel marginBottom key={id}>
                 {image && <Image style={styles.image} source={{ uri: image }} />}
                 <Panel marginHorizontal>
-                  <Form visible={index === 0} expandable={index !== 0} index={index} id={id} />
+                  <Form shot={shot} index={index} />
                 </Panel>
               </Panel>
             );
