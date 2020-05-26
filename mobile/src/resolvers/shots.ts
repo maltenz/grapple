@@ -1,10 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any,  no-shadow, array-callback-return  */
-import { remove } from 'lodash';
+/* 
+eslint-disable 
+@typescript-eslint/no-unused-vars, 
+@typescript-eslint/no-explicit-any,  
+no-shadow, 
+array-callback-return, 
+@typescript-eslint/ban-ts-ignore  
+*/
 import gql from 'graphql-tag';
 import { Shot } from '../generated/graphql';
 
 export const ADD_SHOT = gql`
-  mutation AddShots($id: ID!, $title: String, $content: String, $image: String) {
+  mutation AddShot($id: ID!, $title: String, $content: String, $image: String) {
     addShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
   }
 `;
@@ -20,6 +26,12 @@ export const GET_SHOTS = gql`
   }
 `;
 
+export const UPDATE_SHOT = gql`
+  mutation UpdateShot($id: ID!, $title: String, $content: String, $image: String) {
+    updateShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
+  }
+`;
+
 export const DELETE_SHOT = gql`
   mutation DeleteShot($id: String) {
     deleteShot(input: { id: $id }) @client
@@ -28,7 +40,7 @@ export const DELETE_SHOT = gql`
 
 const query = gql`
   query GetShots {
-    shots @client(always: true) {
+    shots @client {
       id
       title
       content
@@ -49,6 +61,54 @@ function addShot(_: any, { input: { id, title, content, image } }: any, { cache 
   return newShot;
 }
 
+function updateShot(_: any, { input: { id, title, content, image } }: any, { cache }: any): any {
+  const { shots } = cache.readQuery({ query });
+
+  const newShots = [...shots];
+  let newShot: Shot;
+  let data;
+
+  const returnShots = newShots.map((shot: Shot, index: number): any => {
+    if (shot.id === id) {
+      newShot = {
+        id: shot.id,
+        image: shot.image,
+        title: shot.title,
+        content: shot.content,
+        // @ts-ignore
+        __typename: 'TodoItem',
+      };
+
+      if (title) {
+        newShot.title = title;
+      }
+
+      if (content) {
+        newShot.content = content;
+      }
+
+      if (image) {
+        newShot.image = image;
+      }
+
+      newShots.splice(index, 1);
+
+      data = {
+        shots: [...newShots, newShot],
+      };
+    } else {
+      data = {
+        shots: [...shots],
+      };
+    }
+
+    cache.writeQuery({ query, data });
+    return data;
+  });
+
+  return returnShots[0];
+}
+
 function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
   const { shots } = cache.readQuery({ query });
 
@@ -61,11 +121,11 @@ function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
   });
 
   const data = {
-    shots: newShots,
+    shots: [...newShots],
   };
 
   cache.writeQuery({ query, data });
   return data;
 }
 
-export { addShot, deleteShot };
+export { addShot, updateShot, deleteShot };

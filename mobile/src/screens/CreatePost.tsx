@@ -11,7 +11,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -30,7 +30,7 @@ import { NavigationHeading } from '../assets/components/base/Navigation';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { GET_SHOTS } from '../resolvers/shots';
+import { GET_SHOTS, UPDATE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
 type FormData = {
@@ -39,13 +39,17 @@ type FormData = {
 };
 
 interface Form {
+  id: string;
   visible: boolean;
   expandable: boolean;
   index: number;
 }
 
-const Form: FC<Form> = ({ visible: propVisible, expandable, index }) => {
+type OnChangeType = 'title' | 'content';
+
+const Form: FC<Form> = ({ id, visible: propVisible, expandable, index }) => {
   const { control } = useForm<FormData>();
+  const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(propVisible);
@@ -55,7 +59,13 @@ const Form: FC<Form> = ({ visible: propVisible, expandable, index }) => {
     setVisible(!visible);
   };
 
-  const onChange = (args: any[]): EventFunction => {
+  const onChange = (args: any[], type: OnChangeType): EventFunction => {
+    const { text } = args[0].nativeEvent;
+    if (type === 'title') {
+      updateShot({ variables: { id, title: text } });
+    } else {
+      updateShot({ variables: { id, content: text } });
+    }
     return args[0].nativeEvent.text;
   };
 
@@ -102,7 +112,7 @@ const Form: FC<Form> = ({ visible: propVisible, expandable, index }) => {
               as={TextInput}
               control={control}
               name="Title"
-              onChange={onChange}
+              onChange={(args): EventFunction => onChange(args, 'title')}
               onContentSizeChange={onTitleContentSizeChange}
               rules={{ required: true }}
               placeholder="Title"
@@ -117,7 +127,7 @@ const Form: FC<Form> = ({ visible: propVisible, expandable, index }) => {
             as={TextInput}
             control={control}
             name="Content"
-            onChange={onChange}
+            onChange={(args): EventFunction => onChange(args, 'content')}
             onContentSizeChange={onContentSizeChange}
             placeholder="Content"
             style={[
@@ -179,7 +189,7 @@ const CreatePost: FC = () => {
               <Panel marginBottom key={id}>
                 {image && <Image style={styles.image} source={{ uri: image }} />}
                 <Panel marginHorizontal>
-                  <Form visible={index === 0} expandable={index !== 0} index={index} />
+                  <Form visible={index === 0} expandable={index !== 0} index={index} id={id} />
                 </Panel>
               </Panel>
             );
