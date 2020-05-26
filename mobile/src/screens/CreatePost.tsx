@@ -40,9 +40,6 @@ type FormData = {
 
 interface Form {
   shot: Shot;
-  id: string;
-  visible: boolean;
-  expandable: boolean;
   index: number;
 }
 
