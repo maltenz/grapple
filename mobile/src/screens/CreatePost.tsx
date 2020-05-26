@@ -6,6 +6,7 @@ import {
   TextInput,
   TextInputContentSizeChangeEventData,
   View,
+  LayoutAnimation,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -13,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
+
 import {
   Navigation,
   NavigationIcon,
@@ -22,8 +24,11 @@ import {
   SegmentedController,
   Button,
 } from '../assets';
-import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
+
 import { NavigationHeading } from '../assets/components/base/Navigation';
+
+import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
+
 import { GET_SHOTS } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
@@ -32,13 +37,24 @@ type FormData = {
   content: string;
 };
 
-const Form: FC = () => {
-  const { control } = useForm<FormData>();
+interface Form {
+  visible: boolean;
+}
 
+const Form: FC<Form> = ({ visible: propVisible }) => {
+  const { control } = useForm<FormData>();
   const [height, setHeight] = useState<number>();
+  const [visible, setVisible] = useState(propVisible);
+
+  const handleVisible = (): void => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    setVisible(!visible);
+  };
+
   const onChange = (args: any[]): EventFunction => {
     return args[0].nativeEvent.text;
   };
+
   const onContentSizeChange = (event: {
     nativeEvent: TextInputContentSizeChangeEventData;
   }): void => {
@@ -47,30 +63,47 @@ const Form: FC = () => {
 
   return (
     <>
-      <Controller
-        multiline
-        as={TextInput}
-        control={control}
-        name="Title"
-        onChange={onChange}
-        onContentSizeChange={onContentSizeChange}
-        rules={{ required: true }}
-        placeholder="Title"
-        style={[AssetStyles.form.bubble, { height: height && Math.max(35, height + 50) }]}
-      />
-      <Controller
-        multiline
-        as={TextInput}
-        control={control}
-        name="Content"
-        onChange={onChange}
-        onContentSizeChange={onContentSizeChange}
-        placeholder="Content"
-        style={[
-          AssetStyles.form.bubble,
-          { fontFamily: AssetStyles.family.regular, height: height && Math.max(35, height + 50) },
-        ]}
-      />
+      <Button
+        mode="day"
+        type="normal"
+        appearance="normal"
+        style={{ alignSelf: 'flex-end' }}
+        marginBottom
+        onPress={handleVisible}
+      >
+        Add
+      </Button>
+      {visible && (
+        <View>
+          <Controller
+            multiline
+            as={TextInput}
+            control={control}
+            name="Title"
+            onChange={onChange}
+            onContentSizeChange={onContentSizeChange}
+            rules={{ required: true }}
+            placeholder="Title"
+            style={[AssetStyles.form.bubble, { height: height && Math.max(35, height + 50) }]}
+          />
+          <Controller
+            multiline
+            as={TextInput}
+            control={control}
+            name="Content"
+            onChange={onChange}
+            onContentSizeChange={onContentSizeChange}
+            placeholder="Content"
+            style={[
+              AssetStyles.form.bubble,
+              {
+                fontFamily: AssetStyles.family.regular,
+                height: height && Math.max(35, height + 50),
+              },
+            ]}
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -120,16 +153,7 @@ const CreatePost: FC = () => {
               <Panel marginBottom key={id}>
                 {image && <Image style={styles.image} source={{ uri: image }} />}
                 <Panel marginHorizontal>
-                  <Button
-                    mode="day"
-                    type="normal"
-                    appearance="normal"
-                    style={{ alignSelf: 'flex-end' }}
-                    marginBottom
-                  >
-                    Add
-                  </Button>
-                  <Form />
+                  <Form visible={false} />
                 </Panel>
               </Panel>
             );
