@@ -23,6 +23,7 @@ import {
   Color,
   SegmentedController,
   Button,
+  Text,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -39,11 +40,14 @@ type FormData = {
 
 interface Form {
   visible: boolean;
+  expandable: boolean;
+  index: number;
 }
 
-const Form: FC<Form> = ({ visible: propVisible }) => {
+const Form: FC<Form> = ({ visible: propVisible, expandable, index }) => {
   const { control } = useForm<FormData>();
-  const [height, setHeight] = useState<number>();
+  const [heightTitle, setHeightTitle] = useState<number>();
+  const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(propVisible);
 
   const handleVisible = (): void => {
@@ -55,37 +59,59 @@ const Form: FC<Form> = ({ visible: propVisible }) => {
     return args[0].nativeEvent.text;
   };
 
+  const onTitleContentSizeChange = (event: {
+    nativeEvent: TextInputContentSizeChangeEventData;
+  }): void => {
+    setHeightTitle(event.nativeEvent.contentSize.height);
+  };
+
   const onContentSizeChange = (event: {
     nativeEvent: TextInputContentSizeChangeEventData;
   }): void => {
-    setHeight(event.nativeEvent.contentSize.height);
+    setHeightContent(event.nativeEvent.contentSize.height);
   };
 
   return (
     <>
-      <Button
-        mode="day"
-        type="normal"
-        appearance="normal"
-        style={{ alignSelf: 'flex-end' }}
-        marginBottom
-        onPress={handleVisible}
-      >
-        Add
-      </Button>
+      {expandable && (
+        <Button
+          mode="day"
+          type="normal"
+          appearance="normal"
+          style={{ alignSelf: 'flex-end' }}
+          onPress={handleVisible}
+        >
+          Add
+        </Button>
+      )}
+      {index === 0 && (
+        <Text type="h4" mode="day" appearance="subtle" marginVertical>
+          Write up your story
+        </Text>
+      )}
       {visible && (
         <View>
-          <Controller
-            multiline
-            as={TextInput}
-            control={control}
-            name="Title"
-            onChange={onChange}
-            onContentSizeChange={onContentSizeChange}
-            rules={{ required: true }}
-            placeholder="Title"
-            style={[AssetStyles.form.bubble, { height: height && Math.max(35, height + 50) }]}
-          />
+          {index !== 0 && (
+            <Text type="h4" mode="day" appearance="subtle" marginBottom>
+              Add a description
+            </Text>
+          )}
+          {index === 0 && (
+            <Controller
+              multiline
+              as={TextInput}
+              control={control}
+              name="Title"
+              onChange={onChange}
+              onContentSizeChange={onTitleContentSizeChange}
+              rules={{ required: true }}
+              placeholder="Title"
+              style={[
+                AssetStyles.form.bubble.title,
+                { height: heightTitle && Math.max(35, heightTitle + 50) },
+              ]}
+            />
+          )}
           <Controller
             multiline
             as={TextInput}
@@ -95,10 +121,10 @@ const Form: FC<Form> = ({ visible: propVisible }) => {
             onContentSizeChange={onContentSizeChange}
             placeholder="Content"
             style={[
-              AssetStyles.form.bubble,
+              AssetStyles.form.bubble.content,
               {
                 fontFamily: AssetStyles.family.regular,
-                height: height && Math.max(35, height + 50),
+                height: heightContent && Math.max(35, heightContent + 50),
               },
             ]}
           />
@@ -145,7 +171,7 @@ const CreatePost: FC = () => {
           items={[{ title: 'Story' }, { title: 'Incident' }]}
         />
         {data?.shots?.map(
-          (shot: Shot): ReactNode => {
+          (shot: Shot, index: number): ReactNode => {
             const { id } = shot;
             const image = shot.image as string;
 
@@ -153,7 +179,7 @@ const CreatePost: FC = () => {
               <Panel marginBottom key={id}>
                 {image && <Image style={styles.image} source={{ uri: image }} />}
                 <Panel marginHorizontal>
-                  <Form visible={false} />
+                  <Form visible={index === 0} expandable={index !== 0} index={index} />
                 </Panel>
               </Panel>
             );
@@ -176,6 +202,7 @@ const styles = StyleSheet.create({
   image: {
     width: AssetStyles.measure.window.width,
     height: AssetStyles.measure.window.width,
+    marginBottom: AssetStyles.measure.space / 2,
   },
 });
 
