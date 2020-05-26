@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { ModeType } from '../../../types';
-import Panel, { MarginProps } from '../base/Panel';
+import Panel, { MarginProps } from './Panel';
 import { Color } from '../../colors';
-import Text from './Text';
+import Text from '../core/Text';
 
 interface SegmentedControllerItemProps {
   text: string;

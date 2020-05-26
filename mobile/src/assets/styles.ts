@@ -79,6 +79,16 @@ const AssetStyles = {
       borderColor: Color.red,
       fontFamily: fontBold,
     },
+    bubble: {
+      fontSize: p.fontSize,
+      marginBottom: 20,
+      color: Color.grey,
+      fontFamily: fontBold,
+      backgroundColor: Color.grey4,
+      padding: 10,
+      paddingTop: 15,
+      borderRadius: 11.25,
+    },
   },
   shadow: {
     overlay: {

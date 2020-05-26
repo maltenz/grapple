@@ -51,6 +51,7 @@ import PostContentHeader from './components/base/PostContentHeader';
 import PostContentHeading from './components/base/PostContentHeading';
 import PostsEditSlider, { PostsEditItemType } from './components/base/PostsEditSlider';
 import PullBar, { PullBarHeight } from './components/base/PullBar';
+import SegmentedController from './components/base/SegmentedControl';
 import TabbarBackground from './components/base/TabbarBackground';
 import TabbarCircleButton from './components/base/TabbarCircleButton';
 import Text, { TextProps, PlaceholderTextColor } from './components/base/Text';
@@ -162,6 +163,7 @@ export {
   TextProps,
   Thumbnail,
   ThumbnailDimension,
+  SegmentedController,
   Search,
   // components
   // svg graphics
