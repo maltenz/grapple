@@ -39,8 +39,8 @@ const Client: FC = ({ children }) => {
         serialize: true,
       }).then(() => {
         myClient.onResetStore(async () => cache.writeData({ data }));
-        myClient.clearStore();
-        myClient.resetStore();
+        // myClient.clearStore();
+        // myClient.resetStore();
         setClient(myClient);
       });
       return (): void => {};

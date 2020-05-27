@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState, ReactNode, useEffect, memo } from 'react';
+import React, { FC, useState, ReactNode, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,7 +10,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation } from '@react-navigation/native';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -64,7 +63,7 @@ const Form: FC<Form> = ({ id, index }) => {
         return null;
       });
     }
-  }, []);
+  });
 
   if (!shot) {
     return null;
@@ -75,27 +74,14 @@ const Form: FC<Form> = ({ id, index }) => {
     setVisible(!visible);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any[], type: OnChangeType): EventFunction => {
     const { text } = e[0].nativeEvent;
     if (type === 'title') {
-      updateShot({
-        variables: {
-          id,
-          title: text,
-          image: shot?.image,
-          content: shot?.content,
-        },
-      });
+      updateShot({ variables: { id, title: text } });
     }
     if (type === 'content') {
-      updateShot({
-        variables: {
-          id,
-          title: shot?.title,
-          image: shot?.image,
-          content: text,
-        },
-      });
+      updateShot({ variables: { id, content: text } });
     }
 
     return text;
@@ -184,52 +170,51 @@ const Form: FC<Form> = ({ id, index }) => {
   );
 };
 
-const CreatePost: FC = memo(
-  () => {
-    const parentNavigation = useNavigation<ParentNavigationProp>();
-    const navigation = useNavigation<ChildNavigationProp>();
-    const inset = useSafeArea();
-    const [getShots, { data }] = useLazyQuery<{ shots: Shot[] }>(GET_SHOTS);
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+const CreatePost: FC = () => {
+  const parentNavigation = useNavigation<ParentNavigationProp>();
+  const navigation = useNavigation<ChildNavigationProp>();
+  const inset = useSafeArea();
+  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [shots, setShot] = useState<Shot[]>();
 
-    useEffect(() => {
-      const focus = navigation.addListener('focus', () => {
-        getShots();
-      });
+  useEffect(() => {
+    if (data?.shots) {
+      setShot(data.shots);
+    }
+  });
 
-      return focus;
-    }, [navigation]);
-
-    return (
-      <>
-        <Navigation
-          mode="day"
-          Left={
-            <NavigationIcon
-              mode="day"
-              type="image"
-              onPress={(): void => parentNavigation.navigate('Camera')}
-            />
-          }
-          Center={<NavigationHeading mode="day" text="Create" />}
-          Right={
-            <NavigationIcon
-              mode="day"
-              type="close"
-              onPress={(): void => navigation.navigate('HomeStack')}
-            />
-          }
-        />
-
-        <KeyboardAwareScrollView extraHeight={150} style={[styles.scrollview]}>
-          <SegmentedController
+  return (
+    <>
+      <Navigation
+        mode="day"
+        Left={
+          <NavigationIcon
             mode="day"
-            onChange={(index): void => setActiveIndex(index)}
-            margin
-            activeIndex={activeIndex}
-            items={[{ title: 'Story' }, { title: 'Incident' }]}
+            type="image"
+            onPress={(): void => parentNavigation.navigate('Camera')}
           />
-          {data?.shots?.map(
+        }
+        Center={<NavigationHeading mode="day" text="Create" />}
+        Right={
+          <NavigationIcon
+            mode="day"
+            type="close"
+            onPress={(): void => navigation.navigate('HomeStack')}
+          />
+        }
+      />
+
+      <KeyboardAwareScrollView extraHeight={150} style={[styles.scrollview]}>
+        <SegmentedController
+          mode="day"
+          onChange={(index): void => setActiveIndex(index)}
+          margin
+          activeIndex={activeIndex}
+          items={[{ title: 'Story' }, { title: 'Incident' }]}
+        />
+        {shots &&
+          shots.map(
             (shot: Shot, index: number): ReactNode => {
               const { id } = shot;
               const image = shot.image as string;
@@ -244,18 +229,14 @@ const CreatePost: FC = memo(
               );
             }
           )}
-          <Button marginHorizontal type="large" mode="day" appearance="strong">
-            Preview
-          </Button>
-          <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
-        </KeyboardAwareScrollView>
-      </>
-    );
-  },
-  () => true
-);
-
-CreatePost.displayName = 'CreatePost';
+        <Button marginHorizontal type="large" mode="day" appearance="strong">
+          Preview
+        </Button>
+        <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
+      </KeyboardAwareScrollView>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   scrollview: {
