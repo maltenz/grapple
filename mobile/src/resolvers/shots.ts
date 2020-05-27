@@ -26,6 +26,12 @@ export const GET_SHOTS = gql`
   }
 `;
 
+export const GET_SHOT = gql`
+  query GetShot($id: ID!) {
+    getShot(input: { id: $id }) @client
+  }
+`;
+
 export const UPDATE_SHOT = gql`
   mutation UpdateShot($id: ID!, $title: String, $content: String, $image: String) {
     updateShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
@@ -48,6 +54,18 @@ const query = gql`
     }
   }
 `;
+
+function getShot(_: any, { id }: any, { cache }: any): any {
+  const all = cache.readQuery({ query });
+
+  const returnShot = all.shots.map(
+    (shot: Shot): Shot => {
+      return shot;
+    }
+  );
+
+  return returnShot[0];
+}
 
 function addShot(_: any, { input: { id, title, content, image } }: any, { cache }: any): any {
   const all = cache.readQuery({ query });
@@ -128,4 +146,4 @@ function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
   return data;
 }
 
-export { addShot, updateShot, deleteShot };
+export { getShot, addShot, updateShot, deleteShot };

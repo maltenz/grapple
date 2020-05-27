@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState, ReactNode } from 'react';
+import React, { FC, useState, ReactNode, useEffect, memo } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation } from '@react-navigation/native';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -39,33 +39,66 @@ type FormData = {
 };
 
 interface Form {
-  shot: Shot;
+  id: string;
   index: number;
 }
 
 type OnChangeType = 'title' | 'content';
 
-const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
+const Form: FC<Form> = ({ id, index }) => {
   const { control } = useForm<FormData>();
+  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(index === 0);
   const [expandable] = useState(index !== 0);
+  const [shot, setShot] = useState<Shot>();
+
+  useEffect(() => {
+    if (data?.shots) {
+      data.shots.find((myShot): null => {
+        if (myShot.id === id) {
+          setShot(myShot);
+        }
+        return null;
+      });
+    }
+  }, []);
+
+  if (!shot) {
+    return null;
+  }
 
   const handleVisible = (): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     setVisible(!visible);
   };
 
-  const onChange = (args: any[], type: OnChangeType): EventFunction => {
-    const { text } = args[0].nativeEvent;
+  const onChange = (e: any[], type: OnChangeType): EventFunction => {
+    const { text } = e[0].nativeEvent;
     if (type === 'title') {
-      updateShot({ variables: { id, title: text } });
-    } else {
-      updateShot({ variables: { id, content: text } });
+      updateShot({
+        variables: {
+          id,
+          title: text,
+          image: shot?.image,
+          content: shot?.content,
+        },
+      });
     }
-    return args[0].nativeEvent.text;
+    if (type === 'content') {
+      updateShot({
+        variables: {
+          id,
+          title: shot?.title,
+          image: shot?.image,
+          content: text,
+        },
+      });
+    }
+
+    return text;
   };
 
   const onTitleContentSizeChange = (event: {
@@ -79,6 +112,10 @@ const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
   }): void => {
     setHeightContent(event.nativeEvent.contentSize.height);
   };
+
+  if (data === undefined) {
+    return null;
+  }
 
   return (
     <>
@@ -107,15 +144,16 @@ const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
           )}
           {index === 0 && (
             <Controller
-              multiline
               as={TextInput}
               control={control}
-              name="Title"
-              onChange={(args): EventFunction => onChange(args, 'title')}
-              onContentSizeChange={onTitleContentSizeChange}
               rules={{ required: true }}
+              multiline
+              name="title"
+              onChange={(e): EventFunction => onChange(e, 'title')}
+              onContentSizeChange={onTitleContentSizeChange}
               placeholder="Title"
-              value={title || ''}
+              value={shot?.title || ''}
+              defaultValue={shot?.title}
               style={[
                 AssetStyles.form.bubble.title,
                 { height: heightTitle && Math.max(35, heightTitle + 50) },
@@ -123,14 +161,15 @@ const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
             />
           )}
           <Controller
-            multiline
             as={TextInput}
             control={control}
-            name="Content"
-            onChange={(args): EventFunction => onChange(args, 'content')}
+            multiline
+            name="content"
+            onChange={(e): EventFunction => onChange(e, 'content')}
             onContentSizeChange={onContentSizeChange}
             placeholder="Content"
-            value={content || ''}
+            value={shot?.content || ''}
+            defaultValue={shot?.content}
             style={[
               AssetStyles.form.bubble.content,
               {
@@ -145,65 +184,78 @@ const Form: FC<Form> = ({ shot: { id, title, content }, index }) => {
   );
 };
 
-const CreatePost: FC = () => {
-  const parentNavigation = useNavigation<ParentNavigationProp>();
-  const navigation = useNavigation<ChildNavigationProp>();
-  const inset = useSafeArea();
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+const CreatePost: FC = memo(
+  () => {
+    const parentNavigation = useNavigation<ParentNavigationProp>();
+    const navigation = useNavigation<ChildNavigationProp>();
+    const inset = useSafeArea();
+    const [getShots, { data }] = useLazyQuery<{ shots: Shot[] }>(GET_SHOTS);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  return (
-    <>
-      <Navigation
-        mode="day"
-        Left={
-          <NavigationIcon
-            mode="day"
-            type="image"
-            onPress={(): void => parentNavigation.navigate('Camera')}
-          />
-        }
-        Center={<NavigationHeading mode="day" text="Create" />}
-        Right={
-          <NavigationIcon
-            mode="day"
-            type="close"
-            onPress={(): void => navigation.navigate('HomeStack')}
-          />
-        }
-      />
+    useEffect(() => {
+      const focus = navigation.addListener('focus', () => {
+        getShots();
+      });
 
-      <KeyboardAwareScrollView extraHeight={150} style={[styles.scrollview]}>
-        <SegmentedController
+      return focus;
+    }, [navigation]);
+
+    return (
+      <>
+        <Navigation
           mode="day"
-          onChange={(index): void => setActiveIndex(index)}
-          margin
-          activeIndex={activeIndex}
-          items={[{ title: 'Story' }, { title: 'Incident' }]}
-        />
-        {data?.shots?.map(
-          (shot: Shot, index: number): ReactNode => {
-            const { id } = shot;
-            const image = shot.image as string;
-
-            return (
-              <Panel marginBottom key={id}>
-                {image && <Image style={styles.image} source={{ uri: image }} />}
-                <Panel marginHorizontal>
-                  <Form shot={shot} index={index} />
-                </Panel>
-              </Panel>
-            );
+          Left={
+            <NavigationIcon
+              mode="day"
+              type="image"
+              onPress={(): void => parentNavigation.navigate('Camera')}
+            />
           }
-        )}
-        <Button marginHorizontal type="large" mode="day" appearance="strong">
-          Preview
-        </Button>
-        <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
-      </KeyboardAwareScrollView>
-    </>
-  );
-};
+          Center={<NavigationHeading mode="day" text="Create" />}
+          Right={
+            <NavigationIcon
+              mode="day"
+              type="close"
+              onPress={(): void => navigation.navigate('HomeStack')}
+            />
+          }
+        />
+
+        <KeyboardAwareScrollView extraHeight={150} style={[styles.scrollview]}>
+          <SegmentedController
+            mode="day"
+            onChange={(index): void => setActiveIndex(index)}
+            margin
+            activeIndex={activeIndex}
+            items={[{ title: 'Story' }, { title: 'Incident' }]}
+          />
+          {data?.shots?.map(
+            (shot: Shot, index: number): ReactNode => {
+              const { id } = shot;
+              const image = shot.image as string;
+
+              return (
+                <Panel marginBottom key={id}>
+                  {image && <Image style={styles.image} source={{ uri: image }} />}
+                  <Panel marginHorizontal>
+                    <Form id={shot.id} index={index} />
+                  </Panel>
+                </Panel>
+              );
+            }
+          )}
+          <Button marginHorizontal type="large" mode="day" appearance="strong">
+            Preview
+          </Button>
+          <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
+        </KeyboardAwareScrollView>
+      </>
+    );
+  },
+  () => true
+);
+
+CreatePost.displayName = 'CreatePost';
 
 const styles = StyleSheet.create({
   scrollview: {
