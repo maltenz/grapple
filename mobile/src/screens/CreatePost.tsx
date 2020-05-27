@@ -179,10 +179,12 @@ const CreatePost: FC = () => {
   const [shots, setShot] = useState<Shot[]>();
 
   useEffect(() => {
-    if (data?.shots) {
-      setShot(data.shots);
-    }
-  }, []);
+    navigation.addListener('focus', () => {
+      if (data?.shots) {
+        setShot(data.shots);
+      }
+    });
+  }, [navigation]);
 
   return (
     <>

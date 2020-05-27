@@ -4,11 +4,13 @@ import { Alert, View, StyleSheet, TouchableOpacity, ScrollView, Image } from 're
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import {
   Panel,
   Navigation,
@@ -37,6 +39,7 @@ const TOP_OFFSET = 50;
 const TOP_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 - TOP_OFFSET;
 const BOTTOM_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 + TOP_OFFSET;
 const OFFSET_PERCENT = AssetStyles.measure.window.height / TOP_OFFSET;
+const CROP_DIMENSION = 1080;
 
 interface CameraFrameProps {
   backgroundImage: string | null;
@@ -73,7 +76,8 @@ const CameraScreen: FC = () => {
   const [addShot] = useMutation<Shot>(ADD_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
-  const [hasPermission, setHasPermission] = useState<boolean>();
+  const [hasCamPermission, setHasCamPermission] = useState<boolean>();
+  const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [deleteActive, setDeleteActive] = useState<boolean>(false);
@@ -82,8 +86,8 @@ const CameraScreen: FC = () => {
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      setHasPermission(status === 'granted');
+      const { status: camStatus } = await Permissions.askAsync(Permissions.CAMERA);
+      setHasCamPermission(camStatus === 'granted');
     };
     checkMultiPermissions();
   }, []);
@@ -101,45 +105,45 @@ const CameraScreen: FC = () => {
 
   const handleCapture = async (): Promise<void> => {
     try {
-      if (camRef.current !== undefined) {
-        const pic = await camRef.current.takePictureAsync();
+      if (hasCamPermission) {
+        if (camRef.current !== undefined) {
+          const pic = await camRef.current.takePictureAsync();
 
-        const DIMENSION = 1080;
-
-        const resize = await ImageManipulator.manipulateAsync(
-          pic.uri,
-          [
-            { flip: ImageManipulator.FlipType.Horizontal },
-            {
-              resize: {
-                width: DIMENSION,
+          const resize = await ImageManipulator.manipulateAsync(
+            pic.uri,
+            [
+              { flip: ImageManipulator.FlipType.Horizontal },
+              {
+                resize: {
+                  width: CROP_DIMENSION,
+                },
               },
-            },
-          ],
-          { format: ImageManipulator.SaveFormat.JPEG }
-        );
+            ],
+            { format: ImageManipulator.SaveFormat.JPEG }
+          );
 
-        const WIDTH = resize.width;
-        const HEIGHT = resize.height;
+          const WIDTH = resize.width;
+          const HEIGHT = resize.height;
 
-        const crop = await ImageManipulator.manipulateAsync(
-          resize.uri,
-          [
-            {
-              crop: {
-                originX: WIDTH / 2 - DIMENSION / 2,
-                originY: HEIGHT / 2 - DIMENSION / 2 - HEIGHT / OFFSET_PERCENT,
-                width: DIMENSION,
-                height: DIMENSION,
+          const crop = await ImageManipulator.manipulateAsync(
+            resize.uri,
+            [
+              {
+                crop: {
+                  originX: WIDTH / 2 - CROP_DIMENSION / 2,
+                  originY: HEIGHT / 2 - CROP_DIMENSION / 2 - HEIGHT / OFFSET_PERCENT,
+                  width: CROP_DIMENSION,
+                  height: CROP_DIMENSION,
+                },
               },
-            },
-          ],
-          { format: ImageManipulator.SaveFormat.JPEG }
-        );
+            ],
+            { format: ImageManipulator.SaveFormat.JPEG }
+          );
 
-        addShot({
-          variables: { id: CreateId(), title: '', content: '', image: crop.uri },
-        });
+          addShot({
+            variables: { id: CreateId(), title: '', content: '', image: crop.uri },
+          });
+        }
       }
     } catch (err) {
       throw Error(err);
@@ -168,11 +172,42 @@ const CameraScreen: FC = () => {
     }
   };
 
-  if (hasPermission === null) {
-    return <Panel flex={1} backgroundColor="black" />;
-  }
-  if (hasPermission === false) {
-    return <Panel flex={1} backgroundColor="red" />;
+  const handleCamRoll = async (): Promise<void> => {
+    try {
+      const { status: camRollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      setHasCamRollPermission(camRollStatus === 'granted');
+
+      if (hasCamRollPermission) {
+        const camRollPic = (await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 4],
+          quality: 1,
+        })) as ImageInfo;
+
+        const resize = await ImageManipulator.manipulateAsync(
+          camRollPic.uri,
+          [
+            {
+              resize: {
+                width: CROP_DIMENSION,
+              },
+            },
+          ],
+          { format: ImageManipulator.SaveFormat.JPEG }
+        );
+
+        addShot({
+          variables: { id: CreateId(), title: '', content: '', image: resize.uri },
+        });
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  if (hasCamPermission === null || hasCamPermission === false) {
+    return <Panel flex={1} backgroundColor="grey4" />;
   }
 
   return (
@@ -208,7 +243,10 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => navigation.navigate('CreatePost')}
+              onPress={(): void => {
+                navigation.navigate('CreatePost');
+                navigation.push('CreatePost');
+              }}
             >
               Next
             </Button>
@@ -290,7 +328,11 @@ const CameraScreen: FC = () => {
           />
         </Panel>
         <Panel flex={1}>
-          <TouchableOpacity accessibilityRole="button" style={styles.footerIcon}>
+          <TouchableOpacity
+            onPress={handleCamRoll}
+            accessibilityRole="button"
+            style={styles.footerIcon}
+          >
             <SvgIconImage scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>
