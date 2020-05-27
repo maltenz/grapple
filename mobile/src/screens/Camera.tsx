@@ -1,15 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
-import {
-  Alert,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ImageBackground,
-} from 'react-native';
+import { Alert, View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 
@@ -42,6 +36,7 @@ const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
 const TOP_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 - TOP_OFFSET;
 const BOTTOM_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 + TOP_OFFSET;
+const OFFSET_PERCENT = AssetStyles.measure.window.height / TOP_OFFSET;
 
 interface CameraFrameProps {
   backgroundImage: string | null;
@@ -55,29 +50,20 @@ interface CameraBackground {
 
 type Flash = 'flash' | 'flashAuto' | 'flashOff';
 
-const CameraBackground: FC<CameraBackground> = ({ backgroundImage, children }) => {
-  if (backgroundImage) {
-    return (
-      <ImageBackground source={{ uri: backgroundImage }} style={styles.frame}>
-        {children}
-      </ImageBackground>
-    );
-  }
-
-  return <View style={styles.frame}>{children}</View>;
-};
-
 const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => {
   return (
-    <CameraBackground backgroundImage={backgroundImage}>
-      <BlurView tint="dark" intensity={100} style={styles.frameTop}>
-        {Top}
-      </BlurView>
-      <View style={styles.frameSquare} />
-      <BlurView tint="dark" intensity={100} style={styles.frameBottom}>
-        {Bottom}
-      </BlurView>
-    </CameraBackground>
+    <>
+      {backgroundImage && <Image style={styles.image} source={{ uri: backgroundImage }} />}
+      <View style={styles.frame}>
+        <BlurView tint="dark" intensity={100} style={styles.frameTop}>
+          {Top}
+        </BlurView>
+        <View style={styles.frameSquare} />
+        <BlurView tint="dark" intensity={100} style={styles.frameBottom}>
+          {Bottom}
+        </BlurView>
+      </View>
+    </>
   );
 };
 
@@ -117,8 +103,42 @@ const CameraScreen: FC = () => {
     try {
       if (camRef.current !== undefined) {
         const pic = await camRef.current.takePictureAsync();
+
+        const DIMENSION = 1080;
+
+        const resize = await ImageManipulator.manipulateAsync(
+          pic.uri,
+          [
+            { flip: ImageManipulator.FlipType.Horizontal },
+            {
+              resize: {
+                width: DIMENSION,
+              },
+            },
+          ],
+          { format: ImageManipulator.SaveFormat.JPEG }
+        );
+
+        const WIDTH = resize.width;
+        const HEIGHT = resize.height;
+
+        const crop = await ImageManipulator.manipulateAsync(
+          resize.uri,
+          [
+            {
+              crop: {
+                originX: WIDTH / 2 - DIMENSION / 2,
+                originY: HEIGHT / 2 - DIMENSION / 2 - HEIGHT / OFFSET_PERCENT,
+                width: DIMENSION,
+                height: DIMENSION,
+              },
+            },
+          ],
+          { format: ImageManipulator.SaveFormat.JPEG }
+        );
+
         addShot({
-          variables: { id: CreateId(), title: '', content: '', image: pic.uri },
+          variables: { id: CreateId(), title: '', content: '', image: crop.uri },
         });
       }
     } catch (err) {
@@ -320,6 +340,12 @@ const styles = StyleSheet.create({
   scrollView: {
     height: ThumbnailDimension + AssetStyles.measure.space,
     overflow: 'visible',
+  },
+  image: {
+    width: SQUARE_DIMENSION,
+    height: SQUARE_DIMENSION,
+    top: AssetStyles.measure.window.height / 2 - SQUARE_DIMENSION / 2 - TOP_OFFSET,
+    position: 'absolute',
   },
 });
 
