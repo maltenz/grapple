@@ -182,7 +182,7 @@ const CreatePost: FC = () => {
     if (data?.shots) {
       setShot(data.shots);
     }
-  });
+  }, []);
 
   return (
     <>

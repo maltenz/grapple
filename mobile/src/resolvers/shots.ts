@@ -1,11 +1,4 @@
-/* 
-eslint-disable 
-@typescript-eslint/no-unused-vars, 
-@typescript-eslint/no-explicit-any,  
-no-shadow, 
-array-callback-return, 
-@typescript-eslint/ban-ts-ignore  
-*/
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-ignore */
 import gql from 'graphql-tag';
 import { Shot } from '../generated/graphql';
 
@@ -23,12 +16,6 @@ export const GET_SHOTS = gql`
       content
       image
     }
-  }
-`;
-
-export const GET_SHOT = gql`
-  query GetShot($id: ID!) {
-    getShot(input: { id: $id }) @client
   }
 `;
 
@@ -55,22 +42,10 @@ const query = gql`
   }
 `;
 
-function getShot(_: any, { id }: any, { cache }: any): any {
-  const all = cache.readQuery({ query });
-
-  const returnShot = all.shots.map(
-    (shot: Shot): Shot => {
-      return shot;
-    }
-  );
-
-  return returnShot[0];
-}
-
 function addShot(_: any, { input: { id, title, content, image } }: any, { cache }: any): any {
   const all = cache.readQuery({ query });
 
-  const newShot = { id, title, content, image, __typename: 'TodoItem' };
+  const newShot = { id, title, content, image, __typename: 'StateShot' };
   const data = {
     shots: [...all.shots, newShot],
   };
@@ -94,7 +69,7 @@ function updateShot(_: any, { input: { id, title, content, image } }: any, { cac
         title: shot.title,
         content: shot.content,
         // @ts-ignore
-        __typename: 'TodoItem',
+        __typename: 'StateShot',
       };
 
       if (title) {
@@ -132,7 +107,8 @@ function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
 
   const newShots = [...shots];
 
-  newShots.map((shot: Shot, index: number): void => {
+  // eslint-disable-next-line array-callback-return
+  newShots.map((shot: Shot, index: number) => {
     if (shot.id === id) {
       newShots.splice(index, 1);
     }
@@ -146,4 +122,4 @@ function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
   return data;
 }
 
-export { getShot, addShot, updateShot, deleteShot };
+export { addShot, updateShot, deleteShot };
