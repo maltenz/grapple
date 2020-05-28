@@ -6,6 +6,7 @@ import {
   TextInputContentSizeChangeEventData,
   View,
   LayoutAnimation,
+  Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -14,6 +15,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   Navigation,
   NavigationIcon,
@@ -23,13 +25,14 @@ import {
   SegmentedController,
   Button,
   Text,
+  SvgIconMenu,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { GET_SHOTS, UPDATE_SHOT } from '../resolvers/shots';
+import { GET_SHOTS, UPDATE_SHOT, DELETE_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
 type FormData = {
@@ -46,6 +49,7 @@ const Form: FC<Form> = ({ shot, index }) => {
   const { control, getValues } = useForm<FormData>();
   const navigation = useNavigation<ChildNavigationProp>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
+  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(index === 0);
@@ -83,18 +87,52 @@ const Form: FC<Form> = ({ shot, index }) => {
     setHeightContent(event.nativeEvent.contentSize.height);
   };
 
+  const handleOptions = (): void => {
+    Alert.alert(
+      'Shot',
+      'Options',
+      [
+        {
+          text: 'Move up',
+        },
+        {
+          text: 'Move down',
+        },
+        {
+          text: 'Delete shot',
+          style: 'destructive',
+          onPress: (): void => {
+            deleteShot({ variables: { id: shot.id } });
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <>
       {expandable && (
-        <Button
-          mode="day"
-          type="normal"
-          appearance="normal"
-          style={{ alignSelf: 'flex-end' }}
-          onPress={handleVisible}
-        >
-          Add
-        </Button>
+        <Panel row justifyContent="flex-end" alignItems="center">
+          <Button
+            mode="day"
+            type="normal"
+            appearance="grey"
+            style={{ alignSelf: 'flex-end' }}
+            onPress={handleVisible}
+            marginRight={0.5}
+            outline
+          >
+            Content
+          </Button>
+          <TouchableOpacity onPress={handleOptions}>
+            <SvgIconMenu color="grey2" />
+          </TouchableOpacity>
+        </Panel>
       )}
       {index === 0 && (
         <Text type="h4" mode="day" appearance="subtle" marginVertical>

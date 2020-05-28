@@ -19,7 +19,6 @@ import {
   CoreButton,
   CoreNavBar,
   CorePullBar,
-  CoreSegmentedControl,
   CoreText,
 } from './components/core';
 
@@ -86,6 +85,7 @@ import SvgIconHome from './svg/icons/large/SvgIconHome';
 import SvgIconImage from './svg/icons/large/SvgIconImage';
 import SvgIconIncognito from './svg/icons/large/SvgIconIncognito';
 import SvgIconLeft from './svg/icons/large/SvgIconLeft';
+import SvgIconMenu from './svg/icons/large/SvgIconMenu';
 import SvgIconRight from './svg/icons/large/SvgIconRight';
 import SvgIconSearch from './svg/icons/large/SvgIconSearch';
 import SvgIconStory from './svg/icons/large/SvgIconStory';
@@ -123,7 +123,6 @@ export {
   CoreButton,
   CoreNavBar,
   CorePullBar,
-  CoreSegmentedControl,
   CoreText,
   // base components
   Badge,
@@ -189,6 +188,7 @@ export {
   SvgIconImage,
   SvgIconIncognito,
   SvgIconLeft,
+  SvgIconMenu,
   SvgIconRight,
   SvgIconSearch,
   SvgIconStory,

@@ -10,7 +10,7 @@ import CoreButton, {
 } from '../core/Button';
 import { MarginProps } from './Panel';
 
-type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning' | 'dark' | 'light';
+type AppearanceType = 'strong' | 'normal' | 'disabled' | 'warning' | 'dark' | 'grey' | 'light';
 
 interface ButtonProps extends MarginProps {
   mode: ModeType;
@@ -97,6 +97,15 @@ const Button: FC<ButtonProps> = (props) => {
           myBackground = 'transparent';
           myColor = 'grey';
           myOutline = 'grey';
+        }
+        break;
+      case 'grey':
+        myBackground = 'grey2';
+        myColor = 'white';
+        if (propOutline) {
+          myBackground = 'transparent';
+          myColor = 'grey2';
+          myOutline = 'grey2';
         }
         break;
       default:
