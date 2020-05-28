@@ -7,6 +7,7 @@ import {
   View,
   LayoutAnimation,
   Alert,
+  Keyboard,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -52,7 +53,7 @@ const Form: FC<Form> = ({ shot, index }) => {
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
-  const [visible, setVisible] = useState(index === 0);
+  const [visible, setVisible] = useState(index === 0 || !!shot.content);
   const [expandable] = useState(index !== 0);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const Form: FC<Form> = ({ shot, index }) => {
           content: content || shot.content,
         },
       });
+      Keyboard.dismiss();
     });
 
     return unsubscribe;
@@ -135,33 +137,33 @@ const Form: FC<Form> = ({ shot, index }) => {
         </Panel>
       )}
       {index === 0 && (
-        <Text type="h4" mode="day" appearance="subtle" marginVertical>
-          Write up your story
-        </Text>
+        <>
+          <Text type="h4" mode="day" appearance="subtle" marginVertical>
+            Write up your story
+          </Text>
+          <Controller
+            as={TextInput}
+            control={control}
+            rules={{ required: true }}
+            multiline
+            name="title"
+            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
+            onContentSizeChange={onTitleContentSizeChange}
+            placeholder="Title"
+            defaultValue={shot.title || ''}
+            style={[
+              AssetStyles.form.bubble.title,
+              { height: heightTitle && Math.max(35, heightTitle + 50) },
+            ]}
+          />
+        </>
       )}
       {visible && (
         <View>
           {index !== 0 && (
             <Text type="h4" mode="day" appearance="subtle" marginBottom>
-              Add a description
+              Shot description
             </Text>
-          )}
-          {index === 0 && (
-            <Controller
-              as={TextInput}
-              control={control}
-              rules={{ required: true }}
-              multiline
-              name="title"
-              onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
-              onContentSizeChange={onTitleContentSizeChange}
-              placeholder="Title"
-              defaultValue={shot.title || ''}
-              style={[
-                AssetStyles.form.bubble.title,
-                { height: heightTitle && Math.max(35, heightTitle + 50) },
-              ]}
-            />
           )}
           <Controller
             as={TextInput}
@@ -170,7 +172,7 @@ const Form: FC<Form> = ({ shot, index }) => {
             name="content"
             onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
             onContentSizeChange={onContentSizeChange}
-            placeholder="Content"
+            placeholder="Description"
             defaultValue={shot.content || ''}
             style={[
               AssetStyles.form.bubble.content,
