@@ -38,53 +38,37 @@ type FormData = {
 };
 
 interface Form {
-  id: string;
+  shot: Shot;
   index: number;
 }
 
-type OnChangeType = 'title' | 'content';
-
-const Form: FC<Form> = ({ id, index }) => {
-  const { control } = useForm<FormData>();
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
+const Form: FC<Form> = ({ shot, index }) => {
+  const { control, getValues } = useForm<FormData>();
+  const navigation = useNavigation<ChildNavigationProp>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(index === 0);
   const [expandable] = useState(index !== 0);
-  const [shot, setShot] = useState<Shot>();
 
   useEffect(() => {
-    if (data?.shots) {
-      data.shots.find((myShot): null => {
-        if (myShot.id === id) {
-          setShot(myShot);
-        }
-        return null;
+    const unsubscribe = navigation.addListener('blur', () => {
+      const { title, content } = getValues();
+      updateShot({
+        variables: {
+          id: shot.id,
+          title: title || shot.title,
+          content: content || shot.content,
+        },
       });
-    }
-  });
+    });
 
-  if (!shot) {
-    return null;
-  }
+    return unsubscribe;
+  }, [navigation]);
 
   const handleVisible = (): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     setVisible(!visible);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onChange = (e: any[], type: OnChangeType): EventFunction => {
-    const { text } = e[0].nativeEvent;
-    if (type === 'title') {
-      updateShot({ variables: { id, title: text } });
-    }
-    if (type === 'content') {
-      updateShot({ variables: { id, content: text } });
-    }
-
-    return text;
   };
 
   const onTitleContentSizeChange = (event: {
@@ -98,10 +82,6 @@ const Form: FC<Form> = ({ id, index }) => {
   }): void => {
     setHeightContent(event.nativeEvent.contentSize.height);
   };
-
-  if (data === undefined) {
-    return null;
-  }
 
   return (
     <>
@@ -135,11 +115,10 @@ const Form: FC<Form> = ({ id, index }) => {
               rules={{ required: true }}
               multiline
               name="title"
-              onChange={(e): EventFunction => onChange(e, 'title')}
+              onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
               onContentSizeChange={onTitleContentSizeChange}
               placeholder="Title"
-              value={shot?.title || ''}
-              defaultValue={shot?.title}
+              defaultValue={shot.title || ''}
               style={[
                 AssetStyles.form.bubble.title,
                 { height: heightTitle && Math.max(35, heightTitle + 50) },
@@ -151,11 +130,10 @@ const Form: FC<Form> = ({ id, index }) => {
             control={control}
             multiline
             name="content"
-            onChange={(e): EventFunction => onChange(e, 'content')}
+            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
             onContentSizeChange={onContentSizeChange}
             placeholder="Content"
-            value={shot?.content || ''}
-            defaultValue={shot?.content}
+            defaultValue={shot.content || ''}
             style={[
               AssetStyles.form.bubble.content,
               {
@@ -176,15 +154,6 @@ const CreatePost: FC = () => {
   const inset = useSafeArea();
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [shots, setShot] = useState<Shot[]>();
-
-  useEffect(() => {
-    navigation.addListener('focus', () => {
-      if (data?.shots) {
-        setShot(data.shots);
-      }
-    });
-  }, [navigation]);
 
   return (
     <>
@@ -215,8 +184,8 @@ const CreatePost: FC = () => {
           activeIndex={activeIndex}
           items={[{ title: 'Story' }, { title: 'Incident' }]}
         />
-        {shots &&
-          shots.map(
+        {data?.shots &&
+          data?.shots.map(
             (shot: Shot, index: number): ReactNode => {
               const { id } = shot;
               const image = shot.image as string;
@@ -225,7 +194,7 @@ const CreatePost: FC = () => {
                 <Panel marginBottom key={id}>
                   {image && <Image style={styles.image} source={{ uri: image }} />}
                   <Panel marginHorizontal>
-                    <Form id={shot.id} index={index} />
+                    <Form shot={shot} index={index} />
                   </Panel>
                 </Panel>
               );
