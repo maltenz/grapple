@@ -225,10 +225,7 @@ const CameraScreen: FC = () => {
               type="normal"
               mode="night"
               appearance="normal"
-              onPress={(): void => {
-                navigation.push('CreatePost');
-                navigation.navigate('CreatePost');
-              }}
+              onPress={(): void => navigation.navigate('CreatePost')}
             >
               Next
             </Button>
