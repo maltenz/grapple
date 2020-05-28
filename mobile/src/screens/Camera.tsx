@@ -7,10 +7,9 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
-
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import {
   Panel,
   Navigation,
@@ -45,10 +44,6 @@ interface CameraFrameProps {
   backgroundImage: string | null;
   Top?: ReactNode;
   Bottom?: ReactNode;
-}
-
-interface CameraBackground {
-  backgroundImage: string | null;
 }
 
 type Flash = 'flash' | 'flashAuto' | 'flashOff';
@@ -111,14 +106,7 @@ const CameraScreen: FC = () => {
 
           const resize = await ImageManipulator.manipulateAsync(
             pic.uri,
-            [
-              { flip: ImageManipulator.FlipType.Horizontal },
-              {
-                resize: {
-                  width: CROP_DIMENSION,
-                },
-              },
-            ],
+            [{ flip: ImageManipulator.FlipType.Horizontal }, { resize: { width: CROP_DIMENSION } }],
             { format: ImageManipulator.SaveFormat.JPEG }
           );
 
@@ -187,13 +175,7 @@ const CameraScreen: FC = () => {
 
         const resize = await ImageManipulator.manipulateAsync(
           camRollPic.uri,
-          [
-            {
-              resize: {
-                width: CROP_DIMENSION,
-              },
-            },
-          ],
+          [{ resize: { width: CROP_DIMENSION } }],
           { format: ImageManipulator.SaveFormat.JPEG }
         );
 
