@@ -44,12 +44,12 @@ type FormData = {
 interface Form {
   shot: Shot;
   index: number;
-  deleteShot: (id: string) => void;
 }
 
-const Form: FC<Form> = ({ shot, deleteShot, index }) => {
+const Form: FC<Form> = ({ shot, index }) => {
   const { control, getValues, reset } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
+  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const navigation = useNavigation<ChildNavigationProp>();
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
@@ -61,10 +61,7 @@ const Form: FC<Form> = ({ shot, deleteShot, index }) => {
       const { title, content } = getValues();
 
       Keyboard.dismiss();
-
-      updateShot({
-        variables: { id: shot.id, title, content },
-      });
+      updateShot({ variables: { id: shot.id, title, content } });
     });
 
     return unsubscribe;
@@ -121,7 +118,7 @@ const Form: FC<Form> = ({ shot, deleteShot, index }) => {
           text: 'Delete shot',
           style: 'destructive',
           onPress: (): void => {
-            deleteShot(shot.id);
+            deleteShot({ variables: { id: shot.id } });
           },
         },
         {
@@ -210,12 +207,7 @@ const CreatePost: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
-  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  const handleDeleteShot = (id: string): void => {
-    deleteShot({ variables: { id } });
-  };
 
   return (
     <>
@@ -256,11 +248,7 @@ const CreatePost: FC = () => {
                 <Panel marginBottom key={id}>
                   {image && <Image style={styles.image} source={{ uri: image }} />}
                   <Panel marginHorizontal>
-                    <Form
-                      shot={shot}
-                      index={index}
-                      deleteShot={(shotId): void => handleDeleteShot(shotId)}
-                    />
+                    <Form shot={shot} index={index} />
                   </Panel>
                 </Panel>
               );
