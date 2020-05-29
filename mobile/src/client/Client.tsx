@@ -16,7 +16,7 @@ const Client: FC = ({ children }) => {
 
     try {
       const myClient = new ApolloClient({
-        uri: 'http://192.168.1.100:8080/',
+        uri: 'http://172.20.10.2:8080/',
         cache,
         resolvers,
         request: async (operation: Operation): Promise<void> => {

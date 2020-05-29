@@ -44,13 +44,13 @@ type FormData = {
 interface Form {
   shot: Shot;
   index: number;
+  deleteShot: (id: string) => void;
 }
 
-const Form: FC<Form> = ({ shot, index }) => {
-  const { control, getValues } = useForm<FormData>();
-  const navigation = useNavigation<ChildNavigationProp>();
+const Form: FC<Form> = ({ shot, deleteShot, index }) => {
+  const { control, getValues, reset } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
-  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
+  const navigation = useNavigation<ChildNavigationProp>();
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
   const [visible, setVisible] = useState(index === 0 || !!shot.content);
@@ -59,22 +59,39 @@ const Form: FC<Form> = ({ shot, index }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       const { title, content } = getValues();
-      updateShot({
-        variables: {
-          id: shot.id,
-          title: title || shot.title,
-          content: content || shot.content,
-        },
-      });
+
       Keyboard.dismiss();
+
+      updateShot({
+        variables: { id: shot.id, title, content },
+      });
     });
 
     return unsubscribe;
   }, [navigation]);
 
   const handleVisible = (): void => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    setVisible(!visible);
+    if (visible) {
+      Alert.alert('Delete content', 'Are you sure', [
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: (): void => {
+            reset({ content: '' });
+
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+            setVisible(false);
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ]);
+    } else {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+      setVisible(!visible);
+    }
   };
 
   const onTitleContentSizeChange = (event: {
@@ -104,7 +121,7 @@ const Form: FC<Form> = ({ shot, index }) => {
           text: 'Delete shot',
           style: 'destructive',
           onPress: (): void => {
-            deleteShot({ variables: { id: shot.id } });
+            deleteShot(shot.id);
           },
         },
         {
@@ -129,7 +146,7 @@ const Form: FC<Form> = ({ shot, index }) => {
             marginRight={0.5}
             outline
           >
-            Content
+            {visible ? 'Delete' : 'Content'}
           </Button>
           <TouchableOpacity onPress={handleOptions}>
             <SvgIconMenu color="grey2" />
@@ -193,7 +210,12 @@ const CreatePost: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
+  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const handleDeleteShot = (id: string): void => {
+    deleteShot({ variables: { id } });
+  };
 
   return (
     <>
@@ -234,7 +256,11 @@ const CreatePost: FC = () => {
                 <Panel marginBottom key={id}>
                   {image && <Image style={styles.image} source={{ uri: image }} />}
                   <Panel marginHorizontal>
-                    <Form shot={shot} index={index} />
+                    <Form
+                      shot={shot}
+                      index={index}
+                      deleteShot={(shotId): void => handleDeleteShot(shotId)}
+                    />
                   </Panel>
                 </Panel>
               );

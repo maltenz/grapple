@@ -72,15 +72,15 @@ function updateShot(_: any, { input: { id, title, content, image } }: any, { cac
         __typename: 'StateShot',
       };
 
-      if (title) {
+      if (title || title === '') {
         newShot.title = title;
       }
 
-      if (content) {
+      if (content || content === '') {
         newShot.content = content;
       }
 
-      if (image) {
+      if (image || image === '') {
         newShot.image = image;
       }
 
