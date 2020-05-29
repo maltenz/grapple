@@ -33,7 +33,7 @@ import { NavigationHeading } from '../assets/components/base/Navigation';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { GET_SHOTS, UPDATE_SHOT, DELETE_SHOT } from '../resolvers/shots';
+import { GET_SHOTS, UPDATE_SHOT, DELETE_SHOT, MOVE_UP_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
 type FormData = {
@@ -50,6 +50,7 @@ const Form: FC<Form> = ({ shot, index }) => {
   const { control, getValues, reset } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
+  const [moveUpShot] = useMutation<Shot>(MOVE_UP_SHOT);
   const navigation = useNavigation<ChildNavigationProp>();
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
@@ -110,6 +111,9 @@ const Form: FC<Form> = ({ shot, index }) => {
       [
         {
           text: 'Move up',
+          onPress: (): void => {
+            moveUpShot({ variables: { id: shot.id } });
+          },
         },
         {
           text: 'Move down',
@@ -206,7 +210,7 @@ const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
+  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS, { returnPartialData: true });
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   return (

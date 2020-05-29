@@ -70,7 +70,7 @@ const CameraScreen: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const [addShot] = useMutation<Shot>(ADD_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS);
+  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS, { returnPartialData: true });
   const [hasCamPermission, setHasCamPermission] = useState<boolean>();
   const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

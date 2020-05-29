@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-ignore */
+/* eslint-disable no-shadow, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-ignore */
+import _ from 'lodash';
 import gql from 'graphql-tag';
+import arrayMove from 'array-move';
 import { Shot } from '../generated/graphql';
 
 export const ADD_SHOT = gql`
@@ -10,7 +12,7 @@ export const ADD_SHOT = gql`
 
 export const GET_SHOTS = gql`
   {
-    shots @client {
+    shots @client(always: true, returnPartial: true) {
       id
       title
       content
@@ -19,9 +21,16 @@ export const GET_SHOTS = gql`
   }
 `;
 
+export const MOVE_UP_SHOT = gql`
+  mutation MoveUpShot($id: ID!) {
+    moveUpShot(input: { id: $id }) @client
+  }
+`;
+
 export const UPDATE_SHOT = gql`
   mutation UpdateShot($id: ID!, $title: String, $content: String, $image: String) {
-    updateShot(input: { id: $id, title: $title, content: $content, image: $image }) @client
+    updateShot(input: { id: $id, title: $title, content: $content, image: $image })
+      @client(always: true)
   }
 `;
 
@@ -31,9 +40,9 @@ export const DELETE_SHOT = gql`
   }
 `;
 
-const query = gql`
+export const query = gql`
   query GetShots {
-    shots @client {
+    shots @client(always: true) {
       id
       title
       content
@@ -42,20 +51,20 @@ const query = gql`
   }
 `;
 
-function addShot(_: any, { input: { id, title, content, image } }: any, { cache }: any): any {
-  const all = cache.readQuery({ query });
+function addShot(_: any, { input: { id, title, content, image } }: any, { client }: any): any {
+  const all = client.cache.readQuery({ query });
 
   const newShot = { id, title, content, image, __typename: 'StateShot' };
   const data = {
     shots: [...all.shots, newShot],
   };
 
-  cache.writeQuery({ query, data });
+  client.writeQuery({ query, data, variables: { id, title, content, image } });
   return newShot;
 }
 
-function updateShot(_: any, { input: { id, title, content, image } }: any, { cache }: any): any {
-  const { shots } = cache.readQuery({ query });
+function updateShot(_: any, { input: { id, title, content, image } }: any, { client }: any): any {
+  const { shots } = client.cache.readQuery({ query });
 
   const newShots = [...shots];
   let newShot: Shot;
@@ -95,31 +104,59 @@ function updateShot(_: any, { input: { id, title, content, image } }: any, { cac
       };
     }
 
-    cache.writeQuery({ query, data });
+    client.writeQuery({ query, data, variables: { id, title, content, image } });
     return data;
   });
 
   return returnShots[0];
 }
 
-function deleteShot(_: any, { input: { id } }: any, { cache }: any): any {
-  const { shots } = cache.readQuery({ query });
+function deleteShot(_: any, { input: { id } }: any, { client }: any): any {
+  const { shots } = client.cache.readQuery({ query });
 
   const newShots = [...shots];
 
-  // eslint-disable-next-line array-callback-return
   newShots.map((shot: Shot, index: number) => {
     if (shot.id === id) {
       newShots.splice(index, 1);
     }
+    return null;
   });
 
   const data = {
     shots: [...newShots],
   };
 
-  cache.writeQuery({ query, data });
+  client.writeQuery({ query, data });
   return data;
 }
 
-export { addShot, updateShot, deleteShot };
+function moveUpShot(_: any, { input: { id } }: any, { client }: any): any {
+  const { shots } = client.cache.readQuery({ query });
+
+  const newShots = [...shots];
+
+  newShots.map((shot: Shot, index: number) => {
+    if (shot.id === id) {
+      const movedArray = arrayMove(newShots, index, index - 1);
+
+      const data = {
+        shots: [...movedArray],
+      };
+
+      client.writeQuery({ query, data });
+
+      return data;
+    }
+
+    const data = {
+      shots,
+    };
+
+    client.writeQuery({ query, data });
+
+    return data;
+  });
+}
+
+export { addShot, updateShot, deleteShot, moveUpShot };
