@@ -1,6 +1,8 @@
 import { Reducer } from 'redux';
+import arrayMove from 'array-move';
 import { ShotState, ShotActionTypes } from './types';
 import { Shot } from '../../generated/graphql';
+import { MoveShot } from './actions';
 
 export const initialState: ShotState = {
   shots: [],
@@ -43,6 +45,14 @@ const reducer: Reducer<ShotState> = (state = initialState, action) => {
         }
       });
       return { ...state, shots };
+    }
+    case ShotActionTypes.MOVE_SHOT: {
+      const { index, direction }: MoveShot = action.payload;
+      const shots = [...state.shots];
+
+      const moveShots = arrayMove(shots, index, direction === 'up' ? index - 1 : index + 1);
+
+      return { ...state, shots: moveShots };
     }
     default: {
       return state;

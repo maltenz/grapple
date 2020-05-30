@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { ShotState, shotReducer, createShotsSelector } from './create';
-import { addShot, deleteShot, updateShot } from './create/actions';
+import { addShot, deleteShot, updateShot, moveShot } from './create/actions';
 
 export interface ApplicationState {
   create: ShotState;
@@ -12,4 +12,4 @@ export const createRootReducer = () =>
     create: shotReducer,
   });
 
-export { addShot, deleteShot, updateShot, createShotsSelector };
+export { addShot, deleteShot, updateShot, moveShot, createShotsSelector };

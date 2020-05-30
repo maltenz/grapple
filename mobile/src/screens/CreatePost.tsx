@@ -14,9 +14,9 @@ import {
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -31,14 +31,15 @@ import {
   Text,
   SvgIconMenu,
   SvgLogoGrapple,
-  HandleUploadImage,
+  UploadImage,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 
+import { deleteShot, updateShot, moveShot, createShotsSelector } from '../store';
+
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { GET_SHOTS, UPDATE_SHOT, DELETE_SHOT, MOVE_UP_SHOT } from '../resolvers/shots';
 import { Shot } from '../generated/graphql';
 
 type FormData = {
@@ -54,9 +55,7 @@ interface Form {
 
 const Form: FC<Form> = ({ shot, index, onUpload }) => {
   const { control, getValues, reset } = useForm<FormData>();
-  const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
-  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
-  const [moveUpShot] = useMutation<Shot>(MOVE_UP_SHOT);
+  const dispatch = useDispatch();
   const navigation = useNavigation<ChildNavigationProp>();
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
@@ -68,7 +67,7 @@ const Form: FC<Form> = ({ shot, index, onUpload }) => {
       const { title, content } = getValues();
 
       Keyboard.dismiss();
-      updateShot({ variables: { id: shot.id, title, content } });
+      dispatch(updateShot({ id: shot.id, title, content }));
     });
 
     return unsubscribe;
@@ -118,17 +117,20 @@ const Form: FC<Form> = ({ shot, index, onUpload }) => {
         {
           text: 'Move up',
           onPress: (): void => {
-            moveUpShot({ variables: { id: shot.id } });
+            dispatch(moveShot({ index, direction: 'up' }));
           },
         },
         {
           text: 'Move down',
+          onPress: (): void => {
+            dispatch(moveShot({ index, direction: 'up' }));
+          },
         },
         {
           text: 'Delete shot',
           style: 'destructive',
           onPress: (): void => {
-            deleteShot({ variables: { id: shot.id } });
+            dispatch(deleteShot({ id: shot.id }));
           },
         },
         {
@@ -149,10 +151,10 @@ const Form: FC<Form> = ({ shot, index, onUpload }) => {
         onPress={(): void => {
           const image = `data:image/jpeg;base64,${shot.image}` as string;
 
-          HandleUploadImage({
+          UploadImage({
             image,
             onUpload: (value) => onUpload(value),
-            onComplete: (res) => updateShot({ variables: { id: shot.id, image: res } }),
+            onComplete: (res) => dispatch(updateShot({ id: shot.id, image: res })),
           });
         }}
         marginRight={0.5}
@@ -234,7 +236,7 @@ const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS, { returnPartialData: true });
+  const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
 
@@ -267,31 +269,27 @@ const CreatePost: FC = () => {
           activeIndex={activeIndex}
           items={[{ title: 'Story' }, { title: 'Incident' }]}
         />
-        {data?.shots &&
-          data?.shots.map(
-            (shot: Shot, index: number): ReactNode => {
-              const { id } = shot;
-              const image = shot.image as string;
+        {shots.map(
+          (shot: Shot, index: number): ReactNode => {
+            const { id } = shot;
+            const image = shot.image as string;
 
-              return (
-                <Panel marginBottom key={id}>
-                  {image && (
-                    <Image
-                      style={styles.image}
-                      source={{ uri: `data:image/jpeg;base64,${image}` }}
-                    />
-                  )}
-                  <Panel marginHorizontal>
-                    <Form
-                      shot={shot}
-                      index={index}
-                      onUpload={(value: boolean): void => setUploading(value)}
-                    />
-                  </Panel>
+            return (
+              <Panel marginBottom key={id}>
+                {image && (
+                  <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${image}` }} />
+                )}
+                <Panel marginHorizontal>
+                  <Form
+                    shot={shot}
+                    index={index}
+                    onUpload={(value: boolean): void => setUploading(value)}
+                  />
                 </Panel>
-              );
-            }
-          )}
+              </Panel>
+            );
+          }
+        )}
         <Button marginHorizontal type="large" mode="day" appearance="strong">
           Preview
         </Button>

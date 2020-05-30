@@ -8,8 +8,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Panel,
   Navigation,
