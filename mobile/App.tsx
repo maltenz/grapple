@@ -5,11 +5,12 @@ import { AppLoading } from 'expo';
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react';
 
 import Client from './src/client/Client';
 import AppRoot from './src/screens/AppRoot';
-import configureStore from './configureStore';
 import { Window } from './src/types';
+import configureStore from './src/store/configureStore';
 
 declare let window: Window & typeof globalThis;
 
@@ -33,9 +34,11 @@ const App: FC = () => {
     <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
       <Client>
         <Provider store={store}>
-          <NavigationContainer>
-            <AppRoot />
-          </NavigationContainer>
+          <PersistGate loading={null} persistor={persistor}>
+            <NavigationContainer>
+              <AppRoot />
+            </NavigationContainer>
+          </PersistGate>
         </Provider>
       </Client>
     </SafeAreaProvider>
