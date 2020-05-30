@@ -11,17 +11,17 @@ export const CreateId = (): string => {
   return `${id}`;
 };
 
-interface HandleUploadImageType {
+interface UploadImageType {
   image: string;
   onUpload: (value: boolean) => void;
   onComplete: (res: string) => void;
 }
 
-export const HandleUploadImage = async ({
+export const UploadImage = async ({
   image,
   onUpload,
   onComplete,
-}: HandleUploadImageType): Promise<void> => {
+}: UploadImageType): Promise<void> => {
   const data = new FormData();
   data.append('file', `data:image/jpeg;base64,${image}` as string);
   data.append('upload_preset', 'ml_default');

@@ -1,17 +1,15 @@
 import { combineReducers } from 'redux';
-import { LayoutState, layoutReducer } from './layout';
-
-import * as layoutActions from './layout/actions';
-import * as layoutSelectors from './layout/selector';
+import { ShotState, shotReducer } from './create';
+import { addShot, deleteShot, updateShot } from './create/actions';
 
 export interface ApplicationState {
-  layout: LayoutState;
+  create: ShotState;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createRootReducer = () =>
   combineReducers({
-    layout: layoutReducer,
+    create: shotReducer,
   });
 
-export { layoutActions, layoutSelectors };
+export { addShot, deleteShot, updateShot };

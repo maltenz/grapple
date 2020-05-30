@@ -28,4 +28,4 @@ const reducer: Reducer<LayoutState> = (state = initialState, action) => {
   }
 };
 
-export { reducer as layoutReducer };
+export { reducer as shotReducer };

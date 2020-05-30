@@ -1,4 +1,5 @@
 import React, { FC, useState, ReactNode, useEffect } from 'react';
+
 import {
   Image,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
   Keyboard,
   ActivityIndicator,
 } from 'react-native';
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -17,6 +19,7 @@ import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import {
   Navigation,
   NavigationIcon,
@@ -28,7 +31,7 @@ import {
   Text,
   SvgIconMenu,
   SvgLogoGrapple,
-  HandleUploadImage,
+  UploadImage,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -49,7 +52,7 @@ interface Form {
   onUpload: (value: boolean) => void;
 }
 
-const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
+const Form: FC<Form> = ({ shot, index, onUpload }) => {
   const { control, getValues, reset } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
@@ -95,13 +98,13 @@ const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
     }
   };
 
-  const onTitleContentSizeChange = (event: {
+  const handleTitleContentSizeChange = (event: {
     nativeEvent: TextInputContentSizeChangeEventData;
   }): void => {
     setHeightTitle(event.nativeEvent.contentSize.height);
   };
 
-  const onContentSizeChange = (event: {
+  const handleContentSizeChange = (event: {
     nativeEvent: TextInputContentSizeChangeEventData;
   }): void => {
     setHeightContent(event.nativeEvent.contentSize.height);
@@ -146,9 +149,9 @@ const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
         onPress={(): void => {
           const image = `data:image/jpeg;base64,${shot.image}` as string;
 
-          HandleUploadImage({
+          UploadImage({
             image,
-            onUpload: (value) => parentOnUpload(value),
+            onUpload: (value) => onUpload(value),
             onComplete: (res) => updateShot({ variables: { id: shot.id, image: res } }),
           });
         }}
@@ -187,7 +190,7 @@ const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
             multiline
             name="title"
             onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
-            onContentSizeChange={onTitleContentSizeChange}
+            onContentSizeChange={handleTitleContentSizeChange}
             placeholder="Title"
             defaultValue={shot.title || ''}
             style={[
@@ -210,7 +213,7 @@ const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
             multiline
             name="content"
             onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
-            onContentSizeChange={onContentSizeChange}
+            onContentSizeChange={handleContentSizeChange}
             placeholder="Description"
             defaultValue={shot.content || ''}
             style={[
