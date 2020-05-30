@@ -31,7 +31,7 @@ import {
   Text,
   SvgIconMenu,
   SvgLogoGrapple,
-  UploadImage,
+  HandleUploadImage,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -149,7 +149,7 @@ const Form: FC<Form> = ({ shot, index, onUpload }) => {
         onPress={(): void => {
           const image = `data:image/jpeg;base64,${shot.image}` as string;
 
-          UploadImage({
+          HandleUploadImage({
             image,
             onUpload: (value) => onUpload(value),
             onComplete: (res) => updateShot({ variables: { id: shot.id, image: res } }),

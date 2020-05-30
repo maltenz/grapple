@@ -17,7 +17,7 @@ const reducer: Reducer<ShotState> = (state = initialState, action) => {
       return { ...state, shots: shotAdded };
     }
     case ShotActionTypes.DELETE_SHOT: {
-      const payload = ((action.payload.id as Pick<Shot, 'id'>) as unknown) as string;
+      const payload = ((action.payload as Pick<Shot, 'id'>) as unknown) as string;
       const shotDeleted = [...state.shots];
 
       shotDeleted.forEach((shot: Shot, index: number) => {
@@ -26,7 +26,7 @@ const reducer: Reducer<ShotState> = (state = initialState, action) => {
         }
       });
 
-      return { ...state, shots: action.payload };
+      return { ...state, shots: shotDeleted };
     }
     case ShotActionTypes.UPDATE_SHOT: {
       const payload = action.payload as Shot;

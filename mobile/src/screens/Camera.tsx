@@ -8,8 +8,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Panel,
   Navigation,
@@ -30,8 +30,7 @@ import {
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import { ADD_SHOT, GET_SHOTS, DELETE_SHOT } from '../resolvers/shots';
-import { Shot } from '../generated/graphql';
+import { addShot, deleteShot, createShotsSelector } from '../store';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -70,9 +69,8 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => 
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [addShot] = useMutation<Shot>(ADD_SHOT);
-  const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
-  const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS, { returnPartialData: true });
+  const dispatch = useDispatch();
+  const shots = useSelector(createShotsSelector);
   const [hasCamPermission, setHasCamPermission] = useState<boolean>();
   const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -91,7 +89,7 @@ const CameraScreen: FC = () => {
 
   const onChange = (id: string, index: number): void => {
     setActiveIndex(index);
-    const image = data?.shots[index].image;
+    const { image } = shots[index];
     setBackgroundImage(image !== undefined ? image : null);
 
     if (activeIndex === index) {
@@ -129,10 +127,7 @@ const CameraScreen: FC = () => {
             ],
             { format: ImageManipulator.SaveFormat.JPEG, base64: true }
           );
-
-          addShot({
-            variables: { id: CreateId(), title: '', content: '', image: crop.base64 },
-          });
+          dispatch(addShot({ id: CreateId(), title: '', content: '', image: crop.base64 }));
         }
       }
     } catch (err) {
@@ -181,9 +176,7 @@ const CameraScreen: FC = () => {
           { format: ImageManipulator.SaveFormat.JPEG, base64: true }
         );
 
-        addShot({
-          variables: { id: CreateId(), title: '', content: '', image: resize.base64 },
-        });
+        dispatch(addShot({ id: CreateId(), title: '', content: '', image: resize.base64 }));
       }
     } catch (err) {
       throw new Error(err);
@@ -236,7 +229,7 @@ const CameraScreen: FC = () => {
         Bottom={
           <Panel>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-              {data?.shots?.map(
+              {shots.map(
                 (shot, index: number): ReactNode => {
                   if (shot?.image) {
                     return (
@@ -249,16 +242,14 @@ const CameraScreen: FC = () => {
                               onPress={(): void => {
                                 setBackgroundImage(null);
                                 setActiveIndex(null);
-                                deleteShot({
-                                  variables: { id: shot.id },
-                                });
+                                dispatch(deleteShot({ id: shot.id }));
                               }}
                             />
                           )
                         }
                         key={shot.id}
                         src={{ uri: `data:image/jpeg;base64,${shot.image}` }}
-                        marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
+                        marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
                         onPress={(): void => onChange(shot.id, index)}
