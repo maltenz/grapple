@@ -10,3 +10,38 @@ export const CreateId = (): string => {
   id = formatId.$oid;
   return `${id}`;
 };
+
+interface HandleUploadImageType {
+  image: string;
+  onUpload: (value: boolean) => void;
+  onComplete: (res: string) => void;
+}
+
+export const HandleUploadImage = async ({
+  image,
+  onUpload,
+  onComplete,
+}: HandleUploadImageType): Promise<void> => {
+  const data = new FormData();
+  data.append('file', `data:image/jpeg;base64,${image}` as string);
+  data.append('upload_preset', 'ml_default');
+  data.append('cloud_name', process.env.CLOUDINARY_NAME as string);
+  data.append('api_key', process.env.CLOUDINARY_KEY as string);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://api.cloudinary.com/v1_1/cloud_name/image/upload', true);
+
+  onUpload(true);
+
+  try {
+    xhr.onreadystatechange = (): void => {
+      if (xhr.readyState === 4) {
+        onComplete(xhr.response.secure_url);
+        onUpload(false);
+      }
+    };
+  } catch (err) {
+    throw new Error(err);
+  }
+  xhr.send(data);
+};

@@ -8,9 +8,9 @@ import {
   LayoutAnimation,
   Alert,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
@@ -27,6 +27,8 @@ import {
   Button,
   Text,
   SvgIconMenu,
+  SvgLogoGrapple,
+  HandleUploadImage,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -44,9 +46,10 @@ type FormData = {
 interface Form {
   shot: Shot;
   index: number;
+  onUpload: (value: boolean) => void;
 }
 
-const Form: FC<Form> = ({ shot, index }) => {
+const Form: FC<Form> = ({ shot, index, onUpload: parentOnUpload }) => {
   const { control, getValues, reset } = useForm<FormData>();
   const [updateShot] = useMutation<Shot>(UPDATE_SHOT);
   const [deleteShot] = useMutation<Shot>(DELETE_SHOT);
@@ -136,6 +139,24 @@ const Form: FC<Form> = ({ shot, index }) => {
 
   return (
     <>
+      <Button
+        mode="day"
+        type="normal"
+        appearance="grey"
+        onPress={(): void => {
+          const image = `data:image/jpeg;base64,${shot.image}` as string;
+
+          HandleUploadImage({
+            image,
+            onUpload: (value) => parentOnUpload(value),
+            onComplete: (res) => updateShot({ variables: { id: shot.id, image: res } }),
+          });
+        }}
+        marginRight={0.5}
+        outline
+      >
+        Upload
+      </Button>
       {expandable && (
         <Panel row justifyContent="flex-end" alignItems="center">
           <Button
@@ -212,6 +233,7 @@ const CreatePost: FC = () => {
   const inset = useSafeArea();
   const { data } = useQuery<{ shots: Shot[] }>(GET_SHOTS, { returnPartialData: true });
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   return (
     <>
@@ -250,9 +272,18 @@ const CreatePost: FC = () => {
 
               return (
                 <Panel marginBottom key={id}>
-                  {image && <Image style={styles.image} source={{ uri: image }} />}
+                  {image && (
+                    <Image
+                      style={styles.image}
+                      source={{ uri: `data:image/jpeg;base64,${image}` }}
+                    />
+                  )}
                   <Panel marginHorizontal>
-                    <Form shot={shot} index={index} />
+                    <Form
+                      shot={shot}
+                      index={index}
+                      onUpload={(value: boolean): void => setUploading(value)}
+                    />
                   </Panel>
                 </Panel>
               );
@@ -263,6 +294,16 @@ const CreatePost: FC = () => {
         </Button>
         <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
       </KeyboardAwareScrollView>
+      {uploading && (
+        <Panel
+          style={[StyleSheet.absoluteFill, styles.loaderContainer]}
+          center
+          backgroundColor="red"
+        >
+          <ActivityIndicator size="large" color={Color.white} style={styles.activityIndicator} />
+          <SvgLogoGrapple color="white" scale={0.65} />
+        </Panel>
+      )}
     </>
   );
 };
@@ -276,6 +317,13 @@ const styles = StyleSheet.create({
     width: AssetStyles.measure.window.width,
     height: AssetStyles.measure.window.width,
     marginBottom: AssetStyles.measure.space / 2,
+  },
+  loaderContainer: {
+    zIndex: 10,
+    opacity: 0.9,
+  },
+  activityIndicator: {
+    marginBottom: AssetStyles.measure.space * 2,
   },
 });
 

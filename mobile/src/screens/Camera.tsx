@@ -51,7 +51,9 @@ type Flash = 'flash' | 'flashAuto' | 'flashOff';
 const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => {
   return (
     <>
-      {backgroundImage && <Image style={styles.image} source={{ uri: backgroundImage }} />}
+      {backgroundImage && (
+        <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${backgroundImage}` }} />
+      )}
       <View style={styles.frame}>
         <BlurView tint="dark" intensity={100} style={styles.frameTop}>
           {Top}
@@ -125,11 +127,11 @@ const CameraScreen: FC = () => {
                 },
               },
             ],
-            { format: ImageManipulator.SaveFormat.JPEG }
+            { format: ImageManipulator.SaveFormat.JPEG, base64: true }
           );
 
           addShot({
-            variables: { id: CreateId(), title: '', content: '', image: crop.uri },
+            variables: { id: CreateId(), title: '', content: '', image: crop.base64 },
           });
         }
       }
@@ -176,11 +178,11 @@ const CameraScreen: FC = () => {
         const resize = await ImageManipulator.manipulateAsync(
           camRollPic.uri,
           [{ resize: { width: CROP_DIMENSION } }],
-          { format: ImageManipulator.SaveFormat.JPEG }
+          { format: ImageManipulator.SaveFormat.JPEG, base64: true }
         );
 
         addShot({
-          variables: { id: CreateId(), title: '', content: '', image: resize.uri },
+          variables: { id: CreateId(), title: '', content: '', image: resize.base64 },
         });
       }
     } catch (err) {
@@ -255,7 +257,7 @@ const CameraScreen: FC = () => {
                           )
                         }
                         key={shot.id}
-                        src={{ uri: shot.image }}
+                        src={{ uri: `data:image/jpeg;base64,${shot.image}` }}
                         marginRight={index === (data?.shots?.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}

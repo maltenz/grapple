@@ -7,7 +7,7 @@ import { VIBRATE_DUR } from './system';
 /**
  * helpers
  */
-import { CreateId } from './helpers';
+import { CreateId, HandleUploadImage } from './helpers';
 
 /**
  * core components
@@ -108,6 +108,7 @@ import SvgIconSmallUp from './svg/icons/small/SvgIconSmallUp';
 export {
   // helpers
   CreateId,
+  HandleUploadImage,
   // util
   AssetStyles,
   Color,
