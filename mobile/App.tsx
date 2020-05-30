@@ -14,7 +14,7 @@ import configureStore from './src/store/configureStore';
 
 declare let window: Window & typeof globalThis;
 
-const store = configureStore(window.INITIAL_REDUX_STATE);
+const { store, persistor } = configureStore(window.INITIAL_REDUX_STATE);
 
 const fetchFonts = (): Promise<void> => {
   return Font.loadAsync({
