@@ -73,6 +73,7 @@ import SvgRulerRightArrow from './svg/SvgRulerRightArrow';
 // -- icons large
 import SvgIconAccount from './svg/icons/large/SvgIconAccount';
 import SvgIconBookmark from './svg/icons/large/SvgIconBookmark';
+import SvgIconCameraFlip from './svg/icons/large/SvgIconCameraFlip';
 import SvgIconChat from './svg/icons/large/SvgIconChat';
 import SvgIconClose from './svg/icons/large/SvgIconClose';
 import SvgIconDown from './svg/icons/large/SvgIconDown';
@@ -177,6 +178,7 @@ export {
   // icons large
   SvgIconAccount,
   SvgIconBookmark,
+  SvgIconCameraFlip,
   SvgIconChat,
   SvgIconClose,
   SvgIconDown,

@@ -15,6 +15,7 @@ import SvgIconClose from '../../svg/icons/large/SvgIconClose';
 import SvgIconImage from '../../svg/icons/large/SvgIconImage';
 import SvgIconFlashAuto from '../../svg/icons/large/SvgIconFlashAuto';
 import SvgIconFlashOff from '../../svg/icons/large/SvgIconFlashOff';
+import SvgIconCameraFlip from '../../svg/icons/large/SvgIconCameraFlip';
 
 interface NavigationProps {
   Left?: ReactNode;
@@ -37,6 +38,7 @@ interface NavigationIconProps {
     | 'flash'
     | 'flashOff'
     | 'flashAuto'
+    | 'cameraFlip'
     | 'image';
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -88,6 +90,8 @@ const NavigationIconEl: FC<NavigationIconProps> = ({ mode, type = 'back' }) => {
       return <SvgIconFlashOff {...config} />;
     case 'flashAuto':
       return <SvgIconFlashAuto {...config} />;
+    case 'cameraFlip':
+      return <SvgIconCameraFlip {...config} />;
     case 'image':
       return <SvgIconImage {...config} />;
     default:

@@ -214,7 +214,13 @@ const CameraScreen: FC = () => {
     <>
       <Navigation
         mode="night"
-        Left={<NavigationIcon mode="night" type="chat" onPress={(): void => navigation.goBack()} />}
+        Left={
+          <NavigationIcon
+            mode="night"
+            type="cameraFlip"
+            onPress={(): void => navigation.goBack()}
+          />
+        }
         Right={
           <NavigationIcon mode="night" type="close" onPress={(): void => navigation.goBack()} />
         }
