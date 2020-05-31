@@ -51,16 +51,17 @@ interface Form {
   shot: Shot;
   index: number;
   onUpload: (value: boolean) => void;
+  visible: boolean;
+  expandable: boolean;
 }
 
-const Form: FC<Form> = ({ shot, index, onUpload }) => {
+const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandable }) => {
   const { control, getValues, reset } = useForm<FormData>();
   const dispatch = useDispatch();
   const navigation = useNavigation<ChildNavigationProp>();
   const [heightTitle, setHeightTitle] = useState<number>();
   const [heightContent, setHeightContent] = useState<number>();
-  const [visible, setVisible] = useState(index === 0 || !!shot.content);
-  const [expandable] = useState(index !== 0);
+  const [visible, setVisible] = useState<boolean>(propVisible);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
@@ -117,12 +118,18 @@ const Form: FC<Form> = ({ shot, index, onUpload }) => {
         {
           text: 'Move up',
           onPress: (): void => {
+            const { title, content } = getValues();
+
+            dispatch(updateShot({ id: shot.id, title, content }));
             dispatch(moveShot({ index, direction: 'up' }));
           },
         },
         {
           text: 'Move down',
           onPress: (): void => {
+            const { title, content } = getValues();
+
+            dispatch(updateShot({ id: shot.id, title, content }));
             dispatch(moveShot({ index, direction: 'up' }));
           },
         },
@@ -240,6 +247,8 @@ const CreatePost: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
 
+  const localShots = [...shots];
+
   return (
     <>
       <Navigation
@@ -269,9 +278,9 @@ const CreatePost: FC = () => {
           activeIndex={activeIndex}
           items={[{ title: 'Story' }, { title: 'Incident' }]}
         />
-        {shots.map(
+        {localShots.map(
           (shot: Shot, index: number): ReactNode => {
-            const { id } = shot;
+            const { id, content } = shot;
             const image = shot.image as string;
 
             return (
@@ -283,6 +292,8 @@ const CreatePost: FC = () => {
                   <Form
                     shot={shot}
                     index={index}
+                    visible={index === 0 || !!content}
+                    expandable={index !== 0}
                     onUpload={(value: boolean): void => setUploading(value)}
                   />
                 </Panel>
