@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
 import { Alert, View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -23,14 +22,15 @@ import {
   CreateId,
   Badge,
   SvgIconImage,
-  SvgIconVideo,
-  SvgIconVideoOff,
   ThumbnailDimension,
+  SvgIconFlashAuto,
+  SvgIconFlash,
+  SvgIconFlashOff,
 } from '../assets';
 
 import { ChildNavigationProp } from './HomeRoot';
 
-import { addShot, deleteShot, createShotsSelector } from '../store';
+import { addShot, deleteShot, createShotsSelector, clearAllShot } from '../store';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -66,6 +66,22 @@ const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => 
   );
 };
 
+interface FlashIconProps {
+  settings: Flash;
+}
+
+const FlashIcon: FC<FlashIconProps> = ({ settings }): JSX.Element => {
+  switch (settings) {
+    case 'flashAuto':
+      return <SvgIconFlashAuto color="white" scale={0.9} />;
+    case 'flashOff':
+      return <SvgIconFlashOff color="white" scale={0.9} />;
+    case 'flash':
+    default:
+      return <SvgIconFlash color="white" scale={0.9} />;
+  }
+};
+
 const CameraScreen: FC = () => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
@@ -75,9 +91,7 @@ const CameraScreen: FC = () => {
   const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
-  const [deleteActive, setDeleteActive] = useState<boolean>(false);
   const [flashSettings, setFlashSettings] = useState<Flash>('flash');
-  const [videoSettings, setVideoSettings] = useState<'on' | 'off'>('off');
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -87,12 +101,12 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
-  const onChange = (index: number): void => {
-    setActiveIndex(index);
-    const { image } = shots[index];
-    setBackgroundImage(image !== undefined ? image : null);
-
-    if (activeIndex === index) {
+  const handlePreview = (active: boolean, index?: number): void => {
+    if (active && index) {
+      setActiveIndex(index);
+      const { image } = shots[index];
+      setBackgroundImage(image !== undefined ? image : null);
+    } else {
       setBackgroundImage(null);
       setActiveIndex(null);
     }
@@ -149,14 +163,6 @@ const CameraScreen: FC = () => {
     }
   };
 
-  const handleVideo = (): void => {
-    if (videoSettings === 'off') {
-      setVideoSettings('on');
-    } else {
-      setVideoSettings('off');
-    }
-  };
-
   const handleCamRoll = async (): Promise<void> => {
     try {
       const { status: camRollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -183,6 +189,23 @@ const CameraScreen: FC = () => {
     }
   };
 
+  const handleClearAllShot = (): void => {
+    Alert.alert('Clear shots', 'Are you sure', [
+      {
+        text: 'Yes',
+        style: 'default',
+        onPress: (): void => {
+          handlePreview(false);
+          dispatch(clearAllShot());
+        },
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
+  };
+
   if (hasCamPermission === null || hasCamPermission === false) {
     return <Panel flex={1} backgroundColor="grey4" />;
   }
@@ -191,15 +214,14 @@ const CameraScreen: FC = () => {
     <>
       <Navigation
         mode="night"
-        Left={
-          <NavigationIcon mode="night" type={flashSettings} onPress={(): void => handleFlash()} />
-        }
+        Left={<NavigationIcon mode="night" type="chat" onPress={(): void => navigation.goBack()} />}
         Right={
           <NavigationIcon mode="night" type="close" onPress={(): void => navigation.goBack()} />
         }
         style={styles.navigation}
       />
       <Camera
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         ref={camRef}
         style={{ flex: 1 }}
@@ -211,11 +233,26 @@ const CameraScreen: FC = () => {
           <Panel
             alignItems="flex-end"
             flex={1}
-            justifyContent="flex-end"
+            justifyContent="space-between"
             paddingHorizontal
             row
             paddingBottom={0.5}
           >
+            <Button
+              mode="night"
+              onPress={
+                shots.length
+                  ? handleClearAllShot
+                  : (): void => {
+                      dispatch(clearAllShot());
+                      handlePreview(false);
+                    }
+              }
+              appearance="disabled"
+              type="normal"
+            >
+              Clear
+            </Button>
             <Button
               type="normal"
               mode="night"
@@ -235,7 +272,7 @@ const CameraScreen: FC = () => {
                     return (
                       <Thumbnail
                         TopRight={
-                          deleteActive && (
+                          activeIndex === index && (
                             <Badge
                               type="delete"
                               appearance="heavy"
@@ -252,7 +289,7 @@ const CameraScreen: FC = () => {
                         marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
-                        onPress={(): void => onChange(index)}
+                        onPress={(): void => handlePreview(true, index)}
                         backgroundColor="grey4"
                       />
                     );
@@ -261,50 +298,20 @@ const CameraScreen: FC = () => {
                 }
               )}
             </ScrollView>
-            <Panel marginTop={0.5} paddingHorizontal row justifyContent="space-between">
-              <Button type="normal" mode="night" appearance="normal" outline>
-                Flip camera
-              </Button>
-              <Button
-                type="normal"
-                mode="night"
-                appearance="warning"
-                outline={!deleteActive}
-                onPress={(): void => setDeleteActive(!deleteActive)}
-              >
-                Edit
-              </Button>
-            </Panel>
           </Panel>
         }
       />
       <Panel row style={styles.footer}>
         <Panel flex={1}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.footerIcon}
-            onPress={handleVideo}
-          >
-            {videoSettings === 'off' ? (
-              <SvgIconVideoOff scale={0.9} color="white" />
-            ) : (
-              <SvgIconVideo scale={0.9} color="white" />
-            )}
+          <TouchableOpacity style={styles.footerIcon} onPress={handleFlash}>
+            <FlashIcon settings={flashSettings} />
           </TouchableOpacity>
         </Panel>
         <Panel flex={1} center>
-          <TabbarCircleButton
-            type="camera"
-            onPress={handleCapture}
-            onLongPress={(): void => Alert.alert('long press')}
-          />
+          <TabbarCircleButton type="camera" onPress={handleCapture} />
         </Panel>
         <Panel flex={1}>
-          <TouchableOpacity
-            onPress={handleCamRoll}
-            accessibilityRole="button"
-            style={styles.footerIcon}
-          >
+          <TouchableOpacity onPress={handleCamRoll} style={styles.footerIcon}>
             <SvgIconImage scale={0.9} color="white" />
           </TouchableOpacity>
         </Panel>

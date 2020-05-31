@@ -54,6 +54,9 @@ const reducer: Reducer<ShotState> = (state = initialState, action) => {
 
       return { ...state, shots: moveShots };
     }
+    case ShotActionTypes.CLEAR_ALL_SHOT: {
+      return { ...state, shots: [] };
+    }
     default: {
       return state;
     }

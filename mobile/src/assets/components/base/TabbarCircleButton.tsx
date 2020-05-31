@@ -7,7 +7,7 @@ import SvgIconSmallAdd from '../../svg/icons/small/SvgIconSmallAdd';
 interface TabbarCircleButtonProps {
   isFocused?: boolean;
   onPress: () => void;
-  onLongPress: () => void;
+  onLongPress?: () => void;
   style?: StyleProp<ViewStyle>;
   type?: 'camera';
 }
@@ -23,7 +23,7 @@ const TabbarCircleButton: FC<TabbarCircleButtonProps> = ({
       accessibilityRole="button"
       accessibilityStates={isFocused ? ['selected'] : []}
       onPress={onPress}
-      onLongPress={onLongPress}
+      onLongPress={onLongPress && onLongPress}
       style={[
         styles.circle,
         type === 'camera'

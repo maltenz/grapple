@@ -1,24 +1,12 @@
-import React, { FC, useState, ReactNode, useEffect } from 'react';
+/* eslint-disable no-param-reassign */
+import React, { FC, useState, ReactNode } from 'react';
 
-import {
-  Image,
-  StyleSheet,
-  TextInput,
-  TextInputContentSizeChangeEventData,
-  View,
-  LayoutAnimation,
-  Alert,
-  Keyboard,
-  ActivityIndicator,
-} from 'react-native';
+import { Image, StyleSheet, View, ActivityIndicator } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
-import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Action } from 'typesafe-actions';
 
 import { useMutation } from '@apollo/react-hooks';
 
@@ -30,238 +18,43 @@ import {
   Color,
   SegmentedController,
   Button,
-  Text,
-  SvgIconMenu,
   SvgLogoGrapple,
   UploadImage,
-  CreateId,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 
-import { deleteShot, updateShot, moveShot, createShotsSelector } from '../store';
-import { MoveShot } from '../store/create/actions';
+import { createShotsSelector, clearAllShot } from '../store';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import { Shot } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
-type FormData = {
-  title: string;
-  content: string;
-};
-
-interface Form {
-  shot: Shot;
-  index: number;
-  onUpload: (value: boolean) => void;
-  visible: boolean;
-  expandable: boolean;
-}
-
-const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandable }) => {
-  const { control, getValues, reset } = useForm<FormData>();
-  const dispatch = useDispatch();
-  const navigation = useNavigation<ChildNavigationProp>();
-  const [heightTitle, setHeightTitle] = useState<number>();
-  const [heightContent, setHeightContent] = useState<number>();
-  const [visible, setVisible] = useState<boolean>(propVisible);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      const { title, content } = getValues();
-
-      Keyboard.dismiss();
-      dispatch(updateShot({ id: shot.id, title, content }));
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  const handleVisible = (): void => {
-    if (visible) {
-      Alert.alert('Delete content', 'Are you sure', [
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: (): void => {
-            reset({ title: '', content: '' });
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-            setVisible(false);
-          },
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ]);
-    } else {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-      setVisible(!visible);
-    }
-  };
-
-  const handleTitleContentSizeChange = (event: {
-    nativeEvent: TextInputContentSizeChangeEventData;
-  }): void => {
-    setHeightTitle(event.nativeEvent.contentSize.height);
-  };
-
-  const handleContentSizeChange = (event: {
-    nativeEvent: TextInputContentSizeChangeEventData;
-  }): void => {
-    setHeightContent(event.nativeEvent.contentSize.height);
-  };
-
-  const handleMoveShot = ({ direction }: Pick<MoveShot, 'direction'>): void => {
-    const { title, content } = getValues();
-
-    dispatch(updateShot({ id: shot.id, title, content }));
-    dispatch(moveShot({ index, direction }));
-  };
-
-  const handleOptions = (): void => {
-    Alert.alert(
-      'Shot',
-      'Options',
-      [
-        {
-          text: 'Move up',
-          onPress: (): void => handleMoveShot({ direction: 'up' }),
-        },
-        {
-          text: 'Move down',
-          onPress: (): void => handleMoveShot({ direction: 'down' }),
-        },
-        {
-          text: 'Delete shot',
-          style: 'destructive',
-          onPress: (): Action => dispatch(deleteShot({ id: shot.id })),
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false }
-    );
-  };
-
-  return (
-    <>
-      <Button
-        mode="day"
-        type="normal"
-        appearance="grey"
-        onPress={(): void => {
-          const image = `data:image/jpeg;base64,${shot.image}` as string;
-
-          UploadImage({
-            image,
-            onUpload: (value) => onUpload(value),
-            onComplete: (res) => dispatch(updateShot({ id: shot.id, image: res })),
-          });
-        }}
-        marginRight={0.5}
-        outline
-      >
-        Upload
-      </Button>
-      {expandable && (
-        <Panel row justifyContent="flex-end" alignItems="center">
-          <Button
-            mode="day"
-            type="normal"
-            appearance="grey"
-            style={{ alignSelf: 'flex-end' }}
-            onPress={handleVisible}
-            marginRight={0.5}
-            outline
-          >
-            {visible ? 'Delete' : 'Content'}
-          </Button>
-          <TouchableOpacity onPress={handleOptions}>
-            <SvgIconMenu color="grey2" />
-          </TouchableOpacity>
-        </Panel>
-      )}
-      {index === 0 && (
-        <>
-          <Text type="h4" mode="day" appearance="subtle" marginVertical>
-            Write up your story
-          </Text>
-          <Controller
-            as={TextInput}
-            control={control}
-            rules={{ required: true }}
-            multiline
-            name="title"
-            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
-            onContentSizeChange={handleTitleContentSizeChange}
-            placeholder="Title"
-            defaultValue={shot.title || ''}
-            style={[
-              AssetStyles.form.bubble.title,
-              { height: heightTitle && Math.max(35, heightTitle + 50) },
-            ]}
-          />
-        </>
-      )}
-      {visible && (
-        <View>
-          {index !== 0 && (
-            <Text type="h4" mode="day" appearance="subtle" marginBottom>
-              Shot description
-            </Text>
-          )}
-          <Controller
-            as={TextInput}
-            control={control}
-            multiline
-            name="content"
-            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
-            onContentSizeChange={handleContentSizeChange}
-            placeholder="Description"
-            defaultValue={shot.content || ''}
-            style={[
-              AssetStyles.form.bubble.content,
-              {
-                fontFamily: AssetStyles.family.regular,
-                height: heightContent && Math.max(35, heightContent + 50),
-              },
-            ]}
-          />
-        </View>
-      )}
-    </>
-  );
-};
+import CreatePostForm from './components/CreatePostForm';
 
 const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [createPost] = useMutation(CREATE_POST);
   const inset = useSafeArea();
   const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
 
-  /*
-  const handleCreateShot = async (): Promise<void> => {
+  const handleCreatePost = async (): Promise<void> => {
     setUploading(true);
     const newShots: Shot[] = [...shots];
 
     await Promise.all(
-      shots.map(async ({ id, image }, index) => {
+      shots.map(async ({ image }, index) => {
         return new Promise((resolve) => {
           if (image) {
             UploadImage({
               image,
               onComplete: (res) => {
                 newShots[index].image = res;
-                dispatch(updateShot({ id, image: res }));
                 resolve();
               },
             });
@@ -272,17 +65,15 @@ const CreatePost: FC = () => {
       })
     );
 
-    newShots.forEach((shot) => {
-      // eslint-disable-next-line no-param-reassign
+    await newShots.forEach((shot) => {
       delete shot.id;
     });
 
-    // console.log(newShots);
-
-    createPost({ variables: { shots: [{ title: 'test', content: 'test', image: 'test' }] } });
-    // setUploading(false);
+    createPost({ variables: { shots: newShots } });
+    setUploading(false);
+    navigation.navigate('HomeStack');
+    dispatch(clearAllShot());
   };
-  */
 
   const localShots = [...shots];
 
@@ -324,12 +115,11 @@ const CreatePost: FC = () => {
                   <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${image}` }} />
                 )}
                 <Panel marginHorizontal>
-                  <Form
+                  <CreatePostForm
                     shot={shot}
                     index={index}
                     visible={index === 0 || !!content}
                     expandable={index !== 0}
-                    onUpload={(value: boolean): void => setUploading(value)}
                   />
                 </Panel>
               </Panel>
@@ -337,21 +127,7 @@ const CreatePost: FC = () => {
           }
         )}
         <Button
-          onPress={(): void => {
-            createPost({
-              variables: {
-                shots: [
-                  {
-                    title: 'Wahoo',
-                    content: 'This only took 3hrs!',
-                    image: 'coming soon',
-                    id: CreateId(),
-                  },
-                ],
-              },
-            });
-            // createPost();
-          }}
+          onPress={handleCreatePost}
           marginHorizontal
           type="large"
           mode="day"
