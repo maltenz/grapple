@@ -87,7 +87,7 @@ const CameraScreen: FC = () => {
     checkMultiPermissions();
   }, []);
 
-  const onChange = (id: string, index: number): void => {
+  const onChange = (index: number): void => {
     setActiveIndex(index);
     const { image } = shots[index];
     setBackgroundImage(image !== undefined ? image : null);
@@ -252,7 +252,7 @@ const CameraScreen: FC = () => {
                         marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}
                         outline={index === activeIndex && 'blue'}
-                        onPress={(): void => onChange(shot.id, index)}
+                        onPress={(): void => onChange(index)}
                         backgroundColor="grey4"
                       />
                     );

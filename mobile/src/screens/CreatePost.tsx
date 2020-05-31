@@ -17,8 +17,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Action } from 'typesafe-actions';
+
+import { useMutation } from '@apollo/react-hooks';
 
 import {
   Navigation,
@@ -32,15 +34,18 @@ import {
   SvgIconMenu,
   SvgLogoGrapple,
   UploadImage,
+  CreateId,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 
 import { deleteShot, updateShot, moveShot, createShotsSelector } from '../store';
+import { MoveShot } from '../store/create/actions';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import { Shot } from '../generated/graphql';
+import { CREATE_POST } from '../mutations/post';
 
 type FormData = {
   title: string;
@@ -81,8 +86,7 @@ const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandabl
           text: 'Delete',
           style: 'destructive',
           onPress: (): void => {
-            reset({ content: '' });
-
+            reset({ title: '', content: '' });
             LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
             setVisible(false);
           },
@@ -110,6 +114,13 @@ const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandabl
     setHeightContent(event.nativeEvent.contentSize.height);
   };
 
+  const handleMoveShot = ({ direction }: Pick<MoveShot, 'direction'>): void => {
+    const { title, content } = getValues();
+
+    dispatch(updateShot({ id: shot.id, title, content }));
+    dispatch(moveShot({ index, direction }));
+  };
+
   const handleOptions = (): void => {
     Alert.alert(
       'Shot',
@@ -117,28 +128,16 @@ const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandabl
       [
         {
           text: 'Move up',
-          onPress: (): void => {
-            const { title, content } = getValues();
-
-            dispatch(updateShot({ id: shot.id, title, content }));
-            dispatch(moveShot({ index, direction: 'up' }));
-          },
+          onPress: (): void => handleMoveShot({ direction: 'up' }),
         },
         {
           text: 'Move down',
-          onPress: (): void => {
-            const { title, content } = getValues();
-
-            dispatch(updateShot({ id: shot.id, title, content }));
-            dispatch(moveShot({ index, direction: 'up' }));
-          },
+          onPress: (): void => handleMoveShot({ direction: 'down' }),
         },
         {
           text: 'Delete shot',
           style: 'destructive',
-          onPress: (): void => {
-            dispatch(deleteShot({ id: shot.id }));
-          },
+          onPress: (): Action => dispatch(deleteShot({ id: shot.id })),
         },
         {
           text: 'Cancel',
@@ -242,10 +241,48 @@ const Form: FC<Form> = ({ shot, index, onUpload, visible: propVisible, expandabl
 const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
+  // const dispatch = useDispatch();
+  const [createPost] = useMutation(CREATE_POST);
   const inset = useSafeArea();
   const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
+
+  /*
+  const handleCreateShot = async (): Promise<void> => {
+    setUploading(true);
+    const newShots: Shot[] = [...shots];
+
+    await Promise.all(
+      shots.map(async ({ id, image }, index) => {
+        return new Promise((resolve) => {
+          if (image) {
+            UploadImage({
+              image,
+              onComplete: (res) => {
+                newShots[index].image = res;
+                dispatch(updateShot({ id, image: res }));
+                resolve();
+              },
+            });
+          } else {
+            resolve();
+          }
+        });
+      })
+    );
+
+    newShots.forEach((shot) => {
+      // eslint-disable-next-line no-param-reassign
+      delete shot.id;
+    });
+
+    // console.log(newShots);
+
+    createPost({ variables: { shots: [{ title: 'test', content: 'test', image: 'test' }] } });
+    // setUploading(false);
+  };
+  */
 
   const localShots = [...shots];
 
@@ -269,7 +306,6 @@ const CreatePost: FC = () => {
           />
         }
       />
-
       <KeyboardAwareScrollView extraHeight={150} style={[styles.scrollview]}>
         <SegmentedController
           mode="day"
@@ -280,8 +316,7 @@ const CreatePost: FC = () => {
         />
         {localShots.map(
           (shot: Shot, index: number): ReactNode => {
-            const { id, content } = shot;
-            const image = shot.image as string;
+            const { id, content, image } = shot;
 
             return (
               <Panel marginBottom key={id}>
@@ -301,7 +336,27 @@ const CreatePost: FC = () => {
             );
           }
         )}
-        <Button marginHorizontal type="large" mode="day" appearance="strong">
+        <Button
+          onPress={(): void => {
+            createPost({
+              variables: {
+                shots: [
+                  {
+                    title: 'Wahoo',
+                    content: 'This only took 3hrs!',
+                    image: 'coming soon',
+                    id: CreateId(),
+                  },
+                ],
+              },
+            });
+            // createPost();
+          }}
+          marginHorizontal
+          type="large"
+          mode="day"
+          appearance="strong"
+        >
           Preview
         </Button>
         <View style={{ height: inset.bottom + AssetStyles.measure.space }} />

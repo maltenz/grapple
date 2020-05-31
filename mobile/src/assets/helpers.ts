@@ -13,7 +13,7 @@ export const CreateId = (): string => {
 
 interface UploadImageType {
   image: string;
-  onUpload: (value: boolean) => void;
+  onUpload?: (value: boolean) => void;
   onComplete: (res: string) => void;
 }
 
@@ -31,13 +31,18 @@ export const UploadImage = async ({
   const xhr = new XMLHttpRequest();
   xhr.open('POST', 'https://api.cloudinary.com/v1_1/cloud_name/image/upload', true);
 
-  onUpload(true);
+  if (onUpload) {
+    onUpload(true);
+  }
 
   try {
     xhr.onreadystatechange = (): void => {
       if (xhr.readyState === 4) {
-        onComplete(xhr.response.secure_url);
-        onUpload(false);
+        const respose = JSON.parse(xhr.response);
+        onComplete(respose.url);
+        if (onUpload) {
+          onUpload(false);
+        }
       }
     };
   } catch (err) {
