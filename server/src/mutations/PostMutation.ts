@@ -15,7 +15,7 @@ import { Post } from '../models/PostModel';
 export const PostMutation = {
   createPost: {
     resolve: async (parent, args, context, info): Promise<Post> => {
-      return await createPost(context);
+      return await createPost(context, args);
     },
   },
   deletePost: {

@@ -7,23 +7,17 @@ import loginRequired from '../helper/loginRequired';
  * @param context
  * @returns {Post}
  */
-export const createPost = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
+export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
+  const { shots } = args.input;
 
   let post;
-
-  const testShot = {
-    title: 'Why read motivational sayings?',
-    content:
-      'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new.',
-    image: 'https://source.unsplash.com/random/768x768',
-  };
 
   try {
     post = await PostModel(dbConn).create({
       user,
-      shots: [testShot, testShot],
+      shots,
     });
 
     if (post === null) {

@@ -23,9 +23,20 @@ export const PostSchema = gql`
     post(id: String!): Post
   }
 
+  input CreatePost {
+    shots: [ShotInput]!
+  }
+
   input ShotDeleteInput {
     id: ID!
     shotId: ID!
+  }
+
+  input ShotInput {
+    id: ID!
+    title: String!
+    content: String!
+    image: String!
   }
 
   input ShotUpdateInput {
@@ -46,7 +57,7 @@ export const PostSchema = gql`
   }
 
   extend type Mutation {
-    createPost: Post
+    createPost(input: CreatePost): Post
     deletePost(id: String!): Post
     deletePostShot(input: ShotDeleteInput): Post
     updatePostShot(input: ShotUpdateInput): Post
