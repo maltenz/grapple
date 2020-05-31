@@ -17,7 +17,7 @@ interface ButtonProps extends MarginProps {
   type: ButtonType;
   appearance: AppearanceType;
   outline?: boolean;
-  onPress?: () => void;
+  onPress?: boolean | Function;
   style?: StyleProp<ViewStyle>;
   title?: string;
 }

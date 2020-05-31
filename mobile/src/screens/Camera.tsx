@@ -256,8 +256,9 @@ const CameraScreen: FC = () => {
             <Button
               type="normal"
               mode="night"
-              appearance="normal"
-              onPress={(): void => navigation.navigate('CreatePost')}
+              appearance={shots.length ? 'normal' : 'disabled'}
+              outline={!shots.length}
+              onPress={shots.length ? (): void => navigation.navigate('CreatePost') : false}
             >
               Next
             </Button>

@@ -33,7 +33,7 @@ export const PostSchema = gql`
   }
 
   input ShotInput {
-    id: ID!
+    id: ID
     title: String!
     content: String!
     image: String!
