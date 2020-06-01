@@ -92,6 +92,7 @@ const CameraScreen: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [flashSettings, setFlashSettings] = useState<Flash>('auto');
+  const [mode, setMode] = useState<'front' | 'back'>('front');
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -206,6 +207,14 @@ const CameraScreen: FC = () => {
     ]);
   };
 
+  const handleMode = (): void => {
+    if (mode === 'front') {
+      setMode('back');
+    } else {
+      setMode('front');
+    }
+  };
+
   if (hasCamPermission === null || hasCamPermission === false) {
     return <Panel flex={1} backgroundColor="grey4" />;
   }
@@ -214,13 +223,7 @@ const CameraScreen: FC = () => {
     <>
       <Navigation
         mode="night"
-        Left={
-          <NavigationIcon
-            mode="night"
-            type="cameraFlip"
-            onPress={(): void => navigation.goBack()}
-          />
-        }
+        Left={<NavigationIcon mode="night" type="cameraFlip" onPress={handleMode} />}
         Right={
           <NavigationIcon mode="night" type="close" onPress={(): void => navigation.goBack()} />
         }
@@ -231,8 +234,8 @@ const CameraScreen: FC = () => {
         // @ts-ignore
         ref={camRef}
         style={{ flex: 1 }}
-        type="front"
         flashMode={flashSettings}
+        type={mode}
       />
       <CameraFrame
         backgroundImage={backgroundImage}
