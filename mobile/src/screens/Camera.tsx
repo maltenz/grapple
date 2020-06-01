@@ -221,8 +221,7 @@ const CameraScreen: FC = () => {
         text: 'Yes',
         style: 'default',
         onPress: (): void => {
-          setBackgroundImage(null);
-          setActiveIndex(null);
+          handlePreview(false);
           dispatch(deleteShot({ id }));
         },
       },

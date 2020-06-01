@@ -22,8 +22,9 @@ import {
   TabbarCircleButton,
 } from '../assets';
 
-import Home from './Home';
 import { AppRootParamList } from './AppRoot';
+
+import Home from './Home';
 import Menu from './Menu';
 import Camera from './Camera';
 import MyProfile from './MyProfile';

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useState, ReactNode } from 'react';
 
-import { Image, StyleSheet, View, ActivityIndicator } from 'react-native';
+import { Image, StyleSheet, View, ActivityIndicator, Keyboard } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
@@ -47,6 +47,7 @@ const CreatePost: FC = () => {
   const [uploading, setUploading] = useState<boolean | 'complete'>(false);
 
   const handleCreatePost = async (): Promise<void> => {
+    Keyboard.dismiss();
     setUploading(true);
     const newShots: Shot[] = [...shots];
 
@@ -73,14 +74,7 @@ const CreatePost: FC = () => {
     });
 
     createPost({ variables: { shots: newShots } });
-    setUploading(false);
     setUploading('complete');
-  };
-
-  const handleContinue = (): void => {
-    dispatch(clearAllShot());
-    setUploading(false);
-    navigation.navigate('HomeStack');
   };
 
   const localShots = [...shots];
@@ -118,7 +112,7 @@ const CreatePost: FC = () => {
             const { id, content, image } = shot;
 
             return (
-              <Panel marginBottom key={id}>
+              <Panel marginBottom key={id || index}>
                 {image && (
                   <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${image}` }} />
                 )}
@@ -141,11 +135,11 @@ const CreatePost: FC = () => {
           mode="day"
           appearance="strong"
         >
-          Preview
+          Submit
         </Button>
         <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
       </KeyboardAwareScrollView>
-      {uploading && (
+      {uploading === true && (
         <Panel
           style={[StyleSheet.absoluteFill, styles.loaderContainer]}
           center
@@ -172,7 +166,10 @@ const CreatePost: FC = () => {
             <Post gutter title="Hello world" content="Test one two three" />
           </KeyboardAwareScrollView>
           <Button
-            onPress={handleContinue}
+            onPress={(): void => {
+              dispatch(clearAllShot());
+              navigation.navigate('HomeStack');
+            }}
             marginTop
             marginHorizontal
             type="large"

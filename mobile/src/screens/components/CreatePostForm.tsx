@@ -7,12 +7,12 @@ import {
   LayoutAnimation,
   Alert,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Action } from 'typesafe-actions';
 
 import { AssetStyles, Panel, Button, Text, SvgIconMenu } from '../../assets';
