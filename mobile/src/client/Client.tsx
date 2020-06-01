@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore, @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { FC, useState, useEffect } from 'react';
 import { AppLoading } from 'expo';
 import ApolloClient, { Operation } from 'apollo-boost';

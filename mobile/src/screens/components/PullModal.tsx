@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore, no-underscore-dangle  */
+/* eslint-disable no-underscore-dangle  */
 import React, { FC, useState, useEffect, memo } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';

@@ -1,4 +1,4 @@
-/* eslint-disable no-shadow, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-ignore */
+/* eslint-disable no-shadow, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import _ from 'lodash';
 import gql from 'graphql-tag';
 import arrayMove from 'array-move';

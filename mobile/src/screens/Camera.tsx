@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
 import { Alert, View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Camera } from 'expo-camera';
