@@ -45,7 +45,7 @@ interface CameraFrameProps {
   Bottom?: ReactNode;
 }
 
-type Flash = 'flash' | 'flashAuto' | 'flashOff';
+type Flash = 'on' | 'off' | 'auto';
 
 const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => {
   return (
@@ -72,11 +72,11 @@ interface FlashIconProps {
 
 const FlashIcon: FC<FlashIconProps> = ({ settings }): JSX.Element => {
   switch (settings) {
-    case 'flashAuto':
+    case 'auto':
       return <SvgIconFlashAuto color="white" scale={0.9} />;
-    case 'flashOff':
+    case 'off':
       return <SvgIconFlashOff color="white" scale={0.9} />;
-    case 'flash':
+    case 'on':
     default:
       return <SvgIconFlash color="white" scale={0.9} />;
   }
@@ -91,7 +91,7 @@ const CameraScreen: FC = () => {
   const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
-  const [flashSettings, setFlashSettings] = useState<Flash>('flash');
+  const [flashSettings, setFlashSettings] = useState<Flash>('auto');
 
   useEffect(() => {
     const checkMultiPermissions = async (): Promise<void> => {
@@ -151,15 +151,15 @@ const CameraScreen: FC = () => {
 
   const handleFlash = (): void => {
     switch (flashSettings) {
-      case 'flashAuto':
-        setFlashSettings('flashOff');
+      case 'auto':
+        setFlashSettings('on');
         break;
-      case 'flashOff':
-        setFlashSettings('flash');
+      case 'on':
+        setFlashSettings('off');
         break;
-      case 'flash':
+      case 'off':
       default:
-        setFlashSettings('flashAuto');
+        setFlashSettings('auto');
     }
   };
 
@@ -232,6 +232,7 @@ const CameraScreen: FC = () => {
         ref={camRef}
         style={{ flex: 1 }}
         type="front"
+        flashMode={flashSettings}
       />
       <CameraFrame
         backgroundImage={backgroundImage}

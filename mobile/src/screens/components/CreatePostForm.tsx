@@ -155,7 +155,7 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
             rules={{ required: index === 0 }}
             multiline
             name="title"
-            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
+            onChange={(args): EventFunction => args[0].nativeEvent.text}
             onContentSizeChange={handleTitleContentSizeChange}
             placeholder="Title"
             defaultValue={shot.title || ''}
@@ -178,7 +178,7 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
             control={control}
             multiline
             name="content"
-            onChange={(args): { value: EventFunction } => args[0].nativeEvent.text}
+            onChange={(args): EventFunction => args[0].nativeEvent.text}
             onContentSizeChange={handleContentSizeChange}
             placeholder="Description"
             defaultValue={shot.content || ''}
