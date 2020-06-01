@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { useEffect, useState, FC, ReactNode, useRef } from 'react';
 import { Alert, View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -103,10 +104,10 @@ const CameraScreen: FC = () => {
   }, []);
 
   const handlePreview = (active: boolean, index?: number): void => {
-    if (active && index) {
+    if (active && typeof index === 'number') {
+      const image = shots[index].image as string;
       setActiveIndex(index);
-      const { image } = shots[index];
-      setBackgroundImage(image !== undefined ? image : null);
+      setBackgroundImage(image);
     } else {
       setBackgroundImage(null);
       setActiveIndex(null);
@@ -215,6 +216,24 @@ const CameraScreen: FC = () => {
     }
   };
 
+  const handleDeleteShot = (id: string): void => {
+    Alert.alert('Delete shot', 'Are you sure', [
+      {
+        text: 'Yes',
+        style: 'default',
+        onPress: (): void => {
+          setBackgroundImage(null);
+          setActiveIndex(null);
+          dispatch(deleteShot({ id }));
+        },
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
+  };
+
   if (hasCamPermission === null || hasCamPermission === false) {
     return <Panel flex={1} backgroundColor="grey4" />;
   }
@@ -230,7 +249,6 @@ const CameraScreen: FC = () => {
         style={styles.navigation}
       />
       <Camera
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         ref={camRef}
         style={{ flex: 1 }}
@@ -287,11 +305,7 @@ const CameraScreen: FC = () => {
                             <Badge
                               type="delete"
                               appearance="heavy"
-                              onPress={(): void => {
-                                setBackgroundImage(null);
-                                setActiveIndex(null);
-                                dispatch(deleteShot({ id: shot.id }));
-                              }}
+                              onPress={(): void => handleDeleteShot(shot.id)}
                             />
                           )
                         }
