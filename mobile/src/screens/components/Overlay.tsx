@@ -65,12 +65,12 @@ const OverlayPanel: FC<OverlayPanelProps> = ({
 
 type OverlayProps = PanelProps;
 
-const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children }) => {
+const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children, style, ...rest }) => {
   const inset = useSafeArea();
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <Panel flex={1}>
+      <Panel flex={1} style={style}>
         <BlurView tint="dark" intensity={100} style={[StyleSheet.absoluteFill, { flex: 1 }]} />
         <Panel
           flex={1}
@@ -79,6 +79,7 @@ const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children }) => {
             marginBottom: inset.bottom + AssetStyles.measure.space,
           }}
           paddingHorizontal={paddingHorizontal}
+          {...rest}
         >
           {children}
         </Panel>

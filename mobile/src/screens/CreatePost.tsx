@@ -20,6 +20,8 @@ import {
   Button,
   SvgLogoGrapple,
   UploadImage,
+  Post,
+  Text,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -32,6 +34,7 @@ import { Shot } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
 import CreatePostForm from './components/CreatePostForm';
+import Overlay from './components/Overlay';
 
 const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
@@ -41,7 +44,7 @@ const CreatePost: FC = () => {
   const inset = useSafeArea();
   const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean | 'complete'>(false);
 
   const handleCreatePost = async (): Promise<void> => {
     setUploading(true);
@@ -71,8 +74,13 @@ const CreatePost: FC = () => {
 
     createPost({ variables: { shots: newShots } });
     setUploading(false);
-    navigation.navigate('HomeStack');
+    setUploading('complete');
+  };
+
+  const handleContinue = (): void => {
     dispatch(clearAllShot());
+    setUploading(false);
+    navigation.navigate('HomeStack');
   };
 
   const localShots = [...shots];
@@ -147,6 +155,34 @@ const CreatePost: FC = () => {
           <SvgLogoGrapple color="white" scale={0.65} />
         </Panel>
       )}
+      {uploading === 'complete' && (
+        <Overlay paddingHorizontal={0} style={[StyleSheet.absoluteFill, styles.overlay]}>
+          <KeyboardAwareScrollView extraHeight={150}>
+            <Text
+              type="h2"
+              appearance="normal"
+              mode="night"
+              regular
+              textAlign="center"
+              marginBottom={2}
+              marginTop
+            >
+              Thanks for sharing!
+            </Text>
+            <Post gutter title="Hello world" content="Test one two three" />
+          </KeyboardAwareScrollView>
+          <Button
+            onPress={handleContinue}
+            marginTop
+            marginHorizontal
+            type="large"
+            mode="day"
+            appearance="strong"
+          >
+            Continue
+          </Button>
+        </Overlay>
+      )}
     </>
   );
 };
@@ -167,6 +203,10 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     marginBottom: AssetStyles.measure.space * 2,
+  },
+  overlay: {
+    flex: 1,
+    zIndex: 3,
   },
 });
 

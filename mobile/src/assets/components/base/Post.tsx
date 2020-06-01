@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, StyleProp, ViewStyle } from 'react-native';
 
 import PostNavbar from './PostNavbar';
 import PostContent, { PostContentProps } from './PostContent';
@@ -13,9 +13,10 @@ const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/philipegd' };
 
 interface PostProps extends PostContentProps {
   gutter?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 
-const Post: FC<PostProps> = ({ gutter, title, content }) => {
+const Post: FC<PostProps> = ({ gutter, title, content, style }) => {
   const WINDOW_SIZE = AssetStyles.measure.window.width;
   const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
 
@@ -25,7 +26,7 @@ const Post: FC<PostProps> = ({ gutter, title, content }) => {
   };
 
   return (
-    <Panel marginHorizontal={gutter} marginBottom backgroundColor="white">
+    <Panel marginHorizontal={gutter} marginBottom backgroundColor="white" style={style}>
       <ImageBackground
         source={POST_IMAGE_SAMPLE}
         resizeMode="cover"
