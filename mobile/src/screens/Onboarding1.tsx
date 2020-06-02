@@ -3,13 +3,14 @@ import { StyleSheet, StatusBar } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDispatch } from 'react-redux';
 import { SvgLogoGrapple, SvgBlob, Panel, Text, Bullet, Color, AssetStyles } from '../assets';
 
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
 import { PullbarOffset } from './components/PullModal';
 
-import { useUpdatePagerMutation, useUpdatePullModalMutation } from '../generated/graphql';
+import { updatePager, updateModal } from '../store';
 
 const BLOB_INSET = 100;
 
@@ -24,19 +25,20 @@ const ListRow: FC = ({ children }) => (
 
 const Onboarding1: FC = () => {
   const insets = useSafeArea();
-  const [updatePager] = useUpdatePagerMutation();
-  const [updatePullModal] = useUpdatePullModalMutation();
+  const dispatch = useDispatch();
 
   const navigation = useNavigation<OnboardingRootNavigationProp>();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      updatePager({
-        variables: { input: { activeIndex: 0, count: 4, visible: false } },
-      });
-      updatePullModal({
-        variables: { input: { visible: true } },
-      });
+      dispatch(updateModal({ visible: true }));
+      dispatch(
+        updatePager({
+          activeIndex: 0,
+          count: 4,
+          visible: false,
+        })
+      );
     });
 
     return unsubscribe;

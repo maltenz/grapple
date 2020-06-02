@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 import { StatusBar } from 'react-native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import HomeRoot, { ParentParamList } from './HomeRoot';
 import OnboardingRoot from './OnboardingRoot';
-import { useGetSignUserQuery } from '../generated/graphql';
+import { authUserSelector } from '../store';
 
 export type AppRootParamList = {
   HomeRoot: undefined;
@@ -28,13 +29,13 @@ type NavigationProps = {
 const Stack = createStackNavigator<AppRootParamList>();
 
 const AppRoot: FC<NavigationProps> = () => {
-  const { data } = useGetSignUserQuery();
+  const user = useSelector(authUserSelector);
 
   return (
     <>
       <StatusBar barStyle="light-content" />
       <Stack.Navigator headerMode="none">
-        {data?.signUser.userId ? (
+        {user.id ? (
           <Stack.Screen name="HomeRoot" component={HomeRoot} />
         ) : (
           <Stack.Screen name="OnboardingRoot" component={OnboardingRoot} />

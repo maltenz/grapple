@@ -63,7 +63,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@graphql-codegen/cli": "^1.12.2",
-    "@graphql-codegen/fragment-matcher": "1.12.2",
     "@graphql-codegen/typescript": "1.12.2",
     "@graphql-codegen/typescript-operations": "1.12.2",
     "@graphql-codegen/typescript-react-apollo": "1.12.2",

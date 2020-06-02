@@ -1,8 +1,7 @@
 import { ApplicationState } from '..';
-import { Pager, PullVisible } from './types';
+import { Pager, Modal } from '../../generated/graphql';
 
-const pagerSelector = (state: ApplicationState): Pager => state.layout.pager;
-const pullModalVisibleSelector = (state: ApplicationState): PullVisible =>
-  state.layout.pullModalVisible;
+const layoutPagerSelector = (state: ApplicationState): Pager => state.layout.pager;
+const layoutModalSelector = (state: ApplicationState): Modal => state.layout.modal;
 
-export { pagerSelector, pullModalVisibleSelector };
+export { layoutPagerSelector, layoutModalSelector };

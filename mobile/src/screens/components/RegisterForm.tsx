@@ -4,8 +4,9 @@ import { Vibration, Animated, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
 
+import { useDispatch } from 'react-redux';
 import { CREATE_USER } from '../../mutations/user';
-import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
+import { User } from '../../generated/graphql';
 
 import { Panel, AssetStyles, PlaceholderTextColor, Button, VIBRATE_DUR } from '../../assets';
 
@@ -23,9 +24,9 @@ type RegisterFormData = {
 };
 
 const RegisterForm: FC = () => {
+  const dispatch = useDispatch();
   const [createUser] = useMutation(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
-  const [updateSignUser] = useUpdateSignUserMutation();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
@@ -65,10 +66,12 @@ const RegisterForm: FC = () => {
       const { data } = await createUser({ variables: { name: username, email, password } });
 
       if (data?.createUser) {
-        const { id: myId, name: myName, email: myEmail }: UserQuery = data.createUser;
+        const { id: myId, name: myName, email: myEmail }: User = data.createUser;
         await AsyncStorage.setItem('token', data.createUser.token);
-        updateSignUser({
-          variables: { input: { userId: myId || '', name: myName, email: myEmail } },
+        dispatch({
+          userId: myId || '',
+          name: myName,
+          email: myEmail,
         });
       }
     };

@@ -3,9 +3,11 @@ import React, { FC, useState, useEffect } from 'react';
 import { Animated, Vibration, TextInput, AsyncStorage } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { useForm, EventFunction, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-import { useUpdateSignUserMutation, UserQuery } from '../../generated/graphql';
 import { LOGIN_USER } from '../../mutations/user';
+
+import { updateUser } from '../../store';
 
 import { Panel, AssetStyles, PlaceholderTextColor, Text, Button, VIBRATE_DUR } from '../../assets';
 
@@ -15,6 +17,7 @@ import {
   REQUIRED_TEXT,
   SmallTextConfig,
 } from '../../assets/components/base/Text';
+import { User } from '../../generated/graphql';
 
 type LoginFormData = {
   email: string;
@@ -22,12 +25,13 @@ type LoginFormData = {
 };
 
 const LoginForm: FC = () => {
+  const dispatch = useDispatch();
   const [loginUser] = useMutation(LOGIN_USER);
   const { control, handleSubmit, errors } = useForm<LoginFormData>();
-  const [updateSignUser] = useUpdateSignUserMutation();
-
   const [animEmailError] = useState(new Animated.Value(0));
   const [animPasswordError] = useState(new Animated.Value(0));
+
+  // useEffect(() => {}, [data]);
 
   useEffect(() => {
     ErrorAnim(animEmailError, errors.email);
@@ -55,11 +59,9 @@ const LoginForm: FC = () => {
       const { data } = await loginUser({ variables: { email, password } });
 
       if (data?.loginUser) {
-        const { id: myId, name: myName, email: myEmail }: UserQuery = data.loginUser;
+        const { id: myId, name: myName, email: myEmail }: User = data.loginUser;
         await AsyncStorage.setItem('token', data.loginUser.token);
-        updateSignUser({
-          variables: { input: { userId: myId || '', name: myName, email: myEmail } },
-        });
+        dispatch(updateUser({ id: myId || '', name: myName, email: myEmail }));
       }
     };
     auth();

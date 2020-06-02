@@ -1,24 +1,26 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import OnboardingScreen from './components/OnboardingScreen';
 import { OnboardingRootNavigationProp } from './OnboardingRoot';
 
-import { useUpdatePagerMutation, useUpdatePullModalMutation } from '../generated/graphql';
+import { updatePager, updateModal } from '../store';
 
 const Onboarding4: FC = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<OnboardingRootNavigationProp>();
-  const [updatePullModal] = useUpdatePullModalMutation();
-  const [updatePager] = useUpdatePagerMutation();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      updatePullModal({
-        variables: { input: { visible: false } },
-      });
+      dispatch(updateModal({ visible: false }));
 
-      updatePager({
-        variables: { input: { activeIndex: 2, count: 4, visible: true } },
-      });
+      dispatch(
+        updatePager({
+          activeIndex: 2,
+          count: 4,
+          visible: true,
+        })
+      );
     });
 
     return unsubscribe;

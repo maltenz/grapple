@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Alert, AsyncStorage } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDispatch } from 'react-redux';
 import {
   AssetStyles,
   MenuItem,
@@ -18,15 +19,15 @@ import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
 import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../assets/components/base/Navigation';
-import { useUpdateSignUserMutation } from '../generated/graphql';
+import { updateUser } from '../store';
 
 const SRC = { uri: 'https://source.unsplash.com/random' };
 
 const Account: FC = () => {
   const inset = useSafeArea();
+  const dispatch = useDispatch();
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [updateSignUser] = useUpdateSignUserMutation();
 
   return (
     <>
@@ -68,7 +69,7 @@ const Account: FC = () => {
             last
             onPress={async (): Promise<void> => {
               await AsyncStorage.removeItem('token');
-              updateSignUser({ variables: { input: { userId: '' } } });
+              dispatch(updateUser({ id: '', name: '', email: '', password: '' }));
             }}
           />
         </Container>

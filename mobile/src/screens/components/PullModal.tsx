@@ -2,10 +2,10 @@
 import React, { FC, useState, useEffect, memo } from 'react';
 import { StyleSheet, PanResponder, Animated, PanResponderGestureState } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 import { PullBar, AssetStyles, Color, ButtonNormalHeight, PullBarHeight } from '../../assets';
 import { NavigationHeight } from '../../assets/components/base/Navigation';
-
-import { useGetPullModalQuery } from '../../generated/graphql';
+import { layoutModalSelector } from '../../store';
 
 const WINDOW_HEIGHT = AssetStyles.measure.window.height;
 const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.space;
@@ -13,8 +13,7 @@ const PullbarOffset = ButtonNormalHeight + PullBarHeight + AssetStyles.measure.s
 const PullModal: FC = memo(
   ({ children }) => {
     const inset = useSafeArea();
-    const { data: pullModalData } = useGetPullModalQuery();
-    const pullModalDataVisible = pullModalData?.pullModal.visible;
+    const modal = useSelector(layoutModalSelector);
     const [hiddenAnim] = useState(new Animated.Value(0));
     const [bottom] = useState(WINDOW_HEIGHT - Math.abs(PullbarOffset) - inset.bottom);
     const [top] = useState(NavigationHeight + inset.top);
@@ -59,10 +58,10 @@ const PullModal: FC = memo(
 
     useEffect(() => {
       Animated.timing(hiddenAnim, {
-        toValue: pullModalDataVisible ? 1 : 0,
+        toValue: modal.visible ? 1 : 0,
         duration: 250,
       }).start();
-    }, [pullModalData]);
+    }, [modal]);
 
     const marginTop = hiddenAnim.interpolate({
       inputRange: [0, 1],

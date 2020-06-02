@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
-import { useGetPagerQuery } from '../generated/graphql';
+import { useSelector } from 'react-redux';
 
 import { BulletPager, AssetStyles } from '../assets';
 
@@ -19,6 +19,7 @@ import Onboarding2 from './Onboarding2';
 import Onboarding3 from './Onboarding3';
 import Onboarding4 from './Onboarding4';
 import Onboarding5 from './Onboarding5';
+import { layoutPagerSelector } from '../store';
 
 export type OnboardingRootParamList = {
   Onboarding1: undefined;
@@ -46,15 +47,15 @@ const Stack = createMaterialTopTabNavigator();
 
 const OnboardingRoot: FC<NavigationProps> = () => {
   const inset = useSafeArea();
-  const { data } = useGetPagerQuery();
+  const pager = useSelector(layoutPagerSelector);
   const [pagerAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(pagerAnim, {
-      toValue: data?.pager.visible ? 1 : 0,
+      toValue: pager.visible ? 1 : 0,
       duration: 600,
     }).start();
-  }, [data?.pager.visible]);
+  }, [pager?.visible]);
 
   const pagerOpacity = pagerAnim.interpolate({
     inputRange: [0, 1],
@@ -80,14 +81,7 @@ const OnboardingRoot: FC<NavigationProps> = () => {
         <Stack.Screen name="onboarding5" component={Onboarding5} />
       </Stack.Navigator>
       <Animated.View style={[styles.pagerContainer, { top: BULLET_TOP, opacity: pagerOpacity }]}>
-        {data && (
-          <BulletPager
-            mode="day"
-            count={data.pager.count}
-            activeIndex={data.pager.activeIndex}
-            center
-          />
-        )}
+        <BulletPager mode="day" count={pager?.count} activeIndex={pager?.activeIndex} center />
       </Animated.View>
       <PullModal>
         <Authentication />
