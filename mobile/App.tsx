@@ -7,7 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
-import Client from './src/client/Client';
+import ApolloClient, { Operation, InMemoryCache } from 'apollo-boost';
+import { AsyncStorage } from 'react-native';
+import { ApolloProvider } from '@apollo/react-hoc';
 import AppRoot from './src/screens/AppRoot';
 import { Window } from './src/types';
 import configureStore from './src/store/configureStore';
@@ -23,6 +25,24 @@ const fetchFonts = (): Promise<void> => {
   });
 };
 
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  uri: 'http://192.168.1.100:8080',
+  cache,
+  request: async (operation: Operation): Promise<void> => {
+    const token = await AsyncStorage.getItem('token');
+
+    operation.setContext({
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+        'client-name': 'grapple',
+        'client-version': '1.0.0',
+      },
+    });
+  },
+});
+
 const App: FC = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -32,7 +52,7 @@ const App: FC = () => {
 
   return (
     <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-      <Client>
+      <ApolloProvider client={client}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <NavigationContainer>
@@ -40,7 +60,7 @@ const App: FC = () => {
             </NavigationContainer>
           </PersistGate>
         </Provider>
-      </Client>
+      </ApolloProvider>
     </SafeAreaProvider>
   );
 };
