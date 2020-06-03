@@ -64,7 +64,7 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).find()) as Post[];
+    const post = (await PostModel(dbConn).find().sort({ _id: -1 })) as Post[];
 
     if (!post.length) {
       ERR_MESSAGE = 'No posts found';
