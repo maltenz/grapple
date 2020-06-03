@@ -20,7 +20,7 @@ import {
   Button,
   SvgLogoGrapple,
   UploadImage,
-  Post as PostComponent,
+  Post,
   Text,
 } from '../assets';
 
@@ -30,7 +30,7 @@ import { createShotsSelector, clearAllShot } from '../store';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { Shot, Post } from '../generated/graphql';
+import { Shot, Post as PostType } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
 import CreatePostForm from './components/CreatePostForm';
@@ -40,12 +40,12 @@ const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
   const dispatch = useDispatch();
-  const [createPost] = useMutation<{ createPost: Post }>(CREATE_POST);
+  const [createPost] = useMutation<{ createPost: PostType }>(CREATE_POST);
   const inset = useSafeArea();
   const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean | 'complete'>(false);
-  const [result, setResult] = useState<Post>();
+  const [result, setResult] = useState<PostType>();
 
   const handleCreatePost = async (): Promise<void> => {
     Keyboard.dismiss();
@@ -76,7 +76,7 @@ const CreatePost: FC = () => {
 
     try {
       const res = await createPost({ variables: { shots: newShots } });
-      const myPost = res?.data?.createPost as Post;
+      const myPost = res?.data?.createPost as PostType;
 
       if (myPost) {
         setResult(myPost);
@@ -173,7 +173,7 @@ const CreatePost: FC = () => {
             >
               Thanks for sharing!
             </Text>
-            {result && <PostComponent gutter user={result.user} shots={result.shots} />}
+            {result && <Post gutter user={result.user} shots={result.shots} />}
           </KeyboardAwareScrollView>
           <Button
             onPress={(): void => {
