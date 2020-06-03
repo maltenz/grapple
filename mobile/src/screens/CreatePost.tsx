@@ -20,7 +20,7 @@ import {
   Button,
   SvgLogoGrapple,
   UploadImage,
-  Post,
+  Post as PostComponent,
   Text,
 } from '../assets';
 
@@ -30,7 +30,7 @@ import { createShotsSelector, clearAllShot } from '../store';
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import { Shot } from '../generated/graphql';
+import { Shot, Post } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
 import CreatePostForm from './components/CreatePostForm';
@@ -40,11 +40,12 @@ const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const navigation = useNavigation<ChildNavigationProp>();
   const dispatch = useDispatch();
-  const [createPost] = useMutation(CREATE_POST);
+  const [createPost] = useMutation<{ createPost: Post }>(CREATE_POST);
   const inset = useSafeArea();
   const shots = useSelector(createShotsSelector);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean | 'complete'>(false);
+  const [result, setResult] = useState<Post>();
 
   const handleCreatePost = async (): Promise<void> => {
     Keyboard.dismiss();
@@ -73,11 +74,24 @@ const CreatePost: FC = () => {
       delete shot.id;
     });
 
-    createPost({ variables: { shots: newShots } });
+    try {
+      const res = await createPost({ variables: { shots: newShots } });
+      const myPost = res?.data?.createPost as Post;
+
+      if (myPost) {
+        setResult(myPost);
+      }
+    } catch (error) {
+      throw new Error();
+    }
     setUploading('complete');
   };
 
   const localShots = [...shots];
+
+  const resultImage = result?.shots[0]?.image as string;
+  const resultTitle = result?.shots[0]?.title as string;
+  const resultContent = result?.shots[0]?.content as string;
 
   return (
     <>
@@ -163,7 +177,12 @@ const CreatePost: FC = () => {
             >
               Thanks for sharing!
             </Text>
-            <Post gutter title="Hello world" content="Test one two three" />
+            <PostComponent
+              gutter
+              image={{ uri: resultImage }}
+              title={resultTitle}
+              content={resultContent}
+            />
           </KeyboardAwareScrollView>
           <Button
             onPress={(): void => {

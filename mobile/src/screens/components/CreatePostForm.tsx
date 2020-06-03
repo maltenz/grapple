@@ -46,10 +46,8 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      const { title, content } = getValues();
-
       Keyboard.dismiss();
-      dispatch(updateShot({ id: shot.id, title, content }));
+      storeText();
     });
 
     return unsubscribe;
@@ -124,6 +122,12 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
     );
   };
 
+  const storeText = (): void => {
+    const { title, content } = getValues();
+
+    dispatch(updateShot({ id: shot.id, title, content }));
+  };
+
   return (
     <>
       {expandable && (
@@ -159,6 +163,7 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
             onContentSizeChange={handleTitleContentSizeChange}
             placeholder="Title"
             defaultValue={shot.title || ''}
+            onBlur={(): void => storeText()}
             style={[
               AssetStyles.form.bubble.title,
               { height: heightTitle && Math.max(35, heightTitle + 50) },
@@ -182,6 +187,7 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
             onContentSizeChange={handleContentSizeChange}
             placeholder="Description"
             defaultValue={shot.content || ''}
+            onBlur={(): void => storeText()}
             style={[
               AssetStyles.form.bubble.content,
               {

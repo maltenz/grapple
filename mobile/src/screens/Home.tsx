@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { ScrollView, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -21,7 +21,15 @@ import { NavigationLogo } from '../assets/components/base/Navigation';
 const Home: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const inset = useSafeArea();
-  const { data } = useQuery(GET_POSTS);
+  const { data, refetch } = useQuery(GET_POSTS);
+
+  useEffect(() => {
+    const unsubscribe = parentNavigation.addListener('focus', () => {
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [parentNavigation]);
 
   return (
     <>
