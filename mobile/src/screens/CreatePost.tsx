@@ -89,10 +89,6 @@ const CreatePost: FC = () => {
 
   const localShots = [...shots];
 
-  const resultImage = result?.shots[0]?.image as string;
-  const resultTitle = result?.shots[0]?.title as string;
-  const resultContent = result?.shots[0]?.content as string;
-
   return (
     <>
       <Navigation
@@ -177,12 +173,7 @@ const CreatePost: FC = () => {
             >
               Thanks for sharing!
             </Text>
-            <PostComponent
-              gutter
-              image={{ uri: resultImage }}
-              title={resultTitle}
-              content={resultContent}
-            />
+            {result && <PostComponent gutter post={result} />}
           </KeyboardAwareScrollView>
           <Button
             onPress={(): void => {

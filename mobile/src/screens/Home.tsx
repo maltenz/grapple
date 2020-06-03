@@ -53,16 +53,8 @@ const Home: FC = () => {
       >
         {
           // @ts-ignore
-          data?.posts.map(({ id, shots }) => {
-            return (
-              <Post
-                key={id}
-                gutter
-                image={{ uri: shots[0].image }}
-                title={shots[0].title}
-                content={shots[0].content}
-              />
-            );
+          data?.posts.map((post) => {
+            return <Post key={post.id} gutter post={post} />;
           })
         }
       </ScrollView>
