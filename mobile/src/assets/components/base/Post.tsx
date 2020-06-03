@@ -1,5 +1,11 @@
 import React, { FC } from 'react';
-import { StyleSheet, ImageBackground, StyleProp, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  StyleProp,
+  ViewStyle,
+  ImageSourcePropType,
+} from 'react-native';
 
 import PostNavbar from './PostNavbar';
 import PostContent, { PostContentProps } from './PostContent';
@@ -8,15 +14,15 @@ import Panel from './Panel';
 import PullBar from './PullBar';
 import NavBarUser from './NavBarUser';
 
-const POST_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/random' };
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/philipegd' };
 
 interface PostProps extends PostContentProps {
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
+  image: ImageSourcePropType;
 }
 
-const Post: FC<PostProps> = ({ gutter, title, content, style }) => {
+const Post: FC<PostProps> = ({ gutter, title, content, style, image }) => {
   const WINDOW_SIZE = AssetStyles.measure.window.width;
   const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
 
@@ -27,11 +33,7 @@ const Post: FC<PostProps> = ({ gutter, title, content, style }) => {
 
   return (
     <Panel marginHorizontal={gutter} marginBottom backgroundColor="white" style={style}>
-      <ImageBackground
-        source={POST_IMAGE_SAMPLE}
-        resizeMode="cover"
-        style={[styles.image, featureStyles]}
-      >
+      <ImageBackground source={image} resizeMode="cover" style={[styles.image, featureStyles]}>
         <NavBarUser
           userType="approved"
           name="Malte Boeing"

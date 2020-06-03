@@ -9,7 +9,7 @@ import { ApplicationState, createRootReducer } from '.';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['create'],
+  whitelist: ['create', 'auth'],
 };
 
 export default function configureStore(
