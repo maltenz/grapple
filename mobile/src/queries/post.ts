@@ -8,6 +8,7 @@ const GET_POSTS = gql`
         name
       }
       shots {
+        id
         title
         content
         image

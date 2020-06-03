@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { StyleSheet, ImageBackground, StyleProp, ViewStyle } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, ImageBackground, StyleProp, ViewStyle, ImageStyle } from 'react-native';
 
 import PostNavbar from './PostNavbar';
 import PostContent from './PostContent';
@@ -7,40 +7,32 @@ import { AssetStyles } from '../../styles';
 import Panel from './Panel';
 import PullBar from './PullBar';
 import NavBarUser from './NavBarUser';
-import { Post as PostType } from '../../../generated/graphql';
+import { Post as PostType, Shot as ShotType } from '../../../generated/graphql';
 
-const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/philipegd' };
+const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
-interface PostProps {
+interface PostProps extends PostType {
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
-  post: PostType;
 }
 
-const Post: FC<PostProps> = ({ gutter, style, post }) => {
-  const [image, setImage] = useState<string>();
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+interface ShotProps extends ShotType {
+  featureStyles?: StyleProp<ImageStyle>;
+  index: number;
+}
 
-  useEffect(() => {
-    const myImage = post.shots[0]?.image as string;
-    const myTitle = post.shots[0]?.title as string;
-    const myContent = post.shots[0]?.content as string;
-    setImage(myImage);
-    setTitle(myTitle);
-    setContent(myContent);
-  }, [post]);
-
-  const WINDOW_SIZE = AssetStyles.measure.window.width;
-  const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
-
-  const featureStyles = {
-    width: FEATURE_SIZE,
-    height: FEATURE_SIZE,
-  };
+const Shot: FC<ShotProps> = ({
+  image: propImage,
+  title: propTitle,
+  content: propContent,
+  featureStyles,
+}) => {
+  const [image] = useState<string>(propImage as string);
+  const [title] = useState<string>(propTitle as string);
+  const [content] = useState<string>(propContent as string);
 
   return (
-    <Panel marginHorizontal={gutter} marginBottom backgroundColor="white" style={style}>
+    <>
       <ImageBackground
         source={{ uri: image }}
         resizeMode="cover"
@@ -57,6 +49,31 @@ const Post: FC<PostProps> = ({ gutter, style, post }) => {
         <PostNavbar />
         <PostContent title={title} content={content} />
       </Panel>
+    </>
+  );
+};
+
+const Post: FC<PostProps> = ({ gutter, style, shots }) => {
+  const WINDOW_SIZE = AssetStyles.measure.window.width;
+  const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
+
+  const featureStyles = {
+    width: FEATURE_SIZE,
+    height: FEATURE_SIZE,
+  };
+
+  return (
+    <Panel marginHorizontal={gutter} marginBottom backgroundColor="white" style={style}>
+      {shots.map((shot, index) => (
+        <Shot
+          key={shot?.id as string}
+          image={shot?.image as string}
+          title={shot?.title as string}
+          content={shot?.content as string}
+          featureStyles={featureStyles}
+          index={index}
+        />
+      ))}
       <PullBar mode="day" marginBottom />
     </Panel>
   );

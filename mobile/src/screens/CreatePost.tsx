@@ -173,7 +173,7 @@ const CreatePost: FC = () => {
             >
               Thanks for sharing!
             </Text>
-            {result && <PostComponent gutter post={result} />}
+            {result && <PostComponent gutter user={result.user} shots={result.shots} />}
           </KeyboardAwareScrollView>
           <Button
             onPress={(): void => {
