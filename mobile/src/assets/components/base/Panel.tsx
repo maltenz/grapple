@@ -19,6 +19,7 @@ export interface PanelProps extends MarginProps, PaddingProps {
   alignItems?: ContentDistribution | ContentPosition;
   onPress?: () => void;
   pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
+  activeOpacity?: number;
 }
 
 type MeasureType = boolean | number;
@@ -46,11 +47,18 @@ interface ViewOrTouchableProps {
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
   pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
+  activeOpacity?: number;
 }
-const ViewOrTouchable: FC<ViewOrTouchableProps> = ({ onPress, children, pointerEvents, style }) => {
+const ViewOrTouchable: FC<ViewOrTouchableProps> = ({
+  onPress,
+  children,
+  pointerEvents,
+  style,
+  activeOpacity,
+}) => {
   if (onPress) {
     return (
-      <TouchableOpacity style={style} onPress={onPress}>
+      <TouchableOpacity activeOpacity={activeOpacity} style={style} onPress={onPress}>
         {children}
       </TouchableOpacity>
     );
@@ -86,6 +94,7 @@ const Panel: FC<PanelProps> = ({
   alignItems,
   onPress,
   pointerEvents,
+  activeOpacity,
   padding,
   paddingHorizontal,
   paddingVertical,
@@ -188,6 +197,7 @@ const Panel: FC<PanelProps> = ({
     <ViewOrTouchable
       onPress={onPress}
       pointerEvents={pointerEvents}
+      activeOpacity={activeOpacity}
       {...rest}
       style={[panelStyles, style]}
     >
