@@ -303,11 +303,11 @@ const CameraScreen: FC = () => {
                             <Badge
                               type="delete"
                               appearance="heavy"
-                              onPress={(): void => handleDeleteShot(shot.id)}
+                              onPress={(): void => handleDeleteShot(shot.id as string)}
                             />
                           )
                         }
-                        key={shot.id}
+                        key={shot.id as string}
                         src={{ uri: `data:image/jpeg;base64,${shot.image}` }}
                         marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
                         marginLeft={index === 0 && 1}

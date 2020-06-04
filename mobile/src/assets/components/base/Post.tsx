@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { FC, useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -36,27 +37,21 @@ interface ShotProps extends ShotType {
 
 const OFFSET_HEART = 60;
 
-const Shot: FC<ShotProps> = ({
-  image: propImage,
-  title: propTitle,
-  content: propContent,
-  featureStyles,
-  index,
-  heroHeight,
-}) => {
-  const [image] = useState<string>(propImage as string);
-  const [title] = useState<string>(propTitle as string);
-  const [content] = useState<string>(propContent as string);
-  const [animHeart] = useState(new Animated.Value(0));
+const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, index, heroHeight }) => {
+  const [animHeart] = useState<Animated.Value[]>(_.times(9, () => new Animated.Value(0)));
 
   useEffect(() => {
-    Animated.timing(animHeart, {
+    AnimHeart(animHeart[0]);
+  }, []);
+
+  const AnimHeart = (value: Animated.Value): void => {
+    Animated.timing(value, {
       toValue: 1,
       duration: 3000,
     }).start();
-  }, []);
+  };
 
-  const heartInter = animHeart.interpolate({
+  const heartInter = animHeart[0].interpolate({
     inputRange: [0, 1],
     outputRange: [0, -(heroHeight + OFFSET_HEART * 2)],
   });
@@ -64,7 +59,7 @@ const Shot: FC<ShotProps> = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: image }}
+        source={{ uri: image as string }}
         resizeMode="cover"
         style={[styles.image, featureStyles]}
       >
@@ -82,7 +77,7 @@ const Shot: FC<ShotProps> = ({
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
         {index === 0 && <PostNavbar />}
-        <PostContent title={title} content={content} />
+        <PostContent title={title as string} content={content as string} />
       </Panel>
     </>
   );
