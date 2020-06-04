@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -6,7 +6,10 @@ import {
   ViewStyle,
   ImageStyle,
   LayoutAnimation,
+  Animated,
 } from 'react-native';
+
+import Emoji from 'react-native-emoji';
 
 import PostNavbar from './PostNavbar';
 import PostContent from './PostContent';
@@ -27,8 +30,11 @@ interface PostProps extends PostType {
 
 interface ShotProps extends ShotType {
   featureStyles?: StyleProp<ImageStyle>;
+  heroHeight: number;
   index: number;
 }
+
+const OFFSET_HEART = 60;
 
 const Shot: FC<ShotProps> = ({
   image: propImage,
@@ -36,10 +42,24 @@ const Shot: FC<ShotProps> = ({
   content: propContent,
   featureStyles,
   index,
+  heroHeight,
 }) => {
   const [image] = useState<string>(propImage as string);
   const [title] = useState<string>(propTitle as string);
   const [content] = useState<string>(propContent as string);
+  const [animHeart] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(animHeart, {
+      toValue: 1,
+      duration: 3000,
+    }).start();
+  }, []);
+
+  const heartInter = animHeart.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -(heroHeight + OFFSET_HEART * 2)],
+  });
 
   return (
     <>
@@ -56,6 +76,9 @@ const Shot: FC<ShotProps> = ({
             mode="day"
           />
         )}
+        <Animated.View style={[styles.heartAnim, { transform: [{ translateY: heartInter }] }]}>
+          <Emoji name="heart" style={styles.heart} />
+        </Animated.View>
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
         {index === 0 && <PostNavbar />}
@@ -98,6 +121,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
         content={shots[0]?.content as string}
         featureStyles={featureStyles}
         index={0}
+        heroHeight={FEATURE_SIZE}
       />
       {visible && shots.length > 1 && (
         <>
@@ -111,6 +135,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
                   content={shot?.content as string}
                   featureStyles={featureStyles}
                   index={index}
+                  heroHeight={FEATURE_SIZE}
                 />
               );
             }
@@ -127,6 +152,14 @@ const styles = StyleSheet.create({
   image: {
     padding: AssetStyles.measure.space / 2,
     backgroundColor: Color.grey,
+    overflow: 'hidden',
+  },
+  heartAnim: {
+    position: 'absolute',
+    bottom: -OFFSET_HEART,
+  },
+  heart: {
+    fontSize: 50,
   },
 });
 
