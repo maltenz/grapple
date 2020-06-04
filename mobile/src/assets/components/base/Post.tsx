@@ -31,30 +31,95 @@ interface PostProps extends PostType {
 
 interface ShotProps extends ShotType {
   featureStyles?: StyleProp<ImageStyle>;
-  heroHeight: number;
+  feautureHeight: number;
   index: number;
 }
 
-const OFFSET_HEART = 60;
+const HEART_WIDTH = 60;
+const HEART_SIZE = HEART_WIDTH - 10;
+const TOTAL = 9;
 
-const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, index, heroHeight }) => {
-  const [animHeart] = useState<Animated.Value[]>(_.times(9, () => new Animated.Value(0)));
+interface HeartProps {
+  feautureHeight: number;
+  active: boolean;
+  index: number;
+}
+
+const randomDelay = (): number => Math.floor(Math.random() * 1000);
+const randomDuration = (): number => Math.floor(Math.random() * (3000 - 2000 + 1) + 2000);
+const randomX = (): number => Math.floor(Math.random() * 60) + 1 - 30;
+
+const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
+  const [anim] = useState<Animated.Value>(new Animated.Value(0));
+  const [left, setLeft] = useState<number>(0);
+  const [delay, setDelay] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
-    AnimHeart(animHeart[0]);
+    switch (index) {
+      case 0:
+      case 3:
+      case 6:
+        setLeft(randomX());
+        setDuration(randomDuration());
+        setDelay(randomDelay());
+        break;
+      case 1:
+      case 4:
+      case 7:
+        setLeft(randomX() + feautureHeight / 2 - HEART_WIDTH / 2);
+        setDuration(randomDuration());
+        setDelay(randomDelay());
+        break;
+      case 2:
+      case 5:
+      case 8:
+        setLeft(randomX() + feautureHeight - HEART_WIDTH * 1);
+        setDuration(randomDuration);
+        setDelay(randomDelay());
+        break;
+      default:
+    }
   }, []);
 
-  const AnimHeart = (value: Animated.Value): void => {
-    Animated.timing(value, {
-      toValue: 1,
-      duration: 3000,
-    }).start();
-  };
+  useEffect(() => {
+    if (active) {
+      Animated.timing(anim, {
+        toValue: 1,
+        duration,
+        delay,
+      }).start();
+    }
+  }, [active]);
 
-  const heartInter = animHeart[0].interpolate({
+  const interpolate = anim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -(heroHeight + OFFSET_HEART * 2)],
+    outputRange: [0, -(feautureHeight + HEART_WIDTH * 2)],
   });
+
+  return (
+    <Animated.View
+      style={[
+        styles.heartContainer,
+        {
+          left,
+          transform: [{ translateY: interpolate }],
+        },
+      ]}
+    >
+      <Emoji
+        name="heart"
+        style={{
+          fontSize: Math.floor(Math.random() * (HEART_SIZE - HEART_SIZE / 3 + 1) + HEART_SIZE / 3),
+        }}
+      />
+    </Animated.View>
+  );
+};
+
+const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, feautureHeight, index }) => {
+  const [like, setLike] = useState<boolean>(false);
+  const [animList] = useState<number[]>(_.times(TOTAL, (listIndex) => listIndex));
 
   return (
     <>
@@ -71,12 +136,12 @@ const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, index, hero
             mode="day"
           />
         )}
-        <Animated.View style={[styles.heartAnim, { transform: [{ translateY: heartInter }] }]}>
-          <Emoji name="heart" style={styles.heart} />
-        </Animated.View>
+        {animList.map((item) => (
+          <Heart key={item} index={item} feautureHeight={feautureHeight} active={like} />
+        ))}
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
-        {index === 0 && <PostNavbar />}
+        {index === 0 && <PostNavbar onLike={(): void => setLike(!like)} />}
         <PostContent title={title as string} content={content as string} />
       </Panel>
     </>
@@ -102,7 +167,6 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
 
   return (
     <Panel
-      onPress={handleVisible}
       marginHorizontal={gutter}
       marginBottom
       backgroundColor="white"
@@ -116,7 +180,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
         content={shots[0]?.content as string}
         featureStyles={featureStyles}
         index={0}
-        heroHeight={FEATURE_SIZE}
+        feautureHeight={FEATURE_SIZE}
       />
       {visible && shots.length > 1 && (
         <>
@@ -130,7 +194,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
                   content={shot?.content as string}
                   featureStyles={featureStyles}
                   index={index}
-                  heroHeight={FEATURE_SIZE}
+                  feautureHeight={FEATURE_SIZE}
                 />
               );
             }
@@ -138,7 +202,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
           })}
         </>
       )}
-      {shots.length > 1 && <PullBar mode="day" marginBottom={0.5} />}
+      {shots.length > 1 && <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} />}
     </Panel>
   );
 };
@@ -149,12 +213,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.grey,
     overflow: 'hidden',
   },
-  heartAnim: {
+  heartContainer: {
     position: 'absolute',
-    bottom: -OFFSET_HEART,
-  },
-  heart: {
-    fontSize: 50,
+    bottom: -HEART_WIDTH,
   },
 });
 
