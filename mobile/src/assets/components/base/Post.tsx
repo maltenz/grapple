@@ -118,7 +118,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
           })}
         </>
       )}
-      <PullBar mode="day" marginBottom={0.5} />
+      {shots.length > 1 && <PullBar mode="day" marginBottom={0.5} />}
     </Panel>
   );
 };
