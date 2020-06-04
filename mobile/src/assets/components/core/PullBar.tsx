@@ -9,6 +9,7 @@ interface PullBarProps extends MarginProps {
   color?: ColorType;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  backgroundColor?: ColorType;
 }
 
 const PullBarHeight = 30;

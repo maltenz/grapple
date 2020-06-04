@@ -16,7 +16,7 @@ import PullBar from './PullBar';
 import NavBarUser from './NavBarUser';
 
 import { Post as PostType, Shot as ShotType } from '../../../generated/graphql';
-import { Color } from '../..';
+import { Color } from '../../colors';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -72,10 +72,11 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     setVisible(!visible);
   };
-
+  const BORDER_WIDTH = 2;
   const WINDOW_SIZE = AssetStyles.measure.window.width;
-  const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
-
+  const FEATURE_SIZE = !gutter
+    ? WINDOW_SIZE
+    : WINDOW_SIZE - AssetStyles.measure.space * 2 - BORDER_WIDTH * 2;
   const featureStyles = {
     width: FEATURE_SIZE,
     height: FEATURE_SIZE,
@@ -88,7 +89,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
       marginBottom
       backgroundColor="white"
       activeOpacity={1}
-      style={style}
+      style={[style, { borderWidth: 2, borderColor: 'transparent' }]}
     >
       <Shot
         key={shots[0]?.id as string}
@@ -98,7 +99,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
         featureStyles={featureStyles}
         index={0}
       />
-      {visible && (
+      {visible && shots.length > 1 && (
         <>
           {shots.map((shot, index) => {
             if (index > 0) {
@@ -117,7 +118,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
           })}
         </>
       )}
-      <PullBar mode="day" marginBottom />
+      <PullBar mode="day" marginBottom={0.5} />
     </Panel>
   );
 };
