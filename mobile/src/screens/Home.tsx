@@ -54,7 +54,7 @@ const Home: FC = () => {
         {
           // @ts-ignore
           data?.posts.map((post) => (
-            <Post key={post.id} gutter user={post.user} shots={post.shots} />
+            <Post key={post.id} id={post.id} gutter user={post.user} shots={post.shots} />
           ))
         }
       </ScrollView>

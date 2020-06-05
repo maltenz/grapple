@@ -10,6 +10,8 @@ import {
   Animated,
 } from 'react-native';
 
+import { useMutation } from '@apollo/react-hooks';
+
 import Emoji from 'react-native-emoji';
 
 import PostNavbar from './PostNavbar';
@@ -21,6 +23,7 @@ import NavBarUser from './NavBarUser';
 
 import { Post as PostType, Shot as ShotType } from '../../../generated/graphql';
 import { Color } from '../../colors';
+import { LIKE_POST } from '../../../mutations/post';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -32,6 +35,7 @@ interface PostProps extends PostType {
 interface ShotProps extends ShotType {
   featureStyles?: StyleProp<ImageStyle>;
   feautureHeight: number;
+  postId?: string;
   index: number;
 }
 
@@ -115,9 +119,30 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
   );
 };
 
-const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, feautureHeight, index }) => {
+const Shot: FC<ShotProps> = ({
+  image,
+  title,
+  content,
+  featureStyles,
+  feautureHeight,
+  postId,
+  index,
+}) => {
+  const [likePost, { data }] = useMutation<{ likePost: PostType }>(LIKE_POST);
   const [like, setLike] = useState<boolean>(false);
   const [animList] = useState<number[]>(_.times(TOTAL, (listIndex) => listIndex));
+
+  useEffect(() => {
+    if (data?.likePost === null) {
+      // eslint-disable-next-line no-console
+      console.log('unlike');
+    }
+  }, [data]);
+
+  const handleLike = (): void => {
+    setLike(!like);
+    likePost({ variables: { id: postId } });
+  };
 
   return (
     <>
@@ -139,14 +164,14 @@ const Shot: FC<ShotProps> = ({ image, title, content, featureStyles, feautureHei
         ))}
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
-        {index === 0 && <PostNavbar onLike={(): void => setLike(!like)} />}
+        {index === 0 && <PostNavbar onLike={handleLike} />}
         <PostContent title={title as string} content={content as string} />
       </Panel>
     </>
   );
 };
 
-const Post: FC<PostProps> = ({ gutter, style, shots }) => {
+const Post: FC<PostProps> = ({ gutter, style, shots, id }) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handleVisible = (): void => {
@@ -174,6 +199,7 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
       <Shot
         key={shots[0]?.id as string}
         index={0}
+        postId={id as string}
         image={shots[0]?.image as string}
         title={shots[0]?.title as string}
         content={shots[0]?.content as string}
