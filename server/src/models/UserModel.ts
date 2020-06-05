@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { prop, getModelForClass, arrayProp, Ref } from '@typegoose/typegoose';
-import { Post } from './PostModel';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 
 /**
  * User interface constructor
@@ -13,10 +12,6 @@ export class User {
   public password?: string;
   @prop()
   public email?: string;
-  @arrayProp({ ref: 'Post' })
-  public posts?: Ref<Post>[];
-  @arrayProp({ ref: 'Post' })
-  public likes?: Ref<Post>[];
 }
 
 export const UserModel = getModelForClass(User);

@@ -27,6 +27,12 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
       throw new Error(ERR_MESSAGE);
     }
 
+    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
+      $push: {
+        posts: post._id,
+      },
+    })) as User;
+
     return post;
   } catch (error) {
     throw new ApolloError(error);
@@ -47,6 +53,53 @@ export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> =
 
     if (post === null) {
       ERR_MESSAGE = 'Unable find post';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(error);
+  }
+};
+
+/**
+ * @param context
+ * @returns {Post}
+ */
+export const getPostsByUserId = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+  let ERR_MESSAGE;
+  loginRequired(loggedIn);
+
+  try {
+    const post = (await PostModel(dbConn).find({ user: user._id })) as Post;
+    console.log('post');
+    console.log(post);
+
+    if (post === null) {
+      ERR_MESSAGE = 'Unable find posts';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(error);
+  }
+};
+
+/**
+ * @param context
+ * @param id
+ * @returns {Post}
+ */
+export const getPostsByUserLiked = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+  let ERR_MESSAGE;
+  loginRequired(loggedIn);
+
+  try {
+    const post = (await PostModel(dbConn).find({ likes: user._id })) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'No liked posts';
       throw new ApolloError(ERR_MESSAGE);
     }
 

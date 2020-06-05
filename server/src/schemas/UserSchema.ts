@@ -10,15 +10,12 @@ export const UserSchema = gql`
     name: String!
     password: String
     email: String!
-    posts: [Post]
-    likes: [ID!]!
   }
 
   type UserQuery {
     id: ID
     name: String!
     email: String!
-    posts: [Post]
   }
 
   type Token {
@@ -43,6 +40,8 @@ export const UserSchema = gql`
     users: [UserQuery]
     user(id: String!): UserQuery
     userByEmail(email: String!): UserQuery
+    userPosts(id: String!): [Post]
+    userLiked(id: String!): [Post]
   }
 
   extend type Mutation {
