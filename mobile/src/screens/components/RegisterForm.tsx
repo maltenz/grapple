@@ -16,6 +16,8 @@ import {
   REQUIRED_TEXT,
 } from '../../assets/components/base/Text';
 
+import { updateUser } from '../../store';
+
 type RegisterFormData = {
   username: string;
   email: string;
@@ -25,7 +27,7 @@ type RegisterFormData = {
 
 const RegisterForm: FC = () => {
   const dispatch = useDispatch();
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser, { data }] = useMutation(CREATE_USER);
   const { control, handleSubmit, errors } = useForm<RegisterFormData>();
   const [animUsernameError] = useState(new Animated.Value(0));
   const [animEmailError] = useState(new Animated.Value(0));
@@ -42,6 +44,24 @@ const RegisterForm: FC = () => {
       Vibration.vibrate(VIBRATE_DUR);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (data?.createUser) {
+      const storeUser = async (): Promise<void> => {
+        const { id: myId, name: myName, email: myEmail }: User = data.createUser;
+        await AsyncStorage.setItem('token', data.createUser.token);
+
+        dispatch(
+          updateUser({
+            id: myId || '',
+            name: myName,
+            email: myEmail,
+          })
+        );
+      };
+      storeUser();
+    }
+  }, [data]);
 
   const ErrorAnim = (animValue: Animated.Value, errorSelector: any): void => {
     Animated.timing(animValue, {
@@ -61,21 +81,6 @@ const RegisterForm: FC = () => {
 
   const onSubmit = ({ username, email, password }: RegisterFormData): void => {
     createUser({ variables: { name: username, email, password } });
-
-    const auth = async (): Promise<void> => {
-      const { data } = await createUser({ variables: { name: username, email, password } });
-
-      if (data?.createUser) {
-        const { id: myId, name: myName, email: myEmail }: User = data.createUser;
-        await AsyncStorage.setItem('token', data.createUser.token);
-        dispatch({
-          userId: myId || '',
-          name: myName,
-          email: myEmail,
-        });
-      }
-    };
-    auth();
   };
 
   return (
