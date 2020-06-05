@@ -5,6 +5,8 @@ import {
   deletePostShot,
   updatePostShot,
   updateWithPositionPostShot,
+  likePost,
+  unlikePost,
 } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
@@ -47,6 +49,18 @@ export const PostMutation = {
         content,
         image,
       });
+    },
+  },
+  likePost: {
+    resolve: async (parent, args, context, info): Promise<Post> => {
+      const { id } = args;
+      return await likePost(context, id);
+    },
+  },
+  unlikePost: {
+    resolve: async (parent, args, context, info): Promise<Post> => {
+      const { id } = args;
+      return await unlikePost(context, id);
     },
   },
 };

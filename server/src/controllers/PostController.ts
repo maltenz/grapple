@@ -18,6 +18,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
     post = await PostModel(dbConn).create({
       user,
       shots,
+      likes: [],
     });
 
     if (post === null) {
@@ -211,4 +212,67 @@ export const updateWithPositionPostShot = async (
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Post}
+ */
+export const likePost = async (context: Context, id: string): Promise<Post> => {
+  const { dbConn, loggedIn, user } = context;
+  let ERR_MESSAGE = 'Unable to like post';
+  loginRequired(loggedIn);
+
+  let post;
+
+  try {
+    const hasLiked = (await PostModel(dbConn).findOne({ _id: id, likes: user?._id })) as Post;
+
+    if (hasLiked) {
+      ERR_MESSAGE = 'A post can only be liked once';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    post = await PostModel(dbConn).findOneAndUpdate(
+      { _id: id },
+      {
+        $push: {
+          likes: user?._id,
+        },
+      }
+    );
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return post;
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Post}
+ */
+export const unlikePost = async (context: Context, id: string): Promise<Post> => {
+  const { dbConn, loggedIn, user } = context;
+  const ERR_MESSAGE = 'Unable to unlike post';
+  loginRequired(loggedIn);
+
+  let post;
+
+  try {
+    post = await PostModel(dbConn).findOneAndUpdate(
+      { _id: id },
+      {
+        $pull: {
+          likes: user?._id,
+        },
+      }
+    );
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return post;
 };

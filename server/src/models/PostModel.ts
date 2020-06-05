@@ -20,6 +20,8 @@ export class Post {
   public user?: Ref<User>;
   @arrayProp({ items: Shot })
   shots?: Shot[];
+  @arrayProp({ ref: 'User' })
+  public likes?: Ref<User>[];
 }
 
 const PostModel = getModelForClass(Post);

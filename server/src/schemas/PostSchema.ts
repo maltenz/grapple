@@ -9,6 +9,7 @@ export const PostSchema = gql`
     id: ID
     user: UserQuery!
     shots: [Shot]!
+    likes: [UserQuery]
   }
 
   type Shot {
@@ -62,5 +63,7 @@ export const PostSchema = gql`
     deletePostShot(input: ShotDeleteInput): Post
     updatePostShot(input: ShotUpdateInput): Post
     updateWithPositionPostShot(input: ShotUpdatePositionInput): Post
+    likePost(id: String!): Post
+    unlikePost(id: String!): Post
   }
 `;
