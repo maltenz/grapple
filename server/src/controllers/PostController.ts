@@ -2,6 +2,7 @@ import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
+import UserModel, { User } from '../models/UserModel';
 
 /**
  * @param context
@@ -15,11 +16,11 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
   let post;
 
   try {
-    post = await PostModel(dbConn).create({
+    post = (await PostModel(dbConn).create({
       user,
       shots,
       likes: [],
-    });
+    })) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'Unable to save post';
@@ -219,9 +220,9 @@ export const updateWithPositionPostShot = async (
  * @param {id}
  * @returns {Post}
  */
-export const likePost = async (context: Context, id: string): Promise<Post> => {
+export const likePost = async (context: Context, id: string): Promise<Post | null> => {
   const { dbConn, loggedIn, user } = context;
-  let ERR_MESSAGE = 'Unable to like post';
+  const ERR_MESSAGE = 'Unable to like post';
   loginRequired(loggedIn);
 
   let post;
@@ -230,8 +231,7 @@ export const likePost = async (context: Context, id: string): Promise<Post> => {
     const hasLiked = (await PostModel(dbConn).findOne({ _id: id, likes: user?._id })) as Post;
 
     if (hasLiked) {
-      ERR_MESSAGE = 'A post can only be liked once';
-      throw new ApolloError(ERR_MESSAGE);
+      return null;
     }
 
     post = await PostModel(dbConn).findOneAndUpdate(
@@ -242,6 +242,12 @@ export const likePost = async (context: Context, id: string): Promise<Post> => {
         },
       }
     );
+
+    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
+      $push: {
+        likes: post._id,
+      },
+    })) as User;
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
@@ -270,6 +276,11 @@ export const unlikePost = async (context: Context, id: string): Promise<Post> =>
         },
       }
     );
+    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
+      $pull: {
+        likes: post._id,
+      },
+    })) as User;
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass, arrayProp, Ref } from '@typegoose/typegoose';
 import { Post } from './PostModel';
 
 /**
@@ -13,8 +13,10 @@ export class User {
   public password?: string;
   @prop()
   public email?: string;
-  @prop()
-  public posts?: Array<Post>;
+  @arrayProp({ ref: 'Post' })
+  public posts?: Ref<Post>[];
+  @arrayProp({ ref: 'Post' })
+  public likes?: Ref<Post>[];
 }
 
 export const UserModel = getModelForClass(User);

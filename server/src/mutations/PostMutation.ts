@@ -52,7 +52,7 @@ export const PostMutation = {
     },
   },
   likePost: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (parent, args, context, info): Promise<Post | null> => {
       const { id } = args;
       return await likePost(context, id);
     },

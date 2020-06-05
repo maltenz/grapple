@@ -31,6 +31,8 @@ export const createUser = async (
       name,
       email,
       password: hashedPassword,
+      posts: [],
+      likes: [],
     })) as User;
 
     const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';

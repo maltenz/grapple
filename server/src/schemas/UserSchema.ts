@@ -11,6 +11,7 @@ export const UserSchema = gql`
     password: String
     email: String!
     posts: [Post]
+    likes: [ID!]!
   }
 
   type UserQuery {
