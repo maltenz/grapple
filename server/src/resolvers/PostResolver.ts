@@ -21,5 +21,14 @@ export const PostResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
+    likes: async (parent, args, context: Context, info): Promise<User[]> => {
+      try {
+        return await parent.likes.map((id) => {
+          return getUser(context, id);
+        });
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
   },
 };
