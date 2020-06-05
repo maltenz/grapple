@@ -35,15 +35,17 @@ interface ShotProps extends ShotType {
   index: number;
 }
 
-const HEART_WIDTH = 60;
-const HEART_SIZE = HEART_WIDTH - 10;
-const TOTAL = 9;
-
 interface HeartProps {
   feautureHeight: number;
   active: boolean;
   index: number;
 }
+
+const HEART_WIDTH = 80;
+const HEART_SIZE = HEART_WIDTH - 10;
+const TOTAL = 9;
+const BORDER_WIDTH = 2;
+const WINDOW_SIZE = AssetStyles.measure.window.width;
 
 const randomDelay = (): number => Math.floor(Math.random() * 1000);
 const randomDuration = (): number => Math.floor(Math.random() * (3000 - 2000 + 1) + 2000);
@@ -56,27 +58,23 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
   const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
+    setDuration(randomDuration());
+    setDelay(randomDelay());
     switch (index) {
       case 0:
       case 3:
       case 6:
         setLeft(randomX());
-        setDuration(randomDuration());
-        setDelay(randomDelay());
         break;
       case 1:
       case 4:
       case 7:
         setLeft(randomX() + feautureHeight / 2 - HEART_WIDTH / 2);
-        setDuration(randomDuration());
-        setDelay(randomDelay());
         break;
       case 2:
       case 5:
       case 8:
         setLeft(randomX() + feautureHeight - HEART_WIDTH * 1);
-        setDuration(randomDuration);
-        setDelay(randomDelay());
         break;
       default:
     }
@@ -155,11 +153,11 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     setVisible(!visible);
   };
-  const BORDER_WIDTH = 2;
-  const WINDOW_SIZE = AssetStyles.measure.window.width;
+
   const FEATURE_SIZE = !gutter
     ? WINDOW_SIZE
     : WINDOW_SIZE - AssetStyles.measure.space * 2 - BORDER_WIDTH * 2;
+
   const featureStyles = {
     width: FEATURE_SIZE,
     height: FEATURE_SIZE,
@@ -171,15 +169,15 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
       marginBottom
       backgroundColor="white"
       activeOpacity={1}
-      style={[style, { borderWidth: 2, borderColor: 'transparent' }]}
+      style={[styles.container, style]}
     >
       <Shot
         key={shots[0]?.id as string}
+        index={0}
         image={shots[0]?.image as string}
         title={shots[0]?.title as string}
         content={shots[0]?.content as string}
         featureStyles={featureStyles}
-        index={0}
         feautureHeight={FEATURE_SIZE}
       />
       {visible && shots.length > 1 && (
@@ -189,11 +187,11 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
               return (
                 <Shot
                   key={shot?.id as string}
+                  index={index}
                   image={shot?.image as string}
                   title={shot?.title as string}
                   content={shot?.content as string}
                   featureStyles={featureStyles}
-                  index={index}
                   feautureHeight={FEATURE_SIZE}
                 />
               );
@@ -208,6 +206,10 @@ const Post: FC<PostProps> = ({ gutter, style, shots }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
   image: {
     padding: AssetStyles.measure.space / 2,
     backgroundColor: Color.grey,
