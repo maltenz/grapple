@@ -11,6 +11,8 @@ export const PostSchema = gql`
     shots: [Shot]!
     likes: [UserQuery]
     liked: Boolean!
+    bookmarks: [UserQuery]
+    bookmarked: Boolean!
   }
 
   type Shot {
@@ -66,5 +68,7 @@ export const PostSchema = gql`
     updateWithPositionPostShot(input: ShotUpdatePositionInput): Post
     likePost(id: String!): Post
     unlikePost(id: String!): Post
+    bookmarkPost(id: String!): Post
+    removeBookmarkPost(id: String!): Post
   }
 `;

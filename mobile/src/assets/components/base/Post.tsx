@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import _ from 'lodash';
 import React, { FC, useState, useEffect } from 'react';
 import {
@@ -14,7 +15,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import Emoji from 'react-native-emoji';
 
-import PostNavbar from './PostNavbar';
+import PostNavbar, { PostNavbarItem } from './PostNavbar';
 import PostContent from './PostContent';
 import { AssetStyles } from '../../styles';
 import Panel from './Panel';
@@ -23,7 +24,12 @@ import NavBarUser from './NavBarUser';
 
 import { Post as PostType, Shot as ShotType } from '../../../generated/graphql';
 import { Color } from '../../colors';
-import { LIKE_POST } from '../../../mutations/post';
+import {
+  LIKE_POST,
+  UNLIKE_POST,
+  BOOKMARK_POST,
+  REMOVE_BOOKMARK_POST,
+} from '../../../mutations/post';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -36,13 +42,16 @@ interface ShotProps extends ShotType {
   featureStyles?: StyleProp<ImageStyle>;
   feautureHeight: number;
   postId?: string;
+  liked?: boolean;
+  bookmarked?: boolean;
   index: number;
 }
 
-interface HeartProps {
+interface IconProps {
   feautureHeight: number;
   active: boolean;
   index: number;
+  name: string;
 }
 
 const HEART_WIDTH = 80;
@@ -50,14 +59,20 @@ const HEART_SIZE = HEART_WIDTH - 10;
 const TOTAL = 9;
 const BORDER_WIDTH = 2;
 const WINDOW_SIZE = AssetStyles.measure.window.width;
+const DUR = 3000;
+const TOL = 2000;
+const DELAY = 1000;
 
-const randomDelay = (): number => Math.floor(Math.random() * 1000);
-const randomDuration = (): number => Math.floor(Math.random() * (3000 - 2000 + 1) + 2000);
+const randomDelay = (): number => Math.floor(Math.random() * DELAY);
+const randomDuration = (): number => Math.floor(Math.random() * (DUR - TOL + 1) + TOL);
 const randomX = (): number => Math.floor(Math.random() * 60) + 1 - 30;
 
-const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
+const Icon: FC<IconProps> = ({ feautureHeight, active, index, name }) => {
   const [anim] = useState<Animated.Value>(new Animated.Value(0));
   const [left, setLeft] = useState<number>(0);
+  const [fontSize] = useState(
+    Math.floor(Math.random() * (HEART_SIZE - HEART_SIZE / 3 + 1) + HEART_SIZE / 3)
+  );
   const [delay, setDelay] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
 
@@ -68,7 +83,7 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
       case 0:
       case 3:
       case 6:
-        setLeft(randomX());
+        setLeft(randomX() + HEART_WIDTH / 2);
         break;
       case 1:
       case 4:
@@ -78,7 +93,7 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
       case 2:
       case 5:
       case 8:
-        setLeft(randomX() + feautureHeight - HEART_WIDTH * 1);
+        setLeft(randomX() + feautureHeight - HEART_WIDTH);
         break;
       default:
     }
@@ -90,7 +105,9 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
         toValue: 1,
         duration,
         delay,
-      }).start();
+      }).start(() => {
+        anim.setValue(0);
+      });
     }
   }, [active]);
 
@@ -109,12 +126,7 @@ const Heart: FC<HeartProps> = ({ feautureHeight, active, index }) => {
         },
       ]}
     >
-      <Emoji
-        name="heart"
-        style={{
-          fontSize: Math.floor(Math.random() * (HEART_SIZE - HEART_SIZE / 3 + 1) + HEART_SIZE / 3),
-        }}
-      />
+      <Emoji name={name} style={{ fontSize }} />
     </Animated.View>
   );
 };
@@ -126,22 +138,44 @@ const Shot: FC<ShotProps> = ({
   featureStyles,
   feautureHeight,
   postId,
+  liked: propLiked,
+  bookmarked: propBookmarked,
   index,
 }) => {
-  const [likePost, { data }] = useMutation<{ likePost: PostType }>(LIKE_POST);
-  const [like, setLike] = useState<boolean>(false);
+  const [likePost] = useMutation(LIKE_POST);
+  const [unlikePost] = useMutation(UNLIKE_POST);
+  const [bookmarkPost] = useMutation(BOOKMARK_POST);
+  const [removeBookmarkPost] = useMutation(REMOVE_BOOKMARK_POST);
   const [animList] = useState<number[]>(_.times(TOTAL, (listIndex) => listIndex));
-
-  useEffect(() => {
-    if (data?.likePost === null) {
-      // eslint-disable-next-line no-console
-      console.log('unlike');
-    }
-  }, [data]);
+  const [liked, setLiked] = useState<boolean>(propLiked as boolean);
+  const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
+  const [name, setName] = useState<'heart' | 'broken_heart'>(liked ? 'heart' : 'broken_heart');
+  const [animate, setAnimate] = useState<boolean>(false);
 
   const handleLike = (): void => {
-    setLike(!like);
-    likePost({ variables: { id: postId } });
+    if (liked) {
+      unlikePost({ variables: { id: postId } });
+      setName('broken_heart');
+      setLiked(false);
+    } else {
+      likePost({ variables: { id: postId } });
+      setName('heart');
+      setLiked(true);
+    }
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+    }, 4000);
+  };
+
+  const handleBookmark = (): void => {
+    if (bookmarked) {
+      removeBookmarkPost({ variables: { id: postId } });
+      setBookmarked(false);
+    } else {
+      bookmarkPost({ variables: { id: postId } });
+      setBookmarked(true);
+    }
   };
 
   return (
@@ -160,18 +194,47 @@ const Shot: FC<ShotProps> = ({
           />
         )}
         {animList.map((item) => (
-          <Heart key={item} index={item} feautureHeight={feautureHeight} active={like} />
+          <Icon
+            key={item}
+            index={item}
+            name={name}
+            feautureHeight={feautureHeight}
+            active={animate}
+          />
         ))}
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
-        {index === 0 && <PostNavbar onLike={handleLike} />}
+        {index === 0 && (
+          <PostNavbar
+            Icons={
+              <>
+                <Panel flex={1} row>
+                  <PostNavbarItem type="like" onPress={handleLike} marginRight active={liked} />
+                  <PostNavbarItem
+                    type="comment"
+                    marginRight
+                    onPress={(): void => {}}
+                    active={false}
+                  />
+                  <PostNavbarItem
+                    type="share"
+                    marginRight
+                    onPress={(): void => {}}
+                    active={false}
+                  />
+                </Panel>
+                <PostNavbarItem type="bookmark" onPress={handleBookmark} active={bookmarked} />
+              </>
+            }
+          />
+        )}
         <PostContent title={title as string} content={content as string} />
       </Panel>
     </>
   );
 };
 
-const Post: FC<PostProps> = ({ gutter, style, shots, id }) => {
+const Post: FC<PostProps> = ({ gutter, style, shots, id, liked, bookmarked }) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handleVisible = (): void => {
@@ -205,6 +268,8 @@ const Post: FC<PostProps> = ({ gutter, style, shots, id }) => {
         content={shots[0]?.content as string}
         featureStyles={featureStyles}
         feautureHeight={FEATURE_SIZE}
+        liked={liked}
+        bookmarked={bookmarked}
       />
       {visible && shots.length > 1 && (
         <>

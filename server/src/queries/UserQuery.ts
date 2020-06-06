@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getUsers, getUser, getUserByEmail } from '../controllers/UserController';
 import { User } from '../models/UserModel';
-import { getPostsByUserLiked, getPostsByUserId } from '../controllers/PostController';
+import {
+  getPostsByUserLiked,
+  getPostsByUserId,
+  getPostsByUserBookmarked,
+} from '../controllers/PostController';
 
 /**
  * @description holds user queries
@@ -26,6 +30,11 @@ export const UserQuery = {
   userLiked: {
     resolve: async (parent, args, context, info): Promise<User> => {
       return await getPostsByUserLiked(context);
+    },
+  },
+  userBookmarked: {
+    resolve: async (parent, args, context, info): Promise<User> => {
+      return await getPostsByUserBookmarked(context);
     },
   },
   userByEmail: {

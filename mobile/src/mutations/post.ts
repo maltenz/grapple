@@ -13,6 +13,7 @@ const CREATE_POST = gql`
         title
         content
       }
+      liked
     }
   }
 `;
@@ -25,4 +26,28 @@ const LIKE_POST = gql`
   }
 `;
 
-export { CREATE_POST, LIKE_POST };
+const UNLIKE_POST = gql`
+  mutation unlikePost($id: String!) {
+    unlikePost(id: $id) {
+      id
+    }
+  }
+`;
+
+const BOOKMARK_POST = gql`
+  mutation bookmarkPost($id: String!) {
+    bookmarkPost(id: $id) {
+      id
+    }
+  }
+`;
+
+const REMOVE_BOOKMARK_POST = gql`
+  mutation removeBookmarkPost($id: String!) {
+    removeBookmarkPost(id: $id) {
+      id
+    }
+  }
+`;
+
+export { CREATE_POST, LIKE_POST, UNLIKE_POST, BOOKMARK_POST, REMOVE_BOOKMARK_POST };

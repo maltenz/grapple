@@ -10,6 +10,7 @@ interface SvgIconProps {
   strokeWidth?: boolean | number;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  active?: boolean;
 }
 
 const SvgIconSmallHeart: FC<SvgIconProps> = ({
@@ -17,12 +18,13 @@ const SvgIconSmallHeart: FC<SvgIconProps> = ({
   color: propColor,
   strokeWidth: propStrokeWidth,
   onPress,
+  active,
   style,
 }) => {
-  const color = propColor ? Color[propColor] : Color.grey;
+  const color = propColor ? Color[propColor] : Color.grey2;
   let width = 24;
   let height = 24;
-  let strokeWidth = 1;
+  let strokeWidth = 1.5;
 
   if (scale) {
     width *= scale;
@@ -36,10 +38,10 @@ const SvgIconSmallHeart: FC<SvgIconProps> = ({
   return (
     <Svg height={height} width={width} viewBox="0 0 24.483 23.855" onPress={onPress} style={style}>
       <Path
-        stroke={color}
+        stroke={active ? Color.red : color}
         strokeWidth={strokeWidth}
         d="M12.902 6.562a.488.488 0 0 1-.805 0A4.03 4.03 0 0 0 5.055 9.53c0 2.333 1.622 5.379 6.247 8.529a2.136 2.136 0 0 0 2.396 0c4.625-3.15 6.247-6.196 6.247-8.53 0-4.62-5.223-5.462-7.043-2.967z"
-        fill="none"
+        fill={active ? Color.red : 'none'}
         strokeLinecap="round"
       />
     </Svg>

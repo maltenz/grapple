@@ -2,7 +2,6 @@ import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import UserModel, { User } from '../models/UserModel';
 
 /**
  * @param context
@@ -20,18 +19,13 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
       user,
       shots,
       likes: [],
+      bookmarks: [],
     })) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'Unable to save post';
       throw new Error(ERR_MESSAGE);
     }
-
-    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
-      $push: {
-        posts: post._id,
-      },
-    })) as User;
 
     return post;
   } catch (error) {
@@ -293,12 +287,6 @@ export const likePost = async (context: Context, id: string): Promise<Post | nul
         },
       }
     );
-
-    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
-      $push: {
-        likes: post._id,
-      },
-    })) as User;
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
@@ -327,11 +315,94 @@ export const unlikePost = async (context: Context, id: string): Promise<Post> =>
         },
       }
     );
-    (await UserModel(dbConn).findByIdAndUpdate(user?._id, {
-      $pull: {
-        likes: post._id,
-      },
-    })) as User;
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return post;
+};
+
+/**
+ * @param context
+ * @param id
+ * @returns {Post}
+ */
+export const getPostsByUserBookmarked = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+  let ERR_MESSAGE;
+  loginRequired(loggedIn);
+
+  try {
+    const post = (await PostModel(dbConn).find({ bookmarks: user._id })) as Post;
+
+    if (post === null) {
+      ERR_MESSAGE = 'No bookmarked posts';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+
+    return post;
+  } catch (error) {
+    throw new ApolloError(error);
+  }
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Post}
+ */
+export const bookmarkPost = async (context: Context, id: string): Promise<Post | null> => {
+  const { dbConn, loggedIn, user } = context;
+  const ERR_MESSAGE = 'Unable to bookmark post';
+  loginRequired(loggedIn);
+
+  let post;
+
+  try {
+    const hasBookmarked = (await PostModel(dbConn).findOne({
+      _id: id,
+      bookmarks: user?._id,
+    })) as Post;
+
+    if (hasBookmarked) {
+      return null;
+    }
+
+    post = await PostModel(dbConn).findOneAndUpdate(
+      { _id: id },
+      {
+        $push: {
+          bookmarks: user?._id,
+        },
+      }
+    );
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return post;
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Post}
+ */
+export const removeBookmarkPost = async (context: Context, id: string): Promise<Post> => {
+  const { dbConn, loggedIn, user } = context;
+  const ERR_MESSAGE = 'Unable to remove bookmark on post';
+  loginRequired(loggedIn);
+
+  let post;
+
+  try {
+    post = await PostModel(dbConn).findOneAndUpdate(
+      { _id: id },
+      {
+        $pull: {
+          bookmarks: user?._id,
+        },
+      }
+    );
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }

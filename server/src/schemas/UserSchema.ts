@@ -42,6 +42,7 @@ export const UserSchema = gql`
     userByEmail(email: String!): UserQuery
     userPosts(id: String!): [Post]
     userLiked(id: String!): [Post]
+    userBookmarked(id: String!): [Post]
   }
 
   extend type Mutation {

@@ -15,10 +15,10 @@ const SvgIconSmallClose: FC<SvgIconProps> = ({
   color: propColor,
   strokeWidth: propStrokeWidth,
 }) => {
-  const color = propColor ? Color[propColor] : Color.grey;
+  const color = propColor ? Color[propColor] : Color.grey2;
   let width = 24;
   let height = 24;
-  let strokeWidth = 1;
+  let strokeWidth = 1.5;
 
   if (scale) {
     width *= scale;

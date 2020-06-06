@@ -7,6 +7,8 @@ import {
   updateWithPositionPostShot,
   likePost,
   unlikePost,
+  bookmarkPost,
+  removeBookmarkPost,
 } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
@@ -61,6 +63,18 @@ export const PostMutation = {
     resolve: async (parent, args, context, info): Promise<Post> => {
       const { id } = args;
       return await unlikePost(context, id);
+    },
+  },
+  bookmarkPost: {
+    resolve: async (parent, args, context, info): Promise<Post | null> => {
+      const { id } = args;
+      return await bookmarkPost(context, id);
+    },
+  },
+  removeBookmarkPost: {
+    resolve: async (parent, args, context, info): Promise<Post> => {
+      const { id } = args;
+      return await removeBookmarkPost(context, id);
     },
   },
 };

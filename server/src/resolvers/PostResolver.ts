@@ -36,5 +36,11 @@ export const PostResolver: IResolvers = {
       }
       return false;
     },
+    bookmarked: async (parent, args, context: Context, info): Promise<boolean> => {
+      if (parent.bookmarks.includes(context.user?._id)) {
+        return true;
+      }
+      return false;
+    },
   },
 };

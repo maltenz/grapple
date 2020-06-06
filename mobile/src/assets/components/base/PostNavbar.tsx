@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Panel from './Panel';
 import SvgIconSmallHeart from '../../svg/icons/small/SvgIconSmallHeart';
@@ -10,16 +10,17 @@ import { AssetStyles } from '../../styles';
 
 interface PostNavbarItemProps {
   type: 'like' | 'comment' | 'share' | 'bookmark';
-  onPress: () => void;
+  onPress?: () => void;
+  active: boolean;
   marginRight?: boolean;
 }
 
-const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginRight }) => {
+export const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginRight, active }) => {
   switch (type) {
     case 'like':
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallHeart scale={1} style={[marginRight && styles.icon]} />
+          <SvgIconSmallHeart scale={1} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
     case 'comment':
@@ -39,26 +40,20 @@ const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginRight })
     default:
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallBookmark scale={1} style={[marginRight && styles.icon]} />
+          <SvgIconSmallBookmark scale={1} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
   }
 };
 
 interface PostNavbarProps {
-  onLike: () => void;
+  Icons: JSX.Element;
 }
 
-const PostNavbar: FC<PostNavbarProps> = ({ onLike }) => {
-  const onPress = (): void => Alert.alert('press');
+const PostNavbar: FC<PostNavbarProps> = ({ Icons }) => {
   return (
     <Panel row alignItems="center">
-      <Panel flex={1} row>
-        <PostNavbarItem type="like" onPress={onLike} marginRight />
-        <PostNavbarItem type="comment" onPress={onPress} marginRight />
-        <PostNavbarItem type="share" onPress={onPress} marginRight />
-      </Panel>
-      <PostNavbarItem type="bookmark" onPress={onPress} />
+      {Icons}
     </Panel>
   );
 };

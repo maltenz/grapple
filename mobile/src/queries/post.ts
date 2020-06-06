@@ -13,6 +13,8 @@ const GET_POSTS = gql`
         content
         image
       }
+      liked
+      bookmarked
     }
   }
 `;

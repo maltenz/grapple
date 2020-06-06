@@ -6,13 +6,15 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_POSTS } from '../queries/post';
 
+import { Post as PostType } from '../generated/graphql';
+
 import {
-  Post,
   Color,
   AssetStyles,
   Navigation,
   NavigationIcon,
   SvgTabbarBackgroundHeight,
+  Post,
 } from '../assets';
 
 import { ParentNavigationProp } from './HomeRoot';
@@ -51,12 +53,19 @@ const Home: FC = () => {
           paddingBottom: inset.bottom + SvgTabbarBackgroundHeight,
         }}
       >
-        {
-          // @ts-ignore
-          data?.posts.map((post) => (
-            <Post key={post.id} id={post.id} gutter user={post.user} shots={post.shots} />
-          ))
-        }
+        {data?.posts.map((post: PostType) => {
+          return (
+            <Post
+              key={post.id as string}
+              id={post.id as string}
+              gutter
+              user={post.user}
+              shots={post.shots}
+              liked={post.liked}
+              bookmarked={post.bookmarked}
+            />
+          );
+        })}
       </ScrollView>
     </>
   );
