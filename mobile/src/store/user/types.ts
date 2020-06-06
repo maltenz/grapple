@@ -1,9 +1,11 @@
 import { User } from '../../generated/graphql';
 
 export enum UserActionTypes {
-  ADD_USER = '@@user/ADD_USER',
+  USER_UPDATE = '@@user/USER_UPDATE',
+  USER_LIKED = '@@user/USER_LIKED',
 }
 
 export interface UserState {
   readonly user: User;
+  readonly liked: string[];
 }

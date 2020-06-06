@@ -8,11 +8,12 @@ export const initialState: UserState = {
     email: '',
     password: '',
   },
+  liked: [],
 };
 
 const reducer: Reducer<UserState> = (state = initialState, action) => {
   switch (action.type) {
-    case UserActionTypes.ADD_USER: {
+    case UserActionTypes.USER_UPDATE: {
       const payload = action.payload as User;
       return { ...state, user: payload };
     }
