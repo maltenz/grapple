@@ -30,5 +30,11 @@ export const PostResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
+    liked: async (parent, args, context: Context, info): Promise<boolean> => {
+      if (parent.likes.includes(context.user?._id)) {
+        return true;
+      }
+      return false;
+    },
   },
 };

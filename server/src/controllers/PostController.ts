@@ -44,7 +44,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
  * @param id
  * @returns {Post}
  */
-export const getPost = async ({ dbConn, loggedIn, user }, id: string): Promise<Post> => {
+export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
@@ -54,10 +54,6 @@ export const getPost = async ({ dbConn, loggedIn, user }, id: string): Promise<P
     if (post === null) {
       ERR_MESSAGE = 'Unable find post';
       throw new ApolloError(ERR_MESSAGE);
-    }
-
-    if (post.likes?.includes(user._id)) {
-      post.liked = true;
     }
 
     return post;
