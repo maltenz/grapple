@@ -10,6 +10,7 @@ export const PostSchema = gql`
     user: UserQuery!
     shots: [Shot]!
     likes: [UserQuery]
+    liked: Boolean!
   }
 
   type Shot {
