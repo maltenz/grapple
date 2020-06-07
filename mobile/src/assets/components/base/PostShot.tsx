@@ -75,7 +75,7 @@ const Icon: FC<IconProps> = ({
       case 0:
       case 3:
       case 6:
-        setLeft(randomX());
+        setLeft(randomX() + width / 2);
         break;
       case 1:
       case 4:
