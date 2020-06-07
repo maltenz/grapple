@@ -14,8 +14,9 @@ import {
   Navigation,
   NavigationIcon,
   SvgTabbarBackgroundHeight,
-  Post,
 } from '../assets';
+
+import Post from './components/Post';
 
 import { ParentNavigationProp } from './HomeRoot';
 import { NavigationLogo } from '../assets/components/base/Navigation';
@@ -58,7 +59,6 @@ const Home: FC = () => {
             <Post
               key={post.id as string}
               id={post.id as string}
-              gutter
               user={post.user}
               shots={post.shots}
               liked={post.liked}

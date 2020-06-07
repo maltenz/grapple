@@ -57,14 +57,6 @@ const Gallery: FC<GalleryProps> = ({
     setActiveIndex(propActiveIndex);
   }, [propActiveIndex]);
 
-  const WINDOW_SIZE = AssetStyles.measure.window.width;
-  const FEATURE_SIZE = !gutter ? WINDOW_SIZE : WINDOW_SIZE - AssetStyles.measure.space * 2;
-
-  const featureStyles = {
-    width: FEATURE_SIZE,
-    height: FEATURE_SIZE,
-  };
-
   return (
     <Panel
       marginHorizontal={gutter}
@@ -77,7 +69,7 @@ const Gallery: FC<GalleryProps> = ({
       ]}
     >
       {type === 'feature' && src && (
-        <Panel style={featureStyles}>
+        <Panel>
           <Image source={src} resizeMode="cover" style={styles.image} />
           {Nav && <Panel style={styles.navUserEdit}>{Nav}</Panel>}
         </Panel>
