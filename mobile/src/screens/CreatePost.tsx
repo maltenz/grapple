@@ -20,11 +20,12 @@ import {
   Button,
   SvgLogoGrapple,
   UploadImage,
-  Post,
   Text,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
+
+import Post from './components/Post';
 
 import { createShotsSelector, clearAllShot } from '../store';
 
@@ -173,7 +174,17 @@ const CreatePost: FC = () => {
             >
               Thanks for sharing!
             </Text>
-            {result && <Post gutter user={result.user} shots={result.shots} />}
+            {result && (
+              <Post
+                key={result.id as string}
+                id={result.id as string}
+                user={result.user}
+                shots={result.shots}
+                liked={result.liked}
+                bookmarked={result.bookmarked}
+                gutter
+              />
+            )}
           </KeyboardAwareScrollView>
           <Button
             onPress={(): void => {

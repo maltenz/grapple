@@ -38,6 +38,7 @@ interface ShotProps extends ShotType {
 interface IconProps {
   index: number;
   config: AnimIconConfig;
+  gutter?: boolean;
 }
 
 const TOTAL = 9;
@@ -54,6 +55,7 @@ const Icon: FC<IconProps> = ({
     width,
     fontSize: propFontSize,
   },
+  gutter,
   index,
 }) => {
   const [anim] = useState<Animated.Value>(new Animated.Value(0));
@@ -62,26 +64,28 @@ const Icon: FC<IconProps> = ({
     Math.floor(Math.random() * (propFontSize - propFontSize / 3 + 1) + propFontSize / 3)
   );
   const [delay, setDelay] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
+  const [duration, setDuration] = useState<number>();
+
+  const screenWidth = gutter ? WINDOW_WIDTH - GUTTER * 2 : WINDOW_WIDTH;
 
   useEffect(() => {
     setDuration(randomDuration());
-    setDelay(randomDelay());
+    setDelay(randomDelay() - width / 2);
     switch (index) {
       case 0:
       case 3:
       case 6:
-        setLeft(randomX() + width / 2);
+        setLeft(randomX());
         break;
       case 1:
       case 4:
       case 7:
-        setLeft(randomX() + WINDOW_WIDTH / 2 - width / 2);
+        setLeft(randomX() + screenWidth / 2 - width / 2);
         break;
       case 2:
       case 5:
       case 8:
-        setLeft(randomX() + WINDOW_WIDTH - width);
+        setLeft(randomX() + screenWidth - width);
         break;
       default:
     }
@@ -93,6 +97,7 @@ const Icon: FC<IconProps> = ({
         toValue: 1,
         duration,
         delay,
+        useNativeDriver: true,
       }).start(() => {
         anim.setValue(0);
       });
@@ -139,6 +144,8 @@ const Shot: FC<ShotProps> = ({
 }) => {
   const [animList] = useState<number[]>(_.times(TOTAL, (listIndex) => listIndex));
 
+  const width = gutter ? WINDOW_WIDTH - GUTTER * 2 : WINDOW_WIDTH;
+
   return (
     <>
       <ImageBackground
@@ -147,8 +154,8 @@ const Shot: FC<ShotProps> = ({
         style={[
           styles.image,
           {
-            width: gutter ? WINDOW_WIDTH - GUTTER * 2 : WINDOW_WIDTH,
-            height: gutter ? WINDOW_WIDTH - GUTTER * 2 : WINDOW_WIDTH,
+            width,
+            height: width,
           },
         ]}
       >
@@ -160,9 +167,10 @@ const Shot: FC<ShotProps> = ({
             mode="day"
           />
         )}
-        {animList.map((itemIndex) => (
-          <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
-        ))}
+        {index === 0 &&
+          animList.map((itemIndex) => (
+            <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
+          ))}
       </ImageBackground>
       <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
         {index === 0 && (

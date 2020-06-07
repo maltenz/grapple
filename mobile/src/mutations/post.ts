@@ -14,6 +14,7 @@ const CREATE_POST = gql`
         content
       }
       liked
+      bookmarked
     }
   }
 `;
