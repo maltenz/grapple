@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import { useMutation } from '@apollo/react-hooks';
-
 import Emoji from 'react-native-emoji';
 
 import PostNavbar, { PostNavbarItem } from './PostNavbar';
@@ -21,9 +20,10 @@ import { AssetStyles } from '../../styles';
 import Panel from './Panel';
 import PullBar from './PullBar';
 import NavBarUser from './NavBarUser';
+import { Color } from '../../colors';
 
 import { Post as PostType, Shot as ShotType } from '../../../generated/graphql';
-import { Color } from '../../colors';
+
 import {
   LIKE_POST,
   UNLIKE_POST,
@@ -165,7 +165,7 @@ const Shot: FC<ShotProps> = ({
     setAnimate(true);
     setTimeout(() => {
       setAnimate(false);
-    }, 4000);
+    }, DUR + DELAY);
   };
 
   const handleBookmark = (): void => {
