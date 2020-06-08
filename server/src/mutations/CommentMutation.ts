@@ -19,7 +19,7 @@ export const CommentMutation = {
   },
   deleteComment: {
     resolve: async (parent, args, context, info): Promise<Comment> => {
-      return await deleteComment(context, args.id);
+      return await deleteComment(context, args);
     },
   },
 };

@@ -7,16 +7,21 @@ import CommentModel, { Comment } from '../models/CommentModel';
  * @param context
  * @returns {Comment}
  */
-export const createComment = async ({ dbConn, loggedIn }: Context, args): Promise<Comment> => {
+export const createComment = async (
+  { dbConn, loggedIn, user }: Context,
+  args
+): Promise<Comment> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
-  const { text } = args;
+  const { text, id } = args;
 
   let comment;
 
   try {
     comment = (await CommentModel(dbConn).create({
       text,
+      user: user?._id,
+      post: id,
     })) as Comment;
 
     if (comment === null) {
@@ -42,9 +47,13 @@ export const updateComment = async ({ dbConn, loggedIn }: Context, args): Promis
   let comment;
 
   try {
-    comment = (await CommentModel(dbConn).findByIdAndUpdate(id, {
-      $set: { text },
-    })) as Comment;
+    comment = (await CommentModel(dbConn).findByIdAndUpdate(
+      id,
+      {
+        $set: { text },
+      },
+      { new: true }
+    )) as Comment;
 
     if (comment === null) {
       ERR_MESSAGE = 'Unable to update comment';
@@ -86,7 +95,7 @@ export const deleteComment = async ({ dbConn, loggedIn }: Context, args): Promis
  * @param context
  * @returns {Comment[]}
  */
-export const getCommemts = async ({ dbConn, loggedIn }: Context, args): Promise<Comment[]> => {
+export const getComments = async ({ dbConn, loggedIn }: Context, args): Promise<Comment[]> => {
   let ERR_MESSAGE;
   const { id } = args;
   let list;

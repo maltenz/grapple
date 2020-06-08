@@ -196,11 +196,15 @@ export const updatePostShot = async (
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
-      $set: {
-        shots: { shotId, title, content, image },
+    const post = (await PostModel(dbConn).findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          shots: { shotId, title, content, image },
+        },
       },
-    })) as Post;
+      { new: true }
+    )) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'Unable find post';
@@ -240,14 +244,18 @@ export const updateWithPositionPostShot = async (
       },
     })) as Post;
 
-    const post = (await PostModel(dbConn).findByIdAndUpdate(id, {
-      $push: {
-        shots: {
-          $each: [{ _id: shotId, title, content, image }],
-          $position: position,
+    const post = (await PostModel(dbConn).findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          shots: {
+            $each: [{ _id: shotId, title, content, image }],
+            $position: position,
+          },
         },
       },
-    })) as Post;
+      { new: true }
+    )) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'Unable find post';

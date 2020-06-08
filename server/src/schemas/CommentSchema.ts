@@ -2,18 +2,13 @@ import { gql } from 'apollo-server';
 
 export const CommentSchema = gql`
   type Comment {
-    id: ID!
     text: String!
     post: Post!
     user: UserQuery!
   }
 
   extend type Query {
-    comments: [Comment!]!
-  }
-
-  input CreateComment {
-    comment: [CommentInput!]!
+    comments(id: String!): [Comment!]!
   }
 
   input CommentInput {
@@ -22,7 +17,7 @@ export const CommentSchema = gql`
   }
 
   extend type Mutation {
-    createComment(input: CreateComment): Comment
+    createComment(input: CommentInput): Comment
     deleteComment(id: String!): Comment
     updateComment(input: CommentInput): Comment
   }
