@@ -2,10 +2,6 @@
 import { createUser, deleteUser, loginUser } from '../controllers/UserController';
 import { User } from '../models/UserModel';
 
-/**
- * @description holds user mutations
- */
-
 export const UserMutation = {
   loginUser: {
     resolve: async (parent, args, context, info): Promise<{}> => {

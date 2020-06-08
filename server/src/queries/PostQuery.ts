@@ -3,10 +3,6 @@ import { getPost, getPosts } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 import { Context } from '../context';
 
-/**
- * @description holds post queries
- */
-
 export const PostQuery = {
   posts: {
     resolve: async (parent, args, context, info): Promise<Post[]> => {

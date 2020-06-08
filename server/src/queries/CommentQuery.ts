@@ -14,13 +14,4 @@ export const CommentQuery = {
       return await getComments(context, args);
     },
   },
-  // user: {
-  //   resolve: async (parent, args, context, info): Promise<User> => {
-  //     console.log('args');
-  //     console.log(args);
-  //     console.log('parent');
-  //     console.log(parent);
-  //     return await getUser(context, args.id);
-  //   },
-  // },
 };

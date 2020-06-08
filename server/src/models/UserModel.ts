@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import { prop, getModelForClass } from '@typegoose/typegoose';
 
-/**
- * User interface constructor
- */
 export class User {
   _id?: mongoose.Types.ObjectId;
   @prop()

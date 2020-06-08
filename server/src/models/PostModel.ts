@@ -2,9 +2,6 @@ import mongoose from 'mongoose';
 import { prop, getModelForClass, Ref, arrayProp } from '@typegoose/typegoose';
 import { User } from './UserModel';
 
-/**
- * Post interface constructor
- */
 export class Shot {
   @prop()
   public title?: string;

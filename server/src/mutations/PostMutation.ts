@@ -12,10 +12,6 @@ import {
 } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 
-/**
- * @description holds post mutations
- */
-
 export const PostMutation = {
   createPost: {
     resolve: async (parent, args, context, info): Promise<Post> => {

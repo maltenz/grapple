@@ -2,10 +2,6 @@
 import { createComment, updateComment, deleteComment } from '../controllers/CommentController';
 import { Comment } from '../models/CommentModel';
 
-/**
- * @description holds comment mutations
- */
-
 export const CommentMutation = {
   createComment: {
     resolve: async (parent, args, context, info): Promise<Comment> => {

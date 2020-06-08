@@ -7,10 +7,6 @@ import {
   getPostsByUserBookmarked,
 } from '../controllers/PostController';
 
-/**
- * @description holds user queries
- */
-
 export const UserQuery = {
   users: {
     resolve: async (parent, args, context, info): Promise<User[]> => {

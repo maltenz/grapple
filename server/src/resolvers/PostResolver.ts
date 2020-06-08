@@ -6,10 +6,6 @@ import { Context } from '../context';
 import { getUser } from '../controllers/UserController';
 import { User } from '../models/UserModel';
 
-/**
- * @description holds post resolver
- */
-
 export const PostResolver: IResolvers = {
   Query: PostQuery,
   Mutation: PostMutation,

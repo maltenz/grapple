@@ -7,10 +7,6 @@ import { User } from '../models/UserModel';
 import { Context } from '../context';
 import { getPost } from '../controllers/PostController';
 
-/**
- * @description holds user comment
- */
-
 export const CommentResolver: IResolvers = {
   Query: CommentQuery,
   Mutation: CommentMutation,
