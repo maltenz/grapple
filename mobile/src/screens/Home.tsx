@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { useQuery } from '@apollo/react-hooks';
+
 import { GET_POSTS } from '../queries/post';
 
 import { Post as PostType } from '../generated/graphql';
@@ -63,6 +64,7 @@ const Home: FC = () => {
               shots={post.shots}
               liked={post.liked}
               bookmarked={post.bookmarked}
+              gutter
             />
           );
         })}

@@ -20,6 +20,8 @@ const ANIM_ICON_DELAY = 1000;
 const ANIM_ICON_WIDTH = 80;
 const ANIM_ICON_SIZE = ANIM_ICON_WIDTH - 10;
 
+export type View = 'comments' | 'shots';
+
 const Post: FC<PostProps> = ({
   shots,
   id,
@@ -37,6 +39,7 @@ const Post: FC<PostProps> = ({
   const [iconName, setIconName] = useState<'heart' | 'broken_heart'>(
     liked ? 'heart' : 'broken_heart'
   );
+  const [view, setView] = useState<View>('shots');
   const [iconAnimateActive, setIconAnimateActive] = useState<boolean>(false);
 
   const [visible, setVisible] = useState<boolean>(false);
@@ -71,17 +74,31 @@ const Post: FC<PostProps> = ({
   const handleComment = (): void => {
     if (commentsVisible) {
       setCommentsVisible(false);
+      setView('shots');
     } else {
       setCommentsVisible(true);
+      setView('comments');
+    }
+    if (!visible) {
+      setVisible(true);
     }
   };
 
   const handleVisible = (): void => {
-    setVisible(!visible);
+    if (visible) {
+      setCommentsVisible(false);
+      setView('shots');
+      setVisible(false);
+    } else {
+      setVisible(true);
+      setCommentsVisible(shots.length <= 1);
+      setView(shots.length <= 1 ? 'comments' : 'shots');
+    }
   };
 
   return (
     <BasePost
+      view={view}
       shots={shots as Shot[]}
       liked={liked}
       onLike={handleLike}

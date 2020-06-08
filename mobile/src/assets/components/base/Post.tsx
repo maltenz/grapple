@@ -7,11 +7,13 @@ import PostShot, { AnimIconConfig } from './PostShot';
 
 import { Shot as ShotType } from '../../../generated/graphql';
 import Comment, { CommentContainer } from './Comment';
+import { View } from '../../../screens/components/Post';
 
 interface PostProps {
   gutter?: boolean;
   style?: StyleProp<ViewStyle>;
   shots: ShotType[];
+  view: View;
   liked: boolean;
   onLike: () => void;
   bookmarked: boolean;
@@ -24,6 +26,7 @@ interface PostProps {
 }
 
 const Post: FC<PostProps> = ({
+  view,
   shots,
   liked,
   onLike,
@@ -70,7 +73,7 @@ const Post: FC<PostProps> = ({
         animIconConfig={animIconConfig}
         gutter={gutter}
       />
-      {visible && shots.length > 1 && (
+      {visible && view === 'shots' && shots.length > 1 && (
         <>
           {shots.map((shot, index) => {
             if (index > 0) {
@@ -89,13 +92,13 @@ const Post: FC<PostProps> = ({
           })}
         </>
       )}
-      {commentsVisible && (
+      {visible && view === 'comments' && commentsVisible && (
         <CommentContainer gutter title="Comments">
           <Comment />
           <Comment input />
         </CommentContainer>
       )}
-      {shots.length > 1 && <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} />}
+      <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} />
     </Panel>
   );
 };
