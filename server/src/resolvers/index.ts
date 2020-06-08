@@ -1,8 +1,5 @@
 import { UserResolver } from './UserResolver';
 import { PostResolver } from './PostResolver';
+import { CommentResolver } from './CommentResolver';
 
-/**
- * @description holds all resolvers
- */
-
-export const resolvers = [UserResolver, PostResolver];
+export const resolvers = [UserResolver, PostResolver, CommentResolver];

@@ -1,9 +1,6 @@
 import { DefaultSchema } from './DefaultSchema';
 import { UserSchema } from './UserSchema';
 import { PostSchema } from './PostSchema';
+import { CommentSchema } from './CommentSchema';
 
-/**
- * @description holds all schemas
- */
-
-export const schema = [DefaultSchema, UserSchema, PostSchema];
+export const schema = [DefaultSchema, UserSchema, PostSchema, CommentSchema];

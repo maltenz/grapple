@@ -1,7 +1,7 @@
 import { gql } from 'apollo-server';
 
 /**
- * @description holds user schema
+ * @description holds post schema
  */
 
 export const PostSchema = gql`
