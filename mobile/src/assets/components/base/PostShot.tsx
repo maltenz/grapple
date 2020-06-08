@@ -31,6 +31,8 @@ interface ShotProps extends ShotType {
   handleLike?: () => void;
   bookmarked?: boolean;
   handleBookmark?: () => void;
+  commented?: boolean;
+  handleComments?: () => void;
   animIconConfig?: AnimIconConfig;
   gutter?: boolean;
 }
@@ -139,6 +141,8 @@ const Shot: FC<ShotProps> = ({
   handleLike,
   bookmarked,
   handleBookmark,
+  commented,
+  handleComments,
   animIconConfig,
   gutter,
 }) => {
@@ -172,7 +176,7 @@ const Shot: FC<ShotProps> = ({
             <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
           ))}
       </ImageBackground>
-      <Panel marginVertical={0.5} marginRight={0.5} marginLeft={0.5}>
+      <Panel marginVertical={0.5} marginHorizontal={0.5}>
         {index === 0 && (
           <PostNavbar
             Icons={
@@ -188,8 +192,8 @@ const Shot: FC<ShotProps> = ({
                     type="comment"
                     marginRight
                     // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    onPress={(): void => {}}
-                    active={false}
+                    onPress={handleComments}
+                    active={commented as boolean}
                   />
                   <PostNavbarItem
                     type="share"

@@ -17,7 +17,7 @@ const SvgIconSmallAttach: FC<SvgIconProps> = ({
   const color = propColor ? Color[propColor] : Color.grey2;
   let width = 24;
   let height = 24;
-  let strokeWidth = 1.5;
+  let strokeWidth = 2;
 
   if (scale) {
     width *= scale;

@@ -40,6 +40,7 @@ const Post: FC<PostProps> = ({
   const [iconAnimateActive, setIconAnimateActive] = useState<boolean>(false);
 
   const [visible, setVisible] = useState<boolean>(false);
+  const [commentsVisible, setCommentsVisible] = useState<boolean>(false);
 
   const handleLike = (): void => {
     if (liked) {
@@ -67,6 +68,14 @@ const Post: FC<PostProps> = ({
     }
   };
 
+  const handleComment = (): void => {
+    if (commentsVisible) {
+      setCommentsVisible(false);
+    } else {
+      setCommentsVisible(true);
+    }
+  };
+
   const handleVisible = (): void => {
     setVisible(!visible);
   };
@@ -78,6 +87,8 @@ const Post: FC<PostProps> = ({
       onLike={handleLike}
       bookmarked={bookmarked}
       onBookmark={handleBookmark}
+      onComment={handleComment}
+      commentsVisible={commentsVisible}
       visible={visible}
       onVisible={handleVisible}
       animIconConfig={{

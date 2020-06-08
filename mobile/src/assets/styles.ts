@@ -52,7 +52,7 @@ const medium = {
 
 const small = {
   fontSize: 14,
-  lineHeight: 23,
+  lineHeight: 22,
 };
 
 const mini = {
@@ -71,6 +71,7 @@ const AssetStyles = {
     h3,
     h4,
     p,
+    medium,
     small,
     mini,
   },
@@ -107,6 +108,19 @@ const AssetStyles = {
         backgroundColor: Color.grey4,
         padding: 10,
         paddingTop: 15,
+        borderRadius: 11.25,
+        borderWidth: 1,
+        borderColor: Color.grey3,
+      },
+      comment: {
+        fontSize: small.fontSize,
+        lineHeight: small.lineHeight,
+        marginBottom: 20,
+        color: Color.grey,
+        fontFamily: fontRegular,
+        backgroundColor: Color.grey4,
+        padding: 10,
+        paddingTop: 10,
         borderRadius: 11.25,
         borderWidth: 1,
         borderColor: Color.grey3,

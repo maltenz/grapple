@@ -9,6 +9,7 @@ interface SvgIconProps {
   color?: ColorType;
   strokeWidth?: boolean | number;
   onPress?: () => void;
+  active?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -17,12 +18,13 @@ const SvgIconSmallMessage: FC<SvgIconProps> = ({
   color: propColor,
   strokeWidth: propStrokeWidth,
   onPress,
+  active,
   style,
 }) => {
   const color = propColor ? Color[propColor] : Color.grey2;
   let width = 24;
   let height = 24;
-  let strokeWidth = 1.5;
+  let strokeWidth = 2;
 
   if (scale) {
     width *= scale;
@@ -38,7 +40,7 @@ const SvgIconSmallMessage: FC<SvgIconProps> = ({
       <Path
         d="M13.933 5.318h-2.874a6.071 6.071 0 0 0-6.071 6.07V18h8.945a6.071 6.071 0 0 0 6.071-6.071v-.54a6.071 6.071 0 0 0-6.071-6.071z"
         fill="none"
-        stroke={color}
+        stroke={active ? Color.blue : color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
       />

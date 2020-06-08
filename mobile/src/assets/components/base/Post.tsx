@@ -3,9 +3,10 @@ import { StyleProp, ViewStyle, LayoutAnimation } from 'react-native';
 
 import Panel from './Panel';
 import PullBar from './PullBar';
-import Shot, { AnimIconConfig } from './PostShot';
+import PostShot, { AnimIconConfig } from './PostShot';
 
 import { Shot as ShotType } from '../../../generated/graphql';
+import Comment, { CommentContainer } from './Comment';
 
 interface PostProps {
   gutter?: boolean;
@@ -15,8 +16,10 @@ interface PostProps {
   onLike: () => void;
   bookmarked: boolean;
   onBookmark: () => void;
+  onComment: () => void;
+  commentsVisible: boolean;
   visible: boolean;
-  onVisible: (value: boolean) => void;
+  onVisible: () => void;
   animIconConfig: AnimIconConfig;
 }
 
@@ -26,6 +29,8 @@ const Post: FC<PostProps> = ({
   onLike,
   bookmarked,
   onBookmark,
+  onComment,
+  commentsVisible,
   visible,
   onVisible,
   animIconConfig,
@@ -34,7 +39,12 @@ const Post: FC<PostProps> = ({
 }) => {
   const handleVisible = (): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    onVisible(!visible);
+    onVisible();
+  };
+
+  const handleCommentsVisible = (): void => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    onComment();
   };
 
   return (
@@ -45,7 +55,7 @@ const Post: FC<PostProps> = ({
       activeOpacity={1}
       style={style}
     >
-      <Shot
+      <PostShot
         key={shots[0]?.id as string}
         index={0}
         image={shots[0]?.image as string}
@@ -55,6 +65,8 @@ const Post: FC<PostProps> = ({
         handleLike={onLike}
         bookmarked={bookmarked}
         handleBookmark={onBookmark}
+        commented={commentsVisible}
+        handleComments={handleCommentsVisible}
         animIconConfig={animIconConfig}
         gutter={gutter}
       />
@@ -63,7 +75,7 @@ const Post: FC<PostProps> = ({
           {shots.map((shot, index) => {
             if (index > 0) {
               return (
-                <Shot
+                <PostShot
                   key={shot?.id as string}
                   index={index}
                   image={shot?.image as string}
@@ -76,6 +88,12 @@ const Post: FC<PostProps> = ({
             return null;
           })}
         </>
+      )}
+      {commentsVisible && (
+        <CommentContainer gutter title="Comments">
+          <Comment />
+          <Comment input />
+        </CommentContainer>
       )}
       {shots.length > 1 && <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} />}
     </Panel>

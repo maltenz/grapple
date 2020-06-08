@@ -26,7 +26,7 @@ export const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginR
     case 'comment':
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallMessage scale={1} style={[marginRight && styles.icon]} />
+          <SvgIconSmallMessage scale={1} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
     case 'share':

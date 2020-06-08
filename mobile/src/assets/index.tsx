@@ -34,6 +34,7 @@ import Button, {
   ButtonNormalHeight,
   ButtonSmallHeight,
 } from './components/base/Button';
+import Comment from './components/base/Comment';
 import Gallery, { GalleryItemType } from './components/base/Gallery';
 import Container from './components/base/Container';
 import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
@@ -135,6 +136,7 @@ export {
   ButtonLargeHeight,
   ButtonNormalHeight,
   ButtonSmallHeight,
+  Comment,
   Gallery,
   GalleryItemType,
   Container,

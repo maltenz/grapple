@@ -5,7 +5,7 @@ import { AssetStyles, minLineheight as AssetStylesMinLineHeight } from '../../st
 import { Color } from '../../colors';
 import { MarginProps, measure } from '../base/Panel';
 
-export type TextType = 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'small' | 'mini';
+export type TextType = 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'medium' | 'small' | 'mini';
 export type TextAlignType = 'left' | 'right' | 'center';
 
 export interface TextProps extends MarginProps {
