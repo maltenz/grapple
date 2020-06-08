@@ -20,8 +20,8 @@ const SvgIconSmallEdit: FC<SvgIconProps> = ({
   style,
 }: SvgIconProps) => {
   const color = propColor ? Color[propColor] : Color.grey2;
-  let width = 24;
-  let height = 24;
+  let width = 28;
+  let height = 28;
   let strokeWidth = 2;
 
   if (scale) {
