@@ -21,6 +21,13 @@ export class Profile {
   public active?: Date;
 }
 
+export interface UpdateProfile {
+  id: mongoose.Types.ObjectId;
+  bio: string;
+  phone: string;
+  active: Date;
+}
+
 export const ProfileModel = getModelForClass(Profile);
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

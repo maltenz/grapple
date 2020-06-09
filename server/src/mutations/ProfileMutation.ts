@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createProfile, deleteProfile } from '../controllers/ProfileController';
+import { createProfile, deleteProfile, updateProfile } from '../controllers/ProfileController';
 import { Profile } from '../models/ProfileModel';
 
 export const ProfileMutation = {
   createProfile: {
     resolve: async (parent, args, context, info): Promise<Profile> => {
       return await createProfile(context);
+    },
+  },
+  updateProfile: {
+    resolve: async (parent, args, context, info): Promise<Profile> => {
+      return await updateProfile(context, args);
     },
   },
   deleteProfile: {

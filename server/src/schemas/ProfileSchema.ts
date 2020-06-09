@@ -13,12 +13,9 @@ export const ProfileSchema = gql`
   }
 
   input ProfileInput {
-    id: ID
     bio: String
-    skills: [String!]
-    address: [String!]
     phone: String
-    active: Date!
+    active: Date
   }
 
   extend type Query {

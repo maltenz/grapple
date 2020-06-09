@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server';
 import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
-import ProfileModel, { Profile } from '../models/ProfileModel';
+import ProfileModel, { Profile, UpdateProfile } from '../models/ProfileModel';
 
 /**
  * @param context
@@ -43,6 +43,7 @@ export const createProfile = async ({ dbConn, loggedIn, user }: Context): Promis
 
 /**
  * @param context
+ * @param {id}
  * @returns {Profile}
  */
 export const getProfile = async ({ dbConn, loggedIn }: Context, args): Promise<Profile> => {
@@ -68,7 +69,6 @@ export const getProfile = async ({ dbConn, loggedIn }: Context, args): Promise<P
 
 /**
  * @param context
- * @param {id}
  * @returns {Profile}
  */
 export const deleteProfile = async (context: Context): Promise<Profile> => {
@@ -82,6 +82,54 @@ export const deleteProfile = async (context: Context): Promise<Profile> => {
     profile = await ProfileModel(dbConn).findOneAndDelete({ user: context.user?._id });
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return profile;
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Profile}
+ */
+
+export const updateProfile = async (
+  { dbConn, loggedIn, user }: Context,
+  args
+): Promise<Profile> => {
+  let ERR_MESSAGE;
+  loginRequired(loggedIn);
+  const { bio, phone, active }: UpdateProfile = args.input;
+  let profile;
+
+  const set = {};
+
+  if (bio) {
+    Object.assign(set, { bio });
+  }
+
+  if (phone) {
+    Object.assign(set, { phone });
+  }
+
+  if (active) {
+    Object.assign(set, { active });
+  }
+
+  try {
+    profile = (await ProfileModel(dbConn).findOneAndUpdate(
+      { user: user?._id },
+      {
+        $set: set,
+      }
+    )) as Profile;
+
+    if (profile === null) {
+      ERR_MESSAGE = 'Unable to update profile';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+  } catch (error) {
+    throw new ApolloError(error);
   }
 
   return profile;
