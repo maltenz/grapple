@@ -4,7 +4,7 @@ import { getProfile } from '../controllers/ProfileController';
 import { Profile } from '../models/ProfileModel';
 
 export const ProfileQuery = {
-  comments: {
+  profile: {
     resolve: async (parent, args, context, info): Promise<Profile> => {
       return await getProfile(context, args);
     },

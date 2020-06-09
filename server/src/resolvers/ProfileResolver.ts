@@ -5,7 +5,8 @@ import { ProfileMutation } from '../mutations/ProfileMutation';
 import { getUser } from '../controllers/UserController';
 import { User } from '../models/UserModel';
 import { Context } from '../context';
-import { getPost } from '../controllers/PostController';
+import { getPostsByUserId } from '../controllers/PostController';
+import { Post } from '../models/PostModel';
 
 export const ProfileResolver: IResolvers = {
   Query: ProfileQuery,
@@ -18,9 +19,9 @@ export const ProfileResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
-    posts: async (parent, args, context: Context, info): Promise<User> => {
+    posts: async (parent, args, context: Context, info): Promise<Post[]> => {
       try {
-        return await getPost(context, parent.post);
+        return await getPostsByUserId(context, { id: parent?.user?._id });
       } catch (error) {
         throw new ApolloError(error);
       }

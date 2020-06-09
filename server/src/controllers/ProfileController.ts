@@ -53,7 +53,7 @@ export const getProfile = async ({ dbConn, loggedIn }: Context, args): Promise<P
   loginRequired(loggedIn);
 
   try {
-    profile = (await ProfileModel(dbConn).find({ user: id })) as Profile;
+    profile = (await ProfileModel(dbConn).findOne({ user: id })) as Profile;
 
     if (profile === null) {
       ERR_MESSAGE = 'No profile found';

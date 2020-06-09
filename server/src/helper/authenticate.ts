@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { IncomingMessage } from 'http';
 import jwt from 'jsonwebtoken';
 import UserModel, { User } from '../models/UserModel';
+import { ApolloError } from 'apollo-server';
 
 /**
  * @description authenicates user
@@ -35,8 +36,7 @@ const authenticate = async (
       user,
     };
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw new ApolloError(error);
   }
 };
 

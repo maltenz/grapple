@@ -6,6 +6,8 @@ import {
   getPostsByUserId,
   getPostsByUserBookmarked,
 } from '../controllers/PostController';
+import { Context } from '../context';
+import { Post } from '../models/PostModel';
 
 export const UserQuery = {
   users: {
@@ -19,8 +21,8 @@ export const UserQuery = {
     },
   },
   userPosts: {
-    resolve: async (parent, args, context, info): Promise<User> => {
-      return await getPostsByUserId(context);
+    resolve: async (parent, args, context: Context, info): Promise<Post[]> => {
+      return await getPostsByUserId(context, { id: context.user?._id });
     },
   },
   userLiked: {

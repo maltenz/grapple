@@ -60,22 +60,25 @@ export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> =
  * @param context
  * @returns {Post}
  */
-export const getPostsByUserId = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+export const getPostsByUserId = async ({ dbConn, loggedIn }: Context, args): Promise<Post[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
+  const { id } = args;
+  let list;
+
+  console.log(args);
 
   try {
-    const post = (await PostModel(dbConn).find({ user: user._id })) as Post;
+    list = (await PostModel(dbConn).find({ user: id })) as Post;
 
-    if (post === null) {
+    if (list === null) {
       ERR_MESSAGE = 'Unable find posts';
       throw new ApolloError(ERR_MESSAGE);
     }
-
-    return post;
   } catch (error) {
     throw new ApolloError(error);
   }
+  return list;
 };
 
 /**
