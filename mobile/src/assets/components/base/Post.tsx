@@ -4,9 +4,8 @@ import { StyleProp, ViewStyle, LayoutAnimation, StyleSheet } from 'react-native'
 import Panel from './Panel';
 import PullBar from './PullBar';
 import PostShot, { AnimIconConfig } from './PostShot';
-
 import { Shot as ShotType } from '../../../generated/graphql';
-import Comment, { PostComment } from './PostComment';
+import CommentLoader, { CommentLoaderProps } from './CommentLoader';
 
 export type View = 'comments' | 'shots';
 
@@ -21,7 +20,7 @@ interface PostProps {
   onBookmark: () => void;
   onComment: () => void;
   commentsVisible: boolean;
-  comments: PostComment;
+  comments: CommentLoaderProps;
   visible: boolean;
   onVisible: () => void;
   animIconConfig: AnimIconConfig;
@@ -90,7 +89,7 @@ const Post: FC<PostProps> = ({
           })}
         </>
       )}
-      {visible && view === 'comments' && commentsVisible && <Comment {...comments} />}
+      {visible && view === 'comments' && commentsVisible && <CommentLoader {...comments} />}
       <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} backgroundColor="white" />
     </Panel>
   );

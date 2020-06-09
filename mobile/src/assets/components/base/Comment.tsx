@@ -7,10 +7,7 @@ import { Color } from '../../colors';
 import Panel from './Panel';
 import CoreText from '../core/Text';
 import Avatar from '../core/Avatar';
-
-interface CommentProps {
-  input?: boolean;
-}
+import { Comment as CommentType } from '../../../generated/graphql';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -18,6 +15,12 @@ interface CommentContainerProps {
   title: string;
   gutter: boolean;
 }
+
+interface CommentInputProps {
+  placeholder?: string;
+  onChange: (value: string) => void;
+}
+
 export const CommentContainer: FC<CommentContainerProps> = ({ children, gutter }) => {
   return (
     <Panel backgroundColor="white" paddingHorizontal={gutter ? 0.5 : 0}>
@@ -29,24 +32,27 @@ export const CommentContainer: FC<CommentContainerProps> = ({ children, gutter }
   );
 };
 
-interface CommentItemProps {
-  comment: string;
-}
-
-const CommentItem: FC<CommentItemProps> = ({ comment }) => {
+export const Comment: FC<CommentType> = ({ text }) => {
   return (
     <Panel row alignItems="center" marginBottom>
       <Avatar marginRight={0.5} src={POST_USER_IMAGE_SAMPLE} />
       <Panel flex={1} backgroundColor="grey4" padding={0.5} style={styles.comment}>
-        <CoreText type="small">{comment}</CoreText>
+        <CoreText type="small">{text}</CoreText>
       </Panel>
     </Panel>
   );
 };
 
-const Comment: FC<CommentProps> = ({ input }) => {
+const CommentInput: FC<CommentInputProps> = ({ placeholder, onChange: propOnChange }) => {
   const { control } = useForm();
   const [heightContent, setHeightContent] = useState<number>();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onChange = (args: any[]): EventFunction => {
+    const value = args[0].nativeEvent.text;
+    propOnChange(value);
+    return value;
+  };
 
   const handleTitleContentSizeChange = (event: {
     nativeEvent: TextInputContentSizeChangeEventData;
@@ -54,34 +60,24 @@ const Comment: FC<CommentProps> = ({ input }) => {
     setHeightContent(event.nativeEvent.contentSize.height);
   };
 
-  if (input) {
-    return (
-      <Controller
-        as={TextInput}
-        control={control}
-        multiline
-        name="comment"
-        onChange={(args): EventFunction => args[0].nativeEvent.text}
-        onContentSizeChange={handleTitleContentSizeChange}
-        placeholder="Leave a comment"
-        placeholderTextColor={Color.grey2}
-        // defaultValue={shot.title || ''}
-        // onBlur={(): void => storeText()}
-        style={[
-          AssetStyles.form.bubble.comment,
-          {
-            backgroundColor: Color.white,
-            height: heightContent && Math.max(35, heightContent + 50),
-          },
-        ]}
-      />
-    );
-  }
   return (
-    <Panel>
-      <CommentItem comment="Well done, this is a completely new comment. And I hope I get it this time!" />
-      <CommentItem comment="Well done, this is a completely" />
-    </Panel>
+    <Controller
+      as={TextInput}
+      control={control}
+      multiline
+      name="comment"
+      onChange={onChange}
+      onContentSizeChange={handleTitleContentSizeChange}
+      placeholder={placeholder || 'Leave a comment'}
+      placeholderTextColor={Color.grey2}
+      style={[
+        AssetStyles.form.bubble.comment,
+        {
+          backgroundColor: Color.white,
+          height: heightContent && Math.max(35, heightContent + 50),
+        },
+      ]}
+    />
   );
 };
 
@@ -91,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Comment;
+export default CommentInput;

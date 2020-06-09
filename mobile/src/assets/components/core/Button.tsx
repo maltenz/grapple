@@ -54,7 +54,7 @@ const Button: FC<ButtonProps> = ({ children, type, style, color, outline, ...res
         borderRadius: ButtonSmallHeight / 2,
       });
       if (outline) {
-        borderWidth = 1;
+        borderWidth = 2;
       }
       break;
     case 'normal':

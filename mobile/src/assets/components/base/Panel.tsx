@@ -17,7 +17,7 @@ export interface PanelProps extends MarginProps, PaddingProps {
   center?: boolean;
   justifyContent?: ContentDistribution | ContentPosition;
   alignItems?: ContentDistribution | ContentPosition;
-  onPress?: () => void;
+  onPress?: boolean | Function;
   pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none';
   activeOpacity?: number;
 }

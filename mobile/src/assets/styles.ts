@@ -115,7 +115,6 @@ const AssetStyles = {
       comment: {
         fontSize: small.fontSize,
         lineHeight: small.lineHeight,
-        marginBottom: 20,
         color: Color.grey,
         fontFamily: fontRegular,
         backgroundColor: Color.grey4,

@@ -5,7 +5,7 @@ import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Post as BasePost } from '../../assets';
 import { Post as PostType, Shot, Comment } from '../../generated/graphql';
 import { View } from '../../assets/components/base/Post';
-import { PostCommentProps } from '../../assets/components/base/PostComment';
+import { CommentLoaderProps } from '../../assets/components/base/CommentLoader';
 import { Icon } from '../../assets/components/base/PostShot';
 
 import { LIKE_POST, UNLIKE_POST, BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
@@ -37,7 +37,7 @@ const Post: FC<PostProps> = ({
   const [getComments, { data: commentsData, loading: loadingComments }] = useLazyQuery<{
     comments: Comment[];
   }>(GET_COMMENTS);
-  const [comments, setComments] = useState<PostCommentProps>({ loading: false, data: [] });
+  const [comments, setComments] = useState<CommentLoaderProps>({ loading: false, data: [] });
   const [liked, setLiked] = useState<boolean>(propLiked as boolean);
   const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
   const [iconName, setIconName] = useState<Icon>(liked ? 'heart' : 'broken_heart');
@@ -48,21 +48,26 @@ const Post: FC<PostProps> = ({
 
   useEffect(() => {
     if (loadingComments === true) {
-      const myComments = { ...comments };
-      myComments.loading = true;
-      setComments(myComments);
+      handleLoadComments({ loading: true });
+    } else {
+      handleLoadComments({ loading: false });
     }
   }, [loadingComments]);
 
   useEffect(() => {
     if (commentsData?.comments) {
-      const myComments = { ...comments };
-      myComments.data = commentsData.comments;
-      myComments.loading = false;
-
-      setComments(myComments);
+      handleLoadComments({ loading: false, data: commentsData.comments });
     }
   }, [commentsData]);
+
+  const handleLoadComments = ({ loading, data }: CommentLoaderProps): void => {
+    const myComments = { ...comments };
+    myComments.loading = loading;
+    if (data) {
+      myComments.data = data;
+    }
+    setComments(myComments);
+  };
 
   const handleLike = (): void => {
     if (liked) {
