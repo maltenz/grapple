@@ -14,13 +14,19 @@ export const createProfile = async ({ dbConn, loggedIn, user }: Context): Promis
   let profile;
 
   try {
+    const hasProfile = await ProfileModel(dbConn).findOne({ user: user?._id });
+
+    if (hasProfile) {
+      ERR_MESSAGE = 'Profile already exists';
+      throw new Error(ERR_MESSAGE);
+    }
+
     profile = (await ProfileModel(dbConn).create({
       user: user?._id,
       bio: '',
       skills: [],
       address: [],
       phone: '',
-      // posts: [],
       active: new Date(),
     })) as Profile;
 
