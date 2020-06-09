@@ -49,6 +49,7 @@ import Post from './components/base/Post';
 import PostContent from './components/base/PostContent';
 import PostContentHeader from './components/base/PostContentHeader';
 import PostContentHeading from './components/base/PostContentHeading';
+import PostComment from './components/base/PostComment';
 import PostsEditSlider, { PostsEditItemType } from './components/base/PostsEditSlider';
 import PullBar, { PullBarHeight } from './components/base/PullBar';
 import SegmentedController from './components/base/SegmentedControl';
@@ -156,6 +157,7 @@ export {
   PostContent,
   PostContentHeader,
   PostContentHeading,
+  PostComment,
   PostsEditSlider,
   PostsEditItemType,
   PullBar,

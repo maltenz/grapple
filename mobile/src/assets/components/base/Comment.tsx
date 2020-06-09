@@ -64,6 +64,7 @@ const Comment: FC<CommentProps> = ({ input }) => {
         onChange={(args): EventFunction => args[0].nativeEvent.text}
         onContentSizeChange={handleTitleContentSizeChange}
         placeholder="Leave a comment"
+        placeholderTextColor={Color.grey2}
         // defaultValue={shot.title || ''}
         // onBlur={(): void => storeText()}
         style={[

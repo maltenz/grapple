@@ -1,13 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import { Post as BasePost } from '../../assets';
-
-import { Post as PostType, Shot } from '../../generated/graphql';
+import { Post as PostType, Shot, Comment } from '../../generated/graphql';
+import { PostComment } from '../../assets/components/base/PostComment';
 
 import { LIKE_POST, UNLIKE_POST, BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
+import { GET_COMMENTS } from '../../queries/comment';
 
 interface PostProps extends PostType {
   gutter?: boolean;
@@ -34,6 +34,10 @@ const Post: FC<PostProps> = ({
   const [unlikePost] = useMutation(UNLIKE_POST);
   const [bookmarkPost] = useMutation(BOOKMARK_POST);
   const [removeBookmarkPost] = useMutation(REMOVE_BOOKMARK_POST);
+  const [getComments, { data: commentsData, loading: loadingComments }] = useLazyQuery<{
+    comments: Comment[];
+  }>(GET_COMMENTS);
+  const [comments, setComments] = useState<PostComment>({ loading: false, data: [] });
   const [liked, setLiked] = useState<boolean>(propLiked as boolean);
   const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
   const [iconName, setIconName] = useState<'heart' | 'broken_heart'>(
@@ -44,6 +48,24 @@ const Post: FC<PostProps> = ({
 
   const [visible, setVisible] = useState<boolean>(false);
   const [commentsVisible, setCommentsVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (loadingComments === true) {
+      const myComments = { ...comments };
+      myComments.loading = true;
+      setComments(myComments);
+    }
+  }, [loadingComments]);
+
+  useEffect(() => {
+    if (commentsData?.comments) {
+      const myComments = { ...comments };
+      myComments.data = commentsData.comments;
+      myComments.loading = false;
+
+      setComments(myComments);
+    }
+  }, [commentsData]);
 
   const handleLike = (): void => {
     if (liked) {
@@ -77,6 +99,7 @@ const Post: FC<PostProps> = ({
       setView('shots');
     } else {
       setCommentsVisible(true);
+      getComments({ variables: { id } });
       setView('comments');
     }
     if (!visible) {
@@ -106,6 +129,7 @@ const Post: FC<PostProps> = ({
       onBookmark={handleBookmark}
       onComment={handleComment}
       commentsVisible={commentsVisible}
+      comments={comments}
       visible={visible}
       onVisible={handleVisible}
       animIconConfig={{

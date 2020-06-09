@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { StyleProp, ViewStyle, LayoutAnimation } from 'react-native';
+import { StyleProp, ViewStyle, LayoutAnimation, StyleSheet } from 'react-native';
 
 import Panel from './Panel';
 import PullBar from './PullBar';
 import PostShot, { AnimIconConfig } from './PostShot';
+import { View } from '../../../screens/components/Post';
 
 import { Shot as ShotType } from '../../../generated/graphql';
-import Comment, { CommentContainer } from './Comment';
-import { View } from '../../../screens/components/Post';
+import Comment, { PostComment } from './PostComment';
 
 interface PostProps {
   gutter?: boolean;
@@ -20,6 +20,7 @@ interface PostProps {
   onBookmark: () => void;
   onComment: () => void;
   commentsVisible: boolean;
+  comments: PostComment;
   visible: boolean;
   onVisible: () => void;
   animIconConfig: AnimIconConfig;
@@ -34,6 +35,7 @@ const Post: FC<PostProps> = ({
   onBookmark,
   onComment,
   commentsVisible,
+  comments,
   visible,
   onVisible,
   animIconConfig,
@@ -41,12 +43,11 @@ const Post: FC<PostProps> = ({
   style,
 }) => {
   const handleVisible = (): void => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     onVisible();
   };
 
   const handleCommentsVisible = (): void => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     onComment();
   };
 
@@ -56,7 +57,7 @@ const Post: FC<PostProps> = ({
       marginBottom
       backgroundColor="white"
       activeOpacity={1}
-      style={style}
+      style={[style, styles.container]}
     >
       <PostShot
         key={shots[0]?.id as string}
@@ -92,15 +93,16 @@ const Post: FC<PostProps> = ({
           })}
         </>
       )}
-      {visible && view === 'comments' && commentsVisible && (
-        <CommentContainer gutter title="Comments">
-          <Comment />
-          <Comment input />
-        </CommentContainer>
-      )}
-      <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} />
+      {visible && view === 'comments' && commentsVisible && <Comment {...comments} />}
+      <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} backgroundColor="white" />
     </Panel>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+  },
+});
 
 export default Post;

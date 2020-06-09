@@ -91,7 +91,7 @@ const Icon: FC<IconProps> = ({
         break;
       default:
     }
-  }, []);
+  }, [active]);
 
   useEffect(() => {
     if (active) {
@@ -191,7 +191,6 @@ const Shot: FC<ShotProps> = ({
                   <PostNavbarItem
                     type="comment"
                     marginRight
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
                     onPress={handleComments}
                     active={commented as boolean}
                   />

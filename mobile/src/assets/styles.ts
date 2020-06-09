@@ -122,7 +122,7 @@ const AssetStyles = {
         padding: 10,
         paddingTop: 10,
         borderRadius: 11.25,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: Color.grey3,
       },
     },
