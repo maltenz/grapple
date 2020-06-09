@@ -66,8 +66,6 @@ export const getPostsByUserId = async ({ dbConn, loggedIn }: Context, args): Pro
   const { id } = args;
   let list;
 
-  console.log(args);
-
   try {
     list = (await PostModel(dbConn).find({ user: id })) as Post;
 
