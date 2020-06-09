@@ -3,9 +3,17 @@ import { DefaultSchema } from './DefaultSchema';
 import { UserSchema } from './UserSchema';
 import { PostSchema } from './PostSchema';
 import { CommentSchema } from './CommentSchema';
+import { ProfileSchema } from './ProfileSchema';
 
 const typeDefs = gql`
   scalar Date
 `;
 
-export const schema = [typeDefs, DefaultSchema, UserSchema, PostSchema, CommentSchema];
+export const schema = [
+  typeDefs,
+  DefaultSchema,
+  UserSchema,
+  PostSchema,
+  CommentSchema,
+  ProfileSchema,
+];

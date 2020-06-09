@@ -3,7 +3,7 @@ import { createProfile } from '../controllers/ProfileController';
 import { Profile } from '../models/ProfileModel';
 
 export const ProfileMutation = {
-  createComment: {
+  createProfile: {
     resolve: async (parent, args, context, info): Promise<Profile> => {
       return await createProfile(context);
     },

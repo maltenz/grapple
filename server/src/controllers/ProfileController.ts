@@ -20,7 +20,7 @@ export const createProfile = async ({ dbConn, loggedIn, user }: Context): Promis
       skills: [],
       address: [],
       phone: '',
-      posts: [],
+      // posts: [],
       active: new Date(),
     })) as Profile;
 

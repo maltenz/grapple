@@ -13,7 +13,7 @@ export const ProfileSchema = gql`
   }
 
   input ProfileInput {
-    id: ID!
+    id: ID
     bio: String
     skills: [String!]
     address: [String!]

@@ -7,10 +7,10 @@ import { User } from '../models/UserModel';
 import { Context } from '../context';
 import { getPost } from '../controllers/PostController';
 
-export const CommentResolver: IResolvers = {
+export const ProfileResolver: IResolvers = {
   Query: ProfileQuery,
   Mutation: ProfileMutation,
-  Comment: {
+  Profile: {
     user: async (parent, args, context: Context, info): Promise<User> => {
       try {
         return await getUser(context, parent.user);
@@ -18,7 +18,7 @@ export const CommentResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
-    post: async (parent, args, context: Context, info): Promise<User> => {
+    posts: async (parent, args, context: Context, info): Promise<User> => {
       try {
         return await getPost(context, parent.post);
       } catch (error) {
