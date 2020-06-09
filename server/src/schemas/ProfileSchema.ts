@@ -27,7 +27,7 @@ export const ProfileSchema = gql`
 
   extend type Mutation {
     createProfile(input: ProfileInput): Profile
-    deleteProfile(id: String!): Profile
+    deleteProfile: Profile
     updateProfile(input: ProfileInput): Profile
   }
 `;

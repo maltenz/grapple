@@ -65,3 +65,24 @@ export const getProfile = async ({ dbConn, loggedIn }: Context, args): Promise<P
 
   return profile;
 };
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Profile}
+ */
+export const deleteProfile = async (context: Context): Promise<Profile> => {
+  const { dbConn, loggedIn } = context;
+  const ERR_MESSAGE = 'Unable to delete profile';
+  loginRequired(loggedIn);
+
+  let profile;
+
+  try {
+    profile = await ProfileModel(dbConn).findOneAndDelete({ user: context.user?._id });
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return profile;
+};
