@@ -4,10 +4,11 @@ import { StyleProp, ViewStyle, LayoutAnimation, StyleSheet } from 'react-native'
 import Panel from './Panel';
 import PullBar from './PullBar';
 import PostShot, { AnimIconConfig } from './PostShot';
-import { View } from '../../../screens/components/Post';
 
 import { Shot as ShotType } from '../../../generated/graphql';
 import Comment, { PostComment } from './PostComment';
+
+export type View = 'comments' | 'shots';
 
 interface PostProps {
   gutter?: boolean;
@@ -47,17 +48,13 @@ const Post: FC<PostProps> = ({
     onVisible();
   };
 
-  const handleCommentsVisible = (): void => {
-    onComment();
-  };
-
   return (
     <Panel
       marginHorizontal={gutter}
       marginBottom
       backgroundColor="white"
       activeOpacity={1}
-      style={[style, styles.container]}
+      style={[styles.container, style]}
     >
       <PostShot
         key={shots[0]?.id as string}
@@ -70,7 +67,7 @@ const Post: FC<PostProps> = ({
         bookmarked={bookmarked}
         handleBookmark={onBookmark}
         commented={commentsVisible}
-        handleComments={handleCommentsVisible}
+        handleComments={onComment}
         animIconConfig={animIconConfig}
         gutter={gutter}
       />

@@ -5,12 +5,12 @@ import { Comment as CommentType } from '../../../generated/graphql';
 import Panel from './Panel';
 import { Color } from '../../colors';
 
-export interface PostComment {
+export interface PostCommentProps {
   loading: boolean;
   data: CommentType[];
 }
 
-const PostComment: FC<PostComment> = ({ loading, data }) => {
+const PostComment: FC<PostCommentProps> = ({ loading, data }) => {
   if (loading) {
     return (
       <Panel marginBottom={0.5}>

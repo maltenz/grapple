@@ -15,11 +15,13 @@ import { Shot as ShotType } from '../../../generated/graphql';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
+export type Icon = 'heart' | 'broken_heart';
+
 export interface AnimIconConfig {
   duration: number;
   delay: number;
   tolerance: number;
-  iconName: string;
+  iconName: Icon;
   active: boolean;
   width: number;
   fontSize: number;
