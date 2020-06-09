@@ -1,18 +1,37 @@
 import React, { FC, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import CommentInput, { CommentContainer, Comment } from './Comment';
-import { Comment as CommentType } from '../../../generated/graphql';
+import {
+  Comment as CommentType,
+  CommentInput as CommentInputType,
+} from '../../../generated/graphql';
 import Panel from './Panel';
 import Button from './Button';
 import { Color } from '../../colors';
 
-export interface CommentLoaderProps {
+export interface CommentLoaderType {
   loading: boolean;
   data?: CommentType[];
 }
 
-const CommentLoader: FC<CommentLoaderProps> = ({ loading, data }) => {
+interface CommentLoaderProps extends CommentLoaderType {
+  handleCreateComment: (value: CommentInputType) => void;
+  handleResetComment: boolean;
+}
+
+const CommentLoader: FC<CommentLoaderProps> = ({
+  loading,
+  data,
+  handleCreateComment,
+  handleResetComment,
+}) => {
   const [text, setText] = useState<string>();
+  const submit = (): void => {
+    if (text?.length) {
+      handleCreateComment({ text });
+    }
+  };
+
   if (loading) {
     return (
       <Panel marginBottom={0.5}>
@@ -26,7 +45,7 @@ const CommentLoader: FC<CommentLoaderProps> = ({ loading, data }) => {
       {data?.map(({ id, ...rest }) => (
         <Comment key={id as string} {...rest} />
       ))}
-      <CommentInput onChange={(value): void => setText(value)} />
+      <CommentInput onChange={(value): void => setText(value)} handleReset={handleResetComment} />
       <Panel alignItems="flex-end">
         <Button
           type="small"
@@ -34,6 +53,7 @@ const CommentLoader: FC<CommentLoaderProps> = ({ loading, data }) => {
           mode="day"
           marginBottom={0}
           outline={!text?.length}
+          onPress={text?.length ? submit : false}
         >
           Submit
         </Button>

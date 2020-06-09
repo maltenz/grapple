@@ -4,8 +4,8 @@ import { StyleProp, ViewStyle, LayoutAnimation, StyleSheet } from 'react-native'
 import Panel from './Panel';
 import PullBar from './PullBar';
 import PostShot, { AnimIconConfig } from './PostShot';
-import { Shot as ShotType } from '../../../generated/graphql';
-import CommentLoader, { CommentLoaderProps } from './CommentLoader';
+import { Shot as ShotType, CommentInput } from '../../../generated/graphql';
+import CommentLoader, { CommentLoaderType } from './CommentLoader';
 
 export type View = 'comments' | 'shots';
 
@@ -20,7 +20,9 @@ interface PostProps {
   onBookmark: () => void;
   onComment: () => void;
   commentsVisible: boolean;
-  comments: CommentLoaderProps;
+  comments: CommentLoaderType;
+  onCreateComment: (value: CommentInput) => void;
+  onResetComment: boolean;
   visible: boolean;
   onVisible: () => void;
   animIconConfig: AnimIconConfig;
@@ -36,6 +38,8 @@ const Post: FC<PostProps> = ({
   onComment,
   commentsVisible,
   comments,
+  onCreateComment,
+  onResetComment,
   visible,
   onVisible,
   animIconConfig,
@@ -89,7 +93,13 @@ const Post: FC<PostProps> = ({
           })}
         </>
       )}
-      {visible && view === 'comments' && commentsVisible && <CommentLoader {...comments} />}
+      {visible && view === 'comments' && commentsVisible && (
+        <CommentLoader
+          handleCreateComment={onCreateComment}
+          handleResetComment={onResetComment}
+          {...comments}
+        />
+      )}
       <PullBar mode="day" marginBottom={0.5} onPress={handleVisible} backgroundColor="white" />
     </Panel>
   );

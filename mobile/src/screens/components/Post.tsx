@@ -3,13 +3,14 @@ import { StyleProp, ViewStyle } from 'react-native';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import { Post as BasePost } from '../../assets';
-import { Post as PostType, Shot, Comment } from '../../generated/graphql';
+import { Post as PostType, Shot, Comment, CommentInput } from '../../generated/graphql';
 import { View } from '../../assets/components/base/Post';
-import { CommentLoaderProps } from '../../assets/components/base/CommentLoader';
+import { CommentLoaderType } from '../../assets/components/base/CommentLoader';
 import { Icon } from '../../assets/components/base/PostShot';
 
 import { LIKE_POST, UNLIKE_POST, BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
 import { GET_COMMENTS } from '../../queries/comment';
+import { CREATE_COMMENT } from '../../mutations/comment';
 
 interface PostProps extends PostType {
   gutter?: boolean;
@@ -34,10 +35,17 @@ const Post: FC<PostProps> = ({
   const [unlikePost] = useMutation(UNLIKE_POST);
   const [bookmarkPost] = useMutation(BOOKMARK_POST);
   const [removeBookmarkPost] = useMutation(REMOVE_BOOKMARK_POST);
-  const [getComments, { data: commentsData, loading: loadingComments }] = useLazyQuery<{
+  const [
+    getComments,
+    { data: commentsData, loading: loadingComments, refetch: refetchCommments },
+  ] = useLazyQuery<{
     comments: Comment[];
   }>(GET_COMMENTS);
-  const [comments, setComments] = useState<CommentLoaderProps>({ loading: false, data: [] });
+  const [createComment, { data: createCommentData }] = useMutation<{ createComment: Comment }>(
+    CREATE_COMMENT
+  );
+  const [resetComment, setResetComment] = useState<boolean>(false);
+  const [comments, setComments] = useState<CommentLoaderType>({ loading: false, data: [] });
   const [liked, setLiked] = useState<boolean>(propLiked as boolean);
   const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
   const [iconName, setIconName] = useState<Icon>(liked ? 'heart' : 'broken_heart');
@@ -60,13 +68,27 @@ const Post: FC<PostProps> = ({
     }
   }, [commentsData]);
 
-  const handleLoadComments = ({ loading, data }: CommentLoaderProps): void => {
+  useEffect(() => {
+    if (createCommentData?.createComment) {
+      refetchCommments();
+      setResetComment(true);
+      setTimeout(() => {
+        setResetComment(false);
+      });
+    }
+  }, [createCommentData]);
+
+  const handleLoadComments = ({ loading, data }: CommentLoaderType): void => {
     const myComments = { ...comments };
     myComments.loading = loading;
     if (data) {
       myComments.data = data;
     }
     setComments(myComments);
+  };
+
+  const handleCreateComment = ({ text }: CommentInput): void => {
+    createComment({ variables: { id, text } });
   };
 
   const handleLike = (): void => {
@@ -132,6 +154,8 @@ const Post: FC<PostProps> = ({
       onComment={handleComment}
       commentsVisible={commentsVisible}
       comments={comments}
+      onCreateComment={handleCreateComment}
+      onResetComment={resetComment}
       visible={visible}
       onVisible={handleVisible}
       animIconConfig={{

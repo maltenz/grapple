@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { StyleSheet, TextInputContentSizeChangeEventData } from 'react-native';
 import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
@@ -19,6 +19,7 @@ interface CommentContainerProps {
 interface CommentInputProps {
   placeholder?: string;
   onChange: (value: string) => void;
+  handleReset: boolean;
 }
 
 export const CommentContainer: FC<CommentContainerProps> = ({ children, gutter }) => {
@@ -43,9 +44,19 @@ export const Comment: FC<CommentType> = ({ text }) => {
   );
 };
 
-const CommentInput: FC<CommentInputProps> = ({ placeholder, onChange: propOnChange }) => {
-  const { control } = useForm();
+const CommentInput: FC<CommentInputProps> = ({
+  placeholder,
+  onChange: propOnChange,
+  handleReset,
+}) => {
+  const { control, reset } = useForm();
   const [heightContent, setHeightContent] = useState<number>();
+
+  useEffect(() => {
+    if (handleReset) {
+      reset({ comment: '' });
+    }
+  }, [handleReset]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (args: any[]): EventFunction => {
