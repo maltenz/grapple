@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 
 export const CommentSchema = gql`
   type Comment {
+    id: ID
     text: String!
     post: Post!
     user: UserQuery!
@@ -12,7 +13,7 @@ export const CommentSchema = gql`
   }
 
   input CommentInput {
-    id: ID!
+    id: ID
     text: String!
   }
 

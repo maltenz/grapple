@@ -6,7 +6,7 @@ import { gql } from 'apollo-server';
 
 export const PostSchema = gql`
   type Post {
-    id: ID
+    id: ID!
     user: UserQuery!
     shots: [Shot]!
     likes: [UserQuery]
