@@ -99,10 +99,12 @@ export const updateProfile = async (
 ): Promise<Profile> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
-  const { bio, phone, active }: UpdateProfile = args.input;
+  const { bio, phone }: UpdateProfile = args.input;
   let profile;
 
-  const set = {};
+  const set = {
+    active: new Date(),
+  };
 
   if (bio) {
     Object.assign(set, { bio });
@@ -110,10 +112,6 @@ export const updateProfile = async (
 
   if (phone) {
     Object.assign(set, { phone });
-  }
-
-  if (active) {
-    Object.assign(set, { active });
   }
 
   try {
