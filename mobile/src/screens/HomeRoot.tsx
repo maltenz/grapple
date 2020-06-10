@@ -28,6 +28,7 @@ import Home from './Home';
 import Menu from './Menu';
 import Camera from './Camera';
 import MyProfile from './MyProfile';
+import MyProfileEdit from './MyProfileEdit';
 import MyPost from './MyPost';
 import Account from './Account';
 import MyPosts from './MyPosts';
@@ -68,6 +69,7 @@ type ChildParamList = {
   HomeStack: undefined;
   // Profile
   MyProfile: undefined;
+  MyProfileEdit: undefined;
   // Post
   CreatePost: undefined;
   MyPost: undefined;
@@ -199,6 +201,7 @@ const Child: FC<ChildNavigationProps> = () => {
       <ChildStack.Screen name="HomeStack" component={HomeStack} />
       {/* Profile */}
       <ChildStack.Screen name="MyProfile" component={MyProfile} />
+      <ChildStack.Screen name="MyProfileEdit" component={MyProfileEdit} />
       {/* Post */}
       <ChildStack.Screen name="CreatePost" component={CreatePost} />
       <ChildStack.Screen name="MyPost" component={MyPost} />

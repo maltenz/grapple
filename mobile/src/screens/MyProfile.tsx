@@ -44,7 +44,7 @@ const MyProfile: FC = () => {
         Right={
           <Button
             mode="day"
-            onPress={(): void => Alert.alert('Saved')}
+            onPress={(): void => navigation.navigate('MyProfileEdit')}
             appearance="dark"
             outline
             type="normal"

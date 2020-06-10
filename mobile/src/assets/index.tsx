@@ -34,7 +34,7 @@ import Button, {
   ButtonNormalHeight,
   ButtonSmallHeight,
 } from './components/base/Button';
-import CommentInput, { Comment, CommentContainer } from './components/base/Comment';
+import CommentInput, { Comment, CommentBox, CommentContainer } from './components/base/Comment';
 import CommentLoader from './components/base/CommentLoader';
 import Gallery, { GalleryItemType } from './components/base/Gallery';
 import Container from './components/base/Container';
@@ -55,6 +55,7 @@ import PullBar, { PullBarHeight } from './components/base/PullBar';
 import SegmentedController from './components/base/SegmentedControl';
 import TabbarBackground from './components/base/TabbarBackground';
 import TabbarCircleButton from './components/base/TabbarCircleButton';
+import Tag from './components/base/Tag';
 import Text, { TextProps, PlaceholderTextColor } from './components/base/Text';
 import Thumbnail, { ThumbnailDimension } from './components/base/Thumbnail';
 import Search from './components/base/Search';
@@ -138,6 +139,7 @@ export {
   ButtonNormalHeight,
   ButtonSmallHeight,
   Comment,
+  CommentBox,
   CommentContainer,
   CommentLoader,
   CommentInput,
@@ -166,6 +168,7 @@ export {
   PullBarHeight,
   TabbarBackground,
   TabbarCircleButton,
+  Tag,
   Text,
   TextProps,
   Thumbnail,

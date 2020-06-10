@@ -4,7 +4,7 @@ import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import { AssetStyles } from '../../styles';
 import { Color } from '../../colors';
-import Panel from './Panel';
+import Panel, { MarginProps } from './Panel';
 import CoreText from '../core/Text';
 import Avatar from '../core/Avatar';
 import { Comment as CommentType } from '../../../generated/graphql';
@@ -22,6 +22,10 @@ interface CommentInputProps {
   handleReset: boolean;
 }
 
+interface CommentBoxProps extends MarginProps {
+  text: string;
+}
+
 export const CommentContainer: FC<CommentContainerProps> = ({ children, gutter }) => {
   return (
     <Panel backgroundColor="white" paddingHorizontal={gutter ? 0.5 : 0}>
@@ -37,12 +41,16 @@ export const Comment: FC<CommentType> = ({ text }) => {
   return (
     <Panel row alignItems="center" marginBottom>
       <Avatar marginRight={0.5} src={POST_USER_IMAGE_SAMPLE} />
-      <Panel flex={1} backgroundColor="grey4" padding={0.5} style={styles.comment}>
-        <CoreText type="small">{text}</CoreText>
-      </Panel>
+      <CommentBox text={text} />
     </Panel>
   );
 };
+
+export const CommentBox: FC<CommentBoxProps> = ({ text, ...rest }) => (
+  <Panel flex={1} backgroundColor="grey4" padding={0.5} style={styles.comment} {...rest}>
+    <CoreText type="small">{text}</CoreText>
+  </Panel>
+);
 
 const CommentInput: FC<CommentInputProps> = ({
   placeholder,
