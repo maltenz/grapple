@@ -36,7 +36,6 @@ import Button, {
 } from './components/base/Button';
 import CommentInput, { Comment, CommentBox, CommentContainer } from './components/base/Comment';
 import CommentLoader from './components/base/CommentLoader';
-import Gallery, { GalleryItemType } from './components/base/Gallery';
 import Container from './components/base/Container';
 import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
 import MenuItemAccount from './components/base/MenuItemAccount';
@@ -145,8 +144,6 @@ export {
   CommentContainer,
   CommentLoader,
   CommentInput,
-  Gallery,
-  GalleryItemType,
   Container,
   MenuItem,
   MenuItemAccount,

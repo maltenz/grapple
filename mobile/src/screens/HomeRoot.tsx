@@ -29,9 +29,7 @@ import Menu from './Menu';
 import Camera from './Camera';
 import MyProfile from './MyProfile';
 import MyProfileEdit from './MyProfileEdit';
-import MyPost from './MyPost';
 import Account from './Account';
-import MyPosts from './MyPosts';
 import Search from './Search';
 import CreatePost from './CreatePost';
 
@@ -72,8 +70,6 @@ type ChildParamList = {
   MyProfileEdit: undefined;
   // Post
   CreatePost: undefined;
-  MyPost: undefined;
-  MyPosts: undefined;
   // Account
   Notifications: undefined;
   Help: undefined;
@@ -204,14 +200,14 @@ const Child: FC<ChildNavigationProps> = () => {
       <ChildStack.Screen name="MyProfileEdit" component={MyProfileEdit} />
       {/* Post */}
       <ChildStack.Screen name="CreatePost" component={CreatePost} />
-      <ChildStack.Screen name="MyPost" component={MyPost} />
-      <ChildStack.Screen name="MyPosts" component={MyPosts} />
+      <ChildStack.Screen name="MyPost" component={MyProfile} />
+      <ChildStack.Screen name="MyPosts" component={MyProfile} />
       {/* Account */}
-      <ChildStack.Screen name="Notifications" component={MyPost} />
-      <ChildStack.Screen name="Help" component={MyPost} />
-      <ChildStack.Screen name="Security" component={MyPost} />
-      <ChildStack.Screen name="CommunityGuidelines" component={MyPost} />
-      <ChildStack.Screen name="PrivacyPolicy" component={MyPost} />
+      <ChildStack.Screen name="Notifications" component={MyProfile} />
+      <ChildStack.Screen name="Help" component={MyProfile} />
+      <ChildStack.Screen name="Security" component={MyProfile} />
+      <ChildStack.Screen name="CommunityGuidelines" component={MyProfile} />
+      <ChildStack.Screen name="PrivacyPolicy" component={MyProfile} />
     </ChildStack.Navigator>
   );
 };

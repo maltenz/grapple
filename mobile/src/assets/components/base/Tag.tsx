@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
-import { CoreText } from '../core';
+import CoreText from '../core/Text';
 import Panel, { MarginProps } from './Panel';
 import { AssetStyles } from '../../styles';
-import { Color } from '../..';
+import { Color } from '../../colors';
 import SvgIconSmallClose from '../../svg/icons/small/SvgIconSmallClose';
 
 interface TagProps extends MarginProps {

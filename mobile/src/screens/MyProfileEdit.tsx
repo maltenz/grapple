@@ -18,6 +18,7 @@ import {
   SvgWiggleFill,
   SvgAnonymousProfile,
   CoreText,
+  SvgIconAccount,
 } from '../assets';
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ChildNavigationProp } from './HomeRoot';
@@ -51,7 +52,7 @@ const User: FC = () => {
   return (
     <Panel>
       <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
-        <SvgAnonymousProfile strokeWidth={4} color="purple" scale={1.5} />
+        <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
       </BlurView>
       <BlurView tint="light" intensity={90} style={styles.blurviewText}>
         <CoreText type="p" color="purple" bold textAlign="center">
@@ -93,7 +94,6 @@ const MyProfileEdit: FC = () => {
           <Panel style={styles.profile} marginBottom={2} center>
             <SvgWiggleFill dimension={DIMENSION} style={StyleSheet.absoluteFill} />
             <User />
-            {/* <BlurView intensity={100} style={styles.blurview} /> */}
           </Panel>
           <Heading text="Bio" buttonText="Edit" />
           <CommentBox
