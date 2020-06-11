@@ -69,10 +69,12 @@ import SvgTabbarBackground, {
 } from './svg/SvgTabbarBackground';
 
 // -- graphis
+import SvgAnonymousProfile from './svg/SvgAnonymousProfile';
 import SvgLogoGrapple from './svg/SvgGrappleLogo';
 import SvgBlob from './svg/SvgBlob';
 import SvgBlobMirrored from './svg/SvgBlobMirrored';
 import SvgRulerRightArrow from './svg/SvgRulerRightArrow';
+import SvgWiggleFill from './svg/SvgWiggleFill';
 // -- icons large
 import SvgIconAccount from './svg/icons/large/SvgIconAccount';
 import SvgIconBookmark from './svg/icons/large/SvgIconBookmark';
@@ -180,10 +182,12 @@ export {
   SvgTabbarBackground,
   SvgTabbarBackgroundWidth,
   SvgTabbarBackgroundHeight,
+  SvgAnonymousProfile,
   SvgLogoGrapple,
   SvgBlob,
   SvgBlobMirrored,
   SvgRulerRightArrow,
+  SvgWiggleFill,
   // icons large
   SvgIconAccount,
   SvgIconBookmark,

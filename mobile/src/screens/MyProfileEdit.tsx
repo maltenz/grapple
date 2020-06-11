@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { BlurView } from 'expo-blur';
 
 import { useSafeArea } from 'react-native-safe-area-context';
 import {
@@ -14,18 +15,25 @@ import {
   Color,
   Tag,
   SegmentedController,
+  SvgWiggleFill,
+  SvgAnonymousProfile,
+  CoreText,
 } from '../assets';
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ChildNavigationProp } from './HomeRoot';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
+const DIMENSION = WIDTH - SPACE * 2;
+const CIRCLE = 125;
+const RADIUS = AssetStyles.measure.radius.large;
 
 interface HeadingProps {
   text: string;
   buttonText: string;
   onPress?: () => void;
 }
+
 const Heading: FC<HeadingProps> = ({ text, buttonText }) => {
   return (
     <Panel row justifyContent="space-between">
@@ -39,10 +47,25 @@ const Heading: FC<HeadingProps> = ({ text, buttonText }) => {
   );
 };
 
+const User: FC = () => {
+  return (
+    <Panel>
+      <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
+        <SvgAnonymousProfile strokeWidth={4} color="purple" scale={1.5} />
+      </BlurView>
+      <BlurView tint="light" intensity={90} style={styles.blurviewText}>
+        <CoreText type="p" color="purple" bold textAlign="center">
+          Anonymous
+        </CoreText>
+      </BlurView>
+    </Panel>
+  );
+};
+
 const MyProfileEdit: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(1);
 
   const PADDING_BOTTOM = inset.bottom + SPACE;
 
@@ -67,7 +90,11 @@ const MyProfileEdit: FC = () => {
             marginTop
             marginBottom={2}
           />
-          <Panel style={styles.image} backgroundColor="red" />
+          <Panel style={styles.profile} marginBottom={2} center>
+            <SvgWiggleFill dimension={DIMENSION} style={StyleSheet.absoluteFill} />
+            <User />
+            {/* <BlurView intensity={100} style={styles.blurview} /> */}
+          </Panel>
           <Heading text="Bio" buttonText="Edit" />
           <CommentBox
             marginBottom={2}
@@ -94,10 +121,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.white,
   },
-  image: {
-    width: WIDTH - SPACE * 2,
-    height: WIDTH - SPACE * 2,
-    marginBottom: SPACE * 2,
+  profile: {
+    overflow: 'hidden',
+    width: DIMENSION,
+    height: DIMENSION,
+  },
+  blurviewCircle: {
+    width: CIRCLE,
+    height: CIRCLE,
+    borderRadius: CIRCLE / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: AssetStyles.measure.space / 2,
+  },
+  blurviewText: {
+    borderRadius: RADIUS,
   },
   scrollView: {
     paddingBottom: SPACE,
