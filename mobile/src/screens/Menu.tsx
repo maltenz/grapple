@@ -33,7 +33,7 @@ const Menu: FC = () => {
           alignItems="center"
           justifyContent="space-between"
           style={styles.mapContainer}
-          // Sibling={<MapView style={styles.map} />}
+          Sibling={<MapView style={styles.map} />}
         >
           <Text mode="night" appearance="normal" type="p">
             Creeper Beeper

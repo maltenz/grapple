@@ -34,7 +34,7 @@ import Button, {
   ButtonNormalHeight,
   ButtonSmallHeight,
 } from './components/base/Button';
-import CommentInput, { Comment, CommentBox, CommentContainer } from './components/base/Comment';
+import Comment, { CommentUser, CommentContainer } from './components/base/Comment';
 import CommentLoader from './components/base/CommentLoader';
 import Container from './components/base/Container';
 import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
@@ -140,10 +140,9 @@ export {
   ButtonNormalHeight,
   ButtonSmallHeight,
   Comment,
-  CommentBox,
+  CommentUser,
   CommentContainer,
   CommentLoader,
-  CommentInput,
   Container,
   MenuItem,
   MenuItemAccount,

@@ -1,27 +1,33 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { FC, useState, useRef, RefObject } from 'react';
+import { StyleSheet, ScrollView, NativeMethodsMixinStatic } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
 
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+
 import {
   Navigation,
   NavigationIcon,
   Panel,
   AssetStyles,
   Text,
-  CommentBox,
+  Comment,
   Color,
   Tag,
   SegmentedController,
   SvgWiggleFill,
-  SvgAnonymousProfile,
   CoreText,
   SvgIconAccount,
+  SvgIconImage,
+  Badge,
 } from '../assets';
+
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ChildNavigationProp } from './HomeRoot';
+import { authUserSelector } from '../store';
+import { User as UserType } from '../generated/graphql';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
@@ -35,28 +41,41 @@ interface HeadingProps {
   onPress?: () => void;
 }
 
-const Heading: FC<HeadingProps> = ({ text, buttonText }) => {
+type AuthType = 'public' | 'private';
+
+interface UserProps extends UserType {
+  type: AuthType;
+}
+
+const Heading: FC<HeadingProps> = ({ text, buttonText, onPress }) => {
   return (
     <Panel row justifyContent="space-between">
-      <Text mode="day" type="h3" appearance="normal">
+      <Text mode="day" type="h3" appearance="normal" marginBottom={0.5}>
         {text}
       </Text>
-      <Text type="small" appearance="strong" mode="day" bold>
+      <Text type="small" appearance="strong" mode="day" bold onPress={onPress}>
         {buttonText}
       </Text>
     </Panel>
   );
 };
 
-const User: FC = () => {
+const User: FC<UserProps> = ({ type, name }) => {
   return (
     <Panel>
       <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
-        <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
+        {type === 'private' ? (
+          <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
+        ) : (
+          <Panel style={styles.icon}>
+            <SvgIconImage strokeWidth={3} color="purple" scale={2} />
+            <Badge type="add" appearance="strong" style={styles.badge} />
+          </Panel>
+        )}
       </BlurView>
       <BlurView tint="light" intensity={90} style={styles.blurviewText}>
         <CoreText type="p" color="purple" bold textAlign="center">
-          Anonymous
+          {type === 'private' ? 'Anonymous' : name}
         </CoreText>
       </BlurView>
     </Panel>
@@ -64,11 +83,21 @@ const User: FC = () => {
 };
 
 const MyProfileEdit: FC = () => {
+  const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
   const [activeIndex, setActiveIndex] = useState<number>(1);
+  const user = useSelector(authUserSelector);
+  const [editBioActive, setEditBioActive] = useState<boolean>(false);
+  const [bioValue, setBioValue] = useState(
+    `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
+  );
 
   const PADDING_BOTTOM = inset.bottom + SPACE;
+
+  if (editBioActive && inputRef.current !== null) {
+    inputRef.current.focus();
+  }
 
   return (
     <>
@@ -93,13 +122,22 @@ const MyProfileEdit: FC = () => {
           />
           <Panel style={styles.profile} marginBottom={2} center>
             <SvgWiggleFill dimension={DIMENSION} style={StyleSheet.absoluteFill} />
-            <User />
+            <User type={activeIndex === 0 ? 'public' : 'private'} {...user} />
           </Panel>
-          <Heading text="Bio" buttonText="Edit" />
-          <CommentBox
+          <Heading
+            text="Bio"
+            buttonText="Edit"
+            onPress={(): void => setEditBioActive(!editBioActive)}
+          />
+          <Comment
+            ref={inputRef}
             marginBottom={2}
-            text="Many people has the notion that enlightenment is one state. Many also believe that when
-            it is attained, a person is forever in that state."
+            text={bioValue}
+            type={editBioActive ? 'input' : 'comment'}
+            name="bio"
+            placeholder="Something about you"
+            onChange={(text): void => setBioValue(text)}
+            onBlur={(): void => setEditBioActive(false)}
           />
           <Heading text="Talent" buttonText="Add" />
         </Panel>
@@ -139,6 +177,13 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingBottom: SPACE,
+  },
+  icon: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    right: 0,
   },
 });
 

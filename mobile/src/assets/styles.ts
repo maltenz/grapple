@@ -151,6 +151,7 @@ const AssetStyles = {
     },
     border: {
       large: 4,
+      regular: 2,
     },
     circle: {
       large: {

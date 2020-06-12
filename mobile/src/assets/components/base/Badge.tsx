@@ -7,8 +7,9 @@ import SvgIconSmallAttach from '../../svg/icons/small/SvgIconSmallAttach';
 import SvgIconSmallEdit from '../../svg/icons/small/SvgIconSmallEdit';
 import Panel, { MarginProps } from './Panel';
 import Text from '../core/Text';
+import SvgIconSmallAdd from '../../svg/icons/small/SvgIconSmallAdd';
 
-export type BadgeType = 'delete' | 'attachment' | 'edit';
+export type BadgeType = 'delete' | 'attachment' | 'edit' | 'add';
 
 interface BadgeProps extends MarginProps {
   type: BadgeType;
@@ -28,6 +29,8 @@ const Badge: FC<BadgeProps> = ({ type, appearance, title, onPress, ...rest }) =>
         return <SvgIconSmallClose color={iconColor} strokeWidth={strokeWidth} />;
       case 'attachment':
         return <SvgIconSmallAttach color={iconColor} strokeWidth={strokeWidth} />;
+      case 'add':
+        return <SvgIconSmallAdd color={iconColor} strokeWidth={strokeWidth} />;
       case 'edit':
         return <SvgIconSmallEdit color={iconColor} strokeWidth={strokeWidth} />;
       default:
@@ -38,16 +41,16 @@ const Badge: FC<BadgeProps> = ({ type, appearance, title, onPress, ...rest }) =>
   switch (appearance) {
     case 'heavy':
       backgroundColor = 'red';
-      Icon = getIcon('white', 2);
+      Icon = getIcon('white', 3);
       break;
     case 'strong':
       backgroundColor = 'blue';
-      Icon = getIcon('white', 2);
+      Icon = getIcon('white', 3);
       break;
     case 'normal':
     default:
       backgroundColor = 'grey4';
-      Icon = getIcon('grey', 1);
+      Icon = getIcon('grey', 3);
   }
 
   if (title) {

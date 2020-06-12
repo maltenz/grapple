@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
-import CommentInput, { CommentContainer, Comment } from './Comment';
+import Comment, { CommentContainer, CommentUser } from './Comment';
+
 import {
   Comment as CommentType,
   CommentInput as CommentInputType,
 } from '../../../generated/graphql';
+
 import Panel from './Panel';
 import Button from './Button';
 import { Color } from '../../colors';
@@ -19,12 +21,7 @@ interface CommentLoaderProps extends CommentLoaderType {
   handleResetComment: boolean;
 }
 
-const CommentLoader: FC<CommentLoaderProps> = ({
-  loading,
-  data,
-  handleCreateComment,
-  handleResetComment,
-}) => {
+const CommentLoader: FC<CommentLoaderProps> = ({ loading, data, handleCreateComment }) => {
   const [text, setText] = useState<string>();
   const submit = (): void => {
     if (text?.length) {
@@ -43,9 +40,14 @@ const CommentLoader: FC<CommentLoaderProps> = ({
   return (
     <CommentContainer gutter title="Comments">
       {data?.map(({ id, ...rest }) => (
-        <Comment key={id as string} {...rest} />
+        <CommentUser key={id as string} {...rest} />
       ))}
-      <CommentInput onChange={(value): void => setText(value)} handleReset={handleResetComment} />
+      <Comment
+        placeholder="Leave a comment"
+        name="comment"
+        onChange={(value): void => setText(value)}
+        type="input"
+      />
       <Panel alignItems="flex-end">
         <Button
           type="small"

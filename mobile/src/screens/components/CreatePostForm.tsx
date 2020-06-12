@@ -1,21 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 
-import {
-  TextInput,
-  TextInputContentSizeChangeEventData,
-  View,
-  LayoutAnimation,
-  Alert,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import { View, LayoutAnimation, Alert, Keyboard, TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { useForm, Controller, EventFunction } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Action } from 'typesafe-actions';
 
-import { AssetStyles, Panel, Button, Text, SvgIconMenu } from '../../assets';
+import { Panel, Button, Text, SvgIconMenu, Comment } from '../../assets';
 
 import { deleteShot, updateShot, moveShot } from '../../store';
 import { MoveShot } from '../../store/create/actions';
@@ -24,30 +15,29 @@ import { ChildNavigationProp } from '../HomeRoot';
 
 import { Shot } from '../../generated/graphql';
 
-type FormData = {
-  title: string;
-  content: string;
-};
-
-interface Form {
+interface CreatePostFormProps {
   shot: Shot;
   index: number;
   visible: boolean;
   expandable: boolean;
 }
 
-const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandable }) => {
-  const { control, getValues, reset } = useForm<FormData>();
+const CreatePostForm: FC<CreatePostFormProps> = ({
+  shot,
+  index,
+  visible: propVisible,
+  expandable,
+}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<ChildNavigationProp>();
-  const [heightTitle, setHeightTitle] = useState<number>();
-  const [heightContent, setHeightContent] = useState<number>();
+  const [title, setTitle] = useState<string>(shot.title || '');
+  const [content, setContent] = useState<string>(shot.content || '');
   const [visible, setVisible] = useState<boolean>(propVisible);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       Keyboard.dismiss();
-      storeText();
+      dispatch(updateShot({ id: shot.id, title, content }));
     });
 
     return unsubscribe;
@@ -60,7 +50,8 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
           text: 'Delete',
           style: 'destructive',
           onPress: (): void => {
-            reset({ title: '', content: '' });
+            setTitle('');
+            setContent('');
             LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
             setVisible(false);
           },
@@ -76,23 +67,13 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
     }
   };
 
-  const handleTitleContentSizeChange = (event: {
-    nativeEvent: TextInputContentSizeChangeEventData;
-  }): void => {
-    setHeightTitle(event.nativeEvent.contentSize.height);
-  };
-
-  const handleContentSizeChange = (event: {
-    nativeEvent: TextInputContentSizeChangeEventData;
-  }): void => {
-    setHeightContent(event.nativeEvent.contentSize.height);
-  };
-
   const handleMoveShot = ({ direction }: Pick<MoveShot, 'direction'>): void => {
-    const { title, content } = getValues();
-
     dispatch(updateShot({ id: shot.id, title, content }));
     dispatch(moveShot({ index, direction }));
+  };
+
+  const handleUpdateShot = (): void => {
+    dispatch(updateShot({ id: shot.id, title, content }));
   };
 
   const handleOptions = (): void => {
@@ -122,12 +103,6 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
     );
   };
 
-  const storeText = (): void => {
-    const { title, content } = getValues();
-
-    dispatch(updateShot({ id: shot.id, title, content }));
-  };
-
   return (
     <>
       {expandable && (
@@ -153,21 +128,14 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
           <Text type="h4" mode="day" appearance="subtle" marginVertical>
             Write up your story
           </Text>
-          <Controller
-            as={TextInput}
-            control={control}
-            rules={{ required: index === 0 }}
-            multiline
+          <Comment
             name="title"
-            onChange={(args): EventFunction => args[0].nativeEvent.text}
-            onContentSizeChange={handleTitleContentSizeChange}
             placeholder="Title"
-            defaultValue={shot.title || ''}
-            onBlur={(): void => storeText()}
-            style={[
-              AssetStyles.form.bubble.title,
-              { height: heightTitle && Math.max(35, heightTitle + 50) },
-            ]}
+            text={title}
+            onChange={(text): void => setTitle(text)}
+            type="input"
+            marginBottom
+            onBlur={handleUpdateShot}
           />
         </>
       )}
@@ -178,23 +146,13 @@ const CreatePostForm: FC<Form> = ({ shot, index, visible: propVisible, expandabl
               Shot description
             </Text>
           )}
-          <Controller
-            as={TextInput}
-            control={control}
-            multiline
+          <Comment
             name="content"
-            onChange={(args): EventFunction => args[0].nativeEvent.text}
-            onContentSizeChange={handleContentSizeChange}
-            placeholder="Description"
-            defaultValue={shot.content || ''}
-            onBlur={(): void => storeText()}
-            style={[
-              AssetStyles.form.bubble.content,
-              {
-                fontFamily: AssetStyles.family.regular,
-                height: heightContent && Math.max(35, heightContent + 50),
-              },
-            ]}
+            placeholder="Content"
+            text={content}
+            onChange={(text): void => setContent(text)}
+            type="input"
+            onBlur={handleUpdateShot}
           />
         </View>
       )}
