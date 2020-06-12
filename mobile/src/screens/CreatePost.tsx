@@ -21,6 +21,7 @@ import {
   SvgLogoGrapple,
   UploadImage,
   Text,
+  Overlay,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -35,7 +36,6 @@ import { Shot, Post as PostType } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
 import CreatePostForm from './components/CreatePostForm';
-import Overlay from './components/Overlay';
 
 const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
@@ -161,7 +161,7 @@ const CreatePost: FC = () => {
         </Panel>
       )}
       {uploading === 'complete' && (
-        <Overlay paddingHorizontal={0} style={[StyleSheet.absoluteFill, styles.overlay]}>
+        <Overlay paddingHorizontal={0} type="page">
           <KeyboardAwareScrollView extraHeight={150}>
             <Text
               type="h2"
@@ -221,10 +221,6 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     marginBottom: AssetStyles.measure.space * 2,
-  },
-  overlay: {
-    flex: 1,
-    zIndex: 3,
   },
 });
 

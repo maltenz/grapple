@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, RefObject } from 'react';
-import { StyleSheet, ScrollView, NativeMethodsMixinStatic } from 'react-native';
+import { StyleSheet, NativeMethodsMixinStatic, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
@@ -22,6 +22,9 @@ import {
   SvgIconAccount,
   SvgIconImage,
   Badge,
+  Button,
+  Overlay,
+  OverlayHeader,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -89,6 +92,7 @@ const MyProfileEdit: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(1);
   const user = useSelector(authUserSelector);
   const [editBioActive, setEditBioActive] = useState<boolean>(false);
+  const [infoViewVisible, setInfoViewVisisble] = useState<boolean>(false);
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
@@ -111,7 +115,11 @@ const MyProfileEdit: FC = () => {
         contentContainerStyle={{ paddingBottom: PADDING_BOTTOM }}
       >
         <Panel margin>
-          <Heading text="Privacy" buttonText="Info" />
+          <Heading
+            text="Privacy"
+            buttonText="Info"
+            onPress={(): void => setInfoViewVisisble(true)}
+          />
           <SegmentedController
             mode="day"
             activeIndex={activeIndex}
@@ -150,6 +158,36 @@ const MyProfileEdit: FC = () => {
           <Tag text="Call" />
         </ScrollView>
       </KeyboardAwareScrollView>
+      {infoViewVisible && (
+        <Overlay type="page">
+          <OverlayHeader />
+          <Panel flex={1}>
+            <Panel backgroundColor="white" padding>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <Text type="small" mode="day" appearance="normal">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non sem nisi. Quisque
+                  posuere sem quis venenatis aliquet. Integer placerat cursus enim, sed placerat
+                  elit interdum vel. In eu leo fringilla, accumsan nibh nec, vulputate diam. Cras
+                  aliquam placerat mauris, sit amet dictum nibh fringilla ac. Nullam nec mi at eros
+                  pellentesque cursus. Sed id ultrices magna. Quisque cursus ut felis ut bibendum.
+                  Nulla sit amet rhoncus nibh. Aliquam mattis consequat felis, quis feugiat erat
+                  consequat sit amet. Vestibulum dictum elit nunc, a vehicula dui porttitor euismod.
+                  Sed sed libero ante. Sed sed ullamcorper purus. Cras fermentum feugiat gravida.
+                  Donec sed rutrum dui. Suspendisse maximus congue consectetur.
+                </Text>
+              </ScrollView>
+            </Panel>
+          </Panel>
+          <Button
+            mode="day"
+            type="large"
+            appearance="strong"
+            onPress={(): void => setInfoViewVisisble(false)}
+          >
+            OK
+          </Button>
+        </Overlay>
+      )}
     </>
   );
 };

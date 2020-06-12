@@ -2,16 +2,25 @@ import React, { FC, ReactNode } from 'react';
 import { StatusBar, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-
-import { Panel, AssetStyles, Text } from '../../assets';
-import { PanelProps } from '../../assets/components/base/Panel';
+import Panel, { PanelProps } from './Panel';
+import Text from './Text';
+import { AssetStyles } from '../../styles';
 
 interface OverlayItemProps {
   title: string;
   onPress: () => void;
 }
 
-const OverlayItem: FC<OverlayItemProps> = ({ title, onPress }) => (
+interface OverlayProps extends PanelProps {
+  type?: 'page';
+}
+
+interface OverlayPanelProps extends PanelProps {
+  style?: StyleProp<ViewStyle>;
+  Sibling?: ReactNode;
+}
+
+export const OverlayItem: FC<OverlayItemProps> = ({ title, onPress }) => (
   <Text
     type="h3"
     mode="night"
@@ -25,12 +34,7 @@ const OverlayItem: FC<OverlayItemProps> = ({ title, onPress }) => (
   </Text>
 );
 
-interface OverlayPanelProps extends PanelProps {
-  style?: StyleProp<ViewStyle>;
-  Sibling?: ReactNode;
-}
-
-const OverlayPanel: FC<OverlayPanelProps> = ({
+export const OverlayPanel: FC<OverlayPanelProps> = ({
   paddingHorizontal = 1,
   paddingVertical = 0.5,
   children,
@@ -63,14 +67,12 @@ const OverlayPanel: FC<OverlayPanelProps> = ({
   );
 };
 
-type OverlayProps = PanelProps;
-
-const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children, style, ...rest }) => {
+const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children, style, type, ...rest }) => {
   const inset = useSafeArea();
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <Panel flex={1} style={style}>
+      <Panel flex={1} style={[type === 'page' && styles.page, style]}>
         <BlurView tint="dark" intensity={100} style={[StyleSheet.absoluteFill, { flex: 1 }]} />
         <Panel
           flex={1}
@@ -88,12 +90,27 @@ const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children, style, ...
   );
 };
 
+export const OverlayHeader: FC = () => (
+  <Panel padding backgroundColor="grey4">
+    <Text type="h2" mode="day" appearance="normal">
+      Privacy
+    </Text>
+  </Panel>
+);
+
 const styles = StyleSheet.create({
   overlayPanelContainer: {
     borderRadius: AssetStyles.measure.radius.large,
   },
+  page: {
+    flex: 1,
+    zIndex: 3,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
 });
-
-export { OverlayItem, OverlayPanel };
 
 export default Overlay;

@@ -41,6 +41,7 @@ import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
 import MenuItemAccount from './components/base/MenuItemAccount';
 import MenuItemThumbnail from './components/base/MenuItemThumbnail';
 import Navigation, { NavigationIcon } from './components/base/Navigation';
+import Overlay, { OverlayHeader, OverlayPanel, OverlayItem } from './components/base/Overlay';
 import NavBarUser from './components/base/NavBarUser';
 import NavBarUserPostEdit from './components/base/NavBarUserPostEdit';
 import NavBarUserStoryIncident from './components/base/NavBarUserStoryIncident';
@@ -153,6 +154,10 @@ export {
   NavBarUser,
   NavBarUserPostEdit,
   NavBarUserStoryIncident,
+  Overlay,
+  OverlayHeader,
+  OverlayPanel,
+  OverlayItem,
   Panel,
   PanelProps,
   PlaceholderTextColor,
