@@ -67,7 +67,7 @@ export const OverlayPanel: FC<OverlayPanelProps> = ({
   );
 };
 
-const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 2, children, style, type, ...rest }) => {
+const Overlay: FC<OverlayProps> = ({ paddingHorizontal = 1, children, style, type, ...rest }) => {
   const inset = useSafeArea();
   return (
     <>

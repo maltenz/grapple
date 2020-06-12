@@ -1,31 +1,35 @@
 import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Svg, { Path, Rect } from 'react-native-svg';
-import { Color } from '../colors';
 
 interface SvgWiggleFillProps {
   style?: StyleProp<ViewStyle>;
   dimension: number;
+  primaryColor: string;
+  secondaryColor: string;
 }
 
-const SvgWiggleFill: FC<SvgWiggleFillProps> = ({ style, dimension }) => {
+const SvgWiggleFill: FC<SvgWiggleFillProps> = ({
+  style,
+  dimension,
+  primaryColor,
+  secondaryColor,
+}) => {
   const width = dimension;
   const height = dimension;
-  const color = Color.purple;
-  const background = Color.red;
 
   return (
     <Svg width={width} height={height} style={style}>
-      <Rect width={width} height={height} fill={background} />
+      <Rect width={width} height={height} fill={secondaryColor} />
       <Path
-        fill={color}
+        fill={primaryColor}
         d="M360.3,0c-4,4.8-8.3,9.6-13.1,14.4c-54.6,54.6-111.3,53.9-157,53.4c-39.4-0.4-65.5-0.7-93.9,27.7
 			C67.9,124,68.2,150,68.6,189.4c0.5,45.6,1.1,102.4-53.4,157c-5,5-10.1,9.6-15.2,13.8V79.8c7.8-15.4,18.8-31,34.2-46.4
 			C49.1,18.5,64.1,7.8,79,0H360.3z"
       />
 
       <Path
-        fill={color}
+        fill={primaryColor}
         d="M488.9,156.3c-54.6,54.6-111.3,53.9-157,53.4c-39.4-0.4-65.4-0.7-93.9,27.7c-28.4,28.4-28.1,54.5-27.7,93.9
 			c0.5,45.6,1.1,102.4-53.4,157C102.3,542.8,45.6,542.2,0,541.7v-87.8c0.3,0,0.6,0,0.9,0c39.4,0.4,65.5,0.7,93.9-27.7
 			c28.4-28.4,28.1-54.5,27.7-93.9c-0.5-45.6-1.1-102.4,53.4-157c54.6-54.6,111.3-53.9,157-53.4c39.4,0.4,65.5,0.7,93.9-27.7
@@ -33,7 +37,7 @@ const SvgWiggleFill: FC<SvgWiggleFillProps> = ({ style, dimension }) => {
       />
 
       <Path
-        fill={color}
+        fill={primaryColor}
         d="M640,0v288.1c-2.9,3.4-6.1,6.7-9.4,10.1c-54.6,54.6-111.4,53.9-157,53.4c-39.4-0.4-65.5-0.7-93.9,27.7
 			c-28.4,28.4-28.1,54.5-27.7,93.9c0.5,45.6,1.1,102.4-53.4,157c-3.5,3.5-7,6.8-10.5,9.8H0v-3.9c50-41.4,101-40.8,142.6-40.3
 			c39.4,0.4,65.4,0.7,93.9-27.7c28.4-28.4,28.2-54.5,27.7-93.9c-0.5-45.6-1.1-102.4,53.4-157s111.3-53.9,157-53.4
@@ -41,14 +45,14 @@ const SvgWiggleFill: FC<SvgWiggleFillProps> = ({ style, dimension }) => {
       />
 
       <Path
-        fill={color}
+        fill={primaryColor}
         d="M640,405.7v87.8c-8.5,0.2-16.8,0.1-24.7,0c-39.4-0.4-65.5-0.7-93.9,27.7c-28.4,28.4-28.1,54.5-27.7,93.9
 			c0.1,8,0.2,16.3,0,24.9h-87.8c0.2-7.5,0.1-15.4,0-23.9c-0.5-45.6-1.1-102.4,53.4-157c54.6-54.6,111.3-53.9,157-53.4
 			C624.8,405.8,632.6,405.9,640,405.7z"
       />
 
       <Path
-        fill={color}
+        fill={primaryColor}
         d="M640,570.8V640h-69.2c7.5-13,17.3-26,30.2-39C613.9,588.1,627,578.3,640,570.8z"
       />
     </Svg>

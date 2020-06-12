@@ -1,11 +1,22 @@
 import React, { FC, useState, useRef, RefObject } from 'react';
-import { StyleSheet, NativeMethodsMixinStatic, ScrollView, LayoutAnimation } from 'react-native';
+import {
+  StyleSheet,
+  NativeMethodsMixinStatic,
+  ScrollView,
+  LayoutAnimation,
+  View,
+  ViewStyle,
+  StyleProp,
+} from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
-
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import { ColorPicker, fromHsv } from 'react-native-color-picker';
+
+import { authUserSelector } from '../store';
 
 import {
   Navigation,
@@ -29,7 +40,7 @@ import {
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ChildNavigationProp } from './HomeRoot';
-import { authUserSelector } from '../store';
+
 import { User as UserType } from '../generated/graphql';
 import { MarginProps } from '../assets/components/base/Panel';
 
@@ -49,6 +60,12 @@ type AuthType = 'public' | 'private';
 
 interface UserProps extends UserType {
   type: AuthType;
+}
+
+interface ColorThumnailProps {
+  style: StyleProp<ViewStyle>;
+  color: string;
+  onPress: () => void;
 }
 
 const Heading: FC<HeadingProps> = ({ text, buttonText, onPress, ...rest }) => {
@@ -86,6 +103,19 @@ const User: FC<UserProps> = ({ type, name }) => {
   );
 };
 
+const ColorThumnail: FC<ColorThumnailProps> = ({ style, onPress, color }) => {
+  return (
+    <Panel row alignItems="center" style={style} onPress={onPress}>
+      <CoreText type="small" bold marginRight={0.5} color="white">
+        Pick color
+      </CoreText>
+      <View style={styles.colorContainer}>
+        <View style={[styles.color, { backgroundColor: color }]} />
+      </View>
+    </Panel>
+  );
+};
+
 const MyProfileEdit: FC = () => {
   const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
   const navigation = useNavigation<ChildNavigationProp>();
@@ -103,7 +133,9 @@ const MyProfileEdit: FC = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setTalentsVisible(!talentsVisible);
   };
-
+  const [primaryColor, setPrimaryColor] = useState<string>(Color.red);
+  const [secondaryColor] = useState<string>(Color.purple);
+  const [colorPickerVisible, setColorPickerVisible] = useState<boolean>(false);
   const PADDING_BOTTOM = inset.bottom + SPACE;
 
   if (editBioActive && inputRef.current !== null) {
@@ -137,7 +169,17 @@ const MyProfileEdit: FC = () => {
             color="purple"
           />
           <Panel style={styles.profile} marginBottom={2} center>
-            <SvgWiggleFill dimension={DIMENSION} style={StyleSheet.absoluteFill} />
+            <SvgWiggleFill
+              dimension={DIMENSION}
+              style={StyleSheet.absoluteFill}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+            />
+            <ColorThumnail
+              style={styles.colorOuter}
+              color={primaryColor}
+              onPress={(): void => setColorPickerVisible(!colorPickerVisible)}
+            />
             <User type={activeIndex === 0 ? 'public' : 'private'} {...user} />
           </Panel>
           <Heading
@@ -186,8 +228,8 @@ const MyProfileEdit: FC = () => {
       </KeyboardAwareScrollView>
       {infoViewVisible && (
         <Overlay type="page">
-          <OverlayHeader />
-          <Panel flex={1}>
+          <Panel flex={1} justifyContent="center">
+            <OverlayHeader />
             <Panel backgroundColor="white" paddingHorizontal paddingBottom>
               <ScrollView showsVerticalScrollIndicator={false}>
                 <Text marginTop type="small" mode="day" appearance="normal">
@@ -209,6 +251,32 @@ const MyProfileEdit: FC = () => {
             type="large"
             appearance="strong"
             onPress={(): void => setInfoViewVisisble(false)}
+          >
+            Close
+          </Button>
+        </Overlay>
+      )}
+      {colorPickerVisible && (
+        <Overlay type="page">
+          <Panel flex={1} center>
+            {/* @ts-ignore */}
+            <ColorPicker
+              color={primaryColor}
+              onColorSelected={(color): void => setPrimaryColor(color)}
+              onColorChange={(color): void => setPrimaryColor(fromHsv(color))}
+              defaultColor={primaryColor}
+              hideSliders
+              style={{
+                width: WIDTH - SPACE * 2,
+                height: WIDTH - SPACE * 2,
+              }}
+            />
+          </Panel>
+          <Button
+            mode="day"
+            type="large"
+            appearance="strong"
+            onPress={(): void => setColorPickerVisible(false)}
           >
             Close
           </Button>
@@ -253,6 +321,26 @@ const styles = StyleSheet.create({
   badge: {
     position: 'absolute',
     right: 0,
+  },
+  colorOuter: {
+    position: 'absolute',
+    right: AssetStyles.measure.space,
+    bottom: AssetStyles.measure.space,
+  },
+  colorContainer: {
+    width: 40,
+    height: 40,
+    backgroundColor: Color.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: AssetStyles.measure.radius.regular,
+  },
+  color: {
+    width: 30,
+    height: 30,
+    borderRadius: AssetStyles.measure.radius.regular - 2,
+
+    backgroundColor: Color.red,
   },
 });
 
