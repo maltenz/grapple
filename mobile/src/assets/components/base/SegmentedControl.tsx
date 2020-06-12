@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
-import { ModeType } from '../../../types';
+import { ModeType, ColorType } from '../../../types';
 import Panel, { MarginProps } from './Panel';
 import { Color } from '../../colors';
 import Text from '../core/Text';
@@ -9,12 +9,29 @@ interface SegmentedControllerItemProps {
   text: string;
   active: boolean;
   onPress: () => void;
+  color?: ColorType;
 }
 
-const SegmentedControllerItem: FC<SegmentedControllerItemProps> = ({ active, text, onPress }) => {
+const SegmentedControllerItem: FC<SegmentedControllerItemProps> = ({
+  active,
+  text,
+  onPress,
+  color,
+}) => {
+  let activeColor: ColorType;
+  let textColor: ColorType;
+
+  if (color) {
+    activeColor = color;
+    textColor = color;
+  } else {
+    activeColor = 'blue';
+    textColor = 'blue';
+  }
+
   return (
-    <Panel flex={1} center onPress={onPress} backgroundColor={active ? 'blue' : 'transparent'}>
-      <Text type="p" bold color={active ? 'white' : 'blue'}>
+    <Panel flex={1} center onPress={onPress} backgroundColor={active ? activeColor : 'transparent'}>
+      <Text type="p" bold color={active ? 'white' : textColor}>
         {text}
       </Text>
     </Panel>
@@ -29,6 +46,7 @@ interface SegmentedControllerProps extends MarginProps {
   }>;
   onChange: (index: number) => void;
   mode: ModeType;
+  color?: ColorType;
 }
 
 const SegmentedController: FC<SegmentedControllerProps> = ({
@@ -38,6 +56,7 @@ const SegmentedController: FC<SegmentedControllerProps> = ({
   activeIndex,
   items,
   onChange,
+  color,
   ...rest
 }) => {
   return (
@@ -47,13 +66,14 @@ const SegmentedController: FC<SegmentedControllerProps> = ({
           {title}
         </Text>
       )}
-      <Panel row style={styles.container}>
+      <Panel row style={[styles.container, { borderColor: color ? Color[color] : color }]}>
         {items.map(({ title: keyTitle }, index) => (
           <SegmentedControllerItem
             key={keyTitle}
             active={activeIndex === index}
             text={keyTitle}
             onPress={(): void => onChange(index)}
+            color={color}
           />
         ))}
       </Panel>
@@ -63,7 +83,6 @@ const SegmentedController: FC<SegmentedControllerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: Color.blue,
     borderWidth: 2,
     height: 50,
     borderRadius: 25,

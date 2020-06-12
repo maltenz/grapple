@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, RefObject } from 'react';
-import { StyleSheet, NativeMethodsMixinStatic, ScrollView } from 'react-native';
+import { StyleSheet, NativeMethodsMixinStatic, ScrollView, LayoutAnimation } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
@@ -31,6 +31,7 @@ import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ChildNavigationProp } from './HomeRoot';
 import { authUserSelector } from '../store';
 import { User as UserType } from '../generated/graphql';
+import { MarginProps } from '../assets/components/base/Panel';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
@@ -38,7 +39,7 @@ const DIMENSION = WIDTH - SPACE * 2;
 const CIRCLE = 125;
 const RADIUS = AssetStyles.measure.radius.large;
 
-interface HeadingProps {
+interface HeadingProps extends MarginProps {
   text: string;
   buttonText: string;
   onPress?: () => void;
@@ -50,9 +51,9 @@ interface UserProps extends UserType {
   type: AuthType;
 }
 
-const Heading: FC<HeadingProps> = ({ text, buttonText, onPress }) => {
+const Heading: FC<HeadingProps> = ({ text, buttonText, onPress, ...rest }) => {
   return (
-    <Panel row justifyContent="space-between">
+    <Panel row justifyContent="space-between" {...rest}>
       <Text mode="day" type="h3" appearance="normal" marginBottom={0.5}>
         {text}
       </Text>
@@ -96,6 +97,12 @@ const MyProfileEdit: FC = () => {
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
+  const [talentsVisible, setTalentsVisible] = useState<boolean>(false);
+
+  const handleTatentsVisble = (): void => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setTalentsVisible(!talentsVisible);
+  };
 
   const PADDING_BOTTOM = inset.bottom + SPACE;
 
@@ -114,7 +121,7 @@ const MyProfileEdit: FC = () => {
         style={styles.keyboardScrollView}
         contentContainerStyle={{ paddingBottom: PADDING_BOTTOM }}
       >
-        <Panel margin>
+        <Panel marginHorizontal marginTop={2} marginBottom={2}>
           <Heading
             text="Privacy"
             buttonText="Info"
@@ -126,7 +133,8 @@ const MyProfileEdit: FC = () => {
             onChange={(index): void => setActiveIndex(index)}
             items={[{ title: 'Public' }, { title: 'Private' }]}
             marginTop
-            marginBottom={2}
+            marginBottom
+            color="purple"
           />
           <Panel style={styles.profile} marginBottom={2} center>
             <SvgWiggleFill dimension={DIMENSION} style={StyleSheet.absoluteFill} />
@@ -134,12 +142,11 @@ const MyProfileEdit: FC = () => {
           </Panel>
           <Heading
             text="Bio"
-            buttonText="Edit"
+            buttonText={editBioActive ? 'Close' : 'Edit'}
             onPress={(): void => setEditBioActive(!editBioActive)}
           />
           <Comment
             ref={inputRef}
-            marginBottom={2}
             text={bioValue}
             type={editBioActive ? 'input' : 'comment'}
             name="bio"
@@ -147,24 +154,43 @@ const MyProfileEdit: FC = () => {
             onChange={(text): void => setBioValue(text)}
             onBlur={(): void => setEditBioActive(false)}
           />
-          <Heading text="Talent" buttonText="Add" />
         </Panel>
-        <ScrollView horizontal style={styles.scrollView} showsHorizontalScrollIndicator={false}>
-          <Tag text="Legal" marginLeft />
-          <Tag text="Helped 23" />
-          <Tag text="Accomodation" />
-          <Tag text="Survivor" />
-          <Tag text="Chat" />
-          <Tag text="Call" />
+        <Heading
+          text="Talent"
+          buttonText={talentsVisible ? 'Close' : 'Add'}
+          marginHorizontal
+          onPress={handleTatentsVisble}
+        />
+        {talentsVisible && (
+          <ScrollView
+            horizontal
+            style={styles.tagScrollViewAdd}
+            showsHorizontalScrollIndicator={false}
+          >
+            <Tag mode="night" type="add" text="Legal" marginLeft />
+            <Tag mode="night" type="add" text="Helped 23" />
+            <Tag mode="night" type="add" text="Accomodation" />
+            <Tag mode="night" type="add" text="Survivor" />
+            <Tag mode="night" type="add" text="Chat" />
+            <Tag mode="night" type="add" text="Call" />
+          </ScrollView>
+        )}
+        <ScrollView horizontal style={styles.tagScrollView} showsHorizontalScrollIndicator={false}>
+          <Tag mode="day" text="Legal" marginLeft />
+          <Tag mode="day" text="Helped 23" />
+          <Tag mode="day" text="Accomodation" />
+          <Tag mode="day" text="Survivor" />
+          <Tag mode="day" text="Chat" />
+          <Tag mode="day" text="Call" />
         </ScrollView>
       </KeyboardAwareScrollView>
       {infoViewVisible && (
         <Overlay type="page">
           <OverlayHeader />
           <Panel flex={1}>
-            <Panel backgroundColor="white" padding>
+            <Panel backgroundColor="white" paddingHorizontal paddingBottom>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <Text type="small" mode="day" appearance="normal">
+                <Text marginTop type="small" mode="day" appearance="normal">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non sem nisi. Quisque
                   posuere sem quis venenatis aliquet. Integer placerat cursus enim, sed placerat
                   elit interdum vel. In eu leo fringilla, accumsan nibh nec, vulputate diam. Cras
@@ -184,7 +210,7 @@ const MyProfileEdit: FC = () => {
             appearance="strong"
             onPress={(): void => setInfoViewVisisble(false)}
           >
-            OK
+            Close
           </Button>
         </Overlay>
       )}
@@ -213,7 +239,12 @@ const styles = StyleSheet.create({
   blurviewText: {
     borderRadius: RADIUS,
   },
-  scrollView: {
+  tagScrollViewAdd: {
+    paddingVertical: SPACE,
+    backgroundColor: Color.purple,
+  },
+  tagScrollView: {
+    marginTop: AssetStyles.measure.space,
     paddingBottom: SPACE,
   },
   icon: {
