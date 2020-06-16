@@ -28,7 +28,7 @@ const fetchFonts = (): Promise<void> => {
 const cache = new InMemoryCache();
 
 const client = new ApolloClient({
-  uri: 'http://192.168.1.100:8080',
+  uri: 'https://grapple-host.herokuapp.com/',
   cache,
   request: async (operation: Operation): Promise<void> => {
     const token = await AsyncStorage.getItem('token');
