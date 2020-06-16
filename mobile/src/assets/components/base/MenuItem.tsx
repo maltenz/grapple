@@ -8,17 +8,18 @@ import SvgIconSmallRight from '../../svg/icons/small/SvgIconSmallRight';
 interface MenuItemProps {
   title: string;
   last?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
+  Right?: JSX.Element;
 }
 
 const HEIGHT = 60;
 
 const MenuItemHeight = HEIGHT;
 
-const MenuItem: FC<MenuItemProps> = ({ title, last, onPress }) => {
+const MenuItem: FC<MenuItemProps> = ({ title, last, onPress, Right }) => {
   return (
     <Panel
-      onPress={onPress}
+      onPress={onPress || false}
       marginHorizontal
       row
       alignItems="center"
@@ -26,7 +27,7 @@ const MenuItem: FC<MenuItemProps> = ({ title, last, onPress }) => {
       style={styles.container}
     >
       <CoreText type="p">{title}</CoreText>
-      <SvgIconSmallRight color="grey2" strokeWidth={1.5} style={styles.icon} />
+      {Right || <SvgIconSmallRight color="grey2" strokeWidth={1.5} style={styles.icon} />}
       {!last && <Border mode="day" style={styles.border} />}
     </Panel>
   );

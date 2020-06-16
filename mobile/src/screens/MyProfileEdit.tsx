@@ -7,6 +7,7 @@ import {
   View,
   ViewStyle,
   StyleProp,
+  Switch,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -27,7 +28,6 @@ import {
   Comment,
   Color,
   Tag,
-  SegmentedController,
   SvgWiggleFill,
   CoreText,
   SvgIconAccount,
@@ -36,6 +36,7 @@ import {
   Button,
   Overlay,
   OverlayHeader,
+  MenuItem,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -67,19 +68,6 @@ interface ColorThumnailProps {
   color: string;
   onPress: () => void;
 }
-
-const Heading: FC<HeadingProps> = ({ text, buttonText, onPress, ...rest }) => {
-  return (
-    <Panel row justifyContent="space-between" {...rest}>
-      <Text mode="day" type="h3" appearance="normal" marginBottom={0.5}>
-        {text}
-      </Text>
-      <Text type="small" appearance="strong" mode="day" bold onPress={onPress}>
-        {buttonText}
-      </Text>
-    </Panel>
-  );
-};
 
 const User: FC<UserProps> = ({ type, name }) => {
   return (
@@ -120,19 +108,13 @@ const MyProfileEdit: FC = () => {
   const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const [activeIndex, setActiveIndex] = useState<number>(1);
+  const [profilePic, setProfilePic] = useState<'custom' | 'private'>('private');
   const user = useSelector(authUserSelector);
   const [editBioActive, setEditBioActive] = useState<boolean>(false);
   const [infoViewVisible, setInfoViewVisisble] = useState<boolean>(false);
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
-  const [talentsVisible, setTalentsVisible] = useState<boolean>(false);
-
-  const handleTatentsVisble = (): void => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setTalentsVisible(!talentsVisible);
-  };
   const [primaryColor, setPrimaryColor] = useState<string>(Color.red);
   const [secondaryColor] = useState<string>(Color.purple);
   const [colorPickerVisible, setColorPickerVisible] = useState<boolean>(false);
@@ -151,24 +133,19 @@ const MyProfileEdit: FC = () => {
       />
       <KeyboardAwareScrollView
         style={styles.keyboardScrollView}
-        contentContainerStyle={{ paddingBottom: PADDING_BOTTOM }}
+        contentContainerStyle={{
+          paddingBottom: PADDING_BOTTOM,
+          paddingTop: AssetStyles.measure.space,
+        }}
       >
-        <Panel marginHorizontal marginTop={2} marginBottom={2}>
-          <Heading
-            text="Privacy"
-            buttonText="Info"
-            onPress={(): void => setInfoViewVisisble(true)}
-          />
-          <SegmentedController
-            mode="day"
-            activeIndex={activeIndex}
-            onChange={(index): void => setActiveIndex(index)}
-            items={[{ title: 'Public' }, { title: 'Private' }]}
-            marginTop
-            marginBottom
-            color="purple"
-          />
-          <Panel style={styles.profile} marginBottom={2} center>
+        <MenuItem
+          title="Public profile"
+          Right={
+            <Switch value={editBioActive} onValueChange={(val): void => setEditBioActive(val)} />
+          }
+        />
+        <Panel marginTop={2} marginBottom={2}>
+          <Panel style={styles.profile} marginHorizontal marginBottom={2} center>
             <SvgWiggleFill
               dimension={DIMENSION}
               style={StyleSheet.absoluteFill}
@@ -180,43 +157,41 @@ const MyProfileEdit: FC = () => {
               color={primaryColor}
               onPress={(): void => setColorPickerVisible(!colorPickerVisible)}
             />
-            <User type={activeIndex === 0 ? 'public' : 'private'} {...user} />
+            <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
+              <Panel style={styles.icon}>
+                <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
+                <Badge type="add" appearance="strong" style={styles.badge} />
+              </Panel>
+            </BlurView>
+            <BlurView tint="light" intensity={90} style={styles.blurviewText}>
+              <CoreText type="p" color="purple" bold textAlign="center">
+                Anonymous
+              </CoreText>
+            </BlurView>
           </Panel>
-          <Heading
-            text="Bio"
-            buttonText={editBioActive ? 'Close' : 'Edit'}
-            onPress={(): void => setEditBioActive(!editBioActive)}
-          />
-          <Comment
-            ref={inputRef}
-            text={bioValue}
-            type={editBioActive ? 'input' : 'comment'}
-            name="bio"
-            placeholder="Something about you"
-            onChange={(text): void => setBioValue(text)}
-            onBlur={(): void => setEditBioActive(false)}
-          />
+          <MenuItem title="Bio" last Right={<Switch />} />
+          <Panel marginHorizontal>
+            <Comment
+              ref={inputRef}
+              text={bioValue}
+              type={editBioActive ? 'input' : 'comment'}
+              name="bio"
+              placeholder="Something about you"
+              onChange={(text): void => setBioValue(text)}
+              onBlur={(): void => setEditBioActive(false)}
+            />
+          </Panel>
         </Panel>
-        <Heading
-          text="Talent"
-          buttonText={talentsVisible ? 'Close' : 'Add'}
-          marginHorizontal
-          onPress={handleTatentsVisble}
-        />
-        {talentsVisible && (
-          <ScrollView
-            horizontal
-            style={styles.tagScrollViewAdd}
-            showsHorizontalScrollIndicator={false}
-          >
-            <Tag mode="night" type="add" text="Legal" marginLeft />
-            <Tag mode="night" type="add" text="Helped 23" />
-            <Tag mode="night" type="add" text="Accomodation" />
-            <Tag mode="night" type="add" text="Survivor" />
-            <Tag mode="night" type="add" text="Chat" />
-            <Tag mode="night" type="add" text="Call" />
-          </ScrollView>
-        )}
+        <MenuItem title="Strengths" last Right={<Switch />} />
+        <ScrollView horizontal style={styles.tagScrollView} showsHorizontalScrollIndicator={false}>
+          <Tag mode="day" text="Legal" marginLeft />
+          <Tag mode="day" text="Helped 23" />
+          <Tag mode="day" text="Accomodation" />
+          <Tag mode="day" text="Survivor" />
+          <Tag mode="day" text="Chat" />
+          <Tag mode="day" text="Call" />
+        </ScrollView>
+        <MenuItem title="Experiences" last Right={<Switch />} />
         <ScrollView horizontal style={styles.tagScrollView} showsHorizontalScrollIndicator={false}>
           <Tag mode="day" text="Legal" marginLeft />
           <Tag mode="day" text="Helped 23" />
