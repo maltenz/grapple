@@ -41,6 +41,7 @@ const CROP_DIMENSION = 1080;
 
 interface CameraScreenProps {
   next: () => void;
+  clear: boolean;
 }
 
 interface CameraFrameProps {
@@ -86,7 +87,7 @@ const FlashIcon: FC<FlashIconProps> = ({ settings }): JSX.Element => {
   }
 };
 
-const CameraScreen: FC<CameraScreenProps> = ({ next }) => {
+const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const dispatch = useDispatch();
@@ -104,6 +105,10 @@ const CameraScreen: FC<CameraScreenProps> = ({ next }) => {
       setHasCamPermission(camStatus === 'granted');
     };
     checkMultiPermissions();
+
+    if (clear) {
+      dispatch(clearAllShot());
+    }
   }, []);
 
   const handlePreview = (active: boolean, index?: number): void => {

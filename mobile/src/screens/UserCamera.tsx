@@ -6,7 +6,7 @@ import { ChildNavigationProp } from './HomeRoot';
 const UserCamera: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
 
-  return <Camera next={(): void => navigation.navigate('HomeRoot')} />;
+  return <Camera clear next={(): void => navigation.navigate('HomeRoot')} />;
 };
 
 export default UserCamera;
