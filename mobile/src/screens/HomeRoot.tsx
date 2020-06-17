@@ -27,6 +27,7 @@ import { AppRootParamList } from './AppRoot';
 import Home from './Home';
 import Menu from './Menu';
 import CreateCamera from './CreateCamera';
+import UserCamera from './UserCamera';
 import MyProfile from './MyProfile';
 import MyProfileEdit from './MyProfileEdit';
 import Account from './Account';
@@ -41,6 +42,7 @@ export type ParentParamList = {
   Child: undefined;
   Menu: undefined;
   CreateCamera: undefined;
+  UserCamera: undefined;
   Search: undefined;
 };
 
@@ -226,6 +228,7 @@ const Parent: FC<parentNavigationProps> = () => {
         <ParentStack.Screen name="Child" component={Child} />
         <ParentStack.Screen name="Menu" component={Menu} />
         <ParentStack.Screen name="CreateCamera" component={CreateCamera} />
+        <ParentStack.Screen name="UserCamera" component={UserCamera} />
         <ParentStack.Screen name="Search" component={Search} />
       </ParentStack.Navigator>
     </>

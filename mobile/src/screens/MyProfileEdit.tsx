@@ -38,7 +38,7 @@ import {
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
-import { ChildNavigationProp } from './HomeRoot';
+import { ParentNavigationProp } from './HomeRoot';
 
 import { User as UserType } from '../generated/graphql';
 import { MarginProps } from '../assets/components/base/Panel';
@@ -82,7 +82,7 @@ const ColorThumnail: FC<ColorThumnailProps> = ({ style, onPress, color }) => {
 
 const MyProfileEdit: FC = () => {
   const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
-  const navigation = useNavigation<ChildNavigationProp>();
+  const parentNavigation = useNavigation<ParentNavigationProp>();
   const inset = useSafeArea();
   // const [profilePic, setProfilePic] = useState<'custom' | 'private'>('private');
   // const user = useSelector(authUserSelector);
@@ -104,7 +104,9 @@ const MyProfileEdit: FC = () => {
     <>
       <Navigation
         mode="day"
-        Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
+        Left={
+          <NavigationIcon mode="day" type="back" onPress={(): void => parentNavigation.goBack()} />
+        }
         Center={<NavigationHeading mode="day" text="Edit" />}
       />
       <KeyboardAwareScrollView
@@ -133,12 +135,12 @@ const MyProfileEdit: FC = () => {
               color={primaryColor}
               onPress={(): void => setColorPickerVisible(!colorPickerVisible)}
             />
-            <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
-              <Panel style={styles.icon}>
+            <Panel onPress={(): void => parentNavigation.navigate('UserCamera')}>
+              <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
                 <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
                 <Badge type="add" appearance="strong" style={styles.badge} />
-              </Panel>
-            </BlurView>
+              </BlurView>
+            </Panel>
             <BlurView tint="light" intensity={90} style={styles.blurviewText}>
               <CoreText type="p" color="purple" bold textAlign="center">
                 Anonymous
@@ -254,6 +256,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: AssetStyles.measure.space / 2,
+    position: 'relative',
   },
   blurviewText: {
     borderRadius: RADIUS,
@@ -266,12 +269,10 @@ const styles = StyleSheet.create({
     marginTop: AssetStyles.measure.space,
     paddingBottom: SPACE,
   },
-  icon: {
-    position: 'relative',
-  },
   badge: {
     position: 'absolute',
-    right: 0,
+    top: SPACE,
+    right: SPACE,
   },
   colorOuter: {
     position: 'absolute',
