@@ -26,11 +26,11 @@ import {
   SvgIconFlashAuto,
   SvgIconFlash,
   SvgIconFlashOff,
-} from '../assets';
+} from '../../assets';
 
-import { ChildNavigationProp } from './HomeRoot';
+import { ChildNavigationProp } from '../HomeRoot';
 
-import { addShot, deleteShot, createShotsSelector, clearAllShot } from '../store';
+import { addShot, deleteShot, createShotsSelector, clearAllShot } from '../../store';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -38,6 +38,10 @@ const TOP_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 - 
 const BOTTOM_HEIGHT = (AssetStyles.measure.window.height - SQUARE_DIMENSION) / 2 + TOP_OFFSET;
 const OFFSET_PERCENT = AssetStyles.measure.window.height / TOP_OFFSET;
 const CROP_DIMENSION = 1080;
+
+interface CameraScreenProps {
+  next: () => void;
+}
 
 interface CameraFrameProps {
   backgroundImage: string | null;
@@ -82,7 +86,7 @@ const FlashIcon: FC<FlashIconProps> = ({ settings }): JSX.Element => {
   }
 };
 
-const CameraScreen: FC = () => {
+const CameraScreen: FC<CameraScreenProps> = ({ next }) => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const dispatch = useDispatch();
@@ -284,7 +288,7 @@ const CameraScreen: FC = () => {
               mode="night"
               appearance={shots.length ? 'normal' : 'disabled'}
               outline={!shots.length}
-              onPress={shots.length ? (): void => navigation.navigate('CreatePost') : false}
+              onPress={shots.length ? (): void => next() : false}
             >
               Next
             </Button>

@@ -3,7 +3,6 @@ import {
   StyleSheet,
   NativeMethodsMixinStatic,
   ScrollView,
-  LayoutAnimation,
   View,
   ViewStyle,
   StyleProp,
@@ -14,10 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
-import { authUserSelector } from '../store';
+// import { authUserSelector } from '../store';
 
 import {
   Navigation,
@@ -31,7 +30,6 @@ import {
   SvgWiggleFill,
   CoreText,
   SvgIconAccount,
-  SvgIconImage,
   Badge,
   Button,
   Overlay,
@@ -69,28 +67,6 @@ interface ColorThumnailProps {
   onPress: () => void;
 }
 
-const User: FC<UserProps> = ({ type, name }) => {
-  return (
-    <Panel>
-      <BlurView tint="light" intensity={90} style={styles.blurviewCircle}>
-        {type === 'private' ? (
-          <SvgIconAccount strokeWidth={3} color="purple" scale={2} />
-        ) : (
-          <Panel style={styles.icon}>
-            <SvgIconImage strokeWidth={3} color="purple" scale={2} />
-            <Badge type="add" appearance="strong" style={styles.badge} />
-          </Panel>
-        )}
-      </BlurView>
-      <BlurView tint="light" intensity={90} style={styles.blurviewText}>
-        <CoreText type="p" color="purple" bold textAlign="center">
-          {type === 'private' ? 'Anonymous' : name}
-        </CoreText>
-      </BlurView>
-    </Panel>
-  );
-};
-
 const ColorThumnail: FC<ColorThumnailProps> = ({ style, onPress, color }) => {
   return (
     <Panel row alignItems="center" style={style} onPress={onPress}>
@@ -108,8 +84,8 @@ const MyProfileEdit: FC = () => {
   const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const [profilePic, setProfilePic] = useState<'custom' | 'private'>('private');
-  const user = useSelector(authUserSelector);
+  // const [profilePic, setProfilePic] = useState<'custom' | 'private'>('private');
+  // const user = useSelector(authUserSelector);
   const [editBioActive, setEditBioActive] = useState<boolean>(false);
   const [infoViewVisible, setInfoViewVisisble] = useState<boolean>(false);
   const [bioValue, setBioValue] = useState(

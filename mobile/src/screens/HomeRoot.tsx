@@ -26,7 +26,7 @@ import { AppRootParamList } from './AppRoot';
 
 import Home from './Home';
 import Menu from './Menu';
-import Camera from './Camera';
+import CreateCamera from './CreateCamera';
 import MyProfile from './MyProfile';
 import MyProfileEdit from './MyProfileEdit';
 import Account from './Account';
@@ -40,7 +40,7 @@ import CreatePost from './CreatePost';
 export type ParentParamList = {
   Child: undefined;
   Menu: undefined;
-  Camera: undefined;
+  CreateCamera: undefined;
   Search: undefined;
 };
 
@@ -130,6 +130,7 @@ const TabBar: FC<TabBarProps> = ({ state, descriptors, navigation }) => {
                 canPreventDefault: true,
               });
 
+              // @ts-ignore
               if (!isFocused && !event.defaultPrevented) {
                 navigation.navigate(route.name);
               }
@@ -200,8 +201,6 @@ const Child: FC<ChildNavigationProps> = () => {
       <ChildStack.Screen name="MyProfileEdit" component={MyProfileEdit} />
       {/* Post */}
       <ChildStack.Screen name="CreatePost" component={CreatePost} />
-      <ChildStack.Screen name="MyPost" component={MyProfile} />
-      <ChildStack.Screen name="MyPosts" component={MyProfile} />
       {/* Account */}
       <ChildStack.Screen name="Notifications" component={MyProfile} />
       <ChildStack.Screen name="Help" component={MyProfile} />
@@ -226,7 +225,7 @@ const Parent: FC<parentNavigationProps> = () => {
       >
         <ParentStack.Screen name="Child" component={Child} />
         <ParentStack.Screen name="Menu" component={Menu} />
-        <ParentStack.Screen name="Camera" component={Camera} />
+        <ParentStack.Screen name="CreateCamera" component={CreateCamera} />
         <ParentStack.Screen name="Search" component={Search} />
       </ParentStack.Navigator>
     </>
