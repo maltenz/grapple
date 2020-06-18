@@ -1,7 +1,15 @@
 import { combineReducers } from 'redux';
 import { ShotState, shotReducer, createShotsSelector } from './create';
 import { addShot, deleteShot, updateShot, moveShot, clearAllShot } from './create/actions';
-import { UserState, userReducer, authUserSelector } from './user';
+import {
+  UserState,
+  userReducer,
+  authUserSelector,
+  authShotSelector,
+  addShot as authAddShot,
+  deleteShot as authDeleteShot,
+  clearAllShot as authClearAllShot,
+} from './user';
 import { updateUser } from './user/actions';
 import { LayoutState, layoutReducer, layoutPagerSelector, layoutModalSelector } from './layout';
 import { updatePager, updateModal } from './layout/actions';
@@ -26,6 +34,10 @@ export {
    */
   updateUser,
   authUserSelector,
+  authShotSelector,
+  authAddShot,
+  authDeleteShot,
+  authClearAllShot,
   /**
    * Layout
    */

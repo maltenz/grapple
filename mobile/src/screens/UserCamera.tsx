@@ -1,12 +1,7 @@
 import React, { FC } from 'react';
-import { useNavigation } from '@react-navigation/native';
+
 import Camera from './components/Camera';
-import { ChildNavigationProp } from './HomeRoot';
 
-const UserCamera: FC = () => {
-  const navigation = useNavigation<ChildNavigationProp>();
-
-  return <Camera clear next={(): void => navigation.navigate('HomeRoot')} />;
-};
+const UserCamera: FC = () => <Camera type="profile" />;
 
 export default UserCamera;

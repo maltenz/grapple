@@ -33,7 +33,7 @@ const Menu: FC = () => {
       >
         Get help now
       </Button>
-      <Panel style={styles.mapShadow}>
+      <Panel style={styles.mapShadow} center>
         <OverlayPanel
           paddingVertical={0.5}
           paddingHorizontal
@@ -50,7 +50,10 @@ const Menu: FC = () => {
         </OverlayPanel>
       </Panel>
       <Panel flex={1} justifyContent="flex-end">
-        <OverlayItem title="Create" onPress={(): void => parentNavigation.navigate('Camera')} />
+        <OverlayItem
+          title="Create"
+          onPress={(): void => parentNavigation.navigate('CreateCamera')}
+        />
         <OverlayItem title="My Stories" onPress={(): void => navigation.navigate('MyProfile')} />
         <OverlayItem title="My Incidents" onPress={(): void => navigation.navigate('MyProfile')} />
         <OverlayItem title="Back" onPress={(): void => navigation.goBack()}>

@@ -30,7 +30,17 @@ import {
 
 import { ChildNavigationProp } from '../HomeRoot';
 
-import { addShot, deleteShot, createShotsSelector, clearAllShot } from '../../store';
+import {
+  addShot,
+  deleteShot,
+  createShotsSelector,
+  clearAllShot,
+  authShotSelector,
+  authAddShot,
+  authClearAllShot,
+  authDeleteShot,
+} from '../../store';
+import { Shot } from '../../generated/graphql';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;
 const TOP_OFFSET = 50;
@@ -40,8 +50,7 @@ const OFFSET_PERCENT = AssetStyles.measure.window.height / TOP_OFFSET;
 const CROP_DIMENSION = 1080;
 
 interface CameraScreenProps {
-  next: () => void;
-  clear: boolean;
+  type: 'profile' | 'create';
 }
 
 interface CameraFrameProps {
@@ -87,11 +96,13 @@ const FlashIcon: FC<FlashIconProps> = ({ settings }): JSX.Element => {
   }
 };
 
-const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
+const CameraScreen: FC<CameraScreenProps> = ({ type }) => {
   const camRef = useRef<Camera>();
   const navigation = useNavigation<ChildNavigationProp>();
   const dispatch = useDispatch();
-  const shots = useSelector(createShotsSelector);
+  const storedCreateShots = useSelector(createShotsSelector);
+  const storedAuthShots = useSelector(authShotSelector);
+  const [shots, setShots] = useState<Shot[]>([]);
   const [hasCamPermission, setHasCamPermission] = useState<boolean>();
   const [hasCamRollPermission, setHasCamRollPermission] = useState<boolean>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -105,11 +116,19 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
       setHasCamPermission(camStatus === 'granted');
     };
     checkMultiPermissions();
-
-    if (clear) {
-      dispatch(clearAllShot());
-    }
   }, []);
+
+  useEffect(() => {
+    if (type === 'profile') {
+      setShots(storedAuthShots);
+    }
+  }, [storedAuthShots]);
+
+  useEffect(() => {
+    if (type === 'create') {
+      setShots(storedCreateShots);
+    }
+  }, [storedCreateShots]);
 
   const handlePreview = (active: boolean, index?: number): void => {
     if (active && typeof index === 'number') {
@@ -151,7 +170,12 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
             ],
             { format: ImageManipulator.SaveFormat.JPEG, base64: true }
           );
-          dispatch(addShot({ id: CreateId(), title: '', content: '', image: crop.base64 }));
+          if (type === 'create') {
+            dispatch(addShot({ id: CreateId(), title: '', content: '', image: crop.base64 }));
+          }
+          if (type === 'profile') {
+            dispatch(authAddShot({ id: CreateId(), image: crop.base64 }));
+          }
         }
       }
     } catch (err) {
@@ -192,7 +216,13 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
           { format: ImageManipulator.SaveFormat.JPEG, base64: true }
         );
 
-        dispatch(addShot({ id: CreateId(), title: '', content: '', image: resize.base64 }));
+        if (type === 'create') {
+          dispatch(addShot({ id: CreateId(), title: '', content: '', image: resize.base64 }));
+        }
+
+        if (type === 'profile') {
+          dispatch(authAddShot({ id: CreateId(), image: resize.base64 }));
+        }
       }
     } catch (err) {
       throw new Error(err);
@@ -206,7 +236,12 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
         style: 'default',
         onPress: (): void => {
           handlePreview(false);
-          dispatch(clearAllShot());
+          if (type === 'create') {
+            dispatch(clearAllShot());
+          }
+          if (type === 'profile') {
+            dispatch(authClearAllShot());
+          }
         },
       },
       {
@@ -231,7 +266,12 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
         style: 'default',
         onPress: (): void => {
           handlePreview(false);
-          dispatch(deleteShot({ id }));
+          if (type === 'create') {
+            dispatch(deleteShot({ id }));
+          }
+          if (type === 'profile') {
+            dispatch(authDeleteShot({ id }));
+          }
         },
       },
       {
@@ -239,6 +279,15 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
         style: 'cancel',
       },
     ]);
+  };
+
+  const handleNext = (): void => {
+    if (type === 'profile') {
+      navigation.navigate('MyProfileEdit');
+    }
+    if (type === 'create') {
+      navigation.navigate('CreatePost');
+    }
   };
 
   if (hasCamPermission === null || hasCamPermission === false) {
@@ -293,7 +342,7 @@ const CameraScreen: FC<CameraScreenProps> = ({ next, clear }) => {
               mode="night"
               appearance={shots.length ? 'normal' : 'disabled'}
               outline={!shots.length}
-              onPress={shots.length ? (): void => next() : false}
+              onPress={shots.length ? handleNext : false}
             >
               Next
             </Button>

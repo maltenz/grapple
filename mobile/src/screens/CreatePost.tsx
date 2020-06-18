@@ -98,7 +98,7 @@ const CreatePost: FC = () => {
           <NavigationIcon
             mode="day"
             type="image"
-            onPress={(): void => parentNavigation.navigate('Camera')}
+            onPress={(): void => parentNavigation.navigate('CreateCamera')}
           />
         }
         Center={<NavigationHeading mode="day" text="Create" />}

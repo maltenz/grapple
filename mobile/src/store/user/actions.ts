@@ -1,9 +1,9 @@
 import { action, Action } from 'typesafe-actions';
 
 import { UserActionTypes } from './types';
-import { User, Post } from '../../generated/graphql';
+import { User, Shot } from '../../generated/graphql';
 
 export const updateUser = (user: User): Action => action(UserActionTypes.USER_UPDATE, user);
-
-export const updateUserLikes = (id: Pick<Post, 'id'>): Action =>
-  action(UserActionTypes.USER_LIKED, id);
+export const addShot = (shot: Shot): Action => action(UserActionTypes.ADD_SHOT, shot);
+export const deleteShot = ({ id }: Shot): Action => action(UserActionTypes.DELETE_SHOT, id);
+export const clearAllShot = (): Action => action(UserActionTypes.CLEAR_ALL_SHOT);
