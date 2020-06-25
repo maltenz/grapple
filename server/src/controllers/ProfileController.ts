@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server';
 import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
-import ProfileModel, { Profile, UpdateProfile } from '../models/ProfileModel';
+import ProfileModel, { Profile, Reward, UpdateProfile } from '../models/ProfileModel';
 
 /**
  * @param context
@@ -24,8 +24,8 @@ export const createProfile = async ({ dbConn, loggedIn, user }: Context): Promis
     profile = (await ProfileModel(dbConn).create({
       user: user?._id,
       bio: '',
-      skills: [],
-      address: [],
+      rewards: [],
+      location: '',
       phone: '',
       active: new Date(),
     })) as Profile;
@@ -80,6 +80,52 @@ export const deleteProfile = async (context: Context): Promise<Profile> => {
 
   try {
     profile = await ProfileModel(dbConn).findOneAndDelete({ user: context.user?._id });
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return profile;
+};
+
+interface RewardProfileArgs {
+  user: string;
+  type: Reward;
+  nominate: boolean;
+}
+
+/**
+ * @param context
+ * @returns {Profile}
+ */
+export const rewardProfile = async (
+  context: Context,
+  args: RewardProfileArgs
+): Promise<Profile> => {
+  const { dbConn, loggedIn, user } = context;
+  const { user: userArg, type, nominate } = args;
+  const ERR_MESSAGE = 'Unable to reward profile';
+  loginRequired(loggedIn);
+
+  let profile: Profile;
+  const selector = `rewards.${type}.${nominate ? 'nominated' : 'like'}`;
+
+  let push;
+
+  if (nominate) {
+    Object.assign(push, { nominated: userArg });
+  } else {
+    Object.assign(push, { likes: userArg });
+  }
+
+  try {
+    profile = (await ProfileModel(dbConn).findOneAndUpdate(
+      { user: user?._id },
+      {
+        $push: {
+          [selector]: push,
+        },
+      }
+    )) as Profile;
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
