@@ -65,11 +65,14 @@ const ParentStack = createStackNavigator<ParentParamList>();
 /**
  * Home child
  */
+
+export type MyProfileEditParams = { newProfileImg?: boolean };
+
 type ChildParamList = {
   HomeStack: undefined;
   // Profile
   MyProfile: undefined;
-  MyProfileEdit: undefined;
+  MyProfileEdit: MyProfileEditParams;
   // Post
   CreatePost: undefined;
   // Account

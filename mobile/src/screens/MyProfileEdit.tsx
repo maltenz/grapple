@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, RefObject } from 'react';
+import React, { FC, useState, useRef, RefObject, useEffect, ReactNode } from 'react';
 import {
   StyleSheet,
   NativeMethodsMixinStatic,
@@ -7,9 +7,10 @@ import {
   ViewStyle,
   StyleProp,
   Switch,
+  Alert,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -18,6 +19,7 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
 // import { authUserSelector } from '../store';
 
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Navigation,
   NavigationIcon,
@@ -35,13 +37,15 @@ import {
   Overlay,
   OverlayHeader,
   MenuItem,
+  Thumbnail,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
-import { ParentNavigationProp } from './HomeRoot';
+import { ParentNavigationProp, MyProfileEditParams } from './HomeRoot';
 
 import { User as UserType } from '../generated/graphql';
 import { MarginProps } from '../assets/components/base/Panel';
+import { authUserSelector, authShotSelector, authDeleteShot } from '../store';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
@@ -83,11 +87,18 @@ const ColorThumnail: FC<ColorThumnailProps> = ({ style, onPress, color }) => {
 const MyProfileEdit: FC = () => {
   const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
   const parentNavigation = useNavigation<ParentNavigationProp>();
+  const { params }: { params?: MyProfileEditParams } = useRoute();
   const inset = useSafeArea();
-  // const [profilePic, setProfilePic] = useState<'custom' | 'private'>('private');
-  // const user = useSelector(authUserSelector);
+  useEffect(() => {
+    if (params?.newProfileImg) {
+      setSelectProfilePicVisible(true);
+    }
+  }, [params]);
+  const shots = useSelector(authShotSelector);
   const [editBioActive, setEditBioActive] = useState<boolean>(false);
   const [infoViewVisible, setInfoViewVisisble] = useState<boolean>(false);
+  const [selectProfilePicVisible, setSelectProfilePicVisible] = useState<boolean>(false);
+  const [profilePicActiveIndex, setProfilePicActiveIndex] = useState<number>();
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
@@ -235,6 +246,49 @@ const MyProfileEdit: FC = () => {
           </Button>
         </Overlay>
       )}
+      {selectProfilePicVisible && (
+        <Overlay type="page" paddingHorizontal={0}>
+          <Panel flex={1} center>
+            <Text type="h3" mode="night" appearance="normal" textAlign="center">
+              Select profile picture
+            </Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.picScrollView}
+              contentContainerStyle={styles.picScrollViewContent}
+            >
+              {shots.map(
+                (shot, index: number): ReactNode => {
+                  if (shot?.image) {
+                    return (
+                      <Thumbnail
+                        key={shot.id as string}
+                        src={{ uri: `data:image/jpeg;base64,${shot.image}` }}
+                        marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
+                        marginLeft={index === 0 && 1}
+                        outline={index === profilePicActiveIndex && 'blue'}
+                        onPress={(): void => setProfilePicActiveIndex(index)}
+                        backgroundColor="grey4"
+                      />
+                    );
+                  }
+                  return null;
+                }
+              )}
+            </ScrollView>
+          </Panel>
+          <Button
+            marginHorizontal
+            mode="day"
+            type="large"
+            appearance="strong"
+            onPress={(): void => setColorPickerVisible(false)}
+          >
+            Save
+          </Button>
+        </Overlay>
+      )}
     </>
   );
 };
@@ -291,8 +345,16 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: AssetStyles.measure.radius.regular - 2,
-
     backgroundColor: Color.red,
+  },
+  picScrollView: {
+    flexGrow: 0,
+    paddingVertical: SPACE,
+  },
+  picScrollViewContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
 });
 

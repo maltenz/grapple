@@ -283,7 +283,7 @@ const CameraScreen: FC<CameraScreenProps> = ({ type }) => {
 
   const handleNext = (): void => {
     if (type === 'profile') {
-      navigation.navigate('MyProfileEdit');
+      navigation.navigate('MyProfileEdit', { newProfileImg: true });
     }
     if (type === 'create') {
       navigation.navigate('CreatePost');
