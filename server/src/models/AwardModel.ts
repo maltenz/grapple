@@ -23,7 +23,9 @@ export class Award {
   @prop({ ref: Post })
   public post?: Ref<Post>;
   @prop({ ref: User })
-  public user?: Ref<User>;
+  public owner?: Ref<User>;
+  @prop({ ref: User })
+  public subscriber?: Ref<User>;
 }
 
 export const AwardModel = getModelForClass(Award);

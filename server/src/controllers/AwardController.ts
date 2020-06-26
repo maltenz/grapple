@@ -1,8 +1,8 @@
 import loginRequired from '../helper/loginRequired';
-import { ApolloError } from 'apollo-server';
 import { mongoose } from '@typegoose/typegoose';
 import { Context } from '../context';
 import AwardModel, { Award, AwardType } from '../models/AwardModel';
+import { ApolloError } from 'apollo-server';
 import { User } from '../models/UserModel';
 import { Post } from '../models/PostModel';
 
@@ -87,24 +87,55 @@ export const getAward = async (context: Context, args: { input: AwardArgs }): Pr
   let ERR_MESSAGE;
   const { dbConn, loggedIn } = context;
 
-  let list;
+  let award;
   const condition = awardConditionHelper(args.input);
 
   loginRequired(loggedIn);
 
   try {
-    list = (await AwardModel(dbConn).find(condition)) as Award | Award[];
+    award = (await AwardModel(dbConn).findOne(condition)) as Award;
 
-    if (list === null) {
+    if (award === null) {
       ERR_MESSAGE = 'No award found';
-    }
-
-    if (list !== null && list.length > 0) {
-      list = list.map((award) => award);
     }
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
 
-  return list;
+  return award;
+};
+
+/**
+ * @param context
+ * @param {id}
+ * @returns {Award}
+ */
+export const getAwards = async (context: Context, args: { input: AwardArgs }): Promise<Award[]> => {
+  let ERR_MESSAGE;
+  const { dbConn, loggedIn } = context;
+
+  let award;
+  const condition = awardConditionHelper(args.input);
+
+  loginRequired(loggedIn);
+
+  try {
+    award = await AwardModel(dbConn).find(condition);
+
+    if (award === null) {
+      ERR_MESSAGE = 'No award found';
+    }
+
+    if (award !== null && award.length > 0) {
+      award = award.map((award) => award);
+    }
+
+    if (award.length === 0) {
+      award = [award];
+    }
+  } catch (error) {
+    throw new ApolloError(ERR_MESSAGE);
+  }
+
+  return award;
 };
