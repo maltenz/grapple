@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { IResolvers, ApolloError } from 'apollo-server';
-import { RewardQuery } from '../queries/RewardQuery';
-import { RewardMutation } from '../mutations/RewardMutation';
+import { AwardQuery } from '../queries/AwardQuery';
+import { AwardMutation } from '../mutations/AwardMutation';
 import { getUser } from '../controllers/UserController';
 import { User } from '../models/UserModel';
 import { Context } from '../context';
 import { getPostsByUserId, getPost } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 import { mongoose } from '@typegoose/typegoose';
-import { Reward } from '../models/RewardModel';
-import { getReward } from '../controllers/RewardController';
+import { Award } from '../models/AwardModel';
+import { getAward } from '../controllers/AwardController';
 
-export const RewardResolver: IResolvers = {
-  Query: RewardQuery,
-  Mutation: RewardMutation,
-  Reward: {
-    reward: async (parent, args, context: Context, info): Promise<Reward | Reward[]> => {
+export const AwardResolver: IResolvers = {
+  Query: AwardQuery,
+  Mutation: AwardMutation,
+  Award: {
+    award: async (parent, args, context: Context, info): Promise<Award | Award[]> => {
       const id = parent.user?._id as mongoose.Types.ObjectId;
 
       try {
-        return await getReward(context, args);
+        return await getAward(context, args);
       } catch (error) {
         throw new ApolloError(error);
       }

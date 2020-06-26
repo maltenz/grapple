@@ -3,7 +3,7 @@ import { UserResolver } from './UserResolver';
 import { PostResolver } from './PostResolver';
 import { CommentResolver } from './CommentResolver';
 import { ProfileResolver } from './ProfileResolver';
-import { RewardResolver } from './RewardResolver';
+import { AwardResolver } from './AwardResolver';
 
 const customDateScalarResolver = {
   Date: GraphQLDateTime,
@@ -15,5 +15,5 @@ export const resolvers = [
   PostResolver,
   CommentResolver,
   ProfileResolver,
-  RewardResolver,
+  AwardResolver,
 ];

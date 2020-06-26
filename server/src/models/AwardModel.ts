@@ -3,7 +3,7 @@ import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
 import { Post } from './PostModel';
 import { User } from './UserModel';
 
-export type RewardType =
+export type AwardType =
   | 'angel'
   | 'brave'
   | 'calming'
@@ -14,10 +14,10 @@ export type RewardType =
   | 'smart'
   | 'survivor';
 
-export class Reward {
+export class Award {
   _id?: mongoose.Types.ObjectId;
   @prop()
-  public reward?: RewardType;
+  public award?: AwardType;
   @prop()
   public nominate?: boolean;
   @prop({ ref: Post })
@@ -26,7 +26,7 @@ export class Reward {
   public user?: Ref<User>;
 }
 
-export const RewardModel = getModelForClass(Reward);
+export const AwardModel = getModelForClass(Award);
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default (conn: mongoose.Connection) => conn.model('Reward', RewardModel.schema);
+export default (conn: mongoose.Connection) => conn.model('Award', AwardModel.schema);

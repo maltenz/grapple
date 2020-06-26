@@ -1,25 +1,25 @@
 import { gql } from 'apollo-server';
 
 /**
- * @description holds reward schema
+ * @description holds award schema
  */
 
-export const RewardSchema = gql`
-  type Reward {
-    reward: RewardsEnum!
+export const AwardSchema = gql`
+  type Award {
+    award: AwardsEnum!
     nominate: Boolean!
     user: User
     post: Post
   }
 
-  input RewardInput {
-    reward: RewardsEnum
+  input AwardInput {
+    award: AwardsEnum
     nominate: Boolean!
     user: ID!
     post: ID!
   }
 
-  enum RewardsEnum {
+  enum AwardsEnum {
     angel
     brave
     calming
@@ -32,10 +32,10 @@ export const RewardSchema = gql`
   }
 
   extend type Query {
-    reward: Reward
+    award: Award
   }
 
   extend type Mutation {
-    createReward(input: RewardInput!): Reward
+    createAward(input: AwardInput!): Award
   }
 `;
