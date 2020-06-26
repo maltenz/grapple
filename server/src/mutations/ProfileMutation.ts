@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  createProfile,
-  deleteProfile,
-  updateProfile,
-  rewardProfile,
-} from '../controllers/ProfileController';
+import { createProfile, deleteProfile, updateProfile } from '../controllers/ProfileController';
 import { Profile } from '../models/ProfileModel';
 
 export const ProfileMutation = {
@@ -16,11 +11,6 @@ export const ProfileMutation = {
   updateProfile: {
     resolve: async (parent, args, context, info): Promise<Profile> => {
       return await updateProfile(context, args);
-    },
-  },
-  rewardProfile: {
-    resolve: async (parent, args, context, info): Promise<Profile> => {
-      return await rewardProfile(context, args);
     },
   },
   deleteProfile: {

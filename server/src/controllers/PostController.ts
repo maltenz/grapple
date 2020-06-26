@@ -2,6 +2,7 @@ import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
+import { mongoose } from '@typegoose/typegoose';
 
 /**
  * @param context
@@ -38,7 +39,7 @@ export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Pro
  * @param id
  * @returns {Post}
  */
-export const getPost = async ({ dbConn, loggedIn }, id: string): Promise<Post> => {
+export const getPost = async ({ dbConn, loggedIn }, id: mongoose.Types.ObjectId): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 

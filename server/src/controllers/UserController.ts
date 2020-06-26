@@ -123,7 +123,10 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
  * @param id
  * @returns {User}
  */
-export const getUser = async ({ dbConn, loggedIn }: Context, id: string): Promise<User> => {
+export const getUser = async (
+  { dbConn, loggedIn }: Context,
+  id: mongoose.Types.ObjectId
+): Promise<User> => {
   let ERR_MESSAGE;
   let user;
 

@@ -4,6 +4,7 @@ import { UserSchema } from './UserSchema';
 import { PostSchema } from './PostSchema';
 import { CommentSchema } from './CommentSchema';
 import { ProfileSchema } from './ProfileSchema';
+import { RewardSchema } from './RewardSchema';
 
 const typeDefs = gql`
   scalar Date
@@ -16,4 +17,5 @@ export const schema = [
   PostSchema,
   CommentSchema,
   ProfileSchema,
+  RewardSchema,
 ];

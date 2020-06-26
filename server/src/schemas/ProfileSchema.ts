@@ -10,44 +10,6 @@ export const ProfileSchema = gql`
     phone: String!
     posts: [Post!]!
     active: Date!
-    # rewards
-    angelLikes: [UserQuery!]!
-    angelNominates: [UserQuery!]!
-    braveLikes: [UserQuery!]!
-    braveNominates: [UserQuery!]!
-    calmingLikes: [UserQuery!]!
-    calmingNominates: [UserQuery!]!
-    chatLikes: [UserQuery!]!
-    chatNominates: [UserQuery!]!
-    funnyLikes: [UserQuery!]!
-    funnyNominates: [UserQuery!]!
-    helpfulLikes: [UserQuery!]!
-    helpfulNominates: [UserQuery!]!
-    honsetLikes: [UserQuery!]!
-    honsetNominates: [UserQuery!]!
-    smartLikes: [UserQuery!]!
-    smartNominates: [UserQuery!]!
-    survivorLikes: [UserQuery!]!
-    survivorNominates: [UserQuery!]!
-  }
-
-  input RewardInput {
-    user: ID!
-    type: RewardsEnum
-    nominate: Boolean
-  }
-
-  # generates into client
-  enum RewardsEnum {
-    angel
-    brave
-    calming
-    chatty
-    funny
-    helpful
-    honest
-    smart
-    survivor
   }
 
   type Theme {
@@ -74,7 +36,6 @@ export const ProfileSchema = gql`
 
   extend type Mutation {
     createProfile(input: ProfileInput): Profile
-    rewardProfile(input: RewardInput): Profile
     deleteProfile: Profile
     updateProfile(input: ProfileInput): Profile
   }
