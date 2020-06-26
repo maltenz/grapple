@@ -19,6 +19,24 @@ export const ProfileResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
+    angelLikes: async (parent, args, context: Context, info): Promise<User[]> => {
+      try {
+        return await parent.angelLikes.map((id) => {
+          return getUser(context, id);
+        });
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
+    angelNominates: async (parent, args, context: Context, info): Promise<User[]> => {
+      try {
+        return await parent.angelNominates.map((id) => {
+          return getUser(context, id);
+        });
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
     posts: async (parent, args, context: Context, info): Promise<Post[]> => {
       try {
         return await getPostsByUserId(context, { id: parent?.user?._id });

@@ -24,7 +24,26 @@ export const createProfile = async ({ dbConn, loggedIn, user }: Context): Promis
     profile = (await ProfileModel(dbConn).create({
       user: user?._id,
       bio: '',
-      rewards: [],
+      rewards: {
+        angelLikes: [],
+        angelNominated: [],
+        braveLikes: [],
+        braveNominated: [],
+        calmingLikes: [],
+        calmingNominated: [],
+        chattyLikes: [],
+        chattyNominated: [],
+        funnyLikes: [],
+        funnyNominated: [],
+        helpfulLikes: [],
+        helpfulNominated: [],
+        honestLikes: [],
+        honestNominated: [],
+        smartLikes: [],
+        smartNominated: [],
+        survivorLikes: [],
+        survivorNominated: [],
+      },
       location: '',
       phone: '',
       active: new Date(),
@@ -99,32 +118,25 @@ interface RewardProfileArgs {
  */
 export const rewardProfile = async (
   context: Context,
-  args: RewardProfileArgs
+  args: { input: RewardProfileArgs }
 ): Promise<Profile> => {
   const { dbConn, loggedIn, user } = context;
-  const { user: userArg, type, nominate } = args;
+  const { user: userArg, type, nominate } = args.input;
   const ERR_MESSAGE = 'Unable to reward profile';
   loginRequired(loggedIn);
 
   let profile: Profile;
-  const selector = `rewards.${type}.${nominate ? 'nominated' : 'like'}`;
-
-  let push;
-
-  if (nominate) {
-    Object.assign(push, { nominated: userArg });
-  } else {
-    Object.assign(push, { likes: userArg });
-  }
+  const selector = `${type}${nominate ? 'Nominates' : 'Likes'}`;
 
   try {
     profile = (await ProfileModel(dbConn).findOneAndUpdate(
-      { user: user?._id },
+      { user: userArg },
       {
         $push: {
-          [selector]: push,
+          [selector]: user?._id,
         },
-      }
+      },
+      { new: true }
     )) as Profile;
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
