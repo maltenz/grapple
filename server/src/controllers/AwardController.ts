@@ -14,7 +14,7 @@ export interface AwardArgs {
   user: User;
 }
 
-const awardConditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectId): Award => {
+const conditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectId): Award => {
   const { id, award, nominate, post, user } = args;
   const condition = {};
 
@@ -55,7 +55,7 @@ export const createAward = async (context: Context, args: { input: AwardArgs }):
   loginRequired(loggedIn);
 
   let award;
-  const condition = awardConditionHelper(args.input, user?._id);
+  const condition = conditionHelper(args.input, user?._id);
 
   try {
     const hasAward = await AwardModel(dbConn).findOne(condition);
@@ -88,7 +88,7 @@ export const getAward = async (context: Context, args: { input: AwardArgs }): Pr
   const { dbConn, loggedIn } = context;
 
   let award;
-  const condition = awardConditionHelper(args.input);
+  const condition = conditionHelper(args.input);
 
   loginRequired(loggedIn);
 
@@ -114,28 +114,28 @@ export const getAwards = async (context: Context, args: { input: AwardArgs }): P
   let ERR_MESSAGE;
   const { dbConn, loggedIn } = context;
 
-  let award;
-  const condition = awardConditionHelper(args.input);
+  let list;
+  const condition = conditionHelper(args.input);
 
   loginRequired(loggedIn);
 
   try {
-    award = await AwardModel(dbConn).find(condition);
+    list = await AwardModel(dbConn).find(condition);
 
-    if (award === null) {
+    if (list === null) {
       ERR_MESSAGE = 'No award found';
     }
 
-    if (award !== null && award.length > 0) {
-      award = award.map((award) => award);
+    if (list !== null && list.length > 0) {
+      list = list.map((list) => list);
     }
 
-    if (award.length === 0) {
-      award = [award];
+    if (list.length === 0) {
+      list = [list];
     }
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }
 
-  return award;
+  return list;
 };

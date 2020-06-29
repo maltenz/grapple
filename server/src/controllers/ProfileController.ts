@@ -118,7 +118,8 @@ export const updateProfile = async (
       { user: user?._id },
       {
         $set: set,
-      }
+      },
+      { new: true }
     )) as Profile;
 
     if (profile === null) {
