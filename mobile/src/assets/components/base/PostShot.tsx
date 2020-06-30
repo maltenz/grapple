@@ -12,6 +12,7 @@ import NavBarUser from './NavBarUser';
 import { Color } from '../../colors';
 
 import { Shot as ShotType } from '../../../generated/graphql';
+import ReactionMenu from './ReactionMenu';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -166,17 +167,19 @@ const Shot: FC<ShotProps> = ({
         ]}
       >
         {index === 0 && (
-          <NavBarUser
-            userType="approved"
-            name="Malte Boeing"
-            src={POST_USER_IMAGE_SAMPLE}
-            mode="day"
-          />
+          <>
+            <NavBarUser
+              userType="approved"
+              name="Malte Boeing"
+              src={POST_USER_IMAGE_SAMPLE}
+              mode="day"
+            />
+            {animList.map((itemIndex) => (
+              <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
+            ))}
+            <ReactionMenu />
+          </>
         )}
-        {index === 0 &&
-          animList.map((itemIndex) => (
-            <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
-          ))}
       </ImageBackground>
       <Panel marginVertical={0.5} marginHorizontal={gutter ? 0.5 : 1}>
         {index === 0 && (
@@ -224,6 +227,7 @@ const styles = StyleSheet.create({
     padding: AssetStyles.measure.space / 2,
     backgroundColor: Color.grey,
     overflow: 'hidden',
+    justifyContent: 'space-between',
   },
   heartContainer: {
     position: 'absolute',

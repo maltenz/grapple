@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Emoji from 'react-native-emoji';
+// @ts-ignore
 import compactFormat from 'cldr-compact-number';
 import Panel, { MarginProps } from './Panel';
 import { AwardsEnum } from '../../../generated/graphql';
@@ -10,12 +11,14 @@ import CoreText from '../core/Text';
 
 interface AwardProps extends MarginProps {
   type: AwardsEnum;
+  panel?: boolean;
 }
 
 const HEIGHT = 90;
 
 const Award: FC<AwardProps> = ({
   type = AwardsEnum.Angel,
+  panel,
   marginLeft = 0.25,
   marginRight = 0.25,
   ...rest
@@ -65,25 +68,29 @@ const Award: FC<AwardProps> = ({
     }
   }, []);
 
-  return (
-    <Panel
-      style={styles.panel}
-      paddingHorizontal={0.5}
-      center
-      flex={1}
-      marginLeft={marginLeft}
-      marginRight={marginRight}
-      {...rest}
-    >
-      <Emoji name={iconName} style={styles.emoji} />
-      <CoreText type="small" bold color="grey2" minLineHeight>
-        {name}
-      </CoreText>
-      <CoreText type="mini" bold color="grey2">
-        {compactFormat(19634, 'en')}
-      </CoreText>
-    </Panel>
-  );
+  if (panel) {
+    return (
+      <Panel
+        style={styles.panel}
+        paddingHorizontal={0.5}
+        center
+        flex={1}
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+        {...rest}
+      >
+        <Emoji name={iconName} style={styles.emoji} />
+        <CoreText type="small" bold color="grey2" minLineHeight>
+          {name}
+        </CoreText>
+        <CoreText type="mini" bold color="grey2">
+          {compactFormat(19634, 'en')}
+        </CoreText>
+      </Panel>
+    );
+  }
+
+  return <Emoji name={iconName} style={styles.emoji} />;
 };
 
 const styles = StyleSheet.create({

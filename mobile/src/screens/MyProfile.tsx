@@ -102,19 +102,19 @@ const MyProfile: FC = () => {
             Characteristic
           </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
-            <Award type={AwardsEnum.Angel} />
-            <Award type={AwardsEnum.Brave} />
-            <Award type={AwardsEnum.Calming} />
+            <Award panel type={AwardsEnum.Angel} />
+            <Award panel type={AwardsEnum.Brave} />
+            <Award panel type={AwardsEnum.Calming} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award type={AwardsEnum.Chatty} />
-            <Award type={AwardsEnum.Funny} />
-            <Award type={AwardsEnum.Helpful} />
+            <Award panel type={AwardsEnum.Chatty} />
+            <Award panel type={AwardsEnum.Funny} />
+            <Award panel type={AwardsEnum.Helpful} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award type={AwardsEnum.Honest} />
-            <Award type={AwardsEnum.Smart} />
-            <Award type={AwardsEnum.Survivor} />
+            <Award panel type={AwardsEnum.Honest} />
+            <Award panel type={AwardsEnum.Smart} />
+            <Award panel type={AwardsEnum.Survivor} />
           </Panel>
         </Panel>
       </ScrollView>

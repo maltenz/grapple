@@ -54,6 +54,7 @@ import PostContentHeader from './components/base/PostContentHeader';
 import PostContentHeading from './components/base/PostContentHeading';
 import PostsEditSlider, { PostsEditItemType } from './components/base/PostsEditSlider';
 import PullBar, { PullBarHeight } from './components/base/PullBar';
+import ReactionMenu from './components/base/ReactionMenu';
 import SegmentedController from './components/base/SegmentedControl';
 import TabbarBackground from './components/base/TabbarBackground';
 import TabbarCircleButton from './components/base/TabbarCircleButton';
@@ -173,6 +174,7 @@ export {
   PostsEditItemType,
   PullBar,
   PullBarHeight,
+  ReactionMenu,
   TabbarBackground,
   TabbarCircleButton,
   Tag,
