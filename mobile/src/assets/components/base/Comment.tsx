@@ -19,7 +19,7 @@ const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
 interface CommentContainerProps {
   title: string;
-  gutter: boolean;
+  gutter?: boolean;
 }
 
 interface CommentProps extends MarginProps {
@@ -37,7 +37,7 @@ interface CommentBoxProps extends MarginProps {
 
 export const CommentContainer: FC<CommentContainerProps> = ({ children, gutter }) => {
   return (
-    <Panel backgroundColor="white" paddingHorizontal={gutter ? 0.5 : 0}>
+    <Panel backgroundColor="white" paddingHorizontal={gutter ? 1 : 0}>
       <CoreText type="small" bold marginBottom={1} style={{ marginLeft: 0 }}>
         Comments
       </CoreText>

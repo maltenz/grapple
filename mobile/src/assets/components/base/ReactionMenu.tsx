@@ -12,7 +12,12 @@ const HEIGHT = 40;
 const ReactionMenu: FC = () => {
   return (
     <Panel row justifyContent="space-between" alignItems="center">
-      <ScrollView horizontal style={styles.scrollView} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal
+        style={styles.scrollView}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingRight: AssetStyles.measure.space }}
+      >
         {_.map(AwardsEnum, (name) => {
           return (
             <BlurView tint="light" intensity={100} style={styles.item}>

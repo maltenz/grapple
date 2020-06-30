@@ -35,7 +35,6 @@ const MyProfile: FC = () => {
   return (
     <Panel flex={1} backgroundColor="white">
       <Navigation
-        blur
         mode="day"
         Left={<NavigationIcon mode="day" type="back" onPress={(): void => navigation.goBack()} />}
         Center={<NavigationHeading mode="day" text="My profile" />}
