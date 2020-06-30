@@ -15,9 +15,10 @@ export const AwardSchema = gql`
 
   input AwardInput {
     award: AwardsEnum
-    nominate: Boolean!
-    owner: ID!
-    post: ID!
+    nominate: Boolean
+    subscriber: ID
+    owner: ID
+    post: ID
   }
 
   enum AwardsEnum {
@@ -33,8 +34,8 @@ export const AwardSchema = gql`
   }
 
   extend type Query {
-    award: Award
-    awards: [Award]
+    award(input: AwardInput): Award
+    awards(input: AwardInput): [Award]
   }
 
   extend type Mutation {

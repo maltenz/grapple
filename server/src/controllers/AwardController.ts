@@ -11,12 +11,15 @@ export interface AwardArgs {
   award: AwardType;
   nominate: boolean;
   post: Post;
-  user: User;
+  owner: User;
+  subscriber: User;
 }
 
 const conditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectId): Award => {
-  const { id, award, nominate, post, user } = args;
+  const { id, award, nominate = false, post, owner, subscriber } = args;
   const condition = {};
+
+  Object.assign(condition, { nominate });
 
   if (id) {
     Object.assign(condition, { id });
@@ -26,16 +29,16 @@ const conditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectI
     Object.assign(condition, { award });
   }
 
-  if (nominate) {
-    Object.assign(condition, { nominate });
-  }
-
   if (post) {
     Object.assign(condition, { post });
   }
 
-  if (user) {
-    Object.assign(condition, { user });
+  if (owner) {
+    Object.assign(condition, { owner });
+  }
+
+  if (subscriber) {
+    Object.assign(condition, { subscriber });
   }
 
   if (contextUserId) {

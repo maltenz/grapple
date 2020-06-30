@@ -8,6 +8,7 @@ import { Context } from '../context';
 import { getPostsByUserId, getPost } from '../controllers/PostController';
 import { Post } from '../models/PostModel';
 import { mongoose } from '@typegoose/typegoose';
+import { AwardArgs } from '../controllers/AwardController';
 
 export const AwardResolver: IResolvers = {
   Query: AwardQuery,
@@ -31,8 +32,8 @@ export const AwardResolver: IResolvers = {
         throw new ApolloError(error);
       }
     },
-    post: async (parent, args, context: Context, info): Promise<Post> => {
-      const id = context.user?._id as mongoose.Types.ObjectId;
+    post: async (parent: AwardArgs, args, context: Context, info): Promise<Post> => {
+      const id = parent.post?._id as mongoose.Types.ObjectId;
 
       try {
         return await getPost(context, id);
