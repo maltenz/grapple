@@ -7,7 +7,6 @@ import {
   ViewStyle,
   StyleProp,
   Switch,
-  Alert,
 } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -19,7 +18,7 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
 // import { authUserSelector } from '../store';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Navigation,
   NavigationIcon,
@@ -44,20 +43,13 @@ import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ParentNavigationProp, MyProfileEditParams } from './HomeRoot';
 
 import { User as UserType } from '../generated/graphql';
-import { MarginProps } from '../assets/components/base/Panel';
-import { authUserSelector, authShotSelector, authDeleteShot } from '../store';
+import { authShotSelector } from '../store';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
 const DIMENSION = WIDTH - SPACE * 2;
 const CIRCLE = 125;
 const RADIUS = AssetStyles.measure.radius.large;
-
-interface HeadingProps extends MarginProps {
-  text: string;
-  buttonText: string;
-  onPress?: () => void;
-}
 
 type AuthType = 'public' | 'private';
 

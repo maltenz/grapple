@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { ScrollView, StyleSheet, Image } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import emojiFlags from 'emoji-flags';
@@ -19,13 +19,7 @@ import { NavigationHeading, NavigationHeight } from '../assets/components/base/N
 
 import { ChildNavigationProp } from './HomeRoot';
 import { AwardsEnum } from '../generated/graphql';
-
-const HERO_IMAGE = {
-  src: {
-    thumbnail: { uri: 'https://source.unsplash.com/random' },
-    large: { uri: 'https://source.unsplash.com/random' },
-  },
-};
+import ProfileBackground from './components/ProfileBackground';
 
 const TITLE = 'Why read motivational sayings? ';
 const CONTENT =
@@ -39,7 +33,7 @@ const MyProfile: FC = () => {
   const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
 
   return (
-    <>
+    <Panel flex={1} backgroundColor="white">
       <Navigation
         blur
         mode="day"
@@ -50,7 +44,6 @@ const MyProfile: FC = () => {
             mode="day"
             onPress={(): void => navigation.navigate('MyProfileEdit')}
             appearance="dark"
-            outline
             type="normal"
             style={{ marginBottom: 0 }}
           >
@@ -58,10 +51,7 @@ const MyProfile: FC = () => {
           </Button>
         }
       />
-      <Image
-        style={[styles.heroImage, { height: HERO_DIMENSIONS + NavigationHeight + inset.top }]}
-        source={HERO_IMAGE.src.large}
-      />
+      <ProfileBackground />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{
@@ -70,9 +60,9 @@ const MyProfile: FC = () => {
         }}
       >
         <Panel backgroundColor="white" padding>
-          <Text mode="day" appearance="normal" type="h4" bold>
+          {/* <Text mode="day" appearance="normal" type="h4" bold>
             Malte Boeing
-          </Text>
+          </Text> */}
           <Button
             type="normal"
             appearance="disabled"
@@ -82,12 +72,11 @@ const MyProfile: FC = () => {
           >
             {`${flag} Wellington`}
           </Button>
-          <Text mode="day" appearance="normal" type="small" marginBottom>
+          <Text mode="day" appearance="normal" type="small" marginBottom={1.5}>
             Many people has the notion that enlightenment is one state. Many also believe that when
             it is attained, a person is forever in that state.
           </Text>
-
-          <Text mode="day" appearance="normal" type="h4" bold>
+          <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>
             Shared stories
           </Text>
           <ScrollView
@@ -99,6 +88,19 @@ const MyProfile: FC = () => {
             <Excerpt title={TITLE} content={CONTENT} />
             <Excerpt title={TITLE} content={CONTENT} />
           </ScrollView>
+          <Button
+            type="normal"
+            appearance="normal"
+            mode="day"
+            style={{ alignSelf: 'flex-end' }}
+            marginBottom
+            outline
+          >
+            See all
+          </Button>
+          <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>
+            Characteristic
+          </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
             <Award type={AwardsEnum.Angel} />
             <Award type={AwardsEnum.Brave} />
@@ -116,7 +118,7 @@ const MyProfile: FC = () => {
           </Panel>
         </Panel>
       </ScrollView>
-    </>
+    </Panel>
   );
 };
 

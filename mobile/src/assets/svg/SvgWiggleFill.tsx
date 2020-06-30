@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import Svg, { Path, Rect } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 interface SvgWiggleFillProps {
   style?: StyleProp<ViewStyle>;
@@ -19,8 +19,12 @@ const SvgWiggleFill: FC<SvgWiggleFillProps> = ({
   const height = dimension;
 
   return (
-    <Svg width={width} height={height} style={style}>
-      <Rect width={width} height={height} fill={secondaryColor} />
+    <Svg
+      width={width}
+      height={height}
+      style={[style, { backgroundColor: secondaryColor }]}
+      viewBox="0 0 640 640"
+    >
       <Path
         fill={primaryColor}
         d="M360.3,0c-4,4.8-8.3,9.6-13.1,14.4c-54.6,54.6-111.3,53.9-157,53.4c-39.4-0.4-65.5-0.7-93.9,27.7

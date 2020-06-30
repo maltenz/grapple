@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   panel: {
     borderWidth: AssetStyles.measure.border.regular,
     borderColor: Color.grey3,
-    borderRadius: AssetStyles.measure.radius.large,
+    borderRadius: AssetStyles.measure.radius.regular,
     height: HEIGHT,
   },
   emoji: {

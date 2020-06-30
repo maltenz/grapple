@@ -178,7 +178,7 @@ const Shot: FC<ShotProps> = ({
             <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
           ))}
       </ImageBackground>
-      <Panel marginVertical={0.5} marginHorizontal={0.5}>
+      <Panel marginVertical={0.5} marginHorizontal={gutter ? 0.5 : 1}>
         {index === 0 && (
           <PostNavbar
             Icons={
