@@ -56,10 +56,10 @@ const Category: FC = () => {
 const Results: FC = () => {
   return (
     <OverlayPanel paddingHorizontal={0.5}>
-      <Excerpt title={TITLE} content={CONTENT} />
-      <Excerpt title={TITLE} content={CONTENT} />
-      <Excerpt title={TITLE} content={CONTENT} />
-      <Excerpt title={TITLE} content={CONTENT} last />
+      <Excerpt title={TITLE} content={CONTENT} mode="night" />
+      <Excerpt title={TITLE} content={CONTENT} mode="night" />
+      <Excerpt title={TITLE} content={CONTENT} mode="night" />
+      <Excerpt title={TITLE} content={CONTENT} mode="night" last />
     </OverlayPanel>
   );
 };

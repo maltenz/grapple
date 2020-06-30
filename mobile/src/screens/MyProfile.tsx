@@ -4,7 +4,16 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import emojiFlags from 'emoji-flags';
 
-import { Navigation, NavigationIcon, Button, AssetStyles, Panel, Text, Award } from '../assets';
+import {
+  Navigation,
+  NavigationIcon,
+  Button,
+  AssetStyles,
+  Panel,
+  Text,
+  Award,
+  Excerpt,
+} from '../assets';
 
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
@@ -17,6 +26,10 @@ const HERO_IMAGE = {
     large: { uri: 'https://source.unsplash.com/random' },
   },
 };
+
+const TITLE = 'Why read motivational sayings? ';
+const CONTENT =
+  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
 const HERO_DIMENSIONS = AssetStyles.measure.window.width;
 
@@ -60,18 +73,32 @@ const MyProfile: FC = () => {
           <Text mode="day" appearance="normal" type="h4" bold>
             Malte Boeing
           </Text>
-          <Text mode="day" appearance="normal" type="small" marginBottom={0.5}>
-            Many people has the notion that enlightenment is one state. Many also believe that when
-            it is attained, a person is forever in that state.
-          </Text>
           <Button
             type="normal"
             appearance="disabled"
             mode="day"
             style={{ alignSelf: 'flex-start' }}
+            marginBottom
           >
             {`${flag} Wellington`}
           </Button>
+          <Text mode="day" appearance="normal" type="small" marginBottom>
+            Many people has the notion that enlightenment is one state. Many also believe that when
+            it is attained, a person is forever in that state.
+          </Text>
+
+          <Text mode="day" appearance="normal" type="h4" bold>
+            Shared stories
+          </Text>
+          <ScrollView
+            horizontal
+            style={styles.excerptContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            <Excerpt title={TITLE} content={CONTENT} />
+            <Excerpt title={TITLE} content={CONTENT} />
+            <Excerpt title={TITLE} content={CONTENT} />
+          </ScrollView>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
             <Award type={AwardsEnum.Angel} />
             <Award type={AwardsEnum.Brave} />
@@ -115,6 +142,10 @@ const styles = StyleSheet.create({
     left: 0,
   },
   backgroundBug: {},
+  excerptContainer: {
+    overflow: 'visible',
+    marginTop: AssetStyles.measure.space / 2,
+  },
 });
 
 export default MyProfile;
