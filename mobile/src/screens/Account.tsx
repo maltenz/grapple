@@ -17,7 +17,6 @@ import {
 
 import { ParentNavigationProp, ChildNavigationProp } from './HomeRoot';
 
-import MenuItemBuddyFinder from './components/MenuItemBuddyFinder';
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { updateUser } from '../store';
 
@@ -56,9 +55,6 @@ const Account: FC = () => {
             onPress={(): void => navigation.navigate('MyProfile')}
             src={SRC}
           />
-        </Container>
-        <Container>
-          <MenuItemBuddyFinder />
         </Container>
         <Container>
           <MenuItem title="Notifications" onPress={(): void => Alert.alert('press')} />

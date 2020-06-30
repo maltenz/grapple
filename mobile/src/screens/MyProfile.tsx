@@ -1,24 +1,15 @@
-import React, { FC } from 'react';
-import { ScrollView, Alert, StyleSheet, Image } from 'react-native';
+import React, { FC, useState } from 'react';
+import { ScrollView, StyleSheet, Image } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import emojiFlags from 'emoji-flags';
 
-import {
-  Navigation,
-  NavigationIcon,
-  Button,
-  AssetStyles,
-  Container,
-  Panel,
-  Text,
-  MenuItemThumbnail,
-  SvgTabbarBackgroundHeight,
-  CorePullBar,
-} from '../assets';
+import { Navigation, NavigationIcon, Button, AssetStyles, Panel, Text, Award } from '../assets';
 
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
+import { AwardsEnum } from '../generated/graphql';
 
 const HERO_IMAGE = {
   src: {
@@ -31,8 +22,8 @@ const HERO_DIMENSIONS = AssetStyles.measure.window.width;
 
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
-
   const inset = useSafeArea();
+  const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
 
   return (
     <>
@@ -62,48 +53,40 @@ const MyProfile: FC = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{
           paddingTop: AssetStyles.measure.window.width - NavigationHeight - inset.top,
-          paddingBottom: SvgTabbarBackgroundHeight,
+          paddingBottom: inset.bottom + AssetStyles.measure.space,
         }}
       >
-        <Panel backgroundColor="grey4">
-          <Container paddingHorizontal paddingVertical={0.5}>
-            <Panel row alignItems="center">
-              <Button
-                type="small"
-                appearance="normal"
-                mode="day"
-                style={{ alignSelf: 'flex-start' }}
-                marginRight
-              >
-                Become a buddy
-              </Button>
-              <Text mode="day" appearance="normal" type="small" underline>
-                Info
-              </Text>
-            </Panel>
-            <Panel>
-              <Text mode="day" appearance="normal" type="p" bold>
-                Malte Boeing
-              </Text>
-              <Text mode="day" appearance="normal" type="small" marginBottom>
-                Many people has the notion that enlightenment is one state. Many also believe that
-                when it is attained, a person is forever in that state.
-              </Text>
-              <CorePullBar />
-            </Panel>
-          </Container>
-          <MenuItemThumbnail
-            title="Emergency Address"
-            subTitle={`4 Penglington Place \n Wellington, New Zealand`}
-            src={{ uri: HERO_IMAGE.src.thumbnail.uri }}
-            onPress={(): void => Alert.alert('press')}
-          />
-          <MenuItemThumbnail
-            title="Emergency Phone"
-            subTitle="+64 4 21 144 26 24"
-            src={{ uri: HERO_IMAGE.src.thumbnail.uri }}
-            onPress={(): void => Alert.alert('press')}
-          />
+        <Panel backgroundColor="white" padding>
+          <Text mode="day" appearance="normal" type="h4" bold>
+            Malte Boeing
+          </Text>
+          <Text mode="day" appearance="normal" type="small" marginBottom={0.5}>
+            Many people has the notion that enlightenment is one state. Many also believe that when
+            it is attained, a person is forever in that state.
+          </Text>
+          <Button
+            type="normal"
+            appearance="disabled"
+            mode="day"
+            style={{ alignSelf: 'flex-start' }}
+          >
+            {`${flag} Wellington`}
+          </Button>
+          <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
+            <Award type={AwardsEnum.Angel} />
+            <Award type={AwardsEnum.Brave} />
+            <Award type={AwardsEnum.Calming} />
+          </Panel>
+          <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
+            <Award type={AwardsEnum.Chatty} />
+            <Award type={AwardsEnum.Funny} />
+            <Award type={AwardsEnum.Helpful} />
+          </Panel>
+          <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
+            <Award type={AwardsEnum.Honest} />
+            <Award type={AwardsEnum.Smart} />
+            <Award type={AwardsEnum.Survivor} />
+          </Panel>
         </Panel>
       </ScrollView>
     </>

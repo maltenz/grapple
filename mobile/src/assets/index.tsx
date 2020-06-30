@@ -25,6 +25,7 @@ import {
 /**
  * base components
  */
+import Award from './components/base/Award';
 import Badge from './components/base/Badge';
 import Border from './components/base/Border';
 import Bullet from './components/base/Bullet';
@@ -37,6 +38,7 @@ import Button, {
 import Comment, { CommentUser, CommentContainer } from './components/base/Comment';
 import CommentLoader from './components/base/CommentLoader';
 import Container from './components/base/Container';
+import Excerpt from './components/base/Excerpt';
 import MenuItem, { MenuItemHeight } from './components/base/MenuItem';
 import MenuItemAccount from './components/base/MenuItemAccount';
 import MenuItemThumbnail from './components/base/MenuItemThumbnail';
@@ -132,6 +134,7 @@ export {
   CorePullBar,
   CoreText,
   // base components
+  Award,
   Badge,
   Border,
   Bullet,
@@ -145,6 +148,7 @@ export {
   CommentContainer,
   CommentLoader,
   Container,
+  Excerpt,
   MenuItem,
   MenuItemAccount,
   MenuItemHeight,

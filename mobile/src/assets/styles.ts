@@ -51,8 +51,8 @@ const medium = {
 };
 
 const small = {
-  fontSize: 14,
-  lineHeight: 22,
+  fontSize: 15,
+  lineHeight: 24,
 };
 
 const mini = {
