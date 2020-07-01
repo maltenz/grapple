@@ -24,7 +24,7 @@ const ReactionMenu: FC<ReactionMenuProps> = ({ onReaction }) => {
       >
         {_.map(AwardsEnum, (name) => {
           return (
-            <TouchableOpacity onPress={(): void => onReaction(name)}>
+            <TouchableOpacity key={name} onPress={(): void => onReaction(name)}>
               <BlurView key={name} tint="light" intensity={100} style={styles.item}>
                 <Award type={name} />
               </BlurView>

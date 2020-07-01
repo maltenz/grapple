@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
-import ApolloClient, { Operation, InMemoryCache } from 'apollo-boost';
+import ApolloClient, { Operation, InMemoryCache, gql } from 'apollo-boost';
 import { AsyncStorage } from 'react-native';
 import { ApolloProvider } from '@apollo/react-hoc';
 import AppRoot from './src/screens/AppRoot';
@@ -41,6 +41,19 @@ const client = new ApolloClient({
       },
     });
   },
+  typeDefs: gql`
+    enum AwardsEnum {
+      angel
+      brave
+      calming
+      chatty
+      funny
+      helpful
+      honest
+      smart
+      survivor
+    }
+  `,
 });
 
 const App: FC = () => {

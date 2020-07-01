@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
+import { useSelector } from 'react-redux';
 import { Post as BasePost, AwardToEmojiHelper } from '../../assets';
 import { Post as PostType, Shot, Comment, CommentInput, AwardsEnum } from '../../generated/graphql';
 import { View } from '../../assets/components/base/Post';
@@ -10,6 +11,8 @@ import { CommentLoaderType } from '../../assets/components/base/CommentLoader';
 import { BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
 import { GET_COMMENTS } from '../../queries/comment';
 import { CREATE_COMMENT } from '../../mutations/comment';
+import { CREATE_AWARD } from '../../mutations/award';
+import { authUserSelector } from '../../store';
 
 interface PostProps extends PostType {
   gutter?: boolean;
@@ -22,9 +25,10 @@ const ANIM_ICON_DELAY = 1000;
 const ANIM_ICON_WIDTH = 80;
 const ANIM_ICON_SIZE = ANIM_ICON_WIDTH - 10;
 
-const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gutter }) => {
+const Post: FC<PostProps> = ({ id, user, shots, bookmarked: propBookmarked, style, gutter }) => {
   const [bookmarkPost] = useMutation(BOOKMARK_POST);
   const [removeBookmarkPost] = useMutation(REMOVE_BOOKMARK_POST);
+  const [awardPost] = useMutation(CREATE_AWARD);
   const [
     getComments,
     { data: commentsData, loading: loadingComments, refetch: refetchCommments },
@@ -34,6 +38,7 @@ const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gut
   const [createComment, { data: createCommentData }] = useMutation<{ createComment: Comment }>(
     CREATE_COMMENT
   );
+  const authUser = useSelector(authUserSelector);
   const [resetComment, setResetComment] = useState<boolean>(false);
   const [reactionsVisible, setReactionsVisible] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentLoaderType>({ loading: false, data: [] });
@@ -76,6 +81,16 @@ const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gut
     const { name } = AwardToEmojiHelper(icon);
     setIconAnimateActive(true);
     setIconName(name);
+
+    awardPost({
+      variables: {
+        post: id,
+        award: icon,
+        nomimate: false,
+        owner: user.id,
+        subscriber: authUser.id,
+      },
+    });
 
     setTimeout(() => {
       setIconAnimateActive(false);
