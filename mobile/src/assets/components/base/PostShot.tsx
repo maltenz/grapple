@@ -11,8 +11,8 @@ import Panel from './Panel';
 import NavBarUser from './NavBarUser';
 import { Color } from '../../colors';
 
-import { Shot as ShotType } from '../../../generated/graphql';
-import ReactionMenu from './ReactionMenu';
+import { Shot as ShotType, AwardsEnum } from '../../../generated/graphql';
+import ReactionMenu from '../../../screens/components/ReactionMenu';
 
 const POST_USER_IMAGE_SAMPLE = { uri: 'https://source.unsplash.com/120x120' };
 
@@ -22,7 +22,7 @@ export interface AnimIconConfig {
   duration: number;
   delay: number;
   tolerance: number;
-  iconName: Icon;
+  iconName: AwardsEnum;
   active: boolean;
   width: number;
   fontSize: number;
@@ -30,12 +30,13 @@ export interface AnimIconConfig {
 
 interface ShotProps extends ShotType {
   index: number;
-  liked?: boolean;
-  handleLike?: () => void;
+  onHeart?: () => void;
+  onReaction?: (icon: AwardsEnum) => void;
+  reactionsVisible?: boolean;
   bookmarked?: boolean;
-  handleBookmark?: () => void;
+  onBookmark?: () => void;
   commented?: boolean;
-  handleComments?: () => void;
+  onComments?: () => void;
   animIconConfig?: AnimIconConfig;
   gutter?: boolean;
 }
@@ -140,12 +141,13 @@ const Shot: FC<ShotProps> = ({
   title,
   content,
   image,
-  liked,
-  handleLike,
+  onHeart,
+  onReaction,
+  reactionsVisible,
   bookmarked,
-  handleBookmark,
+  onBookmark,
   commented,
-  handleComments,
+  onComments,
   animIconConfig,
   gutter,
 }) => {
@@ -177,7 +179,9 @@ const Shot: FC<ShotProps> = ({
             {animList.map((itemIndex) => (
               <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
             ))}
-            <ReactionMenu />
+            {reactionsVisible && (
+              <ReactionMenu onReaction={onReaction as (icon: AwardsEnum) => void} />
+            )}
           </>
         )}
       </ImageBackground>
@@ -187,16 +191,11 @@ const Shot: FC<ShotProps> = ({
             Icons={
               <>
                 <Panel flex={1} row>
-                  <PostNavbarItem
-                    type="like"
-                    onPress={handleLike}
-                    marginRight
-                    active={liked as boolean}
-                  />
+                  <PostNavbarItem type="like" onPress={onHeart} marginRight active />
                   <PostNavbarItem
                     type="comment"
                     marginRight
-                    onPress={handleComments}
+                    onPress={onComments}
                     active={commented as boolean}
                   />
                   <PostNavbarItem
@@ -209,7 +208,7 @@ const Shot: FC<ShotProps> = ({
                 </Panel>
                 <PostNavbarItem
                   type="bookmark"
-                  onPress={handleBookmark}
+                  onPress={onBookmark}
                   active={bookmarked as boolean}
                 />
               </>

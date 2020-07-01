@@ -3,12 +3,11 @@ import { StyleProp, ViewStyle } from 'react-native';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import { Post as BasePost } from '../../assets';
-import { Post as PostType, Shot, Comment, CommentInput } from '../../generated/graphql';
+import { Post as PostType, Shot, Comment, CommentInput, AwardsEnum } from '../../generated/graphql';
 import { View } from '../../assets/components/base/Post';
 import { CommentLoaderType } from '../../assets/components/base/CommentLoader';
-import { Icon } from '../../assets/components/base/PostShot';
 
-import { LIKE_POST, UNLIKE_POST, BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
+import { BOOKMARK_POST, REMOVE_BOOKMARK_POST } from '../../mutations/post';
 import { GET_COMMENTS } from '../../queries/comment';
 import { CREATE_COMMENT } from '../../mutations/comment';
 
@@ -23,16 +22,7 @@ const ANIM_ICON_DELAY = 1000;
 const ANIM_ICON_WIDTH = 80;
 const ANIM_ICON_SIZE = ANIM_ICON_WIDTH - 10;
 
-const Post: FC<PostProps> = ({
-  shots,
-  id,
-  liked: propLiked,
-  bookmarked: propBookmarked,
-  style,
-  gutter,
-}) => {
-  const [likePost] = useMutation(LIKE_POST);
-  const [unlikePost] = useMutation(UNLIKE_POST);
+const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gutter }) => {
   const [bookmarkPost] = useMutation(BOOKMARK_POST);
   const [removeBookmarkPost] = useMutation(REMOVE_BOOKMARK_POST);
   const [
@@ -45,10 +35,10 @@ const Post: FC<PostProps> = ({
     CREATE_COMMENT
   );
   const [resetComment, setResetComment] = useState<boolean>(false);
+  const [reactionsVisible, setReactionsVisible] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentLoaderType>({ loading: false, data: [] });
-  const [liked, setLiked] = useState<boolean>(propLiked as boolean);
   const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
-  const [iconName, setIconName] = useState<Icon>(liked ? 'heart' : 'broken_heart');
+  const [iconName, setIconName] = useState<AwardsEnum>(AwardsEnum.Angel);
   const [view, setView] = useState<View>('shots');
   const [iconAnimateActive, setIconAnimateActive] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
@@ -78,6 +68,17 @@ const Post: FC<PostProps> = ({
     }
   }, [createCommentData]);
 
+  const handleHeart = (): void => {
+    setReactionsVisible(!reactionsVisible);
+  };
+
+  const handleReaction = (icon: AwardsEnum): void => {
+    setIconName(icon);
+    setTimeout(() => {
+      setIconAnimateActive(false);
+    }, ANIM_ICON_DUR + ANIM_ICON_DELAY);
+  };
+
   const handleLoadComments = ({ loading, data }: CommentLoaderType): void => {
     const myComments = { ...comments };
     myComments.loading = loading;
@@ -89,22 +90,6 @@ const Post: FC<PostProps> = ({
 
   const handleCreateComment = ({ text }: CommentInput): void => {
     createComment({ variables: { id, text } });
-  };
-
-  const handleLike = (): void => {
-    if (liked) {
-      unlikePost({ variables: { id } });
-      setIconName('broken_heart');
-      setLiked(false);
-    } else {
-      likePost({ variables: { id } });
-      setIconName('heart');
-      setLiked(true);
-    }
-    setIconAnimateActive(true);
-    setTimeout(() => {
-      setIconAnimateActive(false);
-    }, ANIM_ICON_DUR + ANIM_ICON_DELAY);
   };
 
   const handleBookmark = (): void => {
@@ -147,9 +132,10 @@ const Post: FC<PostProps> = ({
     <BasePost
       view={view}
       shots={shots as Shot[]}
-      liked={liked}
-      onLike={handleLike}
+      onHeart={handleHeart}
       bookmarked={bookmarked}
+      onReaction={handleReaction}
+      reactionsVisible={reactionsVisible}
       onBookmark={handleBookmark}
       onComment={handleComment}
       commentsVisible={commentsVisible}

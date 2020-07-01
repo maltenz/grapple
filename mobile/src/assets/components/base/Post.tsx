@@ -4,7 +4,7 @@ import { StyleProp, ViewStyle, LayoutAnimation, StyleSheet } from 'react-native'
 import Panel from './Panel';
 import PullBar from './PullBar';
 import PostShot, { AnimIconConfig } from './PostShot';
-import { Shot as ShotType, CommentInput } from '../../../generated/graphql';
+import { Shot as ShotType, CommentInput, AwardsEnum } from '../../../generated/graphql';
 import CommentLoader, { CommentLoaderType } from './CommentLoader';
 
 export type View = 'comments' | 'shots';
@@ -14,8 +14,9 @@ interface PostProps {
   style?: StyleProp<ViewStyle>;
   shots: ShotType[];
   view: View;
-  liked: boolean;
-  onLike: () => void;
+  onHeart: () => void;
+  onReaction: (icon: AwardsEnum) => void;
+  reactionsVisible: boolean;
   bookmarked: boolean;
   onBookmark: () => void;
   onComment: () => void;
@@ -31,8 +32,9 @@ interface PostProps {
 const Post: FC<PostProps> = ({
   view,
   shots,
-  liked,
-  onLike,
+  onHeart,
+  onReaction,
+  reactionsVisible,
   bookmarked,
   onBookmark,
   onComment,
@@ -65,12 +67,13 @@ const Post: FC<PostProps> = ({
         image={shots[0]?.image as string}
         title={shots[0]?.title as string}
         content={shots[0]?.content as string}
-        liked={liked}
-        handleLike={onLike}
+        onHeart={onHeart}
+        onReaction={onReaction}
+        reactionsVisible={reactionsVisible}
         bookmarked={bookmarked}
-        handleBookmark={onBookmark}
+        onBookmark={onBookmark}
         commented={commentsVisible}
-        handleComments={onComment}
+        onComments={onComment}
         animIconConfig={animIconConfig}
         gutter={gutter}
       />
@@ -95,8 +98,8 @@ const Post: FC<PostProps> = ({
       )}
       {visible && view === 'comments' && commentsVisible && (
         <CommentLoader
-          handleCreateComment={onCreateComment}
-          handleResetComment={onResetComment}
+          onCreateComment={onCreateComment}
+          onResetComment={onResetComment}
           {...comments}
         />
       )}

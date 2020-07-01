@@ -1,15 +1,19 @@
 import _ from 'lodash';
 import React, { FC } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
-import Panel from './Panel';
-import { AwardsEnum } from '../../../generated/graphql';
-import Award from './Award';
-import { AssetStyles } from '../../styles';
+import Panel from '../../assets/components/base/Panel';
+import { AwardsEnum } from '../../generated/graphql';
+import Award from '../../assets/components/base/Award';
+import { AssetStyles } from '../../assets/styles';
 
 const HEIGHT = 40;
 
-const ReactionMenu: FC = () => {
+type ReactionMenuProps = {
+  onReaction: (icon: AwardsEnum) => void;
+};
+
+const ReactionMenu: FC<ReactionMenuProps> = ({ onReaction }) => {
   return (
     <Panel row justifyContent="space-between" alignItems="center">
       <ScrollView
@@ -20,9 +24,11 @@ const ReactionMenu: FC = () => {
       >
         {_.map(AwardsEnum, (name) => {
           return (
-            <BlurView tint="light" intensity={100} style={styles.item}>
-              <Award type={name} />
-            </BlurView>
+            <TouchableOpacity onPress={(): void => onReaction(name)}>
+              <BlurView key={name} tint="light" intensity={100} style={styles.item}>
+                <Award type={name} />
+              </BlurView>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>

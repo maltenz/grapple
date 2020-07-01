@@ -17,15 +17,15 @@ export interface CommentLoaderType {
 }
 
 interface CommentLoaderProps extends CommentLoaderType {
-  handleCreateComment: (value: CommentInputType) => void;
-  handleResetComment: boolean;
+  onCreateComment: (value: CommentInputType) => void;
+  onResetComment: boolean;
 }
 
-const CommentLoader: FC<CommentLoaderProps> = ({ loading, data, handleCreateComment }) => {
+const CommentLoader: FC<CommentLoaderProps> = ({ loading, data, onCreateComment }) => {
   const [text, setText] = useState<string>();
   const submit = (): void => {
     if (text?.length) {
-      handleCreateComment({ text });
+      onCreateComment({ text });
     }
   };
 
