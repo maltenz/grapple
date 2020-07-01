@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 
-import { Post as BasePost } from '../../assets';
+import { Post as BasePost, AwardToEmojiHelper } from '../../assets';
 import { Post as PostType, Shot, Comment, CommentInput, AwardsEnum } from '../../generated/graphql';
 import { View } from '../../assets/components/base/Post';
 import { CommentLoaderType } from '../../assets/components/base/CommentLoader';
@@ -38,7 +38,7 @@ const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gut
   const [reactionsVisible, setReactionsVisible] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentLoaderType>({ loading: false, data: [] });
   const [bookmarked, setBookmarked] = useState<boolean>(propBookmarked as boolean);
-  const [iconName, setIconName] = useState<AwardsEnum>(AwardsEnum.Angel);
+  const [iconName, setIconName] = useState<string>('angel');
   const [view, setView] = useState<View>('shots');
   const [iconAnimateActive, setIconAnimateActive] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
@@ -73,7 +73,10 @@ const Post: FC<PostProps> = ({ shots, id, bookmarked: propBookmarked, style, gut
   };
 
   const handleReaction = (icon: AwardsEnum): void => {
-    setIconName(icon);
+    const { name } = AwardToEmojiHelper(icon);
+    setIconAnimateActive(true);
+    setIconName(name);
+
     setTimeout(() => {
       setIconAnimateActive(false);
     }, ANIM_ICON_DUR + ANIM_ICON_DELAY);

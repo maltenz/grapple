@@ -22,7 +22,7 @@ export interface AnimIconConfig {
   duration: number;
   delay: number;
   tolerance: number;
-  iconName: AwardsEnum;
+  iconName: string;
   active: boolean;
   width: number;
   fontSize: number;
