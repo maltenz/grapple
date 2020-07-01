@@ -14,6 +14,54 @@ interface AwardProps extends MarginProps {
   panel?: boolean;
 }
 
+export const AwardToEmojiHelper = (type: AwardsEnum): { text: string; name: string } => {
+  let myName;
+  let myText;
+  switch (type) {
+    case AwardsEnum.Angel:
+      myName = 'angel';
+      myText = 'Angel';
+      break;
+    case AwardsEnum.Brave:
+      myName = 'muscle';
+      myText = 'Brave';
+      break;
+    case AwardsEnum.Calming:
+      myName = 'person_in_lotus_position';
+      myText = 'Calming';
+      break;
+    case AwardsEnum.Chatty:
+      myName = 'speech_balloon';
+      myText = 'Chatty';
+      break;
+    case AwardsEnum.Funny:
+      myName = 'laughing';
+      myText = 'Funny';
+      break;
+    case AwardsEnum.Helpful:
+      myName = 'books';
+      myText = 'Helpful';
+      break;
+    case AwardsEnum.Honest:
+      myName = 'herb';
+      myText = 'Honest';
+      break;
+    case AwardsEnum.Smart:
+      myName = 'nerd_face';
+      myText = 'Smart';
+      break;
+    case AwardsEnum.Survivor:
+    default:
+      myName = 'fire';
+      myText = 'Survivor';
+      break;
+  }
+  return {
+    name: myName,
+    text: myText,
+  };
+};
+
 const HEIGHT = 90;
 
 const Award: FC<AwardProps> = ({
@@ -27,45 +75,9 @@ const Award: FC<AwardProps> = ({
   const [name, setName] = useState<string>('Angel');
 
   useEffect(() => {
-    switch (type) {
-      case AwardsEnum.Angel:
-        setIconName('angel');
-        setName('Angel');
-        break;
-      case AwardsEnum.Brave:
-        setIconName('muscle');
-        setName('Brave');
-        break;
-      case AwardsEnum.Calming:
-        setIconName('person_in_lotus_position');
-        setName('Calming');
-        break;
-      case AwardsEnum.Chatty:
-        setIconName('speech_balloon');
-        setName('Chatty');
-        break;
-      case AwardsEnum.Funny:
-        setIconName('laughing');
-        setName('Funny');
-        break;
-      case AwardsEnum.Helpful:
-        setIconName('books');
-        setName('Helpful');
-        break;
-      case AwardsEnum.Honest:
-        setIconName('herb');
-        setName('Honest');
-        break;
-      case AwardsEnum.Smart:
-        setIconName('nerd_face');
-        setName('Smart');
-        break;
-      case AwardsEnum.Survivor:
-      default:
-        setIconName('fire');
-        setName('Survivor');
-        break;
-    }
+    const { name: helperName, text: helperText } = AwardToEmojiHelper(type);
+    setIconName(helperName);
+    setName(helperText);
   }, []);
 
   if (panel) {

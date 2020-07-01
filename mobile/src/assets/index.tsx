@@ -25,7 +25,7 @@ import {
 /**
  * base components
  */
-import Award from './components/base/Award';
+import Award, { AwardToEmojiHelper } from './components/base/Award';
 import Badge from './components/base/Badge';
 import Border from './components/base/Border';
 import Bullet from './components/base/Bullet';
@@ -135,6 +135,7 @@ export {
   CoreText,
   // base components
   Award,
+  AwardToEmojiHelper,
   Badge,
   Border,
   Bullet,
