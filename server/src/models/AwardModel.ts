@@ -7,7 +7,7 @@ export type AwardType =
   | 'angel'
   | 'brave'
   | 'calming'
-  | 'chat'
+  | 'chatty'
   | 'funny'
   | 'helpful'
   | 'honest'

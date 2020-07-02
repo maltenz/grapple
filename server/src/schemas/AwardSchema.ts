@@ -33,9 +33,26 @@ export const AwardSchema = gql`
     survivor
   }
 
+  type AwardMetrics {
+    angel: AwardMetricsItem
+    brave: AwardMetricsItem
+    calming: AwardMetricsItem
+    chatty: AwardMetricsItem
+    funny: AwardMetricsItem
+    helpful: AwardMetricsItem
+    honest: AwardMetricsItem
+    smart: AwardMetricsItem
+    survivor: AwardMetricsItem
+  }
+
+  type AwardMetricsItem {
+    count: Int
+  }
+
   extend type Query {
     award(input: AwardInput): Award
     awards(input: AwardInput): [Award]
+    awardMetrics: AwardMetrics
   }
 
   extend type Mutation {
