@@ -12,6 +12,7 @@ import CoreText from '../core/Text';
 interface AwardProps extends MarginProps {
   type: AwardsEnum;
   panel?: boolean;
+  count: number;
 }
 
 export const AwardToEmojiHelper = (type: AwardsEnum): { text: string; name: string } => {
@@ -69,6 +70,7 @@ const Award: FC<AwardProps> = ({
   panel,
   marginLeft = 0.25,
   marginRight = 0.25,
+  count,
   ...rest
 }) => {
   const [iconName, setIconName] = useState<string>('angel');
@@ -96,7 +98,7 @@ const Award: FC<AwardProps> = ({
           {name}
         </CoreText>
         <CoreText type="mini" bold color="grey2">
-          {compactFormat(19634, 'en')}
+          {compactFormat(count, 'en')}
         </CoreText>
       </Panel>
     );

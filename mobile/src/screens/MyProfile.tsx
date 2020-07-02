@@ -1,8 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import emojiFlags from 'emoji-flags';
+
+import { useLazyQuery } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 
 import {
   Navigation,
@@ -18,8 +21,10 @@ import {
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
-import { AwardsEnum } from '../generated/graphql';
+import { AwardsEnum, Award as AwardType } from '../generated/graphql';
 import ProfileBackground from './components/ProfileBackground';
+import { AWARDS } from '../queries/award';
+import { authUserSelector } from '../store';
 
 const TITLE = 'Why read motivational sayings? ';
 const CONTENT =
@@ -30,7 +35,61 @@ const HERO_DIMENSIONS = AssetStyles.measure.window.width;
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
+  const [getAwards, { data }] = useLazyQuery(AWARDS);
+  const authUser = useSelector(authUserSelector);
   const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
+  const [angelCount, setAngelCount] = useState<number>(0);
+  const [braveCount, setBraveCount] = useState<number>(0);
+  const [calmingCount, setCalmingCount] = useState<number>(0);
+  const [chattyCount, setChattyCount] = useState<number>(0);
+  const [funnyCount, setFunnyCount] = useState<number>(0);
+  const [helpfulCount, setHelpfulCount] = useState<number>(0);
+  const [honestCount, setHonestCount] = useState<number>(0);
+  const [smartCount, setSmartCount] = useState<number>(0);
+  const [survivorCount, setSurvivorCount] = useState<number>(0);
+
+  useEffect(() => {
+    getAwards({ variables: { owner: authUser.id } });
+  }, []);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      data.awards.forEach((award: AwardType): void => {
+        const myAward = award.award;
+
+        switch (myAward) {
+          case AwardsEnum.Angel:
+            setAngelCount(angelCount + 1);
+            break;
+          case AwardsEnum.Brave:
+            setBraveCount(braveCount + 1);
+            break;
+          case AwardsEnum.Calming:
+            setCalmingCount(calmingCount + 1);
+            break;
+          case AwardsEnum.Chatty:
+            setChattyCount(chattyCount + 1);
+            break;
+          case AwardsEnum.Funny:
+            setFunnyCount(funnyCount + 1);
+            break;
+          case AwardsEnum.Helpful:
+            setHelpfulCount(helpfulCount + 1);
+            break;
+          case AwardsEnum.Honest:
+            setHonestCount(honestCount + 1);
+            break;
+          case AwardsEnum.Smart:
+            setSmartCount(smartCount + 1);
+            break;
+          case AwardsEnum.Survivor:
+            setSurvivorCount(survivorCount + 1);
+            break;
+          default:
+        }
+      });
+    }
+  }, [data]);
 
   return (
     <Panel flex={1} backgroundColor="white">
@@ -101,19 +160,19 @@ const MyProfile: FC = () => {
             Characteristic
           </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
-            <Award panel type={AwardsEnum.Angel} />
-            <Award panel type={AwardsEnum.Brave} />
-            <Award panel type={AwardsEnum.Calming} />
+            <Award panel type={AwardsEnum.Angel} count={angelCount} />
+            <Award panel type={AwardsEnum.Brave} count={braveCount} />
+            <Award panel type={AwardsEnum.Calming} count={calmingCount} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Chatty} />
-            <Award panel type={AwardsEnum.Funny} />
-            <Award panel type={AwardsEnum.Helpful} />
+            <Award panel type={AwardsEnum.Chatty} count={chattyCount} />
+            <Award panel type={AwardsEnum.Funny} count={funnyCount} />
+            <Award panel type={AwardsEnum.Helpful} count={helpfulCount} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Honest} />
-            <Award panel type={AwardsEnum.Smart} />
-            <Award panel type={AwardsEnum.Survivor} />
+            <Award panel type={AwardsEnum.Honest} count={honestCount} />
+            <Award panel type={AwardsEnum.Smart} count={smartCount} />
+            <Award panel type={AwardsEnum.Survivor} count={survivorCount} />
           </Panel>
         </Panel>
       </ScrollView>
