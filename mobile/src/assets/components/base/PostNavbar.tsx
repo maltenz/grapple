@@ -20,19 +20,19 @@ export const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginR
     case 'like':
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallHeart scale={1} style={[marginRight && styles.icon]} active={active} />
+          <SvgIconSmallHeart scale={1.2} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
     case 'comment':
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallMessage scale={1} style={[marginRight && styles.icon]} active={active} />
+          <SvgIconSmallMessage scale={1.2} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
     case 'share':
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallShare scale={1} style={[marginRight && styles.icon]} />
+          <SvgIconSmallShare scale={1.2} style={[marginRight && styles.icon]} />
         </TouchableOpacity>
       );
 
@@ -40,7 +40,7 @@ export const PostNavbarItem: FC<PostNavbarItemProps> = ({ type, onPress, marginR
     default:
       return (
         <TouchableOpacity onPress={onPress}>
-          <SvgIconSmallBookmark scale={1} style={[marginRight && styles.icon]} active={active} />
+          <SvgIconSmallBookmark scale={1.2} style={[marginRight && styles.icon]} active={active} />
         </TouchableOpacity>
       );
   }
@@ -52,7 +52,7 @@ interface PostNavbarProps {
 
 const PostNavbar: FC<PostNavbarProps> = ({ Icons }) => {
   return (
-    <Panel row alignItems="center">
+    <Panel row alignItems="center" marginHorizontal={-0.3}>
       {Icons}
     </Panel>
   );

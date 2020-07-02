@@ -179,9 +179,10 @@ const Shot: FC<ShotProps> = ({
             {animList.map((itemIndex) => (
               <Icon key={itemIndex} index={itemIndex} config={animIconConfig as AnimIconConfig} />
             ))}
-            {reactionsVisible && (
-              <ReactionMenu onReaction={onReaction as (icon: AwardsEnum) => void} />
-            )}
+            <ReactionMenu
+              visible={reactionsVisible || false}
+              onReaction={onReaction as (icon: AwardsEnum) => void}
+            />
           </>
         )}
       </ImageBackground>
