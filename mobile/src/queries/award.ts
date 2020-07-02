@@ -15,3 +15,37 @@ export const AWARDS = gql`
     }
   }
 `;
+
+export const AWARD_METRICS = gql`
+  query awardsMetrics {
+    awardMetrics {
+      angel {
+        count
+      }
+      brave {
+        count
+      }
+      calming {
+        count
+      }
+      chatty {
+        count
+      }
+      funny {
+        count
+      }
+      helpful {
+        count
+      }
+      honest {
+        count
+      }
+      smart {
+        count
+      }
+      survivor {
+        count
+      }
+    }
+  }
+`;

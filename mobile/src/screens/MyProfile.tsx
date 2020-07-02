@@ -4,8 +4,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import emojiFlags from 'emoji-flags';
 
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import { useQuery } from '@apollo/react-hooks';
 
 import {
   Navigation,
@@ -21,75 +20,32 @@ import {
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
-import { AwardsEnum, Award as AwardType } from '../generated/graphql';
+import { AwardsEnum, AwardMetrics } from '../generated/graphql';
 import ProfileBackground from './components/ProfileBackground';
-import { AWARDS } from '../queries/award';
-import { authUserSelector } from '../store';
+import { AWARD_METRICS } from '../queries/award';
 
 const TITLE = 'Why read motivational sayings? ';
 const CONTENT =
   'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
 
-const HERO_DIMENSIONS = AssetStyles.measure.window.width;
-
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const [getAwards, { data }] = useLazyQuery(AWARDS);
-  const authUser = useSelector(authUserSelector);
+  const { data, refetch } = useQuery<{ awardMetrics: AwardMetrics }>(AWARD_METRICS);
+  const [awardMetrics, setAwardMetrics] = useState<AwardMetrics>({});
   const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
-  const [angelCount, setAngelCount] = useState<number>(0);
-  const [braveCount, setBraveCount] = useState<number>(0);
-  const [calmingCount, setCalmingCount] = useState<number>(0);
-  const [chattyCount, setChattyCount] = useState<number>(0);
-  const [funnyCount, setFunnyCount] = useState<number>(0);
-  const [helpfulCount, setHelpfulCount] = useState<number>(0);
-  const [honestCount, setHonestCount] = useState<number>(0);
-  const [smartCount, setSmartCount] = useState<number>(0);
-  const [survivorCount, setSurvivorCount] = useState<number>(0);
-
-  useEffect(() => {
-    getAwards({ variables: { owner: authUser.id } });
-  }, []);
 
   useEffect(() => {
     if (data !== undefined) {
-      data.awards.forEach((award: AwardType): void => {
-        const myAward = award.award;
-
-        switch (myAward) {
-          case AwardsEnum.Angel:
-            setAngelCount(angelCount + 1);
-            break;
-          case AwardsEnum.Brave:
-            setBraveCount(braveCount + 1);
-            break;
-          case AwardsEnum.Calming:
-            setCalmingCount(calmingCount + 1);
-            break;
-          case AwardsEnum.Chatty:
-            setChattyCount(chattyCount + 1);
-            break;
-          case AwardsEnum.Funny:
-            setFunnyCount(funnyCount + 1);
-            break;
-          case AwardsEnum.Helpful:
-            setHelpfulCount(helpfulCount + 1);
-            break;
-          case AwardsEnum.Honest:
-            setHonestCount(honestCount + 1);
-            break;
-          case AwardsEnum.Smart:
-            setSmartCount(smartCount + 1);
-            break;
-          case AwardsEnum.Survivor:
-            setSurvivorCount(survivorCount + 1);
-            break;
-          default:
-        }
-      });
+      setAwardMetrics(data.awardMetrics);
     }
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const { angel, brave, calming, chatty, funny, helpful, honest, smart, survivor } = awardMetrics;
 
   return (
     <Panel flex={1} backgroundColor="white">
@@ -160,19 +116,19 @@ const MyProfile: FC = () => {
             Characteristic
           </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
-            <Award panel type={AwardsEnum.Angel} count={angelCount} />
-            <Award panel type={AwardsEnum.Brave} count={braveCount} />
-            <Award panel type={AwardsEnum.Calming} count={calmingCount} />
+            <Award panel type={AwardsEnum.Angel} count={angel?.count as number} />
+            <Award panel type={AwardsEnum.Brave} count={brave?.count as number} />
+            <Award panel type={AwardsEnum.Calming} count={calming?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Chatty} count={chattyCount} />
-            <Award panel type={AwardsEnum.Funny} count={funnyCount} />
-            <Award panel type={AwardsEnum.Helpful} count={helpfulCount} />
+            <Award panel type={AwardsEnum.Chatty} count={chatty?.count as number} />
+            <Award panel type={AwardsEnum.Funny} count={funny?.count as number} />
+            <Award panel type={AwardsEnum.Helpful} count={helpful?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Honest} count={honestCount} />
-            <Award panel type={AwardsEnum.Smart} count={smartCount} />
-            <Award panel type={AwardsEnum.Survivor} count={survivorCount} />
+            <Award panel type={AwardsEnum.Honest} count={honest?.count as number} />
+            <Award panel type={AwardsEnum.Smart} count={smart?.count as number} />
+            <Award panel type={AwardsEnum.Survivor} count={survivor?.count as number} />
           </Panel>
         </Panel>
       </ScrollView>
@@ -181,27 +137,6 @@ const MyProfile: FC = () => {
 };
 
 const styles = StyleSheet.create({
-  heroImage: {
-    width: HERO_DIMENSIONS,
-    height: HERO_DIMENSIONS,
-    position: 'absolute',
-    padding: AssetStyles.measure.space,
-    flexDirection: 'row',
-  },
-  footer: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-  linearGradient: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-  backgroundBug: {},
   excerptContainer: {
     overflow: 'visible',
     marginTop: AssetStyles.measure.space / 2,
