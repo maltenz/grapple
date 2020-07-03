@@ -11,7 +11,7 @@ import { AssetStyles } from '../../styles';
 interface PostNavbarItemProps {
   type: 'like' | 'comment' | 'share' | 'bookmark';
   onPress?: () => void;
-  active: boolean;
+  active?: boolean;
   marginRight?: boolean;
 }
 

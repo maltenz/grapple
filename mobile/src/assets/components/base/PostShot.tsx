@@ -192,7 +192,12 @@ const Shot: FC<ShotProps> = ({
             Icons={
               <>
                 <Panel flex={1} row>
-                  <PostNavbarItem type="like" onPress={onHeart} marginRight active />
+                  <PostNavbarItem
+                    type="like"
+                    onPress={onHeart}
+                    active={reactionsVisible}
+                    marginRight
+                  />
                   <PostNavbarItem
                     type="comment"
                     marginRight
