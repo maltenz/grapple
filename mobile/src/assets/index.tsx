@@ -35,6 +35,7 @@ import Button, {
   ButtonNormalHeight,
   ButtonSmallHeight,
 } from './components/base/Button';
+import ColorThumbnail from './components/base/ColorThumbnail';
 import Comment, { CommentUser, CommentContainer } from './components/base/Comment';
 import CommentLoader from './components/base/CommentLoader';
 import Container from './components/base/Container';
@@ -144,6 +145,7 @@ export {
   ButtonLargeHeight,
   ButtonNormalHeight,
   ButtonSmallHeight,
+  ColorThumbnail,
   Comment,
   CommentUser,
   CommentContainer,
