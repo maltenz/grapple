@@ -1,8 +1,7 @@
-import React, { FC, useState, useRef, RefObject, useEffect, ReactNode } from 'react';
+import React, { FC, useState, useRef, RefObject, useEffect } from 'react';
 import {
   StyleSheet,
   NativeMethodsMixinStatic,
-  ScrollView,
   View,
   ViewStyle,
   StyleProp,
@@ -13,37 +12,29 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-// import { useSelector } from 'react-redux';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
-// import { authUserSelector } from '../store';
-
-import { useSelector } from 'react-redux';
 import {
   Navigation,
   NavigationIcon,
   Panel,
   AssetStyles,
-  Text,
   Comment,
   Color,
-  Tag,
   SvgWiggleFill,
   CoreText,
   SvgIconAccount,
   Badge,
   Button,
   Overlay,
-  OverlayHeader,
   MenuItem,
-  Thumbnail,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
 import { ParentNavigationProp, MyProfileEditParams } from './HomeRoot';
 
 import { User as UserType } from '../generated/graphql';
-import { authShotSelector } from '../store';
+import SelectProfilePicModal from './components/SelectProfilePicModal';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
@@ -86,11 +77,8 @@ const MyProfileEdit: FC = () => {
       setSelectProfilePicVisible(true);
     }
   }, [params]);
-  const shots = useSelector(authShotSelector);
   const [editBioActive, setEditBioActive] = useState<boolean>(false);
-  const [infoViewVisible, setInfoViewVisisble] = useState<boolean>(false);
   const [selectProfilePicVisible, setSelectProfilePicVisible] = useState<boolean>(false);
-  const [profilePicActiveIndex, setProfilePicActiveIndex] = useState<number>();
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
@@ -163,55 +151,7 @@ const MyProfileEdit: FC = () => {
             />
           </Panel>
         </Panel>
-        <MenuItem title="Strengths" last Right={<Switch />} />
-        <ScrollView horizontal style={styles.tagScrollView} showsHorizontalScrollIndicator={false}>
-          <Tag mode="day" text="Legal" marginLeft />
-          <Tag mode="day" text="Helped 23" />
-          <Tag mode="day" text="Accomodation" />
-          <Tag mode="day" text="Survivor" />
-          <Tag mode="day" text="Chat" />
-          <Tag mode="day" text="Call" />
-        </ScrollView>
-        <MenuItem title="Experiences" last Right={<Switch />} />
-        <ScrollView horizontal style={styles.tagScrollView} showsHorizontalScrollIndicator={false}>
-          <Tag mode="day" text="Legal" marginLeft />
-          <Tag mode="day" text="Helped 23" />
-          <Tag mode="day" text="Accomodation" />
-          <Tag mode="day" text="Survivor" />
-          <Tag mode="day" text="Chat" />
-          <Tag mode="day" text="Call" />
-        </ScrollView>
       </KeyboardAwareScrollView>
-      {infoViewVisible && (
-        <Overlay type="page">
-          <Panel flex={1} justifyContent="center">
-            <OverlayHeader />
-            <Panel backgroundColor="white" paddingHorizontal paddingBottom>
-              <ScrollView showsVerticalScrollIndicator={false}>
-                <Text marginTop type="small" mode="day" appearance="normal">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non sem nisi. Quisque
-                  posuere sem quis venenatis aliquet. Integer placerat cursus enim, sed placerat
-                  elit interdum vel. In eu leo fringilla, accumsan nibh nec, vulputate diam. Cras
-                  aliquam placerat mauris, sit amet dictum nibh fringilla ac. Nullam nec mi at eros
-                  pellentesque cursus. Sed id ultrices magna. Quisque cursus ut felis ut bibendum.
-                  Nulla sit amet rhoncus nibh. Aliquam mattis consequat felis, quis feugiat erat
-                  consequat sit amet. Vestibulum dictum elit nunc, a vehicula dui porttitor euismod.
-                  Sed sed libero ante. Sed sed ullamcorper purus. Cras fermentum feugiat gravida.
-                  Donec sed rutrum dui. Suspendisse maximus congue consectetur.
-                </Text>
-              </ScrollView>
-            </Panel>
-          </Panel>
-          <Button
-            mode="day"
-            type="large"
-            appearance="strong"
-            onPress={(): void => setInfoViewVisisble(false)}
-          >
-            Close
-          </Button>
-        </Overlay>
-      )}
       {colorPickerVisible && (
         <Overlay type="page">
           <Panel flex={1} center>
@@ -238,49 +178,10 @@ const MyProfileEdit: FC = () => {
           </Button>
         </Overlay>
       )}
-      {selectProfilePicVisible && (
-        <Overlay type="page" paddingHorizontal={0}>
-          <Panel flex={1} center>
-            <Text type="h3" mode="night" appearance="normal" textAlign="center">
-              Select profile picture
-            </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.picScrollView}
-              contentContainerStyle={styles.picScrollViewContent}
-            >
-              {shots.map(
-                (shot, index: number): ReactNode => {
-                  if (shot?.image) {
-                    return (
-                      <Thumbnail
-                        key={shot.id as string}
-                        src={{ uri: `data:image/jpeg;base64,${shot.image}` }}
-                        marginRight={index === (shots.length as number) - 1 ? 1 : 0.5}
-                        marginLeft={index === 0 && 1}
-                        outline={index === profilePicActiveIndex && 'blue'}
-                        onPress={(): void => setProfilePicActiveIndex(index)}
-                        backgroundColor="grey4"
-                      />
-                    );
-                  }
-                  return null;
-                }
-              )}
-            </ScrollView>
-          </Panel>
-          <Button
-            marginHorizontal
-            mode="day"
-            type="large"
-            appearance="strong"
-            onPress={(): void => setColorPickerVisible(false)}
-          >
-            Save
-          </Button>
-        </Overlay>
-      )}
+      <SelectProfilePicModal
+        visible={selectProfilePicVisible}
+        onClose={(): void => setSelectProfilePicVisible(false)}
+      />
     </>
   );
 };
@@ -338,15 +239,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: AssetStyles.measure.radius.regular - 2,
     backgroundColor: Color.red,
-  },
-  picScrollView: {
-    flexGrow: 0,
-    paddingVertical: SPACE,
-  },
-  picScrollViewContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
   },
 });
 
