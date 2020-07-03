@@ -32,6 +32,7 @@ export const ProfileSchema = gql`
 
   extend type Query {
     profile(id: String!): Profile!
+    authProfile: Profile!
   }
 
   extend type Mutation {

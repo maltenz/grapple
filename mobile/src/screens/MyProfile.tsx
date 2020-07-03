@@ -23,6 +23,7 @@ import { ChildNavigationProp } from './HomeRoot';
 import { AwardsEnum, AwardMetrics } from '../generated/graphql';
 import ProfileBackground from './components/ProfileBackground';
 import { AWARD_METRICS } from '../queries/award';
+// import { GET_PROFILE } from '../queries/profile';
 
 const TITLE = 'Why read motivational sayings? ';
 const CONTENT =
@@ -31,15 +32,16 @@ const CONTENT =
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  const { data, refetch } = useQuery<{ awardMetrics: AwardMetrics }>(AWARD_METRICS);
+  // const { data } = useQuery(GET_PROFILE);
+  const { data: metricsData, refetch } = useQuery<{ awardMetrics: AwardMetrics }>(AWARD_METRICS);
   const [awardMetrics, setAwardMetrics] = useState<AwardMetrics>({});
   const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
 
   useEffect(() => {
-    if (data !== undefined) {
-      setAwardMetrics(data.awardMetrics);
+    if (metricsData !== undefined) {
+      setAwardMetrics(metricsData.awardMetrics);
     }
-  }, [data]);
+  }, [metricsData]);
 
   useEffect(() => {
     refetch();

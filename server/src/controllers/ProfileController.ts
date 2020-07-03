@@ -68,6 +68,33 @@ export const getProfile = async ({ dbConn, loggedIn }: Context, args): Promise<P
 
 /**
  * @param context
+ * @param {id}
+ * @returns {Profile}
+ */
+export const getAuthProfile = async ({ dbConn, loggedIn, user }: Context): Promise<Profile> => {
+  let ERR_MESSAGE;
+  let profile;
+
+  loginRequired(loggedIn);
+
+  const id = user?._id;
+
+  try {
+    profile = (await ProfileModel(dbConn).findOne({ user: id })) as Profile;
+
+    if (profile === null) {
+      ERR_MESSAGE = 'No profile found';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+  } catch (error) {
+    throw new ApolloError(error);
+  }
+
+  return profile;
+};
+
+/**
+ * @param context
  * @returns {Profile}
  */
 export const deleteProfile = async (context: Context): Promise<Profile> => {
