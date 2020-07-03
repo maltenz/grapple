@@ -40,6 +40,7 @@ import {
   authClearAllShot,
   authDeleteShot,
 } from '../../store';
+
 import { Shot } from '../../generated/graphql';
 
 const SQUARE_DIMENSION = AssetStyles.measure.window.width;

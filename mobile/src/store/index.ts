@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { ShotState, shotReducer, createShotsSelector } from './create';
 import { addShot, deleteShot, updateShot, moveShot, clearAllShot } from './create/actions';
+
 import {
   UserState,
   userReducer,
@@ -10,6 +11,7 @@ import {
   deleteShot as authDeleteShot,
   clearAllShot as authClearAllShot,
 } from './user';
+
 import { updateUser } from './user/actions';
 import { LayoutState, layoutReducer, layoutPagerSelector, layoutModalSelector } from './layout';
 import { updatePager, updateModal } from './layout/actions';

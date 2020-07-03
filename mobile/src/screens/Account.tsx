@@ -4,6 +4,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDispatch } from 'react-redux';
+
 import {
   AssetStyles,
   MenuItem,

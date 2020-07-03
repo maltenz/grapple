@@ -64,7 +64,6 @@ const Home: FC = () => {
               shots={post.shots}
               liked={post.liked}
               bookmarked={post.bookmarked}
-              // gutter
             />
           );
         })}
