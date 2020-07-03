@@ -15,6 +15,7 @@ export const AUTH_PROFILE = gql`
         shots {
           title
           content
+          image
         }
       }
     }

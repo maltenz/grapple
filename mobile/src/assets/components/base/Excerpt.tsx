@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { ImageSourcePropType } from 'react-native';
 import Panel from './Panel';
 import Thumbnail, { ThumbnailDimension } from './Thumbnail';
 import CoreText from '../core/Text';
@@ -9,27 +10,17 @@ interface ExcerptProps {
   last?: boolean;
   title: string;
   content: string;
+  src: ImageSourcePropType;
   mode?: ModeType;
 }
-
-const THUMBNAIL_SRC = {
-  src: {
-    thumbnail: { uri: 'https://source.unsplash.com/random' },
-    large: { uri: 'https://source.unsplash.com/random' },
-  },
-};
 
 const CONTENT_WIDTH =
   AssetStyles.measure.window.width - AssetStyles.measure.space * 3.5 - ThumbnailDimension;
 
-const Excerpt: FC<ExcerptProps> = ({ last, title, content, mode = 'day' }) => {
+const Excerpt: FC<ExcerptProps> = ({ last, title, content, mode = 'day', src }) => {
   return (
     <Panel row marginBottom={last ? 0 : 1}>
-      <Thumbnail
-        src={{ uri: THUMBNAIL_SRC.src.thumbnail.uri }}
-        backgroundColor="grey"
-        marginRight={0.5}
-      />
+      <Thumbnail src={src} backgroundColor="grey" marginRight={0.5} />
       <Panel justifyContent="center">
         <CoreText
           type="small"
@@ -37,7 +28,7 @@ const Excerpt: FC<ExcerptProps> = ({ last, title, content, mode = 'day' }) => {
           bold
           color="blue"
           numberOfLines={1}
-          // style={{ width: CONTENT_WIDTH }}
+          style={{ width: CONTENT_WIDTH }}
         >
           {title}
         </CoreText>

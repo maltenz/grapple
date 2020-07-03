@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -20,36 +20,28 @@ import {
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
-import { AwardsEnum, AwardMetrics } from '../generated/graphql';
+import { AwardsEnum, AwardMetrics, Profile, Post } from '../generated/graphql';
 import ProfileBackground from './components/ProfileBackground';
 import { AWARD_METRICS } from '../queries/award';
-// import { AUTH_PROFILE } from '../queries/profile';
-
-const TITLE = 'Why read motivational sayings? ';
-const CONTENT =
-  'For motivation! You might need a bit, if you can use last year’s list of goals this year because it’s as good as new. All of us can benefit from inspirational thoughts, so here are ten great ones.';
+import { AUTH_PROFILE } from '../queries/profile';
 
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
   const inset = useSafeArea();
-  // const { data } = useQuery(AUTH_PROFILE);
-  const { data: metricsData, refetch } = useQuery<{ awardMetrics: AwardMetrics }>(AWARD_METRICS);
-  const [awardMetrics, setAwardMetrics] = useState<AwardMetrics>({});
+  const { data } = useQuery<{ authProfile: Profile }>(AUTH_PROFILE);
+  const { data: metricsData } = useQuery<{ awardMetrics: AwardMetrics }>(AWARD_METRICS);
   const [flag] = useState(emojiFlags.countryCode('NZ').emoji);
 
-  useEffect(() => {
-    if (metricsData !== undefined) {
-      setAwardMetrics(metricsData.awardMetrics);
-    }
-  }, [metricsData]);
+  let profile = {} as Profile;
+  let metrics = {} as AwardMetrics;
 
-  useEffect(() => {
-    refetch();
-  }, []);
+  if (data?.authProfile) {
+    profile = data.authProfile;
+  }
 
-  // console.log(data);
-
-  const { angel, brave, calming, chatty, funny, helpful, honest, smart, survivor } = awardMetrics;
+  if (metricsData?.awardMetrics) {
+    metrics = metricsData.awardMetrics;
+  }
 
   return (
     <Panel flex={1} backgroundColor="white">
@@ -90,49 +82,60 @@ const MyProfile: FC = () => {
           >
             {`${flag} Wellington`}
           </Button>
-          <Text mode="day" appearance="normal" type="small" marginBottom={1.5}>
-            Many people has the notion that enlightenment is one state. Many also believe that when
-            it is attained, a person is forever in that state.
-          </Text>
-          <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>
-            Shared stories
-          </Text>
-          <ScrollView
-            horizontal
-            style={styles.excerptContainer}
-            showsHorizontalScrollIndicator={false}
-          >
-            <Excerpt title={TITLE} content={CONTENT} />
-            <Excerpt title={TITLE} content={CONTENT} />
-            <Excerpt title={TITLE} content={CONTENT} />
-          </ScrollView>
-          <Button
-            type="normal"
-            appearance="normal"
-            mode="day"
-            style={{ alignSelf: 'flex-end' }}
-            marginBottom
-            outline
-          >
-            See all
-          </Button>
+          {profile.bio && (
+            <Text mode="day" appearance="normal" type="small" marginBottom={1.5}>
+              {profile.bio}
+            </Text>
+          )}
+
+          {profile.posts && (
+            <>
+              <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>
+                Public stories
+              </Text>
+              <ScrollView
+                horizontal
+                style={styles.excerptContainer}
+                showsHorizontalScrollIndicator={false}
+              >
+                {profile.posts.map(({ id, shots }: Post) => (
+                  <Excerpt
+                    key={id}
+                    title={shots[0]?.title as string}
+                    content={shots[0]?.content as string}
+                    src={{ uri: shots[0]?.image as string }}
+                  />
+                ))}
+              </ScrollView>
+              <Button
+                type="normal"
+                appearance="normal"
+                mode="day"
+                style={{ alignSelf: 'flex-end' }}
+                marginBottom
+                outline
+              >
+                See all
+              </Button>
+            </>
+          )}
           <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>
             Characteristic
           </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
-            <Award panel type={AwardsEnum.Angel} count={angel?.count as number} />
-            <Award panel type={AwardsEnum.Brave} count={brave?.count as number} />
-            <Award panel type={AwardsEnum.Calming} count={calming?.count as number} />
+            <Award panel type={AwardsEnum.Angel} count={metrics.angel?.count as number} />
+            <Award panel type={AwardsEnum.Brave} count={metrics.brave?.count as number} />
+            <Award panel type={AwardsEnum.Calming} count={metrics.calming?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Chatty} count={chatty?.count as number} />
-            <Award panel type={AwardsEnum.Funny} count={funny?.count as number} />
-            <Award panel type={AwardsEnum.Helpful} count={helpful?.count as number} />
+            <Award panel type={AwardsEnum.Chatty} count={metrics.chatty?.count as number} />
+            <Award panel type={AwardsEnum.Funny} count={metrics.funny?.count as number} />
+            <Award panel type={AwardsEnum.Helpful} count={metrics.helpful?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Honest} count={honest?.count as number} />
-            <Award panel type={AwardsEnum.Smart} count={smart?.count as number} />
-            <Award panel type={AwardsEnum.Survivor} count={survivor?.count as number} />
+            <Award panel type={AwardsEnum.Honest} count={metrics.honest?.count as number} />
+            <Award panel type={AwardsEnum.Smart} count={metrics.smart?.count as number} />
+            <Award panel type={AwardsEnum.Survivor} count={metrics.survivor?.count as number} />
           </Panel>
         </Panel>
       </ScrollView>
