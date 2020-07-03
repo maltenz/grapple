@@ -17,13 +17,14 @@ import {
   Excerpt,
 } from '../assets';
 
+import { AWARD_METRICS } from '../queries/award';
+import { AUTH_PROFILE } from '../queries/profile';
+
 import { NavigationHeading, NavigationHeight } from '../assets/components/base/Navigation';
 
 import { ChildNavigationProp } from './HomeRoot';
 import { AwardsEnum, AwardMetrics, Profile, Post } from '../generated/graphql';
 import ProfileBackground from './components/ProfileBackground';
-import { AWARD_METRICS } from '../queries/award';
-import { AUTH_PROFILE } from '../queries/profile';
 
 const MyProfile: FC = () => {
   const navigation = useNavigation<ChildNavigationProp>();
@@ -87,7 +88,6 @@ const MyProfile: FC = () => {
               {profile.bio}
             </Text>
           )}
-
           {profile.posts && (
             <>
               <Text mode="day" appearance="normal" type="h4" bold marginBottom={0.25}>

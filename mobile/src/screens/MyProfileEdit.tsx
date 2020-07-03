@@ -12,7 +12,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BlurView } from 'expo-blur';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
 import {
   Navigation,
@@ -25,8 +24,6 @@ import {
   CoreText,
   SvgIconAccount,
   Badge,
-  Button,
-  Overlay,
   MenuItem,
 } from '../assets';
 
@@ -35,6 +32,7 @@ import { ParentNavigationProp, MyProfileEditParams } from './HomeRoot';
 
 import { User as UserType } from '../generated/graphql';
 import SelectProfilePicModal from './components/SelectProfilePicModal';
+import ColorPickerModal from './components/ColorPickModal';
 
 const WIDTH = AssetStyles.measure.window.width;
 const SPACE = AssetStyles.measure.space;
@@ -82,7 +80,7 @@ const MyProfileEdit: FC = () => {
   const [bioValue, setBioValue] = useState(
     `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
   );
-  const [primaryColor, setPrimaryColor] = useState<string>(Color.red);
+  const [primaryColor] = useState<string>(Color.red);
   const [secondaryColor] = useState<string>(Color.purple);
   const [colorPickerVisible, setColorPickerVisible] = useState<boolean>(false);
   const PADDING_BOTTOM = inset.bottom + SPACE;
@@ -152,32 +150,10 @@ const MyProfileEdit: FC = () => {
           </Panel>
         </Panel>
       </KeyboardAwareScrollView>
-      {colorPickerVisible && (
-        <Overlay type="page">
-          <Panel flex={1} center>
-            {/* @ts-ignore */}
-            <ColorPicker
-              color={primaryColor}
-              onColorSelected={(color): void => setPrimaryColor(color)}
-              onColorChange={(color): void => setPrimaryColor(fromHsv(color))}
-              defaultColor={primaryColor}
-              hideSliders
-              style={{
-                width: WIDTH - SPACE * 2,
-                height: WIDTH - SPACE * 2,
-              }}
-            />
-          </Panel>
-          <Button
-            mode="day"
-            type="large"
-            appearance="strong"
-            onPress={(): void => setColorPickerVisible(false)}
-          >
-            Close
-          </Button>
-        </Overlay>
-      )}
+      <ColorPickerModal
+        visible={colorPickerVisible}
+        onClose={(): void => setColorPickerVisible(false)}
+      />
       <SelectProfilePicModal
         visible={selectProfilePicVisible}
         onClose={(): void => setSelectProfilePicVisible(false)}

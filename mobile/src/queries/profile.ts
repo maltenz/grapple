@@ -12,6 +12,7 @@ export const AUTH_PROFILE = gql`
       location
       active
       posts {
+        id
         shots {
           title
           content
