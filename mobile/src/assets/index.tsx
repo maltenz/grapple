@@ -7,7 +7,7 @@ import { VIBRATE_DUR } from './system';
 /**
  * helpers
  */
-import { CreateId, UploadImage } from './helpers';
+import { CreateId, UploadImage, UploadImageType } from './helpers';
 
 /**
  * core components
@@ -118,6 +118,7 @@ export {
   // helpers
   CreateId,
   UploadImage,
+  UploadImageType,
   // util
   AssetStyles,
   Color,

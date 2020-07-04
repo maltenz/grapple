@@ -9,11 +9,21 @@ const SPACE = AssetStyles.measure.space;
 interface SelectProfilePicModalProps {
   visible: boolean;
   onClose: () => void;
+  onImageSelect: ({ image }: { image: string }) => void;
 }
 
-const SelectProfilePicModal: FC<SelectProfilePicModalProps> = ({ visible, onClose }) => {
+const SelectProfilePicModal: FC<SelectProfilePicModalProps> = ({
+  visible,
+  onClose,
+  onImageSelect,
+}) => {
   const shots = useSelector(authShotSelector);
-  const [profilePicActiveIndex, setProfilePicActiveIndex] = useState<number>();
+  const [profilePicActiveIndex, setProfilePicActiveIndex] = useState<number>(0);
+
+  const handleImageSelect = (): void => {
+    onImageSelect({ image: shots[profilePicActiveIndex].image as string });
+    onClose();
+  };
 
   if (!visible) {
     return null;
@@ -56,7 +66,7 @@ const SelectProfilePicModal: FC<SelectProfilePicModalProps> = ({ visible, onClos
         mode="day"
         type="large"
         appearance="strong"
-        onPress={(): void => onClose()}
+        onPress={handleImageSelect}
       >
         Save
       </Button>

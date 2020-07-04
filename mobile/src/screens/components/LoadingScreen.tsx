@@ -2,7 +2,11 @@ import React, { FC } from 'react';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { Panel, AssetStyles, Color, SvgLogoGrapple } from '../../assets';
 
-const LoadingScreen: FC = () => {
+interface LoadingScreenProps {
+  visible: boolean;
+}
+
+const LoadingScreen: FC<LoadingScreenProps> = () => {
   return (
     <Panel style={[StyleSheet.absoluteFill, styles.loaderContainer]} center backgroundColor="red">
       <ActivityIndicator size="large" color={Color.white} style={styles.activityIndicator} />

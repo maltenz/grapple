@@ -14,6 +14,7 @@ import {
   Comment,
   Color,
   MenuItem,
+  UploadImage,
 } from '../assets';
 
 import { NavigationHeading } from '../assets/components/base/Navigation';
@@ -22,6 +23,7 @@ import { ParentNavigationProp, MyProfileEditParams } from './HomeRoot';
 import SelectProfilePicModal from './components/SelectProfilePicModal';
 import ColorPickerModal from './components/ColorPickModal';
 import ProfileCover from './components/ProfileCover';
+import LoadingScreen from './components/LoadingScreen';
 
 const SPACE = AssetStyles.measure.space;
 
@@ -30,6 +32,13 @@ const MyProfileEdit: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const { params }: { params?: MyProfileEditParams } = useRoute();
   const inset = useSafeArea();
+  const [editBioActive, setEditBioActive] = useState<boolean>(false);
+  const [uploadScreenVisible, setUploadScreenVisible] = useState<boolean>(false);
+  const [selectProfilePicVisible, setSelectProfilePicVisible] = useState<boolean>(false);
+  const [bioValue, setBioValue] = useState(
+    `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
+  );
+  const [colorPickerVisible, setColorPickerVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (params?.newProfileImg) {
@@ -37,17 +46,23 @@ const MyProfileEdit: FC = () => {
     }
   }, [params]);
 
-  const [editBioActive, setEditBioActive] = useState<boolean>(false);
-  const [selectProfilePicVisible, setSelectProfilePicVisible] = useState<boolean>(false);
-  const [bioValue, setBioValue] = useState(
-    `Many people has the notion that enlightenment is one state. Many also believe that when it is attained, a person is forever in that state.`
-  );
-  const [colorPickerVisible, setColorPickerVisible] = useState<boolean>(false);
   const PADDING_BOTTOM = inset.bottom + SPACE;
 
   if (editBioActive && inputRef.current !== null) {
     inputRef.current.focus();
   }
+
+  const handleUploadProfilePic = ({ image }: { image: string }): void => {
+    UploadImage({
+      type: 'profile',
+      image,
+      onUpload: () => {
+        setSelectProfilePicVisible(false);
+        setUploadScreenVisible(true);
+      },
+      onComplete: () => setUploadScreenVisible(false),
+    });
+  };
 
   return (
     <>
@@ -94,7 +109,9 @@ const MyProfileEdit: FC = () => {
       <SelectProfilePicModal
         visible={selectProfilePicVisible}
         onClose={(): void => setSelectProfilePicVisible(false)}
+        onImageSelect={handleUploadProfilePic}
       />
+      <LoadingScreen visible={uploadScreenVisible} />
     </>
   );
 };

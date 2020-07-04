@@ -11,20 +11,22 @@ export const CreateId = (): string => {
   return `${id}`;
 };
 
-interface UploadImageType {
+export interface UploadImageType {
   image: string;
   onUpload?: (value: boolean) => void;
   onComplete: (res: string) => void;
+  type: 'post' | 'profile';
 }
 
 export const UploadImage = async ({
+  type = 'post',
   image,
   onUpload,
   onComplete,
 }: UploadImageType): Promise<void> => {
   const data = new FormData();
   data.append('file', `data:image/jpeg;base64,${image}` as string);
-  data.append('upload_preset', 'ml_default');
+  data.append('upload_preset', type);
   data.append('cloud_name', process.env.CLOUDINARY_NAME as string);
   data.append('api_key', process.env.CLOUDINARY_KEY as string);
 

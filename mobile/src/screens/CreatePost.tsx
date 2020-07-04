@@ -153,7 +153,7 @@ const CreatePost: FC = () => {
         </Button>
         <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
       </KeyboardAwareScrollView>
-      {uploading === true && <LoadingScreen />}
+      <LoadingScreen visible={uploading === true} />
       {uploading === 'complete' && (
         <Overlay paddingHorizontal={0} type="page">
           <KeyboardAwareScrollView extraHeight={150}>
