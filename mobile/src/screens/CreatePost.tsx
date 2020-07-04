@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useState, ReactNode } from 'react';
 
-import { Image, StyleSheet, View, ActivityIndicator, Keyboard } from 'react-native';
+import { Image, StyleSheet, View, Keyboard } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
@@ -18,7 +18,6 @@ import {
   Color,
   SegmentedController,
   Button,
-  SvgLogoGrapple,
   UploadImage,
   Text,
   Overlay,
@@ -36,6 +35,10 @@ import { Shot, Post as PostType } from '../generated/graphql';
 import { CREATE_POST } from '../mutations/post';
 
 import CreatePostForm from './components/CreatePostForm';
+import LoadingScreen from './components/LoadingScreen';
+
+const WIDTH = AssetStyles.measure.window.width;
+const SPACE = AssetStyles.measure.space;
 
 const CreatePost: FC = () => {
   const parentNavigation = useNavigation<ParentNavigationProp>();
@@ -150,16 +153,7 @@ const CreatePost: FC = () => {
         </Button>
         <View style={{ height: inset.bottom + AssetStyles.measure.space }} />
       </KeyboardAwareScrollView>
-      {uploading === true && (
-        <Panel
-          style={[StyleSheet.absoluteFill, styles.loaderContainer]}
-          center
-          backgroundColor="red"
-        >
-          <ActivityIndicator size="large" color={Color.white} style={styles.activityIndicator} />
-          <SvgLogoGrapple color="white" scale={0.65} />
-        </Panel>
-      )}
+      {uploading === true && <LoadingScreen />}
       {uploading === 'complete' && (
         <Overlay paddingHorizontal={0} type="page">
           <KeyboardAwareScrollView extraHeight={150}>
@@ -211,16 +205,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
   },
   image: {
-    width: AssetStyles.measure.window.width,
-    height: AssetStyles.measure.window.width,
-    marginBottom: AssetStyles.measure.space / 2,
-  },
-  loaderContainer: {
-    zIndex: 10,
-    opacity: 0.9,
-  },
-  activityIndicator: {
-    marginBottom: AssetStyles.measure.space * 2,
+    width: WIDTH,
+    height: WIDTH,
+    marginBottom: SPACE / 2,
   },
 });
 
