@@ -15,11 +15,11 @@ export interface UploadImageType {
   image: string;
   onUpload?: (value: boolean) => void;
   onComplete: (res: string) => void;
-  type: 'post' | 'profile';
+  type: 'postShots' | 'profile';
 }
 
 export const UploadImage = async ({
-  type = 'post',
+  type = 'postShots',
   image,
   onUpload,
   onComplete,
@@ -42,6 +42,7 @@ export const UploadImage = async ({
       if (xhr.readyState === 4) {
         const respose = JSON.parse(xhr.response);
         onComplete(respose.url);
+
         if (onUpload) {
           onUpload(false);
         }

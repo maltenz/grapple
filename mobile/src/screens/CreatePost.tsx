@@ -61,6 +61,7 @@ const CreatePost: FC = () => {
         return new Promise((resolve) => {
           if (image) {
             UploadImage({
+              type: 'postShots',
               image,
               onComplete: (res) => {
                 newShots[index].image = res;

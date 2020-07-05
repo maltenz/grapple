@@ -83,7 +83,7 @@ const MyProfile: FC = () => {
           >
             {`${flag} Wellington`}
           </Button>
-          {profile.bio && (
+          {profile.bio && profile.bio.length > 0 && (
             <Text mode="day" appearance="normal" type="small" marginBottom={1.5}>
               {profile.bio}
             </Text>
@@ -123,19 +123,19 @@ const MyProfile: FC = () => {
             Characteristic
           </Text>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5} marginTop>
-            <Award panel type={AwardsEnum.Angel} count={metrics.angel?.count as number} />
-            <Award panel type={AwardsEnum.Brave} count={metrics.brave?.count as number} />
-            <Award panel type={AwardsEnum.Calming} count={metrics.calming?.count as number} />
+            <Award panel type={AwardsEnum.Angel} count={metrics?.angel?.count as number} />
+            <Award panel type={AwardsEnum.Brave} count={metrics?.brave?.count as number} />
+            <Award panel type={AwardsEnum.Calming} count={metrics?.calming?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Chatty} count={metrics.chatty?.count as number} />
-            <Award panel type={AwardsEnum.Funny} count={metrics.funny?.count as number} />
-            <Award panel type={AwardsEnum.Helpful} count={metrics.helpful?.count as number} />
+            <Award panel type={AwardsEnum.Chatty} count={metrics?.chatty?.count as number} />
+            <Award panel type={AwardsEnum.Funny} count={metrics?.funny?.count as number} />
+            <Award panel type={AwardsEnum.Helpful} count={metrics?.helpful?.count as number} />
           </Panel>
           <Panel row marginHorizontal={-0.25} marginBottom={0.5}>
-            <Award panel type={AwardsEnum.Honest} count={metrics.honest?.count as number} />
-            <Award panel type={AwardsEnum.Smart} count={metrics.smart?.count as number} />
-            <Award panel type={AwardsEnum.Survivor} count={metrics.survivor?.count as number} />
+            <Award panel type={AwardsEnum.Honest} count={metrics?.honest?.count as number} />
+            <Award panel type={AwardsEnum.Smart} count={metrics?.smart?.count as number} />
+            <Award panel type={AwardsEnum.Survivor} count={metrics?.survivor?.count as number} />
           </Panel>
         </Panel>
       </ScrollView>

@@ -6,7 +6,11 @@ interface LoadingScreenProps {
   visible: boolean;
 }
 
-const LoadingScreen: FC<LoadingScreenProps> = () => {
+const LoadingScreen: FC<LoadingScreenProps> = ({ visible }) => {
+  if (!visible) {
+    return null;
+  }
+
   return (
     <Panel style={[StyleSheet.absoluteFill, styles.loaderContainer]} center backgroundColor="red">
       <ActivityIndicator size="large" color={Color.white} style={styles.activityIndicator} />

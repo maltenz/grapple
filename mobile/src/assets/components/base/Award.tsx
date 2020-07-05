@@ -70,17 +70,22 @@ const Award: FC<AwardProps> = ({
   panel,
   marginLeft = 0.25,
   marginRight = 0.25,
-  count,
+  count: propCount,
   ...rest
 }) => {
   const [iconName, setIconName] = useState<string>('angel');
   const [name, setName] = useState<string>('Angel');
+  const [count, setCount] = useState<string>('0');
 
   useEffect(() => {
     const { name: helperName, text: helperText } = AwardToEmojiHelper(type);
     setIconName(helperName);
     setName(helperText);
-  }, []);
+
+    if (propCount) {
+      setCount(compactFormat(propCount, 'en'));
+    }
+  }, [propCount]);
 
   if (panel) {
     return (
@@ -94,12 +99,14 @@ const Award: FC<AwardProps> = ({
         {...rest}
       >
         <Emoji name={iconName} style={styles.emoji} />
-        <CoreText type="small" bold color="grey2" minLineHeight>
-          {name}
-        </CoreText>
-        {count && (
+        {name && (
+          <CoreText type="small" bold color="grey2" minLineHeight>
+            {name}
+          </CoreText>
+        )}
+        {propCount !== undefined && (
           <CoreText type="mini" bold color="grey2">
-            {compactFormat(count, 'en')}
+            {count}
           </CoreText>
         )}
       </Panel>
