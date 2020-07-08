@@ -6,18 +6,15 @@
   "scripts": {
     "eslint": "eslint '**/src/**' --ignore-path .eslintignore --fix",
     "install:server": "cd server && yarn",
-    "install:webapp": "cd webapp && yarn",
     "install:mobile": "cd mobile && yarn",
     "start:server": "cd server && yarn start",
-    "start:webapp": "cd webapp && yarn start",
     "start:mobile": "cd mobile && expo start",
     "clear:dev": "rm -rf ./node_modules",
     "clear:server": "rm -rf server/node_modules",
-    "clear:webapp": "rm -rf webapp/node_modules",
     "clear:mobile": "rm -rf mobile/node_modules",
-    "start": "concurrently \"yarn start:server\" \"yarn start:webapp\" \"yarn start:mobile\"",
-    "clear:all": "concurrently \"yarn clear:dev\" \"yarn clear:server\" \"yarn clear:webapp\" \"yarn clear:mobile\"",
-    "postinstall": "concurrently \"yarn install:server\" \"yarn install:webapp\" \"yarn install:mobile\""
+    "start": "concurrently \"yarn start:server\" \"yarn start:mobile\"",
+    "clear:all": "concurrently \"yarn clear:dev\" \"yarn clear:server\" \"yarn clear:mobile\"",
+    "postinstall": "concurrently \"yarn install:server\" \"yarn install:mobile\""
   },
   "husky": {
     "hooks": {
@@ -45,6 +42,7 @@
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
+    "@types/redux-persist": "^4.3.1",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.1.0",
     "eslint-config-prettier": "^6.10.1",
