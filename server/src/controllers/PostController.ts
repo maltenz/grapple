@@ -3,12 +3,16 @@ import { mongoose } from '@typegoose/typegoose';
 import PostModel, { Post } from '../models/PostModel';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
+import { CreatePost } from '../generated/graphql';
 
 /**
  * @param context
  * @returns {Post}
  */
-export const createPost = async ({ dbConn, loggedIn, user }: Context, args): Promise<Post> => {
+export const createPost = async (
+  { dbConn, loggedIn, user }: Context,
+  args: { input: CreatePost }
+): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
   const { shots } = args.input;
@@ -59,38 +63,15 @@ export const getPost = async ({ dbConn, loggedIn }, id: mongoose.Types.ObjectId)
 
 /**
  * @param context
- * @returns {Post}
- */
-export const getPostsByUserId = async ({ dbConn, loggedIn }: Context, args): Promise<Post[]> => {
-  let ERR_MESSAGE;
-  loginRequired(loggedIn);
-  const { id } = args;
-  let list;
-
-  try {
-    list = (await PostModel(dbConn).find({ user: id })) as Post;
-
-    if (list === null) {
-      ERR_MESSAGE = 'Unable find posts';
-      throw new ApolloError(ERR_MESSAGE);
-    }
-  } catch (error) {
-    throw new ApolloError(error);
-  }
-  return list;
-};
-
-/**
- * @param context
  * @param id
  * @returns {Post}
  */
-export const getPostsByUserLiked = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+export const getPostsByUserLiked = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).find({ likes: user._id })) as Post;
+    const post = (await PostModel(dbConn).find({ likes: user?._id })) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'No liked posts';
