@@ -15,7 +15,8 @@ const PostContent: FC<PostContentProps> = ({ title, content, color, ...rest }) =
       <Text mode="day" appearance="normal" type="small" bold color={color}>
         {title}
         <Text mode="day" appearance="normal" type="small" color={color}>
-          &nbsp;{content}
+          &nbsp;
+          {content}
         </Text>
       </Text>
     </Panel>

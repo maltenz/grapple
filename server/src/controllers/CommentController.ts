@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server';
+import { mongoose } from '@typegoose/typegoose';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import CommentModel, { Comment } from '../models/CommentModel';
@@ -76,7 +77,7 @@ export const updateComment = async (
  * @returns {Comment}
  */
 interface DeleteCommentArgs {
-  id: string;
+  id: mongoose.Types.ObjectId;
 }
 
 export const deleteComment = async (
