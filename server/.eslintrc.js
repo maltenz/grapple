@@ -19,6 +19,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/prefer-default-export': 'off',
     'no-underscore-dangle': 'off',
+    'max-classes-per-file': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
