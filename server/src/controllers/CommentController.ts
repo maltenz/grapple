@@ -2,14 +2,16 @@ import { ApolloError } from 'apollo-server';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
 import CommentModel, { Comment } from '../models/CommentModel';
+import { CommentInput } from '../generated/graphql';
 
 /**
  * @param context
  * @returns {Comment}
  */
+
 export const createComment = async (
   { dbConn, loggedIn, user }: Context,
-  args
+  args: CommentInput
 ): Promise<Comment> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
@@ -39,7 +41,10 @@ export const createComment = async (
  * @param context
  * @returns {Comment}
  */
-export const updateComment = async ({ dbConn, loggedIn }: Context, args): Promise<Comment> => {
+export const updateComment = async (
+  { dbConn, loggedIn }: Context,
+  args: CommentInput
+): Promise<Comment> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
   const { id, text } = args;
@@ -70,7 +75,14 @@ export const updateComment = async ({ dbConn, loggedIn }: Context, args): Promis
  * @param context
  * @returns {Comment}
  */
-export const deleteComment = async ({ dbConn, loggedIn }: Context, args): Promise<Comment> => {
+interface DeleteCommentArgs {
+  id: string;
+}
+
+export const deleteComment = async (
+  { dbConn, loggedIn }: Context,
+  args: DeleteCommentArgs
+): Promise<Comment> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
   const { id } = args;
@@ -95,7 +107,14 @@ export const deleteComment = async ({ dbConn, loggedIn }: Context, args): Promis
  * @param context
  * @returns {Comment[]}
  */
-export const getComments = async ({ dbConn, loggedIn }: Context, args): Promise<Comment[]> => {
+interface GetCommentsArgs {
+  id: string;
+}
+
+export const getComments = async (
+  { dbConn, loggedIn }: Context,
+  args: GetCommentsArgs
+): Promise<Comment[]> => {
   let ERR_MESSAGE;
   const { id } = args;
   let list;
