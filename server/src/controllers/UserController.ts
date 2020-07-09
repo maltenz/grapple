@@ -1,21 +1,15 @@
-/* eslint-disable no-underscore-dangle */
 import { ApolloError } from 'apollo-server';
 import { mongoose } from '@typegoose/typegoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel, { User } from '../models/UserModel';
-import { User as UserType } from '../generated/graphql';
+import { User as UserType, CreateUserInput, AuthUserInput, Token } from '../generated/graphql';
 import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
 
-/**
- * @param context
- * @param {name email password}
- * @returns {User}
- */
 export const createUser = async (
   { dbConn }: Context,
-  { name, email, password }: { name: string; email: string; password: string }
+  { name, email, password }: CreateUserInput
 ): Promise<UserType> => {
   let ERR_MESSAGE;
 
@@ -57,15 +51,8 @@ export const createUser = async (
   }
 };
 
-/**
- * @param context
- * @param id
- * @returns {User}
- */
-export const loginUser = async (
-  { dbConn },
-  { email, password }: { email: string; password: string }
-): Promise<{ token: string; id: string; name: string; email: string }> => {
+export const loginUser = async ({ dbConn }: Context, args: AuthUserInput): Promise<Token> => {
+  const { email, password } = args;
   let ERR_MESSAGE;
   let user;
 
@@ -92,10 +79,6 @@ export const loginUser = async (
   }
 };
 
-/**
- * @param context
- * @returns {User[]}
- */
 export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> => {
   let ERR_MESSAGE;
   let list;
@@ -120,11 +103,6 @@ export const getUsers = async ({ dbConn, loggedIn }: Context): Promise<User[]> =
   return list;
 };
 
-/**
- * @param context
- * @param id
- * @returns {User}
- */
 export const getUser = async (
   { dbConn, loggedIn }: Context,
   id: mongoose.Types.ObjectId
@@ -148,11 +126,6 @@ export const getUser = async (
   return user;
 };
 
-/**
- * @param context
- * @param email
- * @returns {User}
- */
 export const getUserByEmail = async (
   { dbConn, loggedIn }: Context,
   email: string
@@ -176,15 +149,11 @@ export const getUserByEmail = async (
   return user;
 };
 
-/**
- * @param context
- * @param {email password}
- * @returns {User}
- */
 export const deleteUser = async (
   { dbConn, loggedIn }: Context,
-  { email, password }: { email: string; password: string }
+  args: AuthUserInput
 ): Promise<UserType> => {
+  const { email, password } = args;
   let ERR_MESSAGE;
   let user;
 
