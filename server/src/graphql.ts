@@ -3,10 +3,6 @@ import { resolvers } from './resolvers';
 import { schema } from './schemas';
 import { context } from './context';
 
-/**
- * @description holds and creates apollo server
- */
-
 const apolloServer = new ApolloServer({
   cors: true,
   typeDefs: schema,
