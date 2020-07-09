@@ -22,8 +22,7 @@ export interface ApplicationState {
   layout: LayoutState;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const createRootReducer = () =>
+export const createRootReducer = (): unknown =>
   combineReducers({
     create: shotReducer,
     auth: userReducer,
