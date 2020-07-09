@@ -6,6 +6,7 @@ import { gql } from 'apollo-server';
 
 export const AwardSchema = gql`
   type Award {
+    id: ID
     award: AwardsEnum!
     nominate: Boolean!
     subscriber: User
@@ -14,6 +15,7 @@ export const AwardSchema = gql`
   }
 
   input AwardInput {
+    id: ID
     award: AwardsEnum
     nominate: Boolean
     subscriber: ID
@@ -34,19 +36,19 @@ export const AwardSchema = gql`
   }
 
   type AwardMetrics {
-    angel: AwardMetricsItem
-    brave: AwardMetricsItem
-    calming: AwardMetricsItem
-    chatty: AwardMetricsItem
-    funny: AwardMetricsItem
-    helpful: AwardMetricsItem
-    honest: AwardMetricsItem
-    smart: AwardMetricsItem
-    survivor: AwardMetricsItem
+    angel: AwardMetricsItem!
+    brave: AwardMetricsItem!
+    calming: AwardMetricsItem!
+    chatty: AwardMetricsItem!
+    funny: AwardMetricsItem!
+    helpful: AwardMetricsItem!
+    honest: AwardMetricsItem!
+    smart: AwardMetricsItem!
+    survivor: AwardMetricsItem!
   }
 
   type AwardMetricsItem {
-    count: Int
+    count: Int!
   }
 
   extend type Query {

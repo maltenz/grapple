@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server';
-import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
+import loginRequired from '../helper/loginRequired';
 import CommentModel, { Comment } from '../models/CommentModel';
 
 /**

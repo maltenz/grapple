@@ -1,8 +1,8 @@
-import PostModel, { Post } from '../models/PostModel';
 import { ApolloError } from 'apollo-server';
+import { mongoose } from '@typegoose/typegoose';
+import PostModel, { Post } from '../models/PostModel';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import { mongoose } from '@typegoose/typegoose';
 
 /**
  * @param context
@@ -240,12 +240,6 @@ export const updateWithPositionPostShot = async (
   loginRequired(loggedIn);
 
   try {
-    (await PostModel(dbConn).findByIdAndUpdate(id, {
-      $pull: {
-        shots: { _id: shotId },
-      },
-    })) as Post;
-
     const post = (await PostModel(dbConn).findByIdAndUpdate(
       id,
       {

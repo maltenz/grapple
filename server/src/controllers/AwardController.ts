@@ -1,21 +1,11 @@
-import loginRequired from '../helper/loginRequired';
 import { mongoose } from '@typegoose/typegoose';
-import { Context } from '../context';
-import AwardModel, { Award, AwardType } from '../models/AwardModel';
 import { ApolloError } from 'apollo-server';
-import { User } from '../models/UserModel';
-import { Post } from '../models/PostModel';
+import loginRequired from '../helper/loginRequired';
+import { Context } from '../context';
+import AwardModel, { Award } from '../models/AwardModel';
+import { AwardInput, AwardMetrics } from '../generated/graphql';
 
-export interface AwardArgs {
-  id?: mongoose.Types.ObjectId;
-  award: AwardType;
-  nominate: boolean;
-  post: Post;
-  owner: User;
-  subscriber: User;
-}
-
-const conditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectId): Award => {
+const conditionHelper = (args: AwardInput, contextUserId?: mongoose.Types.ObjectId): Award => {
   const { id, award, nominate = false, post, owner, subscriber } = args;
   const condition = {};
 
@@ -52,7 +42,10 @@ const conditionHelper = (args: AwardArgs, contextUserId?: mongoose.Types.ObjectI
  * @param context
  * @returns {Award}
  */
-export const createAward = async (context: Context, args: { input: AwardArgs }): Promise<Award> => {
+export const createAward = async (
+  context: Context,
+  args: { input: AwardInput }
+): Promise<Award> => {
   const { dbConn, loggedIn, user } = context;
   let ERR_MESSAGE;
   loginRequired(loggedIn);
@@ -86,7 +79,7 @@ export const createAward = async (context: Context, args: { input: AwardArgs }):
  * @param {id}
  * @returns {Award}
  */
-export const getAward = async (context: Context, args: { input: AwardArgs }): Promise<Award> => {
+export const getAward = async (context: Context, args: { input: AwardInput }): Promise<Award> => {
   let ERR_MESSAGE;
   const { dbConn, loggedIn } = context;
 
@@ -113,7 +106,10 @@ export const getAward = async (context: Context, args: { input: AwardArgs }): Pr
  * @param {id}
  * @returns {Award}
  */
-export const getAwards = async (context: Context, args: { input: AwardArgs }): Promise<Award[]> => {
+export const getAwards = async (
+  context: Context,
+  args: { input: AwardInput }
+): Promise<Award[]> => {
   let ERR_MESSAGE;
   const { dbConn, loggedIn } = context;
 
@@ -130,7 +126,7 @@ export const getAwards = async (context: Context, args: { input: AwardArgs }): P
     }
 
     if (list !== null && list.length > 0) {
-      list = list.map((list) => list);
+      list = list.map((item) => item);
     }
 
     if (list.length === 0) {
@@ -148,21 +144,6 @@ export const getAwards = async (context: Context, args: { input: AwardArgs }): P
  * @param {id}
  * @returns {AwardMetrics}
  */
-export interface AwardMetrics {
-  angel: AwardMetricsItems;
-  brave: AwardMetricsItems;
-  calming: AwardMetricsItems;
-  chatty: AwardMetricsItems;
-  funny: AwardMetricsItems;
-  helpful: AwardMetricsItems;
-  honest: AwardMetricsItems;
-  smart: AwardMetricsItems;
-  survivor: AwardMetricsItems;
-}
-
-type AwardMetricsItems = {
-  count: number;
-};
 
 export const getAwardMetrics = async (context: Context): Promise<AwardMetrics> => {
   let ERR_MESSAGE;
@@ -193,34 +174,35 @@ export const getAwardMetrics = async (context: Context): Promise<AwardMetrics> =
     }
 
     if (list !== null && list.length > 0) {
-      list = list.map(({ award }: Award) => {
+      list = list.forEach(({ award }: Award): void => {
         switch (award) {
           case 'angel':
-            metrics.angel.count = metrics.angel.count + 1;
+            metrics.angel.count += 1;
             break;
           case 'brave':
-            metrics.brave.count = metrics.brave.count + 1;
+            metrics.brave.count += 1;
             break;
           case 'calming':
-            metrics.calming.count = metrics.calming.count + 1;
+            metrics.calming.count += 1;
             break;
           case 'chatty':
-            metrics.chatty.count = metrics.chatty.count + 1;
+            metrics.chatty.count += 1;
             break;
           case 'funny':
-            metrics.funny.count = metrics.funny.count + 1;
+            metrics.funny.count += 1;
             break;
           case 'helpful':
-            metrics.helpful.count = metrics.helpful.count + 1;
+            metrics.helpful.count += 1;
             break;
           case 'honest':
-            metrics.honest.count = metrics.honest.count + 1;
+            metrics.honest.count += 1;
             break;
           case 'smart':
-            metrics.smart.count = metrics.smart.count + 1;
+            metrics.smart.count += 1;
             break;
           case 'survivor':
-            metrics.survivor.count = metrics.survivor.count + 1;
+          default:
+            metrics.survivor.count += 1;
             break;
         }
       });

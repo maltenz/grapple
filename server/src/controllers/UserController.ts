@@ -1,10 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 import { ApolloError } from 'apollo-server';
-import UserModel, { User } from '../models/UserModel';
+import { mongoose } from '@typegoose/typegoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import UserModel, { User } from '../models/UserModel';
+import { User as UserType } from '../generated/graphql';
 import loginRequired from '../helper/loginRequired';
 import { Context } from '../context';
-import { mongoose } from '@typegoose/typegoose';
 
 /**
  * @param context
@@ -14,7 +16,7 @@ import { mongoose } from '@typegoose/typegoose';
 export const createUser = async (
   { dbConn }: Context,
   { name, email, password }: { name: string; email: string; password: string }
-): Promise<{ id: mongoose.Types.ObjectId; name: string; email: string; token: string }> => {
+): Promise<UserType> => {
   let ERR_MESSAGE;
 
   try {
@@ -40,16 +42,16 @@ export const createUser = async (
 
     if (newUser._id && newUser.name && newUser.email) {
       return {
+        // @ts-ignore
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
         token,
       };
-    } else {
-      ERR_MESSAGE = 'Oops something went wrong. Please try again';
-      await UserModel(dbConn).findByIdAndRemove(newUser._id);
-      throw new ApolloError(ERR_MESSAGE);
     }
+    ERR_MESSAGE = 'Oops something went wrong. Please try again';
+    await UserModel(dbConn).findByIdAndRemove(newUser._id);
+    throw new ApolloError(ERR_MESSAGE);
   } catch (error) {
     throw new ApolloError(error);
   }
@@ -68,7 +70,7 @@ export const loginUser = async (
   let user;
 
   try {
-    user = (await UserModel(dbConn).findOne({ email: email })) as User;
+    user = (await UserModel(dbConn).findOne({ email })) as User;
 
     if (user === null) {
       ERR_MESSAGE = 'Email not found';
@@ -182,7 +184,7 @@ export const getUserByEmail = async (
 export const deleteUser = async (
   { dbConn, loggedIn }: Context,
   { email, password }: { email: string; password: string }
-): Promise<User> => {
+): Promise<UserType> => {
   let ERR_MESSAGE;
   let user;
 
