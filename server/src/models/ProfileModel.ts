@@ -5,16 +5,22 @@ import { Post } from './PostModel';
 
 export class Profile {
   _id?: mongoose.Types.ObjectId;
+
   @prop({ ref: User })
   public user?: Ref<User>;
+
   @prop({ ref: Post })
   public posts?: Ref<Post>;
+
   @prop()
   public bio?: string;
+
   @prop()
   public location?: string;
+
   @prop()
   public phone?: string;
+
   @prop()
   public active?: Date;
 }

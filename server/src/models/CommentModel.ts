@@ -5,10 +5,13 @@ import { Post } from './PostModel';
 
 export class Comment {
   _id?: mongoose.Types.ObjectId;
+
   @prop()
   public text?: string;
+
   @prop({ ref: Post })
   public post?: Ref<Post>;
+
   @prop({ ref: User })
   public user?: Ref<User>;
 }

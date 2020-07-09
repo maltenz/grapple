@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createUser, deleteUser, loginUser } from '../controllers/UserController';
-import { User } from '../generated/graphql';
+import { User, AuthUserInput, Token } from '../generated/graphql';
 
 export const UserMutation = {
   loginUser: {
-    resolve: async (parent, args, context, info): Promise<User> => {
+    resolve: async (parent, args: { input: AuthUserInput }, context, info): Promise<Token> => {
       return loginUser(context, args.input);
     },
   },

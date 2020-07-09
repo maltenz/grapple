@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getAward, getAwards, getAwardMetrics } from '../controllers/AwardController';
-
 import { Award } from '../models/AwardModel';
 import { Context } from '../context';
 import { AwardInput, AwardMetrics } from '../generated/graphql';

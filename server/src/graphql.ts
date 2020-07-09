@@ -11,7 +11,7 @@ const apolloServer = new ApolloServer({
   cors: true,
   typeDefs: schema,
   resolvers,
-  context: context,
+  context,
   engine: {
     apiKey: process.env.APOLLO_ENGINE,
   },

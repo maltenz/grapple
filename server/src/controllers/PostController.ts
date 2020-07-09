@@ -3,12 +3,13 @@ import { mongoose } from '@typegoose/typegoose';
 import PostModel, { Post } from '../models/PostModel';
 import { Context } from '../context';
 import loginRequired from '../helper/loginRequired';
-import { CreatePost } from '../generated/graphql';
+import {
+  CreatePost,
+  ShotDeleteInput,
+  ShotUpdateInput,
+  ShotUpdatePositionInput,
+} from '../generated/graphql';
 
-/**
- * @param context
- * @returns {Post}
- */
 export const createPost = async (
   { dbConn, loggedIn, user }: Context,
   args: { input: CreatePost }
@@ -38,11 +39,6 @@ export const createPost = async (
   }
 };
 
-/**
- * @param context
- * @param id
- * @returns {Post}
- */
 export const getPost = async ({ dbConn, loggedIn }, id: mongoose.Types.ObjectId): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
@@ -63,9 +59,27 @@ export const getPost = async ({ dbConn, loggedIn }, id: mongoose.Types.ObjectId)
 
 /**
  * @param context
- * @param id
  * @returns {Post}
  */
+export const getPostsByUserId = async ({ dbConn, loggedIn }: Context, args): Promise<Post[]> => {
+  let ERR_MESSAGE;
+  loginRequired(loggedIn);
+  const { id } = args;
+  let list;
+
+  try {
+    list = (await PostModel(dbConn).find({ user: id })) as Post;
+
+    if (list === null) {
+      ERR_MESSAGE = 'Unable find posts';
+      throw new ApolloError(ERR_MESSAGE);
+    }
+  } catch (error) {
+    throw new ApolloError(error);
+  }
+  return list;
+};
+
 export const getPostsByUserLiked = async ({ dbConn, loggedIn, user }: Context): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
@@ -84,12 +98,7 @@ export const getPostsByUserLiked = async ({ dbConn, loggedIn, user }: Context): 
   }
 };
 
-/**
- * @param context
- * @param id
- * @returns {Post}
- */
-export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
+export const getPosts = async ({ dbConn, loggedIn }: Context): Promise<Post[]> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
@@ -112,7 +121,10 @@ export const getPosts = async ({ dbConn, loggedIn }): Promise<Post[]> => {
  * @param {id}
  * @returns {Post}
  */
-export const deletePost = async (context: Context, { id }: { id: string }): Promise<Post> => {
+export const deletePost = async (
+  context: Context,
+  { id }: { id: mongoose.Types.ObjectId }
+): Promise<Post> => {
   const { dbConn, loggedIn } = context;
   const ERR_MESSAGE = 'Unable to delete post';
   loginRequired(loggedIn);
@@ -128,14 +140,9 @@ export const deletePost = async (context: Context, { id }: { id: string }): Prom
   return post;
 };
 
-/**
- * @param context
- * @param {id shotId}
- * @returns {Post}
- */
 export const deletePostShot = async (
   context: Context,
-  { id, shotId }: { id: string; shotId: string }
+  { id, shotId }: ShotDeleteInput
 ): Promise<Post> => {
   const { dbConn, loggedIn } = context;
   let ERR_MESSAGE = 'Unable to delete shot';
@@ -159,20 +166,9 @@ export const deletePostShot = async (
   }
 };
 
-/**
- * @param context
- * @param {id shotId title content image}
- * @returns {Post}
- */
 export const updatePostShot = async (
   context: Context,
-  {
-    id,
-    shotId,
-    title,
-    content,
-    image,
-  }: { id: string; shotId: string; title: string; content: string; image: string }
+  { id, shotId, title, content, image }: ShotUpdateInput
 ): Promise<Post> => {
   const { dbConn, loggedIn } = context;
   let ERR_MESSAGE = 'Unable to update shot';
@@ -200,22 +196,11 @@ export const updatePostShot = async (
   }
 };
 
-/**
- * @param context
- * @param {id shotId title content image}
- * @returns {Post}
- */
 export const updateWithPositionPostShot = async (
   context: Context,
-  {
-    id,
-    shotId,
-    position,
-    title,
-    content,
-    image,
-  }: { id: string; shotId: string; position: string; title: string; content: string; image: string }
+  args: ShotUpdatePositionInput
 ): Promise<Post> => {
+  const { id, shotId, position, title, content, image } = args;
   const { dbConn, loggedIn } = context;
   let ERR_MESSAGE = 'Unable to update shot';
   loginRequired(loggedIn);
@@ -245,12 +230,10 @@ export const updateWithPositionPostShot = async (
   }
 };
 
-/**
- * @param context
- * @param {id}
- * @returns {Post}
- */
-export const likePost = async (context: Context, id: string): Promise<Post | null> => {
+export const likePost = async (
+  context: Context,
+  id: mongoose.Types.ObjectId
+): Promise<Post | null> => {
   const { dbConn, loggedIn, user } = context;
   const ERR_MESSAGE = 'Unable to like post';
   loginRequired(loggedIn);
@@ -279,12 +262,7 @@ export const likePost = async (context: Context, id: string): Promise<Post | nul
   return post;
 };
 
-/**
- * @param context
- * @param {id}
- * @returns {Post}
- */
-export const unlikePost = async (context: Context, id: string): Promise<Post> => {
+export const unlikePost = async (context: Context, id: mongoose.Types.ObjectId): Promise<Post> => {
   const { dbConn, loggedIn, user } = context;
   const ERR_MESSAGE = 'Unable to unlike post';
   loginRequired(loggedIn);
@@ -307,17 +285,16 @@ export const unlikePost = async (context: Context, id: string): Promise<Post> =>
   return post;
 };
 
-/**
- * @param context
- * @param id
- * @returns {Post}
- */
-export const getPostsByUserBookmarked = async ({ dbConn, loggedIn, user }): Promise<Post> => {
+export const getPostsByUserBookmarked = async ({
+  dbConn,
+  loggedIn,
+  user,
+}: Context): Promise<Post> => {
   let ERR_MESSAGE;
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).find({ bookmarks: user._id })) as Post;
+    const post = (await PostModel(dbConn).find({ bookmarks: user?._id })) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'No bookmarked posts';
@@ -330,12 +307,10 @@ export const getPostsByUserBookmarked = async ({ dbConn, loggedIn, user }): Prom
   }
 };
 
-/**
- * @param context
- * @param {id}
- * @returns {Post}
- */
-export const bookmarkPost = async (context: Context, id: string): Promise<Post | null> => {
+export const bookmarkPost = async (
+  context: Context,
+  id: mongoose.Types.ObjectId
+): Promise<Post | null> => {
   const { dbConn, loggedIn, user } = context;
   const ERR_MESSAGE = 'Unable to bookmark post';
   loginRequired(loggedIn);
@@ -367,12 +342,10 @@ export const bookmarkPost = async (context: Context, id: string): Promise<Post |
   return post;
 };
 
-/**
- * @param context
- * @param {id}
- * @returns {Post}
- */
-export const removeBookmarkPost = async (context: Context, id: string): Promise<Post> => {
+export const removeBookmarkPost = async (
+  context: Context,
+  id: mongoose.Types.ObjectId
+): Promise<Post> => {
   const { dbConn, loggedIn, user } = context;
   const ERR_MESSAGE = 'Unable to remove bookmark on post';
   loginRequired(loggedIn);

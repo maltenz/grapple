@@ -5,13 +5,13 @@ import { Context } from '../context';
 
 export const PostQuery = {
   posts: {
-    resolve: async (parent, args, context, info): Promise<Post[]> => {
-      return await getPosts(context);
+    resolve: async (parent, args, context: Context, info): Promise<Post[]> => {
+      return getPosts(context);
     },
   },
   post: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
-      return await getPost(context, args.id);
+    resolve: async (parent, args, context: Context, info): Promise<Post> => {
+      return getPost(context, args.id);
     },
   },
 };

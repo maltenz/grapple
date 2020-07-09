@@ -54,7 +54,7 @@ export const PostSchema = gql`
   input ShotUpdatePositionInput {
     id: ID!
     shotId: ID!
-    position: Int!
+    # position: Int!
     title: String!
     content: String!
     image: String!

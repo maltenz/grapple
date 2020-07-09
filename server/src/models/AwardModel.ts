@@ -16,14 +16,19 @@ export type AwardType =
 
 export class Award {
   _id?: mongoose.Types.ObjectId;
+
   @prop()
   public award?: AwardType;
+
   @prop()
   public nominate?: boolean;
+
   @prop({ ref: Post })
   public post?: Ref<Post>;
+
   @prop({ ref: User })
   public owner?: Ref<User>;
+
   @prop({ ref: User })
   public subscriber?: Ref<User>;
 }

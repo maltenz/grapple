@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { mongoose } from '@typegoose/typegoose';
+
 import {
   createPost,
   deletePost,
@@ -10,36 +12,66 @@ import {
   bookmarkPost,
   removeBookmarkPost,
 } from '../controllers/PostController';
+
 import { Post } from '../models/PostModel';
+
+import { Context } from '../context';
+
+import {
+  CreatePost,
+  ShotDeleteInput,
+  ShotUpdateInput,
+  ShotUpdatePositionInput,
+} from '../generated/graphql';
 
 export const PostMutation = {
   createPost: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
-      return await createPost(context, args);
+    resolve: async (parent, args: { input: CreatePost }, context: Context, info): Promise<Post> => {
+      return createPost(context, args);
     },
   },
   deletePost: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
-      return await deletePost(context, args);
+    resolve: async (
+      parent,
+      args: { id: mongoose.Types.ObjectId },
+      context: Context,
+      info
+    ): Promise<Post> => {
+      return deletePost(context, args);
     },
   },
   deletePostShot: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (
+      parent,
+      args: { input: ShotDeleteInput },
+      context: Context,
+      info
+    ): Promise<Post> => {
       const { id, shotId } = args.input;
-      return await deletePostShot(context, { id, shotId });
+      return deletePostShot(context, { id, shotId });
     },
   },
   updatePostShot: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (
+      parent,
+      args: { input: ShotUpdateInput },
+      context: Context,
+      info
+    ): Promise<Post> => {
       const { id, shotId, title, content, image } = args.input;
-      return await updatePostShot(context, { id, shotId, title, content, image });
+      return updatePostShot(context, { id, shotId, title, content, image });
     },
   },
   updateWithPositionPostShot: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (
+      parent,
+      args: { input: ShotUpdatePositionInput },
+      context: Context,
+      info
+    ): Promise<Post> => {
       const { id, shotId, position, title, content, image } = args.input;
 
-      return await updateWithPositionPostShot(context, {
+      return updateWithPositionPostShot(context, {
         id,
         shotId,
         position,
@@ -50,27 +82,47 @@ export const PostMutation = {
     },
   },
   likePost: {
-    resolve: async (parent, args, context, info): Promise<Post | null> => {
+    resolve: async (
+      parent,
+      args: { id: mongoose.Types.ObjectId },
+      context: Context,
+      info
+    ): Promise<Post | null> => {
       const { id } = args;
-      return await likePost(context, id);
+      return likePost(context, id);
     },
   },
   unlikePost: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (
+      parent,
+      args: { id: mongoose.Types.ObjectId },
+      context: Context,
+      info
+    ): Promise<Post> => {
       const { id } = args;
-      return await unlikePost(context, id);
+      return unlikePost(context, id);
     },
   },
   bookmarkPost: {
-    resolve: async (parent, args, context, info): Promise<Post | null> => {
+    resolve: async (
+      parent,
+      args: { id: mongoose.Types.ObjectId },
+      context: Context,
+      info
+    ): Promise<Post | null> => {
       const { id } = args;
-      return await bookmarkPost(context, id);
+      return bookmarkPost(context, id);
     },
   },
   removeBookmarkPost: {
-    resolve: async (parent, args, context, info): Promise<Post> => {
+    resolve: async (
+      parent,
+      args: { id: mongoose.Types.ObjectId },
+      context: Context,
+      info
+    ): Promise<Post> => {
       const { id } = args;
-      return await removeBookmarkPost(context, id);
+      return removeBookmarkPost(context, id);
     },
   },
 };

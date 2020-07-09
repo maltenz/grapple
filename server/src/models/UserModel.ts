@@ -3,10 +3,13 @@ import { prop, getModelForClass } from '@typegoose/typegoose';
 
 export class User {
   _id?: mongoose.Types.ObjectId;
+
   @prop()
   public name?: string;
+
   @prop()
   public password?: string;
+
   @prop()
   public email?: string;
 }

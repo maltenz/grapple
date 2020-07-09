@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { IncomingMessage } from 'http';
 import jwt from 'jsonwebtoken';
-import UserModel, { User } from '../models/UserModel';
 import { ApolloError } from 'apollo-server';
+import UserModel, { User } from '../models/UserModel';
 
 /**
  * @description authenicates user
@@ -32,7 +32,7 @@ const authenticate = async (
     const user = (await UserModel(dbConn).findOne({ email: jwtPayload.email })) as User;
 
     return {
-      loggedIn: user?._id ? true : false,
+      loggedIn: !!user?._id,
       user,
     };
   } catch (error) {
