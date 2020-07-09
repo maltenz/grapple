@@ -62,24 +62,22 @@ interface CameraFrameProps {
 
 type Flash = 'on' | 'off' | 'auto';
 
-const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => {
-  return (
-    <>
-      {backgroundImage && (
-        <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${backgroundImage}` }} />
-      )}
-      <View style={styles.frame}>
-        <BlurView tint="dark" intensity={100} style={styles.frameTop}>
-          {Top}
-        </BlurView>
-        <View style={styles.frameSquare} />
-        <BlurView tint="dark" intensity={100} style={styles.frameBottom}>
-          {Bottom}
-        </BlurView>
-      </View>
-    </>
-  );
-};
+const CameraFrame: FC<CameraFrameProps> = ({ Top, Bottom, backgroundImage }) => (
+  <>
+    {backgroundImage && (
+      <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${backgroundImage}` }} />
+    )}
+    <View style={styles.frame}>
+      <BlurView tint="dark" intensity={100} style={styles.frameTop}>
+        {Top}
+      </BlurView>
+      <View style={styles.frameSquare} />
+      <BlurView tint="dark" intensity={100} style={styles.frameBottom}>
+        {Bottom}
+      </BlurView>
+    </View>
+  </>
+);
 
 interface FlashIconProps {
   settings: Flash;
@@ -172,7 +170,14 @@ const CameraScreen: FC<CameraScreenProps> = ({ type }) => {
             { format: ImageManipulator.SaveFormat.JPEG, base64: true }
           );
           if (type === 'create') {
-            dispatch(addShot({ id: CreateId(), title: '', content: '', image: crop.base64 }));
+            dispatch(
+              addShot({
+                id: CreateId(),
+                title: '',
+                content: '',
+                image: crop.base64,
+              })
+            );
           }
           if (type === 'profile') {
             dispatch(authAddShot({ id: CreateId(), image: crop.base64 }));
@@ -218,7 +223,14 @@ const CameraScreen: FC<CameraScreenProps> = ({ type }) => {
         );
 
         if (type === 'create') {
-          dispatch(addShot({ id: CreateId(), title: '', content: '', image: resize.base64 }));
+          dispatch(
+            addShot({
+              id: CreateId(),
+              title: '',
+              content: '',
+              image: resize.base64,
+            })
+          );
         }
 
         if (type === 'profile') {

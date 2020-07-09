@@ -4,10 +4,6 @@ import jwt from 'jsonwebtoken';
 import { ApolloError } from 'apollo-server';
 import UserModel, { User } from '../models/UserModel';
 
-/**
- * @description authenicates user
- */
-
 const authenticate = async (
   dbConn: mongoose.Connection,
   req: { req: IncomingMessage }
@@ -29,7 +25,9 @@ const authenticate = async (
 
     const jwtPayload = jwt.verify(myBearer, process.env.JWT_SECRET_KEY || 'mysecretkey');
 
-    const user = (await UserModel(dbConn).findOne({ email: jwtPayload.email })) as User;
+    const user = (await UserModel(dbConn).findOne({
+      email: jwtPayload.email,
+    })) as User;
 
     return {
       loggedIn: !!user?._id,

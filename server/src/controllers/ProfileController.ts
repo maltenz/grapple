@@ -105,7 +105,9 @@ export const deleteProfile = async (context: Context): Promise<Profile> => {
   let profile;
 
   try {
-    profile = await ProfileModel(dbConn).findOneAndDelete({ user: context.user?._id });
+    profile = await ProfileModel(dbConn).findOneAndDelete({
+      user: context.user?._id,
+    });
   } catch (error) {
     throw new ApolloError(ERR_MESSAGE);
   }

@@ -1,23 +1,27 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  extends: [
-    'eslint:recommended',
-    'airbnb',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['prettier/flowtype', 'prettier/react', 'prettier/standard'],
   env: {
     browser: true,
     node: true,
   },
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        trailingComma: 'es5',
+        singleQuote: true,
+        printWidth: 100,
+        semi: true,
+      },
+    ],
     'no-use-before-define': 'off',
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
+    'react/require-default-props': 'off',
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-use-before-define': [
       'error',
       {
@@ -39,7 +43,6 @@ module.exports = {
         jsx: 'never',
         ts: 'never',
         tsx: 'never',
-        mjs: 'never',
       },
     ],
   },
@@ -50,7 +53,7 @@ module.exports = {
     },
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.d.ts', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
   },

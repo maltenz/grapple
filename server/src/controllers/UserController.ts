@@ -70,7 +70,9 @@ export const loginUser = async ({ dbConn }: Context, args: AuthUserInput): Promi
         throw new ApolloError(ERR_MESSAGE);
       }
       const secret = process.env.JWT_SECRET_KEY || 'mysecretkey';
-      const token = jwt.sign({ email: user.email }, secret, { expiresIn: '1y' });
+      const token = jwt.sign({ email: user.email }, secret, {
+        expiresIn: '1y',
+      });
 
       return { token, id: user.id, name: user.name, email: user.email };
     }

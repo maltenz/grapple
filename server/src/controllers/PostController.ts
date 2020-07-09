@@ -241,7 +241,10 @@ export const likePost = async (
   let post;
 
   try {
-    const hasLiked = (await PostModel(dbConn).findOne({ _id: id, likes: user?._id })) as Post;
+    const hasLiked = (await PostModel(dbConn).findOne({
+      _id: id,
+      likes: user?._id,
+    })) as Post;
 
     if (hasLiked) {
       return null;
@@ -294,7 +297,9 @@ export const getPostsByUserBookmarked = async ({
   loginRequired(loggedIn);
 
   try {
-    const post = (await PostModel(dbConn).find({ bookmarks: user?._id })) as Post;
+    const post = (await PostModel(dbConn).find({
+      bookmarks: user?._id,
+    })) as Post;
 
     if (post === null) {
       ERR_MESSAGE = 'No bookmarked posts';

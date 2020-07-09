@@ -1,20 +1,17 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
-    'eslint:recommended',
     'airbnb',
+    'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'prettier/flowtype',
-    'prettier/react',
-    'prettier/standard',
   ],
   settings: {
     'import/resolver': {
       typescript: {},
       node: {
-        extensions: ['.js', '.jsx', '.d.ts', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
   },
@@ -37,7 +34,6 @@ module.exports = {
         jsx: 'never',
         ts: 'never',
         tsx: 'never',
-        mjs: 'never',
       },
     ],
   },
