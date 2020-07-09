@@ -7,6 +7,7 @@ module.exports = {
      "plugin:prettier/recommended",
    ],
    "rules": {
+    "@typescript-eslint/ban-ts-ignore": "off",
     "prettier/prettier": [
       "error",
       {

@@ -9,7 +9,7 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-src/generated/graphql.tsx
+src/generated/graphql.ts
 
 # macOS
 .DS_Store
