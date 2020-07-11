@@ -7,7 +7,6 @@ const ignorePackages = {
 };
 
 module.exports = {
-  parser: '@typescript-eslint/parser',
   extends: ['prettier/react'],
   rules: {
     'no-use-before-define': 'off',

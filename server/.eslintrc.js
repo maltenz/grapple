@@ -1,4 +1,3 @@
-const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 const ignorePackages = {
   js: 'never',
   jsx: 'never',
@@ -7,7 +6,6 @@ const ignorePackages = {
 };
 
 module.exports = {
-  parser: '@typescript-eslint/parser',
   rules: {
     eqeqeq: ['error', 'always'],
     '@typescript-eslint/ban-ts-ignore': 'off',
