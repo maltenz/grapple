@@ -9,7 +9,7 @@ dotenv.config();
 
 import apolloServer from './graphql';
 
-apolloServer.listen(8080).then(({ url }) => {
+apolloServer.listen(process.env.PORT || 8080).then(({ url }) => {
   // eslint-disable-next-line no-console
   console.log(`Apollo Server is running on ${url} `);
 });
