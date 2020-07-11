@@ -6,15 +6,6 @@ module.exports = {
     node: true,
   },
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'es5',
-        singleQuote: true,
-        printWidth: 100,
-        semi: true,
-      },
-    ],
     'no-use-before-define': 'off',
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
@@ -50,11 +41,6 @@ module.exports = {
     react: {
       pragma: 'React',
       version: 'detect',
-    },
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
     },
   },
 };
