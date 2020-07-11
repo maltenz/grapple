@@ -1,3 +1,11 @@
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
+const ignorePackages = {
+  js: 'never',
+  jsx: 'never',
+  ts: 'never',
+  tsx: 'never',
+};
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
@@ -13,12 +21,11 @@ module.exports = {
     'import/resolver': {
       typescript: {},
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions,
       },
     },
   },
   rules: {
-    '@typescript-eslint/ban-ts-ignore': 'off',
     'prettier/prettier': [
       'error',
       {
@@ -28,16 +35,7 @@ module.exports = {
         semi: true,
       },
     ],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
+    'import/extensions': ['error', 'ignorePackages', ignorePackages],
   },
   env: {
     browser: true,

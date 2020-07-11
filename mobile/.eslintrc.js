@@ -1,10 +1,14 @@
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
+const ignorePackages = {
+  js: 'never',
+  jsx: 'never',
+  ts: 'never',
+  tsx: 'never',
+};
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: ['prettier/react'],
-  env: {
-    browser: true,
-    node: true,
-  },
   rules: {
     'no-use-before-define': 'off',
     'import/prefer-default-export': 'off',
@@ -23,19 +27,10 @@ module.exports = {
     'react/jsx-filename-extension': [
       2,
       {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions,
       },
     ],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
+    'import/extensions': ['error', 'ignorePackages', ignorePackages],
   },
   settings: {
     react: {
