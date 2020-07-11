@@ -72,7 +72,7 @@ type ChildParamList = {
   HomeStack: undefined;
   // Profile
   MyProfile: undefined;
-  MyProfileEdit: MyProfileEditParams;
+  MyProfileEdit: undefined;
   // Post
   CreatePost: undefined;
   // Account

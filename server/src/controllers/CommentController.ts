@@ -109,7 +109,7 @@ export const deleteComment = async (
  * @returns {Comment[]}
  */
 interface GetCommentsArgs {
-  id: string;
+  id: mongoose.Types.ObjectId;
 }
 
 export const getComments = async (

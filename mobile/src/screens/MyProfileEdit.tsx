@@ -1,6 +1,6 @@
 import React, { FC, useState, useRef, RefObject, useEffect } from 'react';
 
-import { StyleSheet, NativeMethodsMixinStatic, Switch } from 'react-native';
+import { StyleSheet, NativeMethodsMixinType, Switch } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -28,7 +28,7 @@ import LoadingScreen from './components/LoadingScreen';
 const SPACE = AssetStyles.measure.space;
 
 const MyProfileEdit: FC = () => {
-  const inputRef: RefObject<NativeMethodsMixinStatic> = useRef(null);
+  const inputRef: RefObject<NativeMethodsMixinType> = useRef(null);
   const parentNavigation = useNavigation<ParentNavigationProp>();
   const { params }: { params?: MyProfileEditParams } = useRoute();
   const inset = useSafeArea();

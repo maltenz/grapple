@@ -1,6 +1,6 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  extends: ['prettier/flowtype', 'prettier/react', 'prettier/standard'],
+  extends: ['prettier/react'],
   env: {
     browser: true,
     node: true,
